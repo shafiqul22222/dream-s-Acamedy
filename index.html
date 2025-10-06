@@ -1102,6 +1102,63 @@
             }
         }
         
+        /* --- START: Mobile Bottom Navigation Bar --- */
+        .mobile-bottom-nav {
+            display: none; /* ডেক্সটপে লুকানো থাকবে */
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--text-light);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1001; /* হেডার এর উপরে থাকবে */
+            height: 65px;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .mobile-nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--primary-blue);
+            flex-grow: 1;
+            height: 100%;
+            font-size: 0.8em;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-nav-link .material-symbols-outlined {
+            font-size: 26px;
+            margin-bottom: 2px;
+        }
+
+        .mobile-nav-link.active {
+            color: var(--secondary-blue);
+        }
+
+        /* শুধুমাত্র মোবাইল ডিভাইসে এই স্টাইলগুলো প্রয়োগ হবে */
+        @media (max-width: 768px) {
+            .mobile-bottom-nav {
+                display: flex; /* মোবাইলে দেখানো হবে */
+            }
+            /* নেভিগেশন বারের কারণে যেনো কোনো কন্টেন্ট ঢেকে না যায় */
+            body {
+                padding-bottom: 70px; 
+            }
+            /* মোবাইল ডিভাইসে মূল হেডার এর নেভিগেশন মেন্যু হাইড করা হলো */
+            .main-header .main-nav {
+                display: none;
+            }
+            .main-header .search-bar {
+                display: none;
+            }
+        }
+        /* --- END: Mobile Bottom Navigation Bar --- */
+
     </style>
 </head>
 <body>
@@ -1583,13 +1640,34 @@
 
     <!-- অ্যানিমেটেড নোটিফিকেশন এর জন্য কন্টেইনার -->
     <div id="toast-container"></div>
-
+    
     <!-- START: Firebase SDK Scripts -->
     <!-- Firebase এর সব সার্ভিস ব্যবহার করার জন্য এই স্ক্রিপ্টগুলো যোগ করা হয়েছে -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <!-- END: Firebase SDK Scripts -->
+
+
+    <!-- ======================= Mobile Bottom Navigation ======================= -->
+    <nav class="mobile-bottom-nav">
+        <a href="#noticeboard" class="mobile-nav-link">
+            <span class="material-symbols-outlined">campaign</span>
+            <span>নোটিশ</span>
+        </a>
+        <a href="#courses" class="mobile-nav-link">
+            <span class="material-symbols-outlined">school</span>
+            <span>কোর্স</span>
+        </a>
+        <a href="#services" class="mobile-nav-link">
+            <span class="material-symbols-outlined">miscellaneous_services</span>
+            <span>সার্ভিস</span>
+        </a>
+        <a href="#about" class="mobile-nav-link">
+            <span class="material-symbols-outlined">more_horiz</span>
+            <span>আরও</span>
+        </a>
+    </nav>
 
 
     <script>
@@ -1656,6 +1734,9 @@
             const copyPaymentNumberBtn = document.getElementById('copy-payment-number-btn');
             const adminPanelLinkLi = document.getElementById('admin-panel-link-li');
             const ADMIN_EMAIL = "arafatislamshofiqul@gmail.com";
+            
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
 
             // START: ImgBB পরিবর্তন - ভ্যারিয়েবল ঘোষণা
             const profileImageUpload = document.getElementById('profile-image-upload');
@@ -1701,14 +1782,23 @@
                     targetSection.classList.remove('hidden');
                 }
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // Active state for top navigation
                 navLiElements.forEach(li => li.classList.remove('active'));
                 const activeNavLink = document.querySelector(`.main-nav a[href="#${targetId}"]`);
                 if (activeNavLink) {
                     const parentLi = activeNavLink.closest('li');
                     if(parentLi) parentLi.classList.add('active');
                 }
-            }
 
+                // Active state for mobile bottom navigation
+                mobileNavLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${targetId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
 
             function showLoginModal() {
                 signupModal.classList.add('hidden');
@@ -2401,6 +2491,14 @@
                         const targetId = this.getAttribute('href').substring(1);
                         showPageSection(targetId);
                     }
+                });
+            });
+
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    showPageSection(targetId);
                 });
             });
 
