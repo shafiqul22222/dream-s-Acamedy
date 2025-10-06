@@ -1,0 +1,2145 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream's Academy - অনলাইন শিক্ষা প্ল্যাটফর্ম</title>
+    <!-- Google Fonts: Hind Siluri for Bengali -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+    <style>
+        /* --- General Styles & Variables --- */
+        :root {
+            --primary-blue: #0a4d68;
+            --secondary-blue: #088395;
+            --light-blue: #05bfdb;
+            --accent-yellow: #ffc107;
+            /* START: নতুন সার্ভিস কার্ডের জন্য ভ্যারিয়েবল যোগ করা হলো */
+            --accent-purple: #4f46e5; 
+            /* END: নতুন ভ্যারিয়েবল */
+            --background-light: #f8f9fa;
+            --text-dark: #212529;
+            --text-light: #ffffff;
+            --border-color: #dee2e6;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            --card-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* --- Helper Classes --- */
+        .hidden { display: none !important; }
+
+        /* --- Buttons --- */
+        .btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 50px; /* Pill shape */
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(90deg, var(--light-blue), var(--secondary-blue));
+            color: var(--text-light);
+        }
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(8, 131, 149, 0.4);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--secondary-blue);
+            border: 2px solid var(--secondary-blue);
+        }
+        .btn-outline:hover {
+            background-color: var(--secondary-blue);
+            color: var(--text-light);
+        }
+        
+        /* START: নতুন সার্ভিস কার্ডের জন্য বাটন স্টাইল */
+        .btn-solid-blue {
+            background-color: var(--accent-purple);
+            color: var(--text-light);
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            border-radius: 8px;
+        }
+        .btn-solid-blue:hover {
+            background-color: #4338ca;
+            transform: translateY(-2px);
+        }
+        /* END: নতুন সার্ভিস কার্ডের জন্য বাটন স্টাইল */
+
+        /* --- Header & Navigation --- */
+        .main-header {
+            background-color: var(--text-light);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .main-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+        
+        .main-nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+
+        .main-nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 5px;
+        }
+        
+        .main-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-blue);
+            transition: width 0.3s ease;
+        }
+        
+        .main-nav a:hover::after, .main-nav li.active a::after {
+            width: 100%;
+        }
+        
+        .nav-dropdown { position: relative; }
+        .nav-dropdown .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 150%;
+            left: 0;
+            background: var(--text-light);
+            box-shadow: var(--shadow);
+            border-radius: var(--card-radius);
+            padding: 10px 0;
+            min-width: 200px;
+        }
+        .nav-dropdown:hover .dropdown-menu { display: block; }
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+        }
+        .dropdown-menu a::after { display: none; }
+        .dropdown-menu a:hover { background-color: var(--background-light); }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .search-bar {
+            position: relative;
+        }
+        .search-bar input {
+            padding: 8px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            min-width: 250px;
+        }
+
+        .header-icons { display: flex; align-items: center; gap: 15px; }
+        .header-icons .material-symbols-outlined {
+            cursor: pointer;
+            font-size: 28px;
+            color: var(--primary-blue);
+        }
+
+        .profile-icon-wrapper { position: relative; }
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--border-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .profile-icon .material-symbols-outlined { font-size: 28px; }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 55px;
+            right: 0;
+            width: 280px;
+            background: var(--text-light);
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        .profile-dropdown-header {
+            padding: 20px;
+            background: var(--background-light);
+            text-align: center;
+        }
+        .profile-dropdown-header img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        .profile-dropdown-header h4 { margin-bottom: 5px; }
+        .profile-dropdown-header p { font-size: 0.9em; color: #6c757d; }
+
+        .profile-dropdown-menu ul { list-style: none; }
+        .profile-dropdown-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: var(--text-dark);
+            border-top: 1px solid var(--border-color);
+        }
+        .profile-dropdown-menu li a:hover { background: var(--background-light); }
+        .profile-dropdown-menu .material-symbols-outlined { color: var(--primary-blue); }
+
+        /* START: শুধুমাত্র হিরো সেকশনের জন্য নতুন CSS কোড */
+        .hero-section {
+            padding: 60px 0;
+            background-color: #ffffff; /* একটি ক্লিন সাদা ব্যাকগ্রাউন্ড */
+            overflow: hidden;
+        }
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 40px;
+        }
+        .hero-content {
+            animation: slideInUp 0.8s ease-out forwards;
+        }
+        .hero-content h1 {
+            font-size: 3.4em;
+            line-height: 1.2;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .hero-content h1 span {
+            /* শিরোনামের নির্দিষ্ট অংশকে হাইলাইট করার জন্য */
+            background: linear-gradient(90deg, var(--light-blue), var(--secondary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-content p {
+            font-size: 1.2em;
+            max-width: 550px;
+            margin-bottom: 35px;
+            color: #495057;
+        }
+        .hero-buttons .btn {
+            margin-right: 15px;
+            padding: 12px 30px; /* বাটনগুলো একটু বড় করা হলো */
+        }
+
+        .hero-image-wrapper {
+            text-align: center;
+            animation: fadeInRight 1s ease-out forwards;
+        }
+        .hero-image-wrapper img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* অ্যানিমেশন কোড */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInRight {
+             from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* রেসপন্সিভ ডিজাইন */
+        @media (max-width: 992px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-content {
+                order: 2; /* মোবাইল ডিভাইসে টেক্সট নিচে দেখাবে */
+            }
+            .hero-image-wrapper {
+                order: 1;
+                margin-bottom: 30px;
+            }
+            .hero-content p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+             .hero-content h1 {
+                font-size: 2.8em;
+            }
+        }
+        /* END: শুধুমাত্র হিরো সেকশনের জন্য নতুন CSS কোড */
+        
+        /* --- Section General --- */
+        .section {
+            padding: 60px 0;
+        }
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5em;
+            color: var(--primary-blue);
+            font-weight: 700;
+        }
+
+        /* --- About Us Section --- */
+        .about-section {
+            background-color: var(--text-light);
+        }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            align-items: center;
+            gap: 50px;
+        }
+        .about-image img {
+            width: 100%;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+        }
+        .about-content h3 {
+            font-size: 2em;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+        }
+        .about-content p {
+            margin-bottom: 25px;
+            color: #495057;
+        }
+        .about-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        .feature-item .icon {
+            font-size: 28px;
+            color: var(--secondary-blue);
+            background-color: #eaf6f6;
+            padding: 12px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .feature-item h4 {
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+        .feature-item p {
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 0;
+            color: #6c757d;
+        }
+        @media (max-width: 992px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+        @media (max-width: 576px) {
+            .about-features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* START: নতুন সার্ভিস সেকশনের জন্য CSS কোড */
+        .services-section {
+            background-color: var(--text-light);
+        }
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            justify-items: center;
+        }
+        .service-card {
+            background-color: var(--text-light);
+            border: 2px solid var(--border-color);
+            border-radius: var(--card-radius);
+            padding: 30px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border-top: 5px solid var(--accent-purple);
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-purple);
+        }
+        .service-card h3 {
+            font-size: 1.8em;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+        .service-card .plan-description {
+            color: #6c757d;
+            margin: 10px 0 25px;
+            min-height: 50px;
+        }
+        .pricing-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        .pricing-info .old-price {
+            text-decoration: line-through;
+            color: #adb5bd;
+            font-size: 1.2em;
+        }
+        .pricing-info .save-badge {
+            background-color: #d1fae5;
+            color: #065f46;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .save-badge .material-symbols-outlined {
+            font-size: 1em;
+        }
+        .current-price {
+            margin-bottom: 25px;
+        }
+        .current-price .price-amount {
+            font-size: 3em;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+        .current-price .price-duration {
+            font-size: 1.2em;
+            color: #6c757d;
+            font-weight: 500;
+        }
+        .service-features {
+            list-style: none;
+            margin: 30px 0;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+        }
+        .service-features li {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-weight: 500;
+            color: #344054;
+        }
+        .service-features .material-symbols-outlined {
+            color: var(--accent-purple);
+            font-weight: 600;
+        }
+        /* END: নতুন সার্ভিস সেকশনের জন্য CSS কোড */
+
+        /* --- Courses Section --- */
+        .courses-section {
+            padding: 60px 0;
+        }
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .course-card {
+            background: var(--text-light);
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .card-thumbnail {
+            position: relative;
+        }
+        .card-thumbnail img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+        .top-course-tag {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: var(--accent-yellow);
+            color: var(--text-dark);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        .card-content {
+            padding: 20px;
+        }
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .category-tag {
+            background-color: #eaf6f6;
+            color: var(--secondary-blue);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+        .rating {
+            color: var(--accent-yellow);
+            font-size: 0.9em;
+        }
+        .course-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            height: 50px; /* fixed height for alignment */
+        }
+        .instructor, .course-info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        .course-info {
+            display: flex;
+            gap: 20px;
+            margin: 15px 0;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .price {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+        /* START: Login/Signup Modal UI পরিবর্তন */
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(33, 37, 41, 0.6); /* Slightly darker overlay */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .login-card {
+            background: var(--text-light);
+            border-radius: var(--card-radius);
+            width: 90%;
+            max-width: 850px; /* Increased max-width for two-column layout */
+            display: flex;
+            overflow: hidden; /* Important for border-radius on children */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            padding: 0; /* Removed padding to allow columns to fill space */
+            text-align: left; /* Changed from center */
+        }
+
+        .modal-info-panel {
+            width: 45%;
+            padding: 40px;
+            background: linear-gradient(rgba(10, 77, 104, 0.85), rgba(8, 131, 149, 0.85)), url('https://i.ibb.co/6y15g7p/learning-concept-illustration-114360-6186-removebg-preview.png') no-repeat center center;
+            background-size: cover;
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .modal-info-panel .logo {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .modal-info-panel h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+        .modal-info-panel p {
+            font-size: 1.1em;
+            line-height: 1.7;
+        }
+
+        .modal-form-panel {
+            width: 55%;
+            padding: 40px;
+        }
+        
+        .modal-form-panel h2 {
+            color: var(--primary-blue);
+            font-size: 1.8em;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group .material-symbols-outlined {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #adb5bd;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Hind Siliguri', sans-serif;
+            font-size: 1em;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 0 3px rgba(8, 131, 149, 0.2);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px; 
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .login-links {
+            text-align: right;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+
+        .login-links a {
+            color: var(--secondary-blue);
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .modal-form-panel .btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .signup-link a {
+            color: var(--secondary-blue);
+            font-weight: 600;
+        }
+        
+        /* Responsive styles for modal */
+        @media (max-width: 768px) {
+            .login-card {
+                flex-direction: column;
+                max-width: 450px;
+            }
+            .modal-info-panel {
+                display: none; /* Hide image panel on small screens */
+            }
+            .modal-form-panel {
+                width: 100%;
+            }
+        }
+        /* END: Login/Signup Modal UI পরিবর্তন */
+
+        /* --- Dashboard --- */
+        .dashboard {
+            padding: 40px 0;
+        }
+        .dashboard-container {
+            display: flex;
+            gap: 30px;
+        }
+        .dashboard-sidebar {
+            width: 280px;
+            flex-shrink: 0;
+        }
+        .sidebar-welcome-card {
+            background: var(--text-light);
+            padding: 20px;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .sidebar-user { display: flex; align-items: center; gap: 15px; }
+        .sidebar-user h4 { font-size: 1.1em; }
+        .sidebar-welcome-card .material-symbols-outlined { color: var(--primary-blue); cursor: pointer; }
+        
+        .sidebar-nav {
+            background: var(--text-light);
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            padding: 15px 0;
+            margin-bottom: 20px;
+        }
+        .sidebar-nav ul { list-style: none; }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            border-left: 4px solid transparent;
+        }
+        .sidebar-nav a:hover {
+            background-color: var(--background-light);
+        }
+        .sidebar-nav li.active a {
+            background-color: #eaf6f6;
+            color: var(--secondary-blue);
+            border-left-color: var(--secondary-blue);
+        }
+
+        .countdown-timer {
+            background: var(--primary-blue);
+            color: var(--text-light);
+            padding: 20px;
+            border-radius: var(--card-radius);
+            text-align: center;
+        }
+        .countdown-timer h4 { margin-bottom: 15px; }
+        #timer { display: flex; justify-content: space-around; }
+        .time-block { font-size: 1.5em; font-weight: 700; }
+        .time-block span { display: block; font-size: 0.5em; font-weight: 400; opacity: 0.8; }
+        
+        .dashboard-content {
+            flex-grow: 1;
+        }
+        .content-card {
+            background: var(--text-light);
+            padding: 30px;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+        }
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .content-header h2 { font-size: 2em; color: var(--primary-blue); }
+
+        /* Dashboard Content: My Courses */
+        #my-courses-page .course-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+
+        /* Noticeboard Section (Public) */
+        .notice-list-public {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .notice-item {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            background: var(--text-light);
+            transition: all 0.3s ease;
+        }
+        .notice-item:hover {
+            border-left: 3px solid var(--secondary-blue);
+            background-color: #eaf6f6;
+            transform: translateX(5px);
+        }
+        .notice-item .material-symbols-outlined { color: var(--primary-blue); font-size: 28px; }
+        .notice-details p { font-size: 0.9em; color: #6c757d; margin-bottom: 0; }
+        .notice-details h4 { margin-bottom: 5px; }
+        
+        /* Dashboard Content: Class Joining */
+        .class-schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .class-schedule-table th, .class-schedule-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .class-schedule-table th { background-color: var(--background-light); }
+        .status-tag {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        .status-upcoming { background: #eaf6f6; color: var(--secondary-blue); }
+        .status-completed { background: #e9ecef; color: #6c757d; }
+        
+        /* Dashboard Content: My Profile */
+        .profile-summary {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .profile-avatar { width: 100px; height: 100px; border-radius: 50%; background: var(--border-color); }
+        .profile-summary h3 { font-size: 1.8em; }
+        .profile-form h4 { font-size: 1.2em; margin-bottom: 20px; }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .form-group {
+            position: relative;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        .profile-form .btn {
+            grid-column: 1 / -1; 
+            margin-top: 20px;
+            width: auto; 
+            justify-self: start; 
+        }
+
+        /* --- Footer --- */
+        .main-footer {
+            background-color: var(--text-light);
+            padding: 60px 0 20px;
+            margin-top: 60px;
+            border-top: 1px solid var(--border-color);
+            position: relative;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .footer-col h4 {
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            color: var(--primary-blue);
+        }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 10px; }
+        .footer-col a {
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+        .footer-col a:hover { color: var(--secondary-blue); }
+        .app-download-badge {
+            display: inline-block;
+            background: #000;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+        .social-icons { display: flex; gap: 15px; }
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #eaf6f6;
+            color: var(--secondary-blue);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            font-size: 1.3em;
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        #scrollTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--secondary-blue);
+            color: var(--text-light);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        #scrollTopBtn.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* --- অ্যানিমেটেড নোটিফিকেশন স্টাইল --- */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: var(--text-light);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.5s ease forwards, fadeOut 0.5s ease 3.5s forwards;
+        }
+
+        .toast.success { background-color: #28a745; }
+        .toast.error { background-color: #dc3545; }
+        .toast.info { background-color: var(--secondary-blue); }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+        
+    </style>
+</head>
+<body>
+
+    <!-- ======================= Header ======================= -->
+    <header class="main-header">
+        <div class="container">
+            <a href="#" class="logo">Dream's ACADEMY</a>
+            <nav class="main-nav">
+                <ul>
+                    <li class="active"><a href="#home">হোম</a></li>
+                    <li><a href="#about">আমাদের সম্পর্কে</a></li>
+                    <li><a href="#services">সার্ভিস সমূহ</a></li>
+                    <li class="nav-dropdown">
+                        <a href="#courses">কোর্স</a>
+                        <div class="dropdown-menu">
+                            <a href="#">লাইভ কোর্স</a>
+                            <a href="#">রেকোর্ডেট কোর্স</a>
+                            <a href="#">ফ্রি ক্লাস</a>
+                        </div>
+                    </li>
+                    <li><a href="#noticeboard">নোটিশবোর্ড</a></li>
+                </ul>
+            </nav>
+            <div class="header-right">
+                <div class="search-bar">
+                    <input type="text" id="course-search-input" placeholder="আপনার কাঙ্ক্ষিত কোর্সটি সার্চ করুন">
+                </div>
+                <div id="logged-out-view">
+                    <button class="btn btn-gradient" id="login-signup-btn">লগ ইন / সাইন আপ →</button>
+                </div>
+                <div id="logged-in-view" class="header-icons hidden">
+                    <span class="material-symbols-outlined">notifications</span>
+                    <div class="profile-icon-wrapper">
+                        <div class="profile-icon" id="profile-icon">
+                            <span class="material-symbols-outlined">person</span>
+                        </div>
+                        <div class="profile-dropdown" id="profile-dropdown">
+                            <div class="profile-dropdown-header">
+                                <img src="https://via.placeholder.com/60" alt="Avatar">
+                                <h4>Md Shafiqul Islam</h4>
+                                <p>arafatislamshofiqul@gmail.com</p>
+                            </div>
+                            <nav class="profile-dropdown-menu">
+                                <ul>
+                                    <li><a href="#dashboard" id="dashboard-link"><span class="material-symbols-outlined">school</span> স্টুডেন্ট ড্যাশবোর্ড</a></li>
+                                    <li><a href="#" id="my-profile-link"><span class="material-symbols-outlined">person</span> আমার প্রোফাইল</a></li>
+                                    <li><a href="#" id="logout-btn"><span class="material-symbols-outlined">logout</span> Log Out</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- START: Login Modal UI পরিবর্তন -->
+        <div class="login-modal hidden" id="login-modal">
+            <div class="login-card">
+                <div class="modal-info-panel">
+                    <a href="#" class="logo">Dream's ACADEMY</a>
+                    <h2>দক্ষতার জগতে স্বাগতম!</h2>
+                    <p>আপনার অ্যাকাউন্টে লগইন করে নতুন কিছু শেখার अद्भुत যাত্রা শুরু করুন।</p>
+                </div>
+                <div class="modal-form-panel">
+                    <h2>লগ ইন করুন</h2>
+                    <form id="login-form">
+                        <div class="input-group">
+                            <span class="material-symbols-outlined">mail</span>
+                            <input type="email" id="login-email" placeholder="আপনার ইমেইল দিন" required>
+                        </div>
+                        <div class="input-group">
+                            <span class="material-symbols-outlined">lock</span>
+                            <input type="password" id="login-password" placeholder="পাসওয়ার্ড দিন" required>
+                            <span class="material-symbols-outlined password-toggle" id="password-toggle">visibility_off</span>
+                        </div>
+                        <div class="login-links">
+                            <a href="#">পাসওয়ার্ড ভুলে গেছেন?</a>
+                        </div>
+                        <button type="submit" class="btn btn-gradient">সাবমিট করুন →</button>
+                    </form>
+                    <div class="signup-link">
+                        আপনার পূর্বে একাউন্ট নেই? <a href="#" id="show-signup-modal-btn">সাইন আপ করুন</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="login-modal hidden" id="signup-modal">
+            <div class="login-card">
+                <div class="modal-info-panel">
+                     <a href="#" class="logo">Dream's ACADEMY</a>
+                    <h2>আমাদের সাথে যোগ দিন</h2>
+                    <p>একটি নতুন অ্যাকাউন্ট তৈরি করে আপনার দক্ষতা বিকাশের পথে প্রথম পদক্ষেপ নিন।</p>
+                </div>
+                <div class="modal-form-panel">
+                    <h2>নতুন একাউন্ট তৈরি করুন</h2>
+                    <form id="signup-form">
+                        <div class="input-group">
+                            <span class="material-symbols-outlined">person</span>
+                            <input type="text" id="signup-name" placeholder="আপনার পুরো নাম দিন" required>
+                        </div>
+                        <div class="input-group">
+                            <span class="material-symbols-outlined">mail</span>
+                            <input type="email" id="signup-email" placeholder="আপনার ইমেইল দিন" required>
+                        </div>
+                        <div class="input-group">
+                            <span class="material-symbols-outlined">lock</span>
+                            <input type="password" id="signup-password" placeholder="পাসওয়ার্ড দিন (কমপক্ষে ৬ অক্ষর)" required>
+                        </div>
+                         <div class="input-group">
+                            <span class="material-symbols-outlined">lock</span>
+                            <input type="password" id="signup-confirm-password" placeholder="পাসওয়ার্ডটি পুনরায় দিন" required>
+                        </div>
+                        <button type="submit" class="btn btn-gradient">সাইন আপ করুন →</button>
+                    </form>
+                    <div class="signup-link">
+                        আপনার একাউন্ট আছে? <a href="#" id="show-login-modal-btn">লগ ইন করুন</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END: Login Modal UI পরিবর্তন -->
+
+
+        <!-- ======================= Main Content (Logged Out View) ======================= -->
+        <div id="main-content">
+            
+            <section class="hero-section page-section" id="home">
+                <div class="container hero-grid">
+                    <div class="hero-content">
+                        <h1>বেকারত্ব দূর করতে যোগ দিন <span>আমাদের সাথে!</span></h1>
+                        <p>বেকার বসে না থেকে আপনার হাতে থাকা ডিভাইসটি কাজে লাগিয়ে ইনকাম শুরু করুন আমাদের গাইড লাইন ফলো করে।</p>
+                        <div class="hero-buttons">
+                            <a href="#courses" class="btn btn-gradient internal-link-btn">আমার কোর্স →</a>
+                            <a href="#" id="whatsapp-chat-btn" class="btn btn-outline">সাপোর্ট চ্যাট করুন</a>
+                        </div>
+                    </div>
+                    <div class="hero-image-wrapper">
+                        <img src="https://i.ibb.co/6y15g7p/learning-concept-illustration-114360-6186-removebg-preview.png" alt="Online Education Platform">
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section about-section page-section hidden" id="about">
+                <div class="container">
+                    <h2 class="section-title">আমাদের সম্পর্কে জানুন</h2>
+                    <div class="about-grid">
+                        <div class="about-image">
+                            <img src="https://via.placeholder.com/500x550/088395/FFFFFF?text=Dream's+Academy" alt="আমাদের সম্পর্কে">
+                        </div>
+                        <div class="about-content">
+                            <h3>আমাদের লক্ষ্য আপনার সফলতায় সাহায্য করা</h3>
+                            <p>Dream's Academy একটি অনলাইন শিক্ষা প্ল্যাটফর্ম যার মূল লক্ষ্য হলো বাংলাদেশের তরুণদের মাঝে প্রয়োজনীয় দক্ষতা তৈরি করে বেকারত্ব দূর করা। আমরা বিশ্বাস করি, সঠিক প্রশিক্ষণের মাধ্যমে যে কেউ নিজের ক্যারিয়ার গড়তে পারে এবং আর্থিকভাবে স্বাবলম্বী হতে পারে।</p>
+                            <p>আমাদের প্রতিটি কোর্স অভিজ্ঞ প্রশিক্ষকদের দ্বারা এমনভাবে ডিজাইন করা হয়েছে, যেন শিক্ষার্থীরা সহজভাবে কঠিন বিষয়গুলো আয়ত্ত করতে পারে এবং বাস্তব জীবনে প্রয়োগ করতে পারে।</p>
+                            
+                            <div class="about-features">
+                                <div class="feature-item">
+                                    <span class="material-symbols-outlined icon">school</span>
+                                    <div>
+                                        <h4>অভিজ্ঞ প্রশিক্ষক</h4>
+                                        <p>আমাদের সকল প্রশিক্ষক তাদের নিজ নিজ ক্ষেত্রে বহু বছরের অভিজ্ঞতাসম্পন্ন।</p>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="material-symbols-outlined icon">support_agent</span>
+                                    <div>
+                                        <h4>লাইফটাইম সাপোর্ট</h4>
+                                        <p>কোর্স শেষ হওয়ার পরেও যেকোনো সমস্যায় আমাদের সাপোর্ট টিম আপনাকে সাহায্য করবে।</p>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="material-symbols-outlined icon">slideshow</span>
+                                    <div>
+                                        <h4>লাইভ ক্লাস</h4>
+                                        <p>আমরা লাইভ ক্লাসের মাধ্যমে শিক্ষার্থীদের প্রশ্ন করার এবং সরাসরি শেখার সুযোগ দেই।</p>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="material-symbols-outlined icon">workspace_premium</span>
+                                    <div>
+                                        <h4>ক্যারিয়ার গাইডলাইন</h4>
+                                        <p>ফ্রিল্যান্সিং এবং চাকরি পাওয়ার জন্য আমরা বিশেষ গাইডলাইন প্রদান করে থাকি।</p>
+                                    </div>
+                                </div>
+                            </div>
+                             <a href="#courses" class="btn btn-gradient internal-link-btn">আমাদের কোর্স দেখুন →</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section services-section page-section hidden" id="services">
+                <div class="container">
+                    <h2 class="section-title">আমাদের সার্ভিস সমূহ</h2>
+                    <!-- START: পরিবর্তন -->
+                    <!-- সার্ভিস কার্ডগুলো এখন থেকে Firebase থেকে আসবে, তাই এই কন্টেইনারটি খালি থাকবে -->
+                    <div class="service-grid" id="services-container">
+                        <!-- ডাইনামিক সার্ভিস কার্ড এখানে যুক্ত হবে -->
+                    </div>
+                    <!-- END: পরিবর্তন -->
+                </div>
+            </section>
+
+            <section class="courses-section page-section hidden" id="courses">
+                <div class="container">
+                    <h2 class="section-title">আমাদের কোর্সসমূহ</h2>
+                    <!-- START: পরিবর্তন -->
+                    <!-- কোর্স কার্ডগুলো এখন থেকে Firebase থেকে আসবে, তাই এই কন্টেইনারটি খালি থাকবে -->
+                    <div class="course-grid" id="courses-container">
+                        <!-- ডাইনামিক কোর্স কার্ড এখানে যুক্ত হবে -->
+                    </div>
+                    <!-- END: পরিবর্তন -->
+                </div>
+            </section>
+            
+            <section class="courses-section page-section hidden" id="noticeboard">
+                <div class="container">
+                    <h2 class="section-title">সাম্প্রতিক নোটিশ</h2>
+                    <!-- START: পরিবর্তন -->
+                    <!-- নোটিশগুলো এখন থেকে Firebase থেকে আসবে, তাই এই কন্টেইনারটি খালি থাকবে -->
+                    <div class="notice-list-public" id="notice-board">
+                        <!-- ডাইনামিক নোটিশ এখানে যুক্ত হবে -->
+                    </div>
+                    <!-- END: পরিবর্তন -->
+                </div>
+            </section>
+
+        </div>
+        
+        <!-- ======================= Dashboard Content (Logged In View) ======================= -->
+        <div id="dashboard-content" class="hidden">
+            <section class="dashboard">
+                <div class="container dashboard-container">
+                    <!-- Dashboard Sidebar -->
+                    <aside class="dashboard-sidebar">
+                        <div class="sidebar-welcome-card">
+                            <div class="sidebar-user">
+                                <img src="https://via.placeholder.com/40" alt="avatar" style="border-radius: 50%;">
+                                <h4>স্বাগতম, শফিকুল</h4>
+                            </div>
+                            <span class="material-symbols-outlined">notifications</span>
+                        </div>
+                        <nav class="sidebar-nav">
+                            <ul id="sidebar-menu">
+                                <li data-page="my-courses-page" class="active"><a href="#"><span class="material-symbols-outlined">book</span> আমার কোর্স</a></li>
+                                <li data-page="class-joining-page"><a href="#"><span class="material-symbols-outlined">slideshow</span> ক্লাস জয়েনিং</a></li>
+                                <li data-page="my-profile-page"><a href="#"><span class="material-symbols-outlined">manage_accounts</span> আমার প্রোফাইল</a></li>
+                            </ul>
+                        </nav>
+                        <div class="countdown-timer">
+                            <h4>পরবর্তী লাইভ ক্লাস শুরু হবে</h4>
+                            <div id="timer">
+                                <div class="time-block" id="days">00<span>দিন</span></div>
+                                <div class="time-block" id="hours">00<span>ঘণ্টা</span></div>
+                                <div class="time-block" id="minutes">00<span>মিনিট</span></div>
+                                <div class="time-block" id="seconds">00<span>সেকেন্ড</span></div>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- Dashboard Main Content -->
+                    <main class="dashboard-content">
+                        <!-- My Courses Page -->
+                        <div class="dashboard-page" id="my-courses-page">
+                           <div class="content-header"><h2>আমার কোর্সগুলি</h2></div>
+                           <div class="course-grid">
+                               <div class="course-card">
+                                   <div class="card-thumbnail"><img src="https://via.placeholder.com/400x250/0a4d68/FFFFFF?text=Marketing" alt="Course Thumbnail"></div>
+                                   <div class="card-content">
+                                       <span class="category-tag">FREELANCING</span>
+                                       <h3>Freelancing with Digital Marketing - 122</h3>
+                                       <a href="#" class="btn btn-outline" style="width:100%; margin-top: 15px;">কোর্সটি শুরু করুন</a>
+                                   </div>
+                               </div>
+                               <!-- Add more enrolled courses -->
+                           </div>
+                        </div>
+                        
+                        <!-- Class Joining Page -->
+                        <div class="dashboard-page hidden" id="class-joining-page">
+                            <div class="content-card">
+                                <div class="content-header"><h2>লাইভ ক্লাস শিডিউল</h2></div>
+                                <h4>Freelancing with Digital Marketing 122</h4>
+                                <br>
+                                <table class="class-schedule-table">
+                                    <thead>
+                                        <tr><th>ক্লাস</th><th>টপিক</th><th>তারিখ ও সময়</th><th>স্ট্যাটাস</th><th>যোগদান</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Class-3</td>
+                                            <td>Logo, Post and Cover Design</td>
+                                            <td>2 October, বুধবার 10:00 AM</td>
+                                            <td><span class="status-tag status-upcoming">আসন্ন</span></td>
+                                            <td><a href="#" class="btn btn-gradient">Join Now</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Class-2</td>
+                                            <td>Social Media Marketing</td>
+                                            <td>29 September, রবিবার 10:00 AM</td>
+                                            <td><span class="status-tag status-completed">সম্পন্ন</span></td>
+                                            <td>-</td>
+                                        </tr>
+                                         <tr>
+                                            <td>Class-1</td>
+                                            <td>Introduction to Freelancing</td>
+                                            <td>25 September, বুধবার 10:00 AM</td>
+                                            <td><span class="status-tag status-completed">সম্পন্ন</span></td>
+                                            <td>-</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- My Profile Page -->
+                        <div class="dashboard-page hidden" id="my-profile-page">
+                             <div class="content-card">
+                                <div class="content-header">
+                                    <h2>আমার প্রোফাইল</h2>
+                                    <a href="#" class="btn btn-gradient">ভেরিফাই করুন →</a>
+                                </div>
+                                <div class="profile-summary">
+                                    <img class="profile-avatar" src="https://via.placeholder.com/100" alt="Avatar">
+                                    <h3 id="profile-summary-name">Md Shafiqul Islam</h3>
+                                </div>
+                                <!-- START: This form has been modified -->
+                                <form class="profile-form" id="profile-update-form">
+                                    <h4>পার্সোনাল ডিটেইলস</h4>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label for="fullName">আপনার পুরো নাম</label>
+                                            <input type="text" id="fullName" value="Md Shafiqul Islam">
+                                        </div>
+                                         <div class="form-group">
+                                            <!-- START: পরিবর্তন -->
+                                            <label for="email">আপনার ইমেইল (অপরিবর্তনযোগ্য)</label>
+                                            <input type="email" id="email" value="arafatislamshofiqul@gmail.com" readonly style="background-color: #e9ecef; cursor: not-allowed;">
+                                            <!-- END: পরিবর্তন -->
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="mobile">মোবাইল নাম্বার</label>
+                                            <input type="text" id="mobile" value="01703743441">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="dob">জন্ম তারিখ</label>
+                                            <input type="date" id="dob">
+                                        </div>
+                                         <div class="form-group">
+                                            <label for="title">টাইটেল</label>
+                                            <input type="text" id="title" placeholder="e.g., Web Developer">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-gradient">আপডেট করুন →</button>
+                                </form>
+                                <!-- END: Form modification -->
+                             </div>
+                        </div>
+
+                    </main>
+                </div>
+            </section>
+        </div>
+
+        <!-- Örnek Ödeme Ağ Geçidi Sayfası -->
+        <div id="payment-gateway" class="hidden" style="padding: 50px; text-align: center;">
+            <h2>পেমেন্ট পেজ</h2>
+            <p>আপনাকে পেমেন্ট গেটওয়েতে রিডাইরেক্ট করা হচ্ছে...</p>
+            <!-- Gerçek ödeme ağ geçidi formu veya yönlendirme burada olacak -->
+        </div>
+
+    </main>
+
+    <!-- ======================= Footer ======================= -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Column 1 -->
+                <div class="footer-col">
+                    <h4 class="logo">GoPixel's ACADEMY</h4>
+                    <p>ডাউনলোড করুন আমাদের মোবাইল অ্যাপ</p><br>
+                    <a href="#" class="app-download-badge">Download for Android</a>
+                </div>
+                <!-- Column 2 -->
+                <div class="footer-col">
+                    <h4>হেল্পফুল লিংকস</h4>
+                    <ul>
+                        <li><a href="#">সকল কোর্স</a></li>
+                        <li><a href="#">আমাদের সম্পর্কে</a></li>
+                        <li><a href="#">স্টুডেন্ট ফিডব্যাক</a></li>
+                        <li><a href="#">হেল্পডেস্ক</a></li>
+                    </ul>
+                </div>
+                <!-- Column 3 -->
+                <div class="footer-col">
+                    <h4>নেভিগেশন</h4>
+                    <ul>
+                        <li><a href="#">আমাদের ব্লগ</a></li>
+                        <li><a href="#">টার্মস এন্ড কন্ডিশন</a></li>
+                        <li><a href="#">রিফান্ড পলিসি</a></li>
+                        <li><a href="#">প্রাইভেসি পলিসি</a></li>
+                    </ul>
+                </div>
+                <!-- Column 4 -->
+                <div class="footer-col">
+                    <h4>আমাদের যোগাযোগ মাধ্যম</h4>
+                    <p><strong>কল করুন:</strong> 01703743441</p>
+                    <p><strong>ইমেইল:</strong> arafatislamshofiqul@gmail.com</p>
+                    <br>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon">F</a> <!-- Placeholder for FB icon -->
+                        <a href="#" class="social-icon">W</a> <!-- Placeholder for WA icon -->
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2024 - 2025 Dream's Academy</p>
+            </div>
+        </div>
+        <button id="scrollTopBtn"><span class="material-symbols-outlined">arrow_upward</span></button>
+    </footer>
+
+    <!-- অ্যানিমেটেড নোটিফিকেশন এর জন্য কন্টেইনার -->
+    <div id="toast-container"></div>
+
+    <!-- START: Firebase SDK Scripts -->
+    <!-- Firebase এর সব সার্ভিস ব্যবহার করার জন্য এই স্ক্রিপ্টগুলো যোগ করা হয়েছে -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <!-- END: Firebase SDK Scripts -->
+
+
+    <script>
+        // START: Firebase Configuration 
+        // এখানে আপনার Firebase প্রজেক্টের কনফিগারেশন কোড পেস্ট করুন
+        const firebaseConfig = {
+            apiKey: "AIzaSyAu6Lo33AH6GWFDHusaP14fmAHb0LEzWOQ",
+            authDomain: "go-pixel-f1c13.firebaseapp.com",
+            projectId: "go-pixel-f1c13",
+            storageBucket: "go-pixel-f1c13.firebasestorage.app",
+            messagingSenderId: "390711689002",
+            appId: "1:390711689002:web:0ce672f38aeca40d2f6853"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        // END: Firebase Configuration
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Variable Declarations ---
+            const loginSignupBtn = document.getElementById('login-signup-btn');
+            const loginModal = document.getElementById('login-modal');
+            const loginForm = document.getElementById('login-form');
+            const passwordField = document.getElementById('login-password');
+            const passwordToggle = document.getElementById('password-toggle');
+            
+            const signupModal = document.getElementById('signup-modal');
+            const signupForm = document.getElementById('signup-form');
+            const showSignupBtn = document.getElementById('show-signup-modal-btn');
+            const showLoginBtn = document.getElementById('show-login-modal-btn');
+            
+            const loggedOutView = document.getElementById('logged-out-view');
+            const loggedInView = document.getElementById('logged-in-view');
+            const mainContent = document.getElementById('main-content');
+            const dashboardContent = document.getElementById('dashboard-content');
+            
+            const profileIcon = document.getElementById('profile-icon');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            const dashboardLink = document.getElementById('dashboard-link');
+            const myProfileLink = document.getElementById('my-profile-link');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            const sidebarMenuItems = document.querySelectorAll('#sidebar-menu li');
+            const dashboardPages = document.querySelectorAll('.dashboard-page');
+
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            
+            const mainNavLinks = document.querySelectorAll('.main-nav a[href^="#"]');
+            const navLiElements = document.querySelectorAll('.main-nav ul > li');
+            const logoLink = document.querySelector('header .logo');
+
+            const whatsappChatBtn = document.getElementById('whatsapp-chat-btn');
+            
+            const profileUpdateForm = document.getElementById('profile-update-form');
+            
+            const mainContentSections = document.querySelectorAll('#main-content .page-section');
+            const internalLinkButtons = document.querySelectorAll('.internal-link-btn');
+
+            // --- Functions ---
+            
+            function showToast(message, type = 'info') {
+                const toastContainer = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                let icon = 'info';
+                if (type === 'success') icon = 'check_circle';
+                if (type === 'error') icon = 'error';
+                toast.innerHTML = `<span class="material-symbols-outlined">${icon}</span> ${message}`;
+                toastContainer.appendChild(toast);
+                setTimeout(() => {
+                    toast.remove();
+                }, 4000); 
+            }
+
+            function showPageSection(targetId) {
+                if (!dashboardContent.classList.contains('hidden')) {
+                    dashboardContent.classList.add('hidden');
+                    mainContent.classList.remove('hidden');
+                }
+                mainContentSections.forEach(section => {
+                    section.classList.add('hidden');
+                });
+                document.getElementById('payment-gateway').classList.add('hidden');
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.remove('hidden');
+                }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                navLiElements.forEach(li => li.classList.remove('active'));
+                const activeNavLink = document.querySelector(`.main-nav a[href="#${targetId}"]`);
+                if (activeNavLink) {
+                    const parentLi = activeNavLink.closest('li');
+                    if(parentLi) parentLi.classList.add('active');
+                }
+            }
+
+
+            function showLoginModal() {
+                signupModal.classList.add('hidden');
+                loginModal.classList.remove('hidden');
+            }
+
+            function hideLoginModal() {
+                loginModal.classList.add('hidden');
+            }
+
+            function showSignupModal() {
+                loginModal.classList.add('hidden');
+                signupModal.classList.remove('hidden');
+            }
+
+            function hideSignupModal() {
+                signupModal.classList.add('hidden');
+            }
+            
+            function togglePassword() {
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    passwordToggle.textContent = 'visibility';
+                } else {
+                    passwordField.type = 'password';
+                    passwordToggle.textContent = 'visibility_off';
+                }
+            }
+            
+            function populateUI(userData) {
+                if (!userData) return;
+                document.querySelector('.sidebar-user h4').textContent = `স্বাগতম, ${userData.name.split(' ')[0]}`;
+                document.querySelector('.profile-dropdown-header h4').textContent = userData.name;
+                document.querySelector('.profile-dropdown-header p').textContent = userData.email;
+                document.getElementById('profile-summary-name').textContent = userData.name;
+            }
+
+            // Firebase Login Handler
+            function handleLogin(event) {
+                event.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+
+                auth.signInWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        // ইউজার লগইন সফল হয়েছে
+                        hideLoginModal();
+                        showToast(`স্বাগতম! আপনি সফলভাবে লগইন করেছেন।`, 'success');
+                        // onAuthStateChanged বাকি কাজ করবে
+                    })
+                    .catch((error) => {
+                        let message = "একটি ত্রুটি ঘটেছে।";
+                        if (error.code === 'auth/user-not-found') {
+                            message = "এই ইমেইলের কোনো একাউন্ট পাওয়া যায়নি।";
+                        } else if (error.code === 'auth/wrong-password') {
+                            message = "ভুল পাসওয়ার্ড। আবার চেষ্টা করুন।";
+                        }
+                        showToast(message, 'error');
+                    });
+            }
+
+            // Firebase Signup Handler
+            function handleSignup(event) {
+                event.preventDefault();
+                const name = document.getElementById('signup-name').value;
+                const email = document.getElementById('signup-email').value;
+                const password = document.getElementById('signup-password').value;
+                const confirmPassword = document.getElementById('signup-confirm-password').value;
+                
+                if (password !== confirmPassword) {
+                    showToast("পাসওয়ার্ড দুটি মেলেনি।", 'error');
+                    return;
+                }
+
+                auth.createUserWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+                        // Firestore এ অতিরিক্ত তথ্য সংরক্ষণ
+                        return db.collection('users').doc(user.uid).set({
+                            name: name,
+                            email: email,
+                            mobile: '',
+                            dob: '',
+                            title: ''
+                        });
+                    })
+                    .then(() => {
+                        showToast("সাইন আপ সফল হয়েছে! এখন লগ ইন করুন।", 'success');
+                        signupForm.reset();
+                        showLoginModal();
+                    })
+                    .catch((error) => {
+                        let message = "একটি ত্রুটি ঘটেছে।";
+                        if (error.code === 'auth/email-already-in-use') {
+                            message = "এই ইমেইল দিয়ে ইতিমধ্যে একটি একাউন্ট আছে।";
+                        } else if (error.code === 'auth/weak-password') {
+                            message = "পাসওয়ার্ডটি অন্তত ৬ অক্ষরের হতে হবে।";
+                        }
+                        showToast(message, 'error');
+                    });
+            }
+
+            // Firebase Logout Handler
+            function handleLogout() {
+                auth.signOut().then(() => {
+                    showToast("আপনি সফলভাবে লগ আউট হয়েছেন।", "info");
+                    // onAuthStateChanged বাকি কাজ করবে
+                }).catch((error) => {
+                    showToast("লগ আউট করার সময় একটি সমস্যা হয়েছে।", "error");
+                });
+            }
+            
+            function populateProfileForm() {
+                const user = auth.currentUser;
+                if (!user) return;
+
+                db.collection('users').doc(user.uid).get().then(doc => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        document.getElementById('fullName').value = userData.name || '';
+                        document.getElementById('email').value = userData.email || '';
+                        document.getElementById('mobile').value = userData.mobile || '';
+                        document.getElementById('dob').value = userData.dob || '';
+                        document.getElementById('title').value = userData.title || '';
+                    }
+                });
+            }
+            
+            // START: ফাংশনটি পরিবর্তন করা হয়েছে
+            function handleProfileUpdate(event) {
+                event.preventDefault();
+                const user = auth.currentUser;
+                if (!user) {
+                    showToast("আপডেট করার জন্য আপনাকে লগইন করতে হবে।", "error");
+                    return;
+                }
+                
+                // শুধুমাত্র যে ফিল্ডগুলো পরিবর্তনযোগ্য, সেগুলো আপডেট করা হবে
+                const updatedData = {
+                    name: document.getElementById('fullName').value,
+                    mobile: document.getElementById('mobile').value,
+                    dob: document.getElementById('dob').value,
+                    title: document.getElementById('title').value,
+                };
+
+                db.collection('users').doc(user.uid).update(updatedData)
+                    .then(() => {
+                        // UI তে নতুন তথ্য দেখানোর জন্য একটি সম্পূর্ণ অবজেক্ট তৈরি করা
+                        const fullUserDataForUI = {
+                            ...updatedData,
+                            email: user.email // বর্তমান ইমেইলটি যোগ করা
+                        };
+                        populateUI(fullUserDataForUI); // UI তে তাৎক্ষণিক পরিবর্তন দেখানো
+                        showToast("প্রোফাইল সফলভাবে আপডেট করা হয়েছে!", "success");
+                    })
+                    .catch(error => {
+                        // এই ত্রুটি এখন ঘটার সম্ভাবনা খুবই কম
+                        console.error("Firestore Profile Update Error:", error);
+                        showToast("প্রোফাইল আপডেট করার সময় একটি অপ্রত্যাশিত সমস্যা হয়েছে।", "error");
+                    });
+            }
+            // END: ফাংশন পরিবর্তন সম্পন্ন
+            
+            // Firebase Auth State Listener
+            // এই ফাংশনটি ব্যবহারকারীর লগইন বা লগআউট অবস্থা পর্যবেক্ষণ করে এবং UI পরিবর্তন করে
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    // ব্যবহারকারী লগইন করা আছে
+                    loggedOutView.classList.add('hidden');
+                    loggedInView.classList.remove('hidden');
+                    profileDropdown.style.display = 'none';
+
+                    // Firestore থেকে ব্যবহারকারীর তথ্য আনা
+                    db.collection('users').doc(user.uid).get().then(doc => {
+                        if (doc.exists) {
+                            populateUI(doc.data());
+                        } else {
+                            // যদি কোনো কারণে Firestore এ ডাটা না থাকে
+                            populateUI({ name: user.email, email: user.email });
+                        }
+                    });
+                } else {
+                    // ব্যবহারকারী লগ আউট করা আছে
+                    loggedInView.classList.add('hidden');
+                    loggedOutView.classList.remove('hidden');
+                    
+                    // ড্যাশবোর্ড থেকে হোম পেজে ফেরত পাঠানো
+                    showPageSection('home');
+                }
+            });
+
+            // START: পরিবর্তন (ডেটা দেখানোর জন্য নতুন ফাংশন)
+            // =============================================================
+            // Firebase থেকে সার্ভিসগুলো এনে ওয়েবসাইটে দেখানোর ফাংশন
+            async function displayServices() {
+                const container = document.getElementById('services-container');
+                if (!container) return;
+
+                try {
+                    container.innerHTML = '<em>সার্ভিস লোড হচ্ছে...</em>';
+                    const snapshot = await db.collection('services').get();
+                    let allServicesHTML = '';
+
+                    snapshot.forEach(doc => {
+                        const service = doc.data();
+                        const savedPercentage = Math.round(((service.oldPrice - service.currentPrice) / service.oldPrice) * 100);
+
+                        const serviceHTML = `
+                            <div class="service-card">
+                                <h3>${service.name}</h3>
+                                <p class="plan-description">${service.description}</p>
+                                <div class="pricing-info">
+                                    <span class="old-price">৳ ${service.oldPrice}</span>
+                                    ${savedPercentage > 0 ? `<span class="save-badge"><span class="material-symbols-outlined">sell</span> Save ${savedPercentage}%</span>` : ''}
+                                </div>
+                                <div class="current-price">
+                                    <span class="price-amount">৳ ${service.currentPrice}</span>
+                                    <span class="price-duration">/mo</span>
+                                </div>
+                                <a href="#" class="btn btn-solid-blue">Buy Now</a>
+                                <ul class="service-features">
+                                    ${(service.features || []).map(feature => `<li><span class="material-symbols-outlined">check_circle</span>${feature}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                        allServicesHTML += serviceHTML;
+                    });
+
+                    if (allServicesHTML === '') {
+                        container.innerHTML = '<p>এই মুহূর্তে কোনো সার্ভিস পাওয়া যায়নি।</p>';
+                    } else {
+                        container.innerHTML = allServicesHTML;
+                    }
+                } catch (error) {
+                    console.error("Error fetching services:", error);
+                    container.innerHTML = '<p>সার্ভিস লোড করার সময় একটি সমস্যা হয়েছে।</p>';
+                }
+            }
+
+            // Firebase থেকে কোর্সগুলো এনে ওয়েবসাইটে দেখানোর ফাংশন
+            async function displayCourses() {
+                const container = document.getElementById('courses-container');
+                if (!container) return;
+
+                try {
+                    container.innerHTML = '<em>কোর্স লোড হচ্ছে...</em>';
+                    const snapshot = await db.collection('courses').get();
+                    let allCoursesHTML = '';
+
+                    snapshot.forEach(doc => {
+                        const course = doc.data();
+                        const courseHTML = `
+                            <div class="course-card">
+                                <div class="card-thumbnail">
+                                    <img src="${course.image || 'https://via.placeholder.com/400x250'}" alt="${course.name}">
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-meta">
+                                        <span class="category-tag">${course.category}</span>
+                                        <div class="rating">★★★★★</div>
+                                    </div>
+                                    <h3>${course.name}</h3>
+                                    <div class="instructor">
+                                        <span class="material-symbols-outlined">person</span>
+                                        <span>${course.instructor}</span>
+                                    </div>
+                                    <div class="course-info">
+                                        <div class="course-info-item"><span class="material-symbols-outlined">schedule</span><span>${course.duration}</span></div>
+                                        <div class="course-info-item"><span class="material-symbols-outlined">receipt_long</span><span>${course.lectures} টি লেকচার</span></div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <span class="price">৳ ${course.price}</span>
+                                        <a href="#" class="btn btn-outline buy-now-btn">কোর্সটি কিনুন</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        allCoursesHTML += courseHTML;
+                    });
+                    
+                    if (allCoursesHTML === '') {
+                        container.innerHTML = '<p>এই মুহূর্তে কোনো কোর্স পাওয়া যায়নি।</p>';
+                    } else {
+                        container.innerHTML = allCoursesHTML;
+                        // নতুন করে 'buy-now-btn' গুলোকে আবার ইভেন্ট লিসেনার দিতে হবে
+                         document.querySelectorAll('.buy-now-btn').forEach(button => {
+                            button.addEventListener('click', handleBuyNowClick);
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error fetching courses:", error);
+                    container.innerHTML = '<p>কোর্স লোড করার সময় একটি সমস্যা হয়েছে।</p>';
+                }
+            }
+
+            // Firebase থেকে নোটিশগুলো এনে ওয়েবসাইটে দেখানোর ফাংশন
+            async function displayNotices() {
+                const container = document.getElementById('notice-board');
+                if (!container) return;
+
+                try {
+                    container.innerHTML = '<em>নোটিশ লোড হচ্ছে...</em>';
+                    const snapshot = await db.collection('notices').get();
+                    let allNoticesHTML = '';
+
+                    snapshot.forEach(doc => {
+                        const notice = doc.data();
+                        const noticeHTML = `
+                            <div class="notice-item">
+                                <span class="material-symbols-outlined">campaign</span>
+                                <div class="notice-details">
+                                    <h4>${notice.title}</h4>
+                                    <p>${notice.description}</p>
+                                </div>
+                            </div>
+                        `;
+                        allNoticesHTML += noticeHTML;
+                    });
+
+                     if (allNoticesHTML === '') {
+                        container.innerHTML = '<p>এই মুহূর্তে কোনো নতুন নোটিশ নেই।</p>';
+                    } else {
+                        container.innerHTML = allNoticesHTML;
+                    }
+                } catch (error) {
+                    console.error("Error fetching notices:", error);
+                    container.innerHTML = '<p>নোটিশ লোড করার সময় একটি সমস্যা হয়েছে।</p>';
+                }
+            }
+            // =============================================================
+            // END: পরিবর্তন
+
+
+            function switchDashboardPage(targetPageId) {
+                dashboardPages.forEach(page => page.classList.add('hidden'));
+                const targetPage = document.getElementById(targetPageId);
+                if (targetPage) {
+                    targetPage.classList.remove('hidden');
+                }
+                sidebarMenuItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('data-page') === targetPageId) {
+                        item.classList.add('active');
+                    }
+                });
+
+                if (targetPageId === 'my-profile-page') {
+                    populateProfileForm();
+                }
+            }
+
+            function startCountdown() {
+                const countdownDate = new Date().getTime() + (2 * 24 * 60 * 60 * 1000 + 5 * 60 * 60 * 1000);
+                const timerInterval = setInterval(function() {
+                    const now = new Date().getTime();
+                    const distance = countdownDate - now;
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    document.getElementById('days').innerHTML = `${days.toString().padStart(2, '0')}<span>দিন</span>`;
+                    document.getElementById('hours').innerHTML = `${hours.toString().padStart(2, '0')}<span>ঘণ্টা</span>`;
+                    document.getElementById('minutes').innerHTML = `${minutes.toString().padStart(2, '0')}<span>মিনিট</span>`;
+                    document.getElementById('seconds').innerHTML = `${seconds.toString().padStart(2, '0')}<span>সেকেন্ড</span>`;
+
+                    if (distance < 0) {
+                        clearInterval(timerInterval);
+                        document.getElementById('timer').innerHTML = "ক্লাস শুরু হয়েছে!";
+                    }
+                }, 1000);
+            }
+
+            function handleScroll() {
+                if (window.scrollY > 300) {
+                    scrollTopBtn.classList.add('show');
+                } else {
+                    scrollTopBtn.classList.remove('show');
+                }
+            }
+
+            function scrollToTop() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            const searchInput = document.getElementById('course-search-input');
+            
+            function filterCourses() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                // এখন কোর্স কার্ডগুলো ডাইনামিক, তাই নতুন করে ফিল্টার করতে হবে
+                const allCourseCards = document.querySelectorAll('#courses-container .course-card');
+                const courseGrid = document.querySelector('#courses-container');
+                let courseFound = false;
+
+                allCourseCards.forEach(card => {
+                    const titleElement = card.querySelector('h3');
+                    if (titleElement) {
+                        const title = titleElement.textContent.toLowerCase();
+                        if (title.includes(searchTerm)) {
+                            card.style.display = '';
+                            courseFound = true;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    }
+                });
+
+                let notFoundMessage = courseGrid.querySelector('.no-results');
+                if (!courseFound && searchTerm) {
+                    if (!notFoundMessage) {
+                        notFoundMessage = document.createElement('p');
+                        notFoundMessage.className = 'no-results';
+                        notFoundMessage.textContent = 'আপনার সার্চের সাথে মিলে এমন কোনো কোর্স পাওয়া যায়নি।';
+                        notFoundMessage.style.textAlign = 'center';
+                        notFoundMessage.style.fontSize = '1.1em';
+                        notFoundMessage.style.gridColumn = '1 / -1';
+                        courseGrid.appendChild(notFoundMessage);
+                    }
+                } else {
+                    if (notFoundMessage) {
+                        notFoundMessage.remove();
+                    }
+                }
+            }
+
+            function redirectToPaymentGateway() {
+                mainContent.classList.add('hidden');
+                dashboardContent.classList.add('hidden');
+                document.getElementById('payment-gateway').classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function handleBuyNowClick(event) {
+                event.preventDefault();
+                // Firebase থেকে বর্তমান ব্যবহারকারী লগইন করা আছে কিনা তা পরীক্ষা করে
+                if (auth.currentUser) {
+                    redirectToPaymentGateway();
+                } else {
+                    showLoginModal();
+                }
+            }
+
+            // --- Event Listeners ---
+            loginSignupBtn.addEventListener('click', showLoginModal);
+            
+            loginModal.addEventListener('click', function(e) {
+                if (e.target === loginModal) hideLoginModal();
+            });
+            
+            signupModal.addEventListener('click', function(e) {
+                if (e.target === signupModal) hideSignupModal();
+            });
+
+            showSignupBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showSignupModal();
+            });
+
+            showLoginBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showLoginModal();
+            });
+
+            passwordToggle.addEventListener('click', togglePassword);
+            
+            loginForm.addEventListener('submit', handleLogin);
+            signupForm.addEventListener('submit', handleSignup);
+            
+            profileUpdateForm.addEventListener('submit', handleProfileUpdate);
+            
+            profileIcon.addEventListener('click', function() {
+                profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
+            });
+            
+            document.addEventListener('click', function(e){
+                if (!profileIcon.contains(e.target) && !profileDropdown.contains(e.target)){
+                    profileDropdown.style.display = 'none';
+                }
+            });
+            
+            dashboardLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                mainContent.classList.add('hidden');
+                dashboardContent.classList.remove('hidden');
+                switchDashboardPage('my-courses-page');
+                profileDropdown.style.display = 'none';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            
+            myProfileLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                mainContent.classList.add('hidden');
+                dashboardContent.classList.remove('hidden');
+                switchDashboardPage('my-profile-page');
+                profileDropdown.style.display = 'none';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            logoutBtn.addEventListener('click', handleLogout);
+
+            sidebarMenuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('data-page');
+                    switchDashboardPage(pageId);
+                });
+            });
+
+            mainNavLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (!this.closest('.dropdown-menu')) {
+                        e.preventDefault();
+                        const targetId = this.getAttribute('href').substring(1);
+                        showPageSection(targetId);
+                    }
+                });
+            });
+
+            logoLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showPageSection('home');
+                searchInput.value = '';
+            });
+
+            internalLinkButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    showPageSection(targetId);
+                });
+            });
+            
+            searchInput.addEventListener('input', function() {
+                showPageSection('courses');
+                filterCourses();
+            });
+           
+            window.addEventListener('scroll', handleScroll);
+            scrollTopBtn.addEventListener('click', scrollToTop);
+
+            whatsappChatBtn.addEventListener('click', function(event) {
+                event.preventDefault();
+                const phoneNumber = '8801703743441';
+                const url = `https://wa.me/${phoneNumber}`;
+                const windowFeatures = 'width=800,height=700,resizable=yes,scrollbars=yes';
+                window.open(url, 'whatsappPopup', windowFeatures);
+            });
+
+            document.querySelectorAll('.buy-now-btn').forEach(button => {
+                button.addEventListener('click', handleBuyNowClick);
+            });
+
+            // --- Initializations ---
+            startCountdown();
+            switchDashboardPage('my-courses-page');
+            
+            // START: পরিবর্তন (ওয়েবসাইট লোড হওয়ার সাথে সাথে ডেটা দেখানোর জন্য ফাংশনগুলো কল করা)
+            displayServices();
+            displayCourses();
+            displayNotices();
+            // END: পরিবর্তন
+        });
+    </script>
+</body>
+</html>
