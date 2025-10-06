@@ -1156,6 +1156,46 @@
             .main-header .search-bar {
                 display: none;
             }
+            
+            /* START: ছবি অনুযায়ী মোবাইল ভিউয়ের জন্য নতুন CSS */
+            .hero-section {
+                background-color: var(--primary-blue);
+                padding: 70px 0;
+                text-align: center;
+            }
+            .hero-grid {
+                gap: 20px;
+            }
+            .hero-content h1 {
+                color: var(--text-light);
+                font-size: 2.5em;
+            }
+            .hero-content h1 span {
+                background: none;
+                -webkit-background-clip: unset;
+                -webkit-text-fill-color: unset;
+                background-clip: unset;
+                color: var(--light-blue);
+                font-weight: 700;
+            }
+            .hero-content p {
+                color: #e0e0e0;
+                font-size: 1.1em;
+                max-width: 90%;
+            }
+            .hero-image-wrapper {
+                display: none; /* মোবাইলে ছবি লুকানো থাকবে */
+            }
+            .hero-buttons {
+                margin-top: 30px;
+            }
+            .hero-buttons .btn-gradient {
+                background: var(--secondary-blue); /* বাটন স্টাইল পরিবর্তন */
+            }
+            .hero-buttons .btn-outline {
+                display: none; /* সাপোর্ট চ্যাট বাটন লুকানো থাকবে */
+            }
+            /* END: ছবি অনুযায়ী মোবাইল ভিউয়ের জন্য নতুন CSS */
         }
         /* --- END: Mobile Bottom Navigation Bar --- */
 
@@ -1295,7 +1335,9 @@
             <section class="hero-section page-section" id="home">
                 <div class="container hero-grid">
                     <div class="hero-content">
-                        <h1>বেকারত্ব দূর করতে যোগ দিন <span>আমাদের সাথে!</span></h1>
+                        <!-- START: ছবি অনুযায়ী লেখা পরিবর্তন -->
+                        <h1>বেকারত্ব দূর করতে যোগ দিন <br> <span>আমাদের ফ্রি ক্লাসে!</span></h1>
+                        <!-- END: ছবি অনুযায়ী লেখা পরিবর্তন -->
                         <p>বেকার বসে না থেকে আপনার হাতে থাকা ডিভাইসটি কাজে লাগিয়ে ইনকাম শুরু করুন আমাদের গাইড লাইন ফলো করে।</p>
                         <div class="hero-buttons">
                             <a href="#courses" class="btn btn-gradient internal-link-btn">আমার কোর্স →</a>
@@ -1650,24 +1692,26 @@
 
 
     <!-- ======================= Mobile Bottom Navigation ======================= -->
+    <!-- START: ছবি অনুযায়ী মোবাইল নেভিগেশন পরিবর্তন -->
     <nav class="mobile-bottom-nav">
         <a href="#noticeboard" class="mobile-nav-link">
             <span class="material-symbols-outlined">campaign</span>
             <span>নোটিশ</span>
         </a>
         <a href="#courses" class="mobile-nav-link">
-            <span class="material-symbols-outlined">school</span>
+            <span class="material-symbols-outlined">book</span>
             <span>কোর্স</span>
         </a>
-        <a href="#services" class="mobile-nav-link">
-            <span class="material-symbols-outlined">miscellaneous_services</span>
-            <span>সার্ভিস</span>
+        <a href="#" id="mobile-class-joining-link" class="mobile-nav-link">
+            <span class="material-symbols-outlined">slideshow</span>
+            <span>ক্লাস জয়েনিং</span>
         </a>
         <a href="#about" class="mobile-nav-link">
-            <span class="material-symbols-outlined">more_horiz</span>
+            <span class="material-symbols-outlined">menu</span>
             <span>আরও</span>
         </a>
     </nav>
+    <!-- END: ছবি অনুযায়ী মোবাইল নেভিগেশন পরিবর্তন -->
 
 
     <script>
@@ -2494,13 +2538,31 @@
                 });
             });
 
+            // START: মোবাইল নেভিগেশন লিঙ্কের জন্য উন্নত ইভেন্ট লিসেনার
             mobileNavLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const targetId = this.getAttribute('href').substring(1);
-                    showPageSection(targetId);
+
+                    if (this.id === 'mobile-class-joining-link') {
+                        // "ক্লাস জয়েনিং" লিঙ্ক হ্যান্ডেল করা
+                        if (auth.currentUser && auth.currentUser.email !== ADMIN_EMAIL) {
+                            mainContent.classList.add('hidden');
+                            dashboardContent.classList.remove('hidden');
+                            switchDashboardPage('class-joining-page');
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                            mobileNavLinks.forEach(navLink => navLink.classList.remove('active'));
+                            this.classList.add('active');
+                        } else {
+                            showLoginModal();
+                        }
+                    } else if (targetId) {
+                        // অন্য সকল লিঙ্ক হ্যান্ডেল করা
+                        showPageSection(targetId);
+                    }
                 });
             });
+            // END: মোবাইল নেভিগেশন লিঙ্কের জন্য উন্নত ইভেন্ট লিসেনার
 
             logoLink.addEventListener('click', function(e) {
                 e.preventDefault();
