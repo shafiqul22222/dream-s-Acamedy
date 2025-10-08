@@ -18,9 +18,7 @@
             --secondary-blue: #088395;
             --light-blue: #05bfdb;
             --accent-yellow: #ffc107;
-            /* START: নতুন সার্ভিস কার্ডের জন্য ভ্যারিয়েবল যোগ করা হলো */
-            --accent-purple: #4f46e5; 
-            /* END: নতুন ভ্যারিয়েবল */
+            --accent-purple: #4f46e5;
             --background-light: #f8f9fa;
             --text-dark: #212529;
             --text-light: #ffffff;
@@ -52,15 +50,13 @@
             max-width: 1200px;
             margin: 0 auto;
         }
-        
-        /* --- Helper Classes --- */
+
         .hidden { display: none !important; }
 
-        /* --- Buttons --- */
         .btn {
             padding: 10px 25px;
             border: none;
-            border-radius: 50px; /* Pill shape */
+            border-radius: 50px;
             cursor: pointer;
             font-weight: 600;
             display: inline-flex;
@@ -89,8 +85,7 @@
             background-color: var(--secondary-blue);
             color: var(--text-light);
         }
-        
-        /* START: নতুন সার্ভিস কার্ডের জন্য বাটন স্টাইল */
+
         .btn-solid-blue {
             background-color: var(--accent-purple);
             color: var(--text-light);
@@ -103,7 +98,6 @@
             background-color: #4338ca;
             transform: translateY(-2px);
         }
-        /* END: নতুন সার্ভিস কার্ডের জন্য বাটন স্টাইল */
 
         /* --- Header & Navigation --- */
         .main-header {
@@ -127,7 +121,7 @@
             color: var(--primary-blue);
             text-decoration: none;
         }
-        
+
         .main-nav ul {
             list-style: none;
             display: flex;
@@ -141,7 +135,7 @@
             position: relative;
             padding-bottom: 5px;
         }
-        
+
         .main-nav a::after {
             content: '';
             position: absolute;
@@ -152,11 +146,11 @@
             background-color: var(--secondary-blue);
             transition: width 0.3s ease;
         }
-        
+
         .main-nav a:hover::after, .main-nav li.active a::after {
             width: 100%;
         }
-        
+
         .nav-dropdown { position: relative; }
         .nav-dropdown .dropdown-menu {
             display: none;
@@ -182,7 +176,7 @@
             align-items: center;
             gap: 20px;
         }
-        
+
         .search-bar {
             position: relative;
         }
@@ -252,10 +246,9 @@
         .profile-dropdown-menu li a:hover { background: var(--background-light); }
         .profile-dropdown-menu .material-symbols-outlined { color: var(--primary-blue); }
 
-        /* START: শুধুমাত্র হিরো সেকশনের জন্য নতুন CSS কোড */
         .hero-section {
             padding: 60px 0;
-            background-color: #ffffff; /* একটি ক্লিন সাদা ব্যাকগ্রাউন্ড */
+            background-color: #ffffff;
             overflow: hidden;
         }
         .hero-grid {
@@ -275,7 +268,6 @@
             font-weight: 700;
         }
         .hero-content h1 span {
-            /* শিরোনামের নির্দিষ্ট অংশকে হাইলাইট করার জন্য */
             background: linear-gradient(90deg, var(--light-blue), var(--secondary-blue));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -289,7 +281,7 @@
         }
         .hero-buttons .btn {
             margin-right: 15px;
-            padding: 12px 30px; /* বাটনগুলো একটু বড় করা হলো */
+            padding: 12px 30px;
         }
 
         .hero-image-wrapper {
@@ -300,8 +292,7 @@
             max-width: 100%;
             height: auto;
         }
-        
-        /* অ্যানিমেশন কোড */
+
         @keyframes slideInUp {
             from {
                 opacity: 0;
@@ -322,15 +313,14 @@
                 transform: translateX(0);
             }
         }
-        
-        /* রেসপন্সিভ ডিজাইন */
+
         @media (max-width: 992px) {
             .hero-grid {
                 grid-template-columns: 1fr;
                 text-align: center;
             }
             .hero-content {
-                order: 2; /* মোবাইল ডিভাইসে টেক্সট নিচে দেখাবে */
+                order: 2;
             }
             .hero-image-wrapper {
                 order: 1;
@@ -344,9 +334,7 @@
                 font-size: 2.8em;
             }
         }
-        /* END: শুধুমাত্র হিরো সেকশনের জন্য নতুন CSS কোড */
-        
-        /* --- Section General --- */
+
         .section {
             padding: 60px 0;
         }
@@ -358,7 +346,6 @@
             font-weight: 700;
         }
 
-        /* --- About Us Section --- */
         .about-section {
             background-color: var(--text-light);
         }
@@ -425,7 +412,6 @@
             }
         }
 
-        /* START: নতুন সার্ভিস সেকশনের জন্য CSS কোড */
         .services-section {
             background-color: var(--text-light);
         }
@@ -516,9 +502,7 @@
             color: var(--accent-purple);
             font-weight: 600;
         }
-        /* END: নতুন সার্ভিস সেকশনের জন্য CSS কোড */
 
-        /* --- Courses Section --- */
         .courses-section {
             padding: 60px 0;
         }
@@ -582,7 +566,7 @@
         .course-card h3 {
             font-size: 1.3em;
             margin-bottom: 10px;
-            height: 50px; /* fixed height for alignment */
+            height: 50px;
         }
         .instructor, .course-info-item {
             display: flex;
@@ -609,14 +593,13 @@
             color: var(--primary-blue);
         }
 
-        /* START: Login/Signup Modal UI পরিবর্তন */
         .login-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(33, 37, 41, 0.6); /* Slightly darker overlay */
+            background: rgba(33, 37, 41, 0.6);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -628,12 +611,12 @@
             background: var(--text-light);
             border-radius: var(--card-radius);
             width: 90%;
-            max-width: 850px; /* Increased max-width for two-column layout */
+            max-width: 850px;
             display: flex;
-            overflow: hidden; /* Important for border-radius on children */
+            overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            padding: 0; /* Removed padding to allow columns to fill space */
-            text-align: left; /* Changed from center */
+            padding: 0;
+            text-align: left;
         }
 
         .modal-info-panel {
@@ -646,7 +629,7 @@
             flex-direction: column;
             justify-content: center;
         }
-        
+
         .modal-info-panel .logo {
             color: var(--text-light);
             margin-bottom: 20px;
@@ -665,7 +648,7 @@
             width: 55%;
             padding: 40px;
         }
-        
+
         .modal-form-panel h2 {
             color: var(--primary-blue);
             font-size: 1.8em;
@@ -694,7 +677,7 @@
             font-size: 1em;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
-        
+
         .input-group input:focus, .input-group select:focus {
             outline: none;
             border-color: var(--secondary-blue);
@@ -703,7 +686,7 @@
 
         .password-toggle {
             position: absolute;
-            right: 15px; 
+            right: 15px;
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
@@ -738,23 +721,20 @@
             color: var(--secondary-blue);
             font-weight: 600;
         }
-        
-        /* Responsive styles for modal */
+
         @media (max-width: 768px) {
             .login-card {
                 flex-direction: column;
                 max-width: 450px;
             }
             .modal-info-panel {
-                display: none; /* Hide image panel on small screens */
+                display: none;
             }
             .modal-form-panel {
                 width: 100%;
             }
         }
-        /* END: Login/Signup Modal UI পরিবর্তন */
 
-        /* --- Dashboard --- */
         .dashboard {
             padding: 40px 0;
         }
@@ -785,7 +765,7 @@
         }
         .sidebar-user h4 { font-size: 1.1em; }
         .sidebar-welcome-card .material-symbols-outlined { color: var(--primary-blue); cursor: pointer; }
-        
+
         .sidebar-nav {
             background: var(--text-light);
             border-radius: var(--card-radius);
@@ -824,7 +804,7 @@
         #timer { display: flex; justify-content: space-around; }
         .time-block { font-size: 1.5em; font-weight: 700; }
         .time-block span { display: block; font-size: 0.5em; font-weight: 400; opacity: 0.8; }
-        
+
         .dashboard-content {
             flex-grow: 1;
         }
@@ -833,6 +813,7 @@
             padding: 30px;
             border-radius: var(--card-radius);
             box-shadow: var(--shadow);
+            overflow-x: auto;
         }
         .content-header {
             display: flex;
@@ -844,10 +825,8 @@
         }
         .content-header h2 { font-size: 2em; color: var(--primary-blue); }
 
-        /* Dashboard Content: My Courses */
         #my-courses-page .course-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
 
-        /* Noticeboard Section (Public) */
         .notice-list-public {
             max-width: 800px;
             margin: 0 auto;
@@ -871,8 +850,7 @@
         .notice-item .material-symbols-outlined { color: var(--primary-blue); font-size: 28px; }
         .notice-details p { font-size: 0.9em; color: #6c757d; margin-bottom: 0; }
         .notice-details h4 { margin-bottom: 5px; }
-        
-        /* Dashboard Content: Class Joining */
+
         .class-schedule-table {
             width: 100%;
             border-collapse: collapse;
@@ -881,6 +859,7 @@
             padding: 15px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
         }
         .class-schedule-table th { background-color: var(--background-light); }
         .status-tag {
@@ -891,8 +870,7 @@
         }
         .status-upcoming { background: #eaf6f6; color: var(--secondary-blue); }
         .status-completed { background: #e9ecef; color: #6c757d; }
-        
-        /* Dashboard Content: My Profile */
+
         .profile-summary {
             display: flex;
             align-items: center;
@@ -901,7 +879,6 @@
         }
         .profile-summary h3 { font-size: 1.8em; }
 
-        /* START: ImgBB পরিবর্তন - প্রোফাইল ছবি আপলোডের জন্য CSS */
         .profile-avatar-wrapper {
             position: relative;
             width: 100px;
@@ -939,7 +916,6 @@
             font-size: 18px;
         }
 
-        /* START: নতুন পরিবর্তন - আপলোড আইকন ঘোরানোর জন্য অ্যানিমেশন */
         .upload-in-progress {
             animation: spin 1.5s linear infinite;
         }
@@ -947,8 +923,6 @@
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
-        /* END: নতুন পরিবর্তন */
-        /* END: ImgBB পরিবর্তন */
 
         .profile-form h4 { font-size: 1.2em; margin-bottom: 20px; }
         .form-grid {
@@ -971,13 +945,163 @@
             border-radius: 8px;
         }
         .profile-form .btn {
-            grid-column: 1 / -1; 
+            grid-column: 1 / -1;
             margin-top: 20px;
-            width: auto; 
-            justify-self: start; 
+            width: auto;
+            justify-self: start;
+        }
+        
+        /* --- START: New Styles for Curriculum Page --- */
+        #course-curriculum-page .content-header {
+            align-items: flex-start;
+        }
+        
+        .back-to-courses-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .back-to-courses-btn:hover {
+            background: var(--background-light);
+            color: var(--primary-blue);
         }
 
-        /* --- Footer --- */
+        .curriculum-layout {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 30px;
+        }
+        .video-player-wrapper {
+            background: #000;
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            position: relative;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            box-shadow: var(--shadow);
+        }
+        .video-player-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        #video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--text-dark);
+            color: #ccc;
+            text-align: center;
+            padding: 20px;
+        }
+        #video-placeholder .material-symbols-outlined {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+        .curriculum-list-wrapper {
+            background: var(--text-light);
+            padding: 20px;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        .curriculum-module {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        .module-header {
+            padding: 15px;
+            background: var(--background-light);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        .module-header .material-symbols-outlined {
+            transition: transform 0.3s ease;
+        }
+        .module-header.active .material-symbols-outlined {
+            transform: rotate(180deg);
+        }
+        .module-videos {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+        .module-videos.show {
+           max-height: 500px; /* Adjust as needed */
+        }
+        .video-item-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-top: 1px solid var(--border-color);
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: background-color 0.3s;
+            gap: 15px;
+        }
+        .video-item-link:hover {
+            background-color: #eaf6f6;
+        }
+        .video-item-link.playing {
+            background-color: #d1fae5;
+            color: #065f46;
+            font-weight: 600;
+        }
+        .video-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .video-title-wrapper .material-symbols-outlined {
+            font-size: 22px;
+        }
+        .video-duration {
+            font-size: 0.9em;
+            color: #6c757d;
+            background-color: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 1024px) {
+            .curriculum-layout {
+                grid-template-columns: 1fr;
+            }
+             .curriculum-list-wrapper {
+                max-height: none;
+            }
+        }
+        /* --- END: New Styles for Curriculum Page --- */
+
+
         .main-footer {
             background-color: var(--text-light);
             padding: 60px 0 20px;
@@ -1054,7 +1178,6 @@
             visibility: visible;
         }
 
-        /* --- অ্যানিমেটেড নোটিফিকেশন স্টাইল --- */
         #toast-container {
             position: fixed;
             top: 20px;
@@ -1101,17 +1224,16 @@
                 transform: translateX(100%);
             }
         }
-        
-        /* --- START: Mobile Bottom Navigation Bar --- */
+
         .mobile-bottom-nav {
-            display: none; /* ডেক্সটপে লুকানো থাকবে */
+            display: none;
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             background-color: var(--text-light);
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-            z-index: 1001; /* হেডার এর উপরে থাকবে */
+            z-index: 1001;
             height: 65px;
             justify-content: space-around;
             align-items: center;
@@ -1140,24 +1262,20 @@
             color: var(--secondary-blue);
         }
 
-        /* শুধুমাত্র মোবাইল ডিভাইসে এই স্টাইলগুলো প্রয়োগ হবে */
         @media (max-width: 768px) {
             .mobile-bottom-nav {
-                display: flex; /* মোবাইলে দেখানো হবে */
+                display: flex;
             }
-            /* নেভিগেশন বারের কারণে যেনো কোনো কন্টেন্ট ঢেকে না যায় */
             body {
-                padding-bottom: 70px; 
+                padding-bottom: 70px;
             }
-            /* মোবাইল ডিভাইসে মূল হেডার এর নেভিগেশন মেন্যু হাইড করা হলো */
             .main-header .main-nav {
                 display: none;
             }
             .main-header .search-bar {
                 display: none;
             }
-            
-            /* START: ছবি অনুযায়ী মোবাইল ভিউয়ের জন্য নতুন CSS */
+
             .hero-section {
                 background-color: var(--primary-blue);
                 padding: 70px 0;
@@ -1184,31 +1302,29 @@
                 max-width: 90%;
             }
             .hero-image-wrapper {
-                display: none; /* মোবাইলে ছবি লুকানো থাকবে */
+                display: none;
             }
             .hero-buttons {
                 margin-top: 30px;
             }
             .hero-buttons .btn-gradient {
-                background: var(--secondary-blue); /* বাটন স্টাইল পরিবর্তন */
+                background: var(--secondary-blue);
             }
             .hero-buttons .btn-outline {
-                display: none; /* সাপোর্ট চ্যাট বাটন লুকানো থাকবে */
+                display: none;
             }
-            /* END: ছবি অনুযায়ী মোবাইল ভিউয়ের জন্য নতুন CSS */
 
-            /* START: অতিরিক্ত মোবাইল রেসপন্সিভ স্টাইল */
             .section-title {
                 font-size: 2.1em;
                 margin-bottom: 30px;
             }
 
             .logo {
-                font-size: 1.6em; /* মোবাইলের জন্য লোগোর আকার পরিবর্তন */
+                font-size: 1.6em;
             }
 
             .header-right .btn {
-                padding: 8px 15px; /* মোবাইলের জন্য বাটনের প্যাডিং পরিবর্তন */
+                padding: 8px 15px;
                 font-size: 0.9em;
             }
 
@@ -1216,13 +1332,12 @@
                 text-align: center;
             }
             .about-content {
-                text-align: left; /* কনটেন্ট বাম দিকে অ্যালাইন থাকবে */
+                text-align: left;
             }
              .about-features {
                 text-align: left;
             }
 
-            /* Dashboard */
             .dashboard-container {
                 flex-direction: column;
             }
@@ -1232,15 +1347,7 @@
             .content-header h2 {
                 font-size: 1.6em;
             }
-            .class-schedule-table {
-                font-size: 0.9em;
-                white-space: nowrap; /* টেবিলের লেখা যেন ভেঙ্গে না যায় */
-            }
-            .class-schedule-table th, .class-schedule-table td {
-                padding: 10px;
-            }
-            
-            /* Profile Page */
+
             .profile-form .form-grid {
                 grid-template-columns: 1fr;
             }
@@ -1250,7 +1357,6 @@
                 text-align: center;
             }
 
-            /* Footer */
             .footer-grid {
                 grid-template-columns: 1fr;
                 text-align: center;
@@ -1263,9 +1369,7 @@
             .social-icons {
                 justify-content: center;
             }
-            /* END: অতিরিক্ত মোবাইল রেসপন্সিভ স্টাইল */
         }
-        /* --- END: Mobile Bottom Navigation Bar --- */
 
     </style>
 </head>
@@ -1306,7 +1410,7 @@
                         </div>
                         <div class="profile-dropdown" id="profile-dropdown">
                             <div class="profile-dropdown-header">
-                                <img src="https://via.placeholder.com/60" alt="Avatar">
+                                <img src="https://i.ibb.co/L1LQtBm/default-avatar.png" alt="Avatar">
                                 <h4>Md Shafiqul Islam</h4>
                                 <p>arafatislamshofiqul@gmail.com</p>
                             </div>
@@ -1314,9 +1418,7 @@
                                 <ul>
                                     <li><a href="#dashboard" id="dashboard-link"><span class="material-symbols-outlined">school</span> স্টুডেন্ট ড্যাশবোর্ড</a></li>
                                     <li><a href="#" id="my-profile-link"><span class="material-symbols-outlined">person</span> আমার প্রোফাইল</a></li>
-                                    <!-- START: পরিবর্তন -->
                                     <li id="admin-panel-link-li" class="hidden"><a href="admin.html" target="_blank"><span class="material-symbols-outlined">admin_panel_settings</span> অ্যাডমিন প্যানেল</a></li>
-                                    <!-- END: পরিবর্তন -->
                                     <li><a href="#" id="logout-btn"><span class="material-symbols-outlined">logout</span> Log Out</a></li>
                                 </ul>
                             </nav>
@@ -1328,7 +1430,7 @@
     </header>
 
     <main>
-        <!-- START: Login Modal UI পরিবর্তন -->
+        <!-- Login/Signup Modals -->
         <div class="login-modal hidden" id="login-modal">
             <div class="login-card">
                 <div class="modal-info-panel">
@@ -1359,7 +1461,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="login-modal hidden" id="signup-modal">
             <div class="login-card">
                 <div class="modal-info-panel">
@@ -1394,18 +1496,15 @@
                 </div>
             </div>
         </div>
-        <!-- END: Login Modal UI পরিবর্তন -->
 
 
         <!-- ======================= Main Content (Logged Out View) ======================= -->
         <div id="main-content">
-            
+
             <section class="hero-section page-section" id="home">
                 <div class="container hero-grid">
                     <div class="hero-content">
-                        <!-- START: ছবি অনুযায়ী লেখা পরিবর্তন -->
                         <h1>বেকারত্ব দূর করতে যোগ দিন <br> <span>আমাদের ফ্রি ক্লাসে!</span></h1>
-                        <!-- END: ছবি অনুযায়ী লেখা পরিবর্তন -->
                         <p>বেকার বসে না থেকে আপনার হাতে থাকা ডিভাইসটি কাজে লাগিয়ে ইনকাম শুরু করুন আমাদের গাইড লাইন ফলো করে।</p>
                         <div class="hero-buttons">
                             <a href="#courses" class="btn btn-gradient internal-link-btn">আমার কোর্স →</a>
@@ -1413,23 +1512,23 @@
                         </div>
                     </div>
                     <div class="hero-image-wrapper">
-                        <img src="https://i.ibb.co/6y15g7p/learning-concept-illustration-114360-6186-removebg-preview.png" alt="Online Education Platform">
+                        <img id="hero-image" src="https://i.ibb.co/6y15g7p/learning-concept-illustration-114360-6186-removebg-preview.png" alt="Online Education Platform">
                     </div>
                 </div>
             </section>
-            
+
             <section class="section about-section page-section hidden" id="about">
                 <div class="container">
                     <h2 class="section-title">আমাদের সম্পর্কে জানুন</h2>
                     <div class="about-grid">
                         <div class="about-image">
-                            <img src="https://via.placeholder.com/500x550/088395/FFFFFF?text=Dream's+Academy" alt="আমাদের সম্পর্কে">
+                            <img src="https://i.ibb.co/hK4k1g2/about-us-image.jpg" alt="আমাদের সম্পর্কে">
                         </div>
                         <div class="about-content">
                             <h3>আমাদের লক্ষ্য আপনার সফলতায় সাহায্য করা</h3>
                             <p>Dream's Academy একটি অনলাইন শিক্ষা প্ল্যাটফর্ম যার মূল লক্ষ্য হলো বাংলাদেশের তরুণদের মাঝে প্রয়োজনীয় দক্ষতা তৈরি করে বেকারত্ব দূর করা। আমরা বিশ্বাস করি, সঠিক প্রশিক্ষণের মাধ্যমে যে কেউ নিজের ক্যারিয়ার গড়তে পারে এবং আর্থিকভাবে স্বাবলম্বী হতে পারে।</p>
                             <p>আমাদের প্রতিটি কোর্স অভিজ্ঞ প্রশিক্ষকদের দ্বারা এমনভাবে ডিজাইন করা হয়েছে, যেন শিক্ষার্থীরা সহজভাবে কঠিন বিষয়গুলো আয়ত্ত করতে পারে এবং বাস্তব জীবনে প্রয়োগ করতে পারে।</p>
-                            
+
                             <div class="about-features">
                                 <div class="feature-item">
                                     <span class="material-symbols-outlined icon">school</span>
@@ -1465,45 +1564,36 @@
                     </div>
                 </div>
             </section>
-            
+
             <section class="section services-section page-section hidden" id="services">
                 <div class="container">
                     <h2 class="section-title">আমাদের সার্ভিস সমূহ</h2>
-                    <!-- START: পরিবর্তন -->
-                    <!-- সার্ভিস কার্ডগুলো এখন থেকে Firebase থেকে আসবে, তাই এই কন্টেইনারটি খালি থাকবে -->
                     <div class="service-grid" id="services-container">
-                        <!-- ডাইনামিক সার্ভিস কার্ড এখানে যুক্ত হবে -->
+                        <!-- Dynamic service cards will be added here -->
                     </div>
-                    <!-- END: পরিবর্তন -->
                 </div>
             </section>
 
             <section class="courses-section page-section hidden" id="courses">
                 <div class="container">
                     <h2 class="section-title">আমাদের কোর্সসমূহ</h2>
-                    <!-- START: পরিবর্তন -->
-                    <!-- কোর্স কার্ডগুলো এখন থেকে Firebase থেকে আসবে, তাই এই কন্টেইনারটি খালি থাকবে -->
                     <div class="course-grid" id="courses-container">
-                        <!-- ডাইনামিক কোর্স কার্ড এখানে যুক্ত হবে -->
+                        <!-- Dynamic course cards will be added here -->
                     </div>
-                    <!-- END: পরিবর্তন -->
                 </div>
             </section>
-            
+
             <section class="courses-section page-section hidden" id="noticeboard">
                 <div class="container">
                     <h2 class="section-title">সাম্প্রতিক নোটিশ</h2>
-                    <!-- START: পরিবর্তন -->
-                    <!-- নোটিশগুলো এখন থেকে Firebase থেকে আসবে, তাই এই কন্টেইনারটি খালি থাকবে -->
                     <div class="notice-list-public" id="notice-board">
-                        <!-- ডাইনামিক নোটিশ এখানে যুক্ত হবে -->
+                        <!-- Dynamic notices will be added here -->
                     </div>
-                    <!-- END: পরিবর্তন -->
                 </div>
             </section>
 
         </div>
-        
+
         <!-- ======================= Dashboard Content (Logged In View) ======================= -->
         <div id="dashboard-content" class="hidden">
             <section class="dashboard">
@@ -1512,7 +1602,7 @@
                     <aside class="dashboard-sidebar">
                         <div class="sidebar-welcome-card">
                             <div class="sidebar-user">
-                                <img src="https://via.placeholder.com/40" alt="avatar">
+                                <img src="https://i.ibb.co/L1LQtBm/default-avatar.png" alt="avatar">
                                 <h4>স্বাগতম, শফিকুল</h4>
                             </div>
                             <span class="material-symbols-outlined">notifications</span>
@@ -1540,47 +1630,18 @@
                         <!-- My Courses Page -->
                         <div class="dashboard-page" id="my-courses-page">
                            <div class="content-header"><h2>আমার কোর্সগুলি</h2></div>
-                           <!-- START: পরিবর্তন - ডেমো কোর্স মুছে ফেলা হয়েছে এবং নতুন আইডি যোগ করা হয়েছে -->
                            <div class="course-grid" id="my-courses-grid">
-                               <!-- অ্যাডমিন দ্বারা নির্ধারিত কোর্সগুলো এখানে JS দ্বারা যুক্ত হবে -->
+                               <!-- Admin-assigned courses will be added here by JS -->
                            </div>
-                           <!-- END: পরিবর্তন -->
                         </div>
-                        
+
                         <!-- Class Joining Page -->
                         <div class="dashboard-page hidden" id="class-joining-page">
                             <div class="content-card">
                                 <div class="content-header"><h2>লাইভ ক্লাস শিডিউল</h2></div>
-                                <h4>Freelancing with Digital Marketing 122</h4>
-                                <br>
-                                <table class="class-schedule-table">
-                                    <thead>
-                                        <tr><th>ক্লাস</th><th>টপিক</th><th>তারিখ ও সময়</th><th>স্ট্যাটাস</th><th>যোগদান</th></tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Class-3</td>
-                                            <td>Logo, Post and Cover Design</td>
-                                            <td>2 October, বুধবার 10:00 AM</td>
-                                            <td><span class="status-tag status-upcoming">আসন্ন</span></td>
-                                            <td><a href="#" class="btn btn-gradient">Join Now</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Class-2</td>
-                                            <td>Social Media Marketing</td>
-                                            <td>29 September, রবিবার 10:00 AM</td>
-                                            <td><span class="status-tag status-completed">সম্পন্ন</span></td>
-                                            <td>-</td>
-                                        </tr>
-                                         <tr>
-                                            <td>Class-1</td>
-                                            <td>Introduction to Freelancing</td>
-                                            <td>25 September, বুধবার 10:00 AM</td>
-                                            <td><span class="status-tag status-completed">সম্পন্ন</span></td>
-                                            <td>-</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div id="live-class-schedule-container">
+                                    <p>আপনার ক্লাস শিডিউল লোড হচ্ছে...</p>
+                                </div>
                             </div>
                         </div>
 
@@ -1592,18 +1653,15 @@
                                     <a href="#" class="btn btn-gradient">ভেরিফাই করুন →</a>
                                 </div>
                                 <div class="profile-summary">
-                                    <!-- START: ImgBB পরিবর্তন -->
                                     <div class="profile-avatar-wrapper">
-                                        <img class="profile-avatar" id="profile-page-avatar" src="https://via.placeholder.com/100" alt="Avatar">
+                                        <img class="profile-avatar" id="profile-page-avatar" src="https://i.ibb.co/L1LQtBm/default-avatar.png" alt="Avatar">
                                         <label for="profile-image-upload" class="avatar-upload-label">
                                             <span class="material-symbols-outlined">edit</span>
                                         </label>
                                         <input type="file" id="profile-image-upload" accept="image/*" style="display: none;">
                                     </div>
-                                    <!-- END: ImgBB পরিবর্তন -->
                                     <h3 id="profile-summary-name">Md Shafiqul Islam</h3>
                                 </div>
-                                <!-- START: This form has been modified -->
                                 <form class="profile-form" id="profile-update-form">
                                     <h4>পার্সোনাল ডিটেইলস</h4>
                                     <div class="form-grid">
@@ -1612,10 +1670,8 @@
                                             <input type="text" id="fullName" value="Md Shafiqul Islam">
                                         </div>
                                          <div class="form-group">
-                                            <!-- START: পরিবর্তন -->
                                             <label for="email">আপনার ইমেইল (অপরিবর্তনযোগ্য)</label>
                                             <input type="email" id="email" value="arafatislamshofiqul@gmail.com" readonly style="background-color: #e9ecef; cursor: not-allowed;">
-                                            <!-- END: পরিবর্তন -->
                                         </div>
                                         <div class="form-group">
                                             <label for="mobile">মোবাইল নাম্বার</label>
@@ -1632,9 +1688,35 @@
                                     </div>
                                     <button type="submit" class="btn btn-gradient">আপডেট করুন →</button>
                                 </form>
-                                <!-- END: Form modification -->
                              </div>
                         </div>
+                        
+                        <!-- START: New Course Curriculum Page -->
+                        <div class="dashboard-page hidden" id="course-curriculum-page">
+                            <div class="content-header">
+                                <h2 id="curriculum-course-title">কোর্সের নাম লোড হচ্ছে...</h2>
+                                <a href="#" id="back-to-my-courses" class="back-to-courses-btn">
+                                    <span class="material-symbols-outlined">arrow_back</span> সকল কোর্স
+                                </a>
+                            </div>
+                            <div class="curriculum-layout">
+                                <div class="video-player-wrapper">
+                                    <div id="video-placeholder">
+                                        <span class="material-symbols-outlined">play_circle</span>
+                                        <h3>ভিডিও প্লেয়ার</h3>
+                                        <p>শুরু করার জন্য ডান পাশ থেকে একটি ক্লাস সিলেক্ট করুন।</p>
+                                    </div>
+                                    <iframe id="youtube-player" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                                <div class="curriculum-list-wrapper">
+                                    <div id="curriculum-list-container">
+                                        <p>কারিকুলাম লোড হচ্ছে...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END: New Course Curriculum Page -->
+
 
                     </main>
                 </div>
@@ -1643,7 +1725,7 @@
 
     </main>
 
-    <!-- START: পেমেন্ট এর জন্য নতুন মোডাল -->
+    <!-- Payment Modal -->
     <div class="login-modal hidden" id="payment-modal">
         <div class="login-card" style="max-width: 500px; display: block; text-align: left; padding: 0;">
             <div class="modal-form-panel" style="width: 100%; position: relative;">
@@ -1653,8 +1735,7 @@
                      <p style="margin-bottom: 5px;">কোর্স: <strong id="payment-course-name-display"></strong></p>
                      <p style="font-size: 1.5em; color: var(--primary-blue); margin-bottom: 0;">মূল্য: <strong id="payment-amount-display"></strong></p>
                 </div>
-                
-                <!-- START: নতুন পরিবর্তন -->
+
                 <div style="padding: 15px; border: 1px dashed var(--secondary-blue); border-radius: 8px; margin-bottom: 25px; text-align: center;">
                     <p style="margin-bottom: 10px; font-weight: 500;">এই নম্বরে টাকা পাঠান (বিকাশ/নগদ)</p>
                     <div style="display: flex; justify-content: center; align-items: center; gap: 10px; background: #eaf6f6; padding: 10px; border-radius: 8px;">
@@ -1664,7 +1745,6 @@
                         </button>
                     </div>
                 </div>
-                <!-- END: নতুন পরিবর্তন -->
 
                 <form id="payment-form">
                     <input type="hidden" id="payment-course-name">
@@ -1672,7 +1752,7 @@
                         <span class="material-symbols-outlined">mail</span>
                         <input type="email" id="payment-email" placeholder="আপনার ইমেইল" readonly style="background-color: #e9ecef; cursor: not-allowed;">
                     </div>
-    
+
                     <div class="input-group">
                          <span class="material-symbols-outlined">payments</span>
                          <select id="payment-account-type" required style="width: 100%; padding: 14px 15px 14px 45px; border: 1px solid var(--border-color); border-radius: 8px; font-family: 'Hind Siliguri', sans-serif; font-size: 1em; -webkit-appearance: none; appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236c757d%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 15px center; background-size: 12px;">
@@ -1680,36 +1760,33 @@
                             <option value="Nagad">নগদ</option>
                          </select>
                     </div>
-                    
+
                     <div class="input-group">
                         <span class="material-symbols-outlined">attach_money</span>
                         <input type="text" id="payment-amount" placeholder="টাকার পরিমাণ" readonly style="background-color: #e9ecef; cursor: not-allowed;">
                     </div>
-    
+
                     <div class="input-group">
                         <span class="material-symbols-outlined">pin</span>
                         <input type="text" id="payment-trx-id" placeholder="TrxID দিন" required>
                     </div>
-    
+
                     <button type="submit" class="btn btn-gradient" style="width: 100%; padding: 14px; border-radius: 8px;">সাবমিট করুন →</button>
                 </form>
             </div>
         </div>
     </div>
-    <!-- END: পেমেন্ট এর জন্য নতুন মোডাল -->
 
 
     <!-- ======================= Footer ======================= -->
     <footer class="main-footer">
         <div class="container">
             <div class="footer-grid">
-                <!-- Column 1 -->
                 <div class="footer-col">
                     <h4 class="logo">Dream's ACADEMY</h4>
                     <p>ডাউনলোড করুন আমাদের মোবাইল অ্যাপ</p><br>
                     <a href="#" class="app-download-badge">Download for Android</a>
                 </div>
-                <!-- Column 2 -->
                 <div class="footer-col">
                     <h4>হেল্পফুল লিংকস</h4>
                     <ul>
@@ -1719,7 +1796,6 @@
                         <li><a href="#">হেল্পডেস্ক</a></li>
                     </ul>
                 </div>
-                <!-- Column 3 -->
                 <div class="footer-col">
                     <h4>নেভিগেশন</h4>
                     <ul>
@@ -1729,15 +1805,14 @@
                         <li><a href="#">প্রাইভেসি পলিসি</a></li>
                     </ul>
                 </div>
-                <!-- Column 4 -->
                 <div class="footer-col">
                     <h4>আমাদের যোগাযোগ মাধ্যম</h4>
                     <p><strong>কল করুন:</strong> 01703743441</p>
                     <p><strong>ইমেইল:</strong> arafatislamshofiqul@gmail.com</p>
                     <br>
                     <div class="social-icons">
-                        <a href="#" class="social-icon">F</a> <!-- Placeholder for FB icon -->
-                        <a href="#" class="social-icon">W</a> <!-- Placeholder for WA icon -->
+                        <a href="#" class="social-icon">F</a>
+                        <a href="#" class="social-icon">W</a>
                     </div>
                 </div>
             </div>
@@ -1748,19 +1823,13 @@
         <button id="scrollTopBtn"><span class="material-symbols-outlined">arrow_upward</span></button>
     </footer>
 
-    <!-- অ্যানিমেটেড নোটিফিকেশন এর জন্য কন্টেইনার -->
     <div id="toast-container"></div>
-    
-    <!-- START: Firebase SDK Scripts -->
-    <!-- Firebase এর সব সার্ভিস ব্যবহার করার জন্য এই স্ক্রিপ্টগুলো যোগ করা হয়েছে -->
+
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <!-- END: Firebase SDK Scripts -->
-
 
     <!-- ======================= Mobile Bottom Navigation ======================= -->
-    <!-- START: মোবাইল নেভিগেশন পরিবর্তন -->
     <nav class="mobile-bottom-nav">
         <a href="#noticeboard" class="mobile-nav-link">
             <span class="material-symbols-outlined">campaign</span>
@@ -1779,12 +1848,9 @@
             <span>আরও</span>
         </a>
     </nav>
-    <!-- END: মোবাইল নেভিগেশন পরিবর্তন -->
 
 
     <script>
-        // START: Firebase Configuration 
-        // এখানে আপনার Firebase প্রজেক্টের কনফিগারেশন কোড পেস্ট করুন
         const firebaseConfig = {
             apiKey: "AIzaSyAu6Lo33AH6GWFDHusaP14fmAHb0LEzWOQ",
             authDomain: "go-pixel-f1c13.firebaseapp.com",
@@ -1794,11 +1860,9 @@
             appId: "1:390711689002:web:0ce672f38aeca40d2f6853"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
-        // END: Firebase Configuration
 
         document.addEventListener('DOMContentLoaded', function() {
             // --- Variable Declarations ---
@@ -1807,17 +1871,17 @@
             const loginForm = document.getElementById('login-form');
             const passwordField = document.getElementById('login-password');
             const passwordToggle = document.getElementById('password-toggle');
-            
+
             const signupModal = document.getElementById('signup-modal');
             const signupForm = document.getElementById('signup-form');
             const showSignupBtn = document.getElementById('show-signup-modal-btn');
             const showLoginBtn = document.getElementById('show-login-modal-btn');
-            
+
             const loggedOutView = document.getElementById('logged-out-view');
             const loggedInView = document.getElementById('logged-in-view');
             const mainContent = document.getElementById('main-content');
             const dashboardContent = document.getElementById('dashboard-content');
-            
+
             const profileIcon = document.getElementById('profile-icon');
             const profileDropdown = document.getElementById('profile-dropdown');
             const dashboardLink = document.getElementById('dashboard-link');
@@ -1828,44 +1892,57 @@
             const dashboardPages = document.querySelectorAll('.dashboard-page');
 
             const scrollTopBtn = document.getElementById('scrollTopBtn');
-            
+
             const mainNavLinks = document.querySelectorAll('.main-nav a[href^="#"]');
             const navLiElements = document.querySelectorAll('.main-nav ul > li');
             const logoLink = document.querySelector('header .logo');
 
             const whatsappChatBtn = document.getElementById('whatsapp-chat-btn');
-            
+
             const profileUpdateForm = document.getElementById('profile-update-form');
-            
+
             const mainContentSections = document.querySelectorAll('#main-content .page-section');
             const internalLinkButtons = document.querySelectorAll('.internal-link-btn');
-            
+
             const paymentModal = document.getElementById('payment-modal');
             const closePaymentModalBtn = document.getElementById('close-payment-modal');
             const paymentForm = document.getElementById('payment-form');
             const copyPaymentNumberBtn = document.getElementById('copy-payment-number-btn');
             const adminPanelLinkLi = document.getElementById('admin-panel-link-li');
             const ADMIN_EMAIL = "arafatislamshofiqul@gmail.com";
-            
+
             const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
 
-
-            // START: ImgBB পরিবর্তন - ভ্যারিয়েবল ঘোষণা
             const profileImageUpload = document.getElementById('profile-image-upload');
             const profilePageAvatar = document.getElementById('profile-page-avatar');
             const headerAvatar = document.querySelector('.profile-dropdown-header img');
             const sidebarAvatar = document.querySelector('.sidebar-user img');
-            
-            // =========================================================================
-            // START: আপনার দেওয়া API কী এখানে যুক্ত করা হয়েছে
-            // =========================================================================
+
             const IMGBB_API_KEY = "41b94ddf4c1e99c53b0253d7daefadef";
-            // =========================================================================
-            // END: ImgBB পরিবর্তন
-            // =========================================================================
+            
+            // New Curriculum Page Variables
+            const backToMyCoursesBtn = document.getElementById('back-to-my-courses');
+
 
             // --- Functions ---
-            
+
+            async function loadHeroImage() {
+                const heroImageElement = document.getElementById('hero-image');
+                if (!heroImageElement) return;
+
+                try {
+                    const doc = await db.collection('site_settings').doc('hero_section').get();
+                    if (doc.exists && doc.data().imageUrl) {
+                        heroImageElement.src = doc.data().imageUrl;
+                    } else {
+                        heroImageElement.src = 'https://i.ibb.co/6y15g7p/learning-concept-illustration-114360-6186-removebg-preview.png';
+                    }
+                } catch (error) {
+                    console.error("Error fetching hero image:", error);
+                    heroImageElement.src = 'https://i.ibb.co/6y15g7p/learning-concept-illustration-114360-6186-removebg-preview.png';
+                }
+            }
+
             function showToast(message, type = 'info') {
                 const toastContainer = document.getElementById('toast-container');
                 const toast = document.createElement('div');
@@ -1877,7 +1954,7 @@
                 toastContainer.appendChild(toast);
                 setTimeout(() => {
                     toast.remove();
-                }, 4000); 
+                }, 4000);
             }
 
             function showPageSection(targetId) {
@@ -1894,8 +1971,7 @@
                     targetSection.classList.remove('hidden');
                 }
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                
-                // Active state for top navigation
+
                 navLiElements.forEach(li => li.classList.remove('active'));
                 const activeNavLink = document.querySelector(`.main-nav a[href="#${targetId}"]`);
                 if (activeNavLink) {
@@ -1903,7 +1979,6 @@
                     if(parentLi) parentLi.classList.add('active');
                 }
 
-                // Active state for mobile bottom navigation
                 mobileNavLinks.forEach(link => {
                     link.classList.remove('active');
                     if (link.getAttribute('href') === `#${targetId}`) {
@@ -1929,7 +2004,7 @@
             function hideSignupModal() {
                 signupModal.classList.add('hidden');
             }
-            
+
             function togglePassword() {
                 if (passwordField.type === 'password') {
                     passwordField.type = 'text';
@@ -1939,26 +2014,23 @@
                     passwordToggle.textContent = 'visibility_off';
                 }
             }
-            
+
             function populateUI(userData) {
                 if (!userData) return;
 
                 const displayName = userData.name || userData.email;
                 const userEmail = userData.email;
-                const photoUrl = userData.photoURL || 'https://via.placeholder.com/60';
+                const photoUrl = userData.photoURL || 'https://i.ibb.co/L1LQtBm/default-avatar.png';
 
-                // Sidebar
                 if (sidebarAvatar) sidebarAvatar.src = photoUrl;
                 document.querySelector('.sidebar-user h4').textContent = `স্বাগতম, ${displayName.split(' ')[0]}`;
 
-                // Header Dropdown
                 if (headerAvatar) headerAvatar.src = photoUrl;
                 document.querySelector('.profile-dropdown-header h4').textContent = displayName;
                 document.querySelector('.profile-dropdown-header p').textContent = userEmail;
-                
-                // My Profile Page
+
                 document.getElementById('profile-summary-name').textContent = displayName;
-                if (profilePageAvatar) profilePageAvatar.src = photoUrl.replace('=s60-c', '=s100-c'); 
+                if (profilePageAvatar) profilePageAvatar.src = photoUrl;
             }
 
             function handleLogin(event) {
@@ -1988,7 +2060,7 @@
                 const email = document.getElementById('signup-email').value;
                 const password = document.getElementById('signup-password').value;
                 const confirmPassword = document.getElementById('signup-confirm-password').value;
-                
+
                 if (password !== confirmPassword) {
                     showToast("পাসওয়ার্ড দুটি মেলেনি।", 'error');
                     return;
@@ -2003,7 +2075,7 @@
                             mobile: '',
                             dob: '',
                             title: '',
-                            photoURL: '' 
+                            photoURL: ''
                         });
                     })
                     .then(() => {
@@ -2029,7 +2101,7 @@
                     showToast("লগ আউট করার সময় একটি সমস্যা হয়েছে।", "error");
                 });
             }
-            
+
             function populateProfileForm() {
                 const user = auth.currentUser;
                 if (!user) return;
@@ -2042,14 +2114,14 @@
                         document.getElementById('mobile').value = userData.mobile || '';
                         document.getElementById('dob').value = userData.dob || '';
                         document.getElementById('title').value = userData.title || '';
-                        
+
                         if(profilePageAvatar) {
-                           profilePageAvatar.src = userData.photoURL || 'https://via.placeholder.com/100';
+                           profilePageAvatar.src = userData.photoURL || 'https://i.ibb.co/L1LQtBm/default-avatar.png';
                         }
                     }
                 });
             }
-            
+
             function handleProfileUpdate(event) {
                 event.preventDefault();
                 const user = auth.currentUser;
@@ -2057,7 +2129,7 @@
                     showToast("আপডেট করার জন্য আপনাকে লগইন করতে হবে।", "error");
                     return;
                 }
-                
+
                 const updatedData = {
                     name: document.getElementById('fullName').value,
                     mobile: document.getElementById('mobile').value,
@@ -2082,45 +2154,37 @@
                         showToast("প্রোফাইল আপডেট করার সময় একটি অপ্রত্যাশিত সমস্যা হয়েছে।", "error");
                     });
             }
-            
+
             auth.onAuthStateChanged(user => {
-                // START: নতুন পরিবর্তন - অ্যাডমিন লগইন করলে ইউজার সাইটে অটো লগইন হওয়া বন্ধ করা হলো
                 if (user && user.email === ADMIN_EMAIL) {
-                    // যদি অ্যাডমিন লগইন করে, ইউজার সাইটে তাকে লগ-আউট দেখানো হবে।
-                    // এটি অ্যাডমিন প্যানেলের সেশনকে প্রভাবিত করবে না।
                     loggedInView.classList.add('hidden');
                     loggedOutView.classList.remove('hidden');
                     adminPanelLinkLi.classList.add('hidden');
-                    // যদি ড্যাশবোর্ড খোলা থাকে, তাকে হোম পেজে পাঠানো হবে।
                     if (!dashboardContent.classList.contains('hidden')) {
                         mainContent.classList.remove('hidden');
                         dashboardContent.classList.add('hidden');
                         showPageSection('home');
                     }
                 }
-                // END: নতুন পরিবর্তন
-
-                else if (user) { // শুধুমাত্র সাধারণ ইউজারদের জন্য এই কোডটি চলবে
+                else if (user) {
                     loggedOutView.classList.add('hidden');
                     loggedInView.classList.remove('hidden');
                     profileDropdown.style.display = 'none';
-                    
-                    // সাধারণ ইউজার অ্যাডমিন প্যানেলের লিঙ্ক দেখতে পাবে না
+
                     adminPanelLinkLi.classList.add('hidden');
-                    
+
                     db.collection('users').doc(user.uid).get().then(doc => {
                         if (doc.exists) {
                             populateUI(doc.data());
                         } else {
-                            // যদি ইউজারের কোনো ডকুমেন্ট না থাকে, তাহলে বেসিক তথ্য দিয়ে UI দেখানো হবে
                             populateUI({ name: user.email, email: user.email });
                         }
                     });
                     displayMyCourses();
-                } else { // যখন কোনো ইউজার লগইন করা নেই
+                } else {
                     loggedInView.classList.add('hidden');
                     loggedOutView.classList.remove('hidden');
-                    adminPanelLinkLi.classList.add('hidden'); 
+                    adminPanelLinkLi.classList.add('hidden');
                     showPageSection('home');
                 }
             });
@@ -2188,7 +2252,7 @@
                         const courseHTML = `
                             <div class="course-card">
                                 <div class="card-thumbnail">
-                                    <img src="${course.image || 'https://via.placeholder.com/400x250'}" alt="${course.name}">
+                                    <img src="${course.image || 'https://i.ibb.co/JqgWkCg/placeholder.png'}" alt="${course.name}">
                                 </div>
                                 <div class="card-content">
                                     <div class="card-meta">
@@ -2213,7 +2277,7 @@
                         `;
                         allCoursesHTML += courseHTML;
                     });
-                    
+
                     if (allCoursesHTML === '') {
                         container.innerHTML = '<p>এই মুহূর্তে কোনো কোর্স পাওয়া যায়নি।</p>';
                     } else {
@@ -2234,7 +2298,7 @@
 
                 try {
                     container.innerHTML = '<em>নোটিশ লোড হচ্ছে...</em>';
-                    const snapshot = await db.collection('notices').get();
+                    const snapshot = await db.collection('notices').orderBy('timestamp', 'desc').get();
                     let allNoticesHTML = '';
 
                     snapshot.forEach(doc => {
@@ -2261,14 +2325,14 @@
                     container.innerHTML = '<p>নোটিশ লোড করার সময় একটি সমস্যা হয়েছে।</p>';
                 }
             }
-            
+
             async function displayMyCourses() {
                 const grid = document.getElementById('my-courses-grid');
                 const user = auth.currentUser;
                 if (!user || !grid) return;
 
                 grid.innerHTML = '<p style="text-align: center;">আপনার কোর্স লোড হচ্ছে...</p>';
-                
+
                 try {
                     const enrollmentsQuery = db.collection('enrollments').where('studentUid', '==', user.uid);
                     const snapshot = await enrollmentsQuery.get();
@@ -2287,17 +2351,243 @@
                                <div class="card-content">
                                    <span class="category-tag">${enrollment.courseCategory} - ব্যাচ ${enrollment.batch}</span>
                                    <h3>${enrollment.courseName}</h3>
-                                   <a href="#" class="btn btn-outline" style="width:100%; margin-top: 15px;">কোর্সটি শুরু করুন</a>
+                                   <button class="btn btn-outline start-course-btn"
+                                           data-course-name="${enrollment.courseName}"
+                                           data-batch="${enrollment.batch}"
+                                           style="width:100%; margin-top: 15px;">
+                                       কোর্সটি শুরু করুন
+                                   </button>
                                </div>
                            </div>
                         `;
                         allCoursesHTML += courseHTML;
                     });
                     grid.innerHTML = allCoursesHTML;
+                    
+                    // Add event listeners AFTER appending the HTML
+                    document.querySelectorAll('.start-course-btn').forEach(button => {
+                        button.addEventListener('click', (event) => {
+                            const courseName = event.currentTarget.dataset.courseName;
+                            const batch = event.currentTarget.dataset.batch;
+                            showCurriculumPage(courseName, batch);
+                        });
+                    });
+
 
                 } catch (error) {
                     console.error("Error fetching enrolled courses: ", error);
                     grid.innerHTML = '<p style="text-align: center; color: red;">আপনার কোর্সগুলো লোড করার সময় একটি সমস্যা হয়েছে।</p>';
+                }
+            }
+            
+            // --- START: New functions for Curriculum Page ---
+            
+            function getYouTubeEmbedUrl(url) {
+                if (!url) return '';
+                let videoId = '';
+                try {
+                    const urlObj = new URL(url);
+                    if (urlObj.hostname === 'youtu.be') {
+                        videoId = urlObj.pathname.slice(1);
+                    } else if (urlObj.hostname.includes('youtube.com')) {
+                        videoId = urlObj.searchParams.get('v');
+                    }
+                } catch(e) {
+                    console.error("Invalid URL for YouTube", e);
+                    return '';
+                }
+                return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+            }
+            
+            async function fetchAndDisplayCurriculum(courseName, batch) {
+                const container = document.getElementById('curriculum-list-container');
+                const player = document.getElementById('youtube-player');
+                const placeholder = document.getElementById('video-placeholder');
+
+                container.innerHTML = '<p>কারিকুলাম লোড হচ্ছে...</p>';
+                player.src = ''; // Clear previous video
+                placeholder.classList.remove('hidden');
+
+
+                try {
+                    const query = await db.collection('curriculum')
+                                        .where('courseName', '==', courseName)
+                                        .where('batch', '==', batch)
+                                        .limit(1)
+                                        .get();
+
+                    if (query.empty) {
+                        container.innerHTML = '<p>এই কোর্সের জন্য কোনো কারিকুলাম এখনো যোগ করা হয়নি।</p>';
+                        return;
+                    }
+
+                    const curriculumData = query.docs[0].data();
+                    let curriculumHTML = '';
+
+                    (curriculumData.modules || []).forEach((module, index) => {
+                         const lectureCount = module.videos ? module.videos.length : 0;
+                         curriculumHTML += `
+                            <div class="curriculum-module">
+                                <div class="module-header" data-target="module-videos-${index}">
+                                    <span>${module.title} • ${lectureCount} লেকচার</span>
+                                    <span class="material-symbols-outlined">expand_more</span>
+                                </div>
+                                <ul class="module-videos" id="module-videos-${index}">
+                                    ${(module.videos || []).map(video => `
+                                        <li>
+                                            <a href="#" class="video-item-link" data-video-url="${video.youtubeLink}">
+                                                <div class="video-title-wrapper">
+                                                    <span class="material-symbols-outlined">play_circle</span>
+                                                    <span>${video.title}</span>
+                                                </div>
+                                                <span class="video-duration">${video.duration || ''}</span>
+                                            </a>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                         `;
+                    });
+
+                    container.innerHTML = curriculumHTML || '<p>এই মডিউলে কোনো ভিডিও যোগ করা হয়নি।</p>';
+
+                    // Add event listeners for accordion
+                    container.querySelectorAll('.module-header').forEach(header => {
+                        header.addEventListener('click', () => {
+                            header.classList.toggle('active');
+                            const content = document.getElementById(header.dataset.target);
+                            content.classList.toggle('show');
+                        });
+                    });
+
+                    // Add event listeners for video links
+                    container.querySelectorAll('.video-item-link').forEach(link => {
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            
+                            // Remove playing class from all other links
+                            container.querySelectorAll('.video-item-link').forEach(l => l.classList.remove('playing'));
+                            
+                            // Add playing class to the clicked link
+                            link.classList.add('playing');
+                            
+                            const videoUrl = link.dataset.videoUrl;
+                            const embedUrl = getYouTubeEmbedUrl(videoUrl);
+                            if (embedUrl) {
+                                placeholder.classList.add('hidden');
+                                player.src = embedUrl;
+                            } else {
+                                showToast("দুঃখিত, ভিডিও লিঙ্কটি সঠিক নয়।", "error");
+                            }
+                        });
+                    });
+
+
+                } catch (error) {
+                    console.error("Error fetching curriculum:", error);
+                    container.innerHTML = '<p style="color:red;">কারিকুলাম লোড করার সময় একটি সমস্যা হয়েছে।</p>';
+                }
+
+            }
+
+            function showCurriculumPage(courseName, batch) {
+                document.getElementById('curriculum-course-title').textContent = `${courseName} - ব্যাচ ${batch}`;
+                switchDashboardPage('course-curriculum-page');
+                fetchAndDisplayCurriculum(courseName, batch);
+            }
+            
+            // --- END: New functions for Curriculum Page ---
+
+
+            async function displayLiveClasses() {
+                const container = document.getElementById('live-class-schedule-container');
+                const user = auth.currentUser;
+                if (!user || !container) return;
+
+                container.innerHTML = '<p>আপনার ক্লাস শিডিউল লোড হচ্ছে...</p>';
+
+                try {
+                    const enrollmentsSnapshot = await db.collection('enrollments').where('studentUid', '==', user.uid).get();
+
+                    if (enrollmentsSnapshot.empty) {
+                        container.innerHTML = '<p>আপনি কোনো কোর্সে এনরোল করেননি, তাই কোনো ক্লাস শিডিউল নেই।</p>';
+                        return;
+                    }
+
+                    let finalHTML = '';
+                    let classFound = false;
+
+                    for (const enrollmentDoc of enrollmentsSnapshot.docs) {
+                        const enrollment = enrollmentDoc.data();
+                        const { courseName, batch } = enrollment;
+
+                        const classesSnapshot = await db.collection('joinClass')
+                            .where('courseName', '==', courseName)
+                            .where('batch', '==', batch)
+                            .orderBy('dateTime', 'desc')
+                            .get();
+
+                        if (!classesSnapshot.empty) {
+                            classFound = true;
+                            finalHTML += `<h3 style="color:var(--primary-blue); margin-bottom:15px;">${courseName} - ব্যাচ ${batch}</h3>`;
+                            let tableHTML = `
+                                <table class="class-schedule-table">
+                                    <thead>
+                                        <tr><th>ক্লাস নং</th><th>টপিক</th><th>তারিখ ও সময়</th><th>স্ট্যাটাস</th><th>যোগদান</th></tr>
+                                    </thead>
+                                    <tbody>
+                            `;
+
+                            classesSnapshot.forEach(classDoc => {
+                                const liveClass = classDoc.data();
+                                const classTime = liveClass.dateTime.toDate();
+                                const now = new Date();
+
+                                const formattedTime = new Intl.DateTimeFormat('bn-BD', {
+                                    year: 'numeric', month: 'long', day: 'numeric',
+                                    weekday: 'long', hour: 'numeric', minute: 'numeric', hour12: true
+                                }).format(classTime);
+
+                                let statusTag = '';
+                                let joinButton = '-';
+                                const minutesDifference = (classTime - now) / (1000 * 60);
+
+                                if (now > classTime) {
+                                     statusTag = '<span class="status-tag status-completed">সম্পন্ন</span>';
+                                } else {
+                                    statusTag = '<span class="status-tag status-upcoming">আসন্ন</span>';
+                                    if (minutesDifference <= 15) {
+                                       joinButton = `<a href="${liveClass.link}" target="_blank" class="btn btn-gradient">এখন জয়েন করুন</a>`;
+                                    } else {
+                                       joinButton = 'সময় হয়নি';
+                                    }
+                                }
+
+                                tableHTML += `
+                                    <tr>
+                                        <td>${liveClass.classNumber}</td>
+                                        <td>${liveClass.topic}</td>
+                                        <td>${formattedTime}</td>
+                                        <td>${statusTag}</td>
+                                        <td>${joinButton}</td>
+                                    </tr>
+                                `;
+                            });
+
+                            tableHTML += '</tbody></table><br><hr style="margin: 20px 0;"><br>';
+                            finalHTML += tableHTML;
+                        }
+                    }
+
+                    if (!classFound) {
+                        container.innerHTML = '<p>আপনার কোর্সের জন্য এখনো কোনো ক্লাস শিডিউল করা হয়নি।</p>';
+                    } else {
+                        container.innerHTML = finalHTML;
+                    }
+
+                } catch (error) {
+                    console.error("Error fetching live classes: ", error);
+                    container.innerHTML = '<p style="color: red;">ক্লাস শিডিউল লোড করার সময় একটি সমস্যা হয়েছে। অনুগ্রহ করে Console চেক করুন এবং Firestore Index তৈরি করুন।</p>';
                 }
             }
 
@@ -2313,12 +2603,20 @@
                         item.classList.add('active');
                     }
                 });
+                
+                // Keep sidebar active on curriculum page
+                if (targetPageId === 'course-curriculum-page') {
+                     document.querySelector('#sidebar-menu li[data-page="my-courses-page"]').classList.add('active');
+                }
 
                 if (targetPageId === 'my-profile-page') {
                     populateProfileForm();
                 }
                 if (targetPageId === 'my-courses-page') {
                     displayMyCourses();
+                }
+                if (targetPageId === 'class-joining-page') {
+                    displayLiveClasses();
                 }
             }
 
@@ -2357,7 +2655,7 @@
             }
 
             const searchInput = document.getElementById('course-search-input');
-            
+
             function filterCourses() {
                 const searchTerm = searchInput.value.toLowerCase().trim();
                 const allCourseCards = document.querySelectorAll('#courses-container .course-card');
@@ -2394,7 +2692,7 @@
                     }
                 }
             }
-            
+
             function handleBuyNowClick(event) {
                 event.preventDefault();
                 if (auth.currentUser) {
@@ -2408,13 +2706,13 @@
                     document.getElementById('payment-course-name').value = itemName;
                     document.getElementById('payment-amount').value = itemPrice;
                     document.getElementById('payment-email').value = userEmail;
-                    
+
                     paymentModal.classList.remove('hidden');
                 } else {
                     showLoginModal();
                 }
             }
-            
+
             function handlePaymentSubmit(event) {
                 event.preventDefault();
                 const user = auth.currentUser;
@@ -2437,7 +2735,7 @@
                     status: 'pending',
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 };
-                
+
                 if (!paymentData.transactionId.trim()) {
                     showToast("অনুগ্রহ করে TrxID দিন।", "error");
                     submitBtn.disabled = false;
@@ -2461,7 +2759,6 @@
                     });
             }
 
-            // START: ImgBB পরিবর্তন - ছবি আপলোডের জন্য উন্নত ফাংশন
             function handleProfileImageUpload(event) {
                 const file = event.target.files[0];
                 const user = auth.currentUser;
@@ -2473,7 +2770,6 @@
                     return;
                 }
 
-                // আপলোড শুরু হওয়ার ভিজুয়াল ফিডব্যাক
                 showToast("ছবি আপলোড হচ্ছে...", "info");
                 const originalSrc = profilePageAvatar.src;
                 profilePageAvatar.style.opacity = '0.5';
@@ -2501,13 +2797,12 @@
                         const imageUrl = result.data.url;
                         return db.collection('users').doc(user.uid).update({
                             photoURL: imageUrl
-                        }).then(() => imageUrl); // Firestore আপডেটের পর imageUrl পাস করা
+                        }).then(() => imageUrl);
                     } else {
                         throw new Error(result.error.message || 'ImgBB API থেকে একটি অজানা সমস্যা হয়েছে।');
                     }
                 })
                 .then((newImageUrl) => {
-                    // UI তে সবশেষে আপডেট করা
                     profilePageAvatar.src = newImageUrl;
                     headerAvatar.src = newImageUrl;
                     sidebarAvatar.src = newImageUrl;
@@ -2516,59 +2811,45 @@
                 .catch(error => {
                     console.error('Image Upload Error:', error);
                     showToast(`ছবি আপলোডে সমস্যা: ${error.message}`, "error");
-                    profilePageAvatar.src = originalSrc; // ব্যর্থ হলে আগের ছবিতে ফেরত যাওয়া
+                    profilePageAvatar.src = originalSrc;
                 })
                 .finally(() => {
-                    // আপলোড শেষে ভিজুয়াল ফিডব্যাক রিসেট করা
                     profilePageAvatar.style.opacity = '1';
                     if (uploadIcon) {
                         uploadIcon.textContent = 'edit';
                         uploadIcon.classList.remove('upload-in-progress');
                     }
-                    event.target.value = null; // ফাইল ইনপুট রিসেট করা
+                    event.target.value = null;
                 });
             }
-            // END: ImgBB পরিবর্তন
 
             // --- Event Listeners ---
             loginSignupBtn.addEventListener('click', showLoginModal);
-            
-            loginModal.addEventListener('click', function(e) {
-                if (e.target === loginModal) hideLoginModal();
-            });
-            
-            signupModal.addEventListener('click', function(e) {
-                if (e.target === signupModal) hideSignupModal();
-            });
 
-            showSignupBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                showSignupModal();
-            });
+            loginModal.addEventListener('click', (e) => { if (e.target === loginModal) hideLoginModal(); });
+            signupModal.addEventListener('click', (e) => { if (e.target === signupModal) hideSignupModal(); });
 
-            showLoginBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                showLoginModal();
-            });
+            showSignupBtn.addEventListener('click', (e) => { e.preventDefault(); showSignupModal(); });
+            showLoginBtn.addEventListener('click', (e) => { e.preventDefault(); showLoginModal(); });
 
             passwordToggle.addEventListener('click', togglePassword);
-            
+
             loginForm.addEventListener('submit', handleLogin);
             signupForm.addEventListener('submit', handleSignup);
-            
+
             profileUpdateForm.addEventListener('submit', handleProfileUpdate);
-            
-            profileIcon.addEventListener('click', function() {
+
+            profileIcon.addEventListener('click', () => {
                 profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
             });
-            
-            document.addEventListener('click', function(e){
+
+            document.addEventListener('click', (e) => {
                 if (!profileIcon.contains(e.target) && !profileDropdown.contains(e.target)){
                     profileDropdown.style.display = 'none';
                 }
             });
-            
-            dashboardLink.addEventListener('click', function(e) {
+
+            dashboardLink.addEventListener('click', (e) => {
                 e.preventDefault();
                 mainContent.classList.add('hidden');
                 dashboardContent.classList.remove('hidden');
@@ -2576,8 +2857,8 @@
                 profileDropdown.style.display = 'none';
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
-            
-            myProfileLink.addEventListener('click', function(e) {
+
+            myProfileLink.addEventListener('click', (e) => {
                 e.preventDefault();
                 mainContent.classList.add('hidden');
                 dashboardContent.classList.remove('hidden');
@@ -2595,6 +2876,11 @@
                     switchDashboardPage(pageId);
                 });
             });
+            
+            backToMyCoursesBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchDashboardPage('my-courses-page');
+            });
 
             mainNavLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
@@ -2606,7 +2892,6 @@
                 });
             });
 
-            // START: মোবাইল নেভিগেশন লিঙ্কের জন্য ইভেন্ট লিসেনার পরিবর্তন
             mobileNavLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -2616,12 +2901,12 @@
                     }
                 });
             });
-            // END: মোবাইল নেভিগেশন লিঙ্কের জন্য ইভেন্ট লিসেনার পরিবর্তন
 
-            logoLink.addEventListener('click', function(e) {
+            logoLink.addEventListener('click', (e) => {
                 e.preventDefault();
                 showPageSection('home');
                 searchInput.value = '';
+                filterCourses();
             });
 
             internalLinkButtons.forEach(button => {
@@ -2631,58 +2916,43 @@
                     showPageSection(targetId);
                 });
             });
-            
-            searchInput.addEventListener('input', function() {
+
+            searchInput.addEventListener('input', () => {
                 showPageSection('courses');
                 filterCourses();
             });
-           
+
             window.addEventListener('scroll', handleScroll);
             scrollTopBtn.addEventListener('click', scrollToTop);
 
-            whatsappChatBtn.addEventListener('click', function(event) {
+            whatsappChatBtn.addEventListener('click', (event) => {
                 event.preventDefault();
-                const phoneNumber = '8801703743441';
-                const url = `https://wa.me/${phoneNumber}`;
-                const windowFeatures = 'width=800,height=700,resizable=yes,scrollbars=yes';
-                window.open(url, 'whatsappPopup', windowFeatures);
+                window.open(`https://wa.me/8801703743441`, 'whatsappPopup', 'width=800,height=700');
             });
 
             paymentForm.addEventListener('submit', handlePaymentSubmit);
 
-            closePaymentModalBtn.addEventListener('click', () => {
-                paymentModal.classList.add('hidden');
+            closePaymentModalBtn.addEventListener('click', () => paymentModal.classList.add('hidden'));
+            paymentModal.addEventListener('click', (e) => { if (e.target === paymentModal) paymentModal.classList.add('hidden'); });
+
+            copyPaymentNumberBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(document.getElementById('payment-number').textContent)
+                    .then(() => showToast('নম্বরটি সফলভাবে কপি করা হয়েছে!', 'success'))
+                    .catch(err => showToast('কপি করতে সমস্যা হয়েছে।', 'error'));
             });
 
-            paymentModal.addEventListener('click', (e) => {
-                if (e.target === paymentModal) {
-                    paymentModal.classList.add('hidden');
-                }
-            });
-
-            copyPaymentNumberBtn.addEventListener('click', function() {
-                const paymentNumber = document.getElementById('payment-number').textContent;
-                navigator.clipboard.writeText(paymentNumber).then(() => {
-                    showToast('নম্বরটি সফলভাবে কপি করা হয়েছে!', 'success');
-                }).catch(err => {
-                    console.error('Failed to copy text: ', err);
-                    showToast('কপি করতে সমস্যা হয়েছে।', 'error');
-                });
-            });
-
-            // START: ImgBB পরিবর্তন - ফাইল ইনপুটের জন্য ইভেন্ট লিসেনার
             if (profileImageUpload) {
                 profileImageUpload.addEventListener('change', handleProfileImageUpload);
             }
-            // END: ImgBB পরিবর্তন
 
             // --- Initializations ---
             startCountdown();
             switchDashboardPage('my-courses-page');
-            
+
             displayServices();
             displayCourses();
             displayNotices();
+            loadHeroImage();
         });
     </script>
 </body>
