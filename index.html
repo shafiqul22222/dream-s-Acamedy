@@ -245,6 +245,108 @@
         }
         .profile-dropdown-menu li a:hover { background: var(--background-light); }
         .profile-dropdown-menu .material-symbols-outlined { color: var(--primary-blue); }
+        
+        /* START: New Notification Styles */
+        .notification-icon-wrapper {
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 10px;
+            height: 10px;
+            background-color: #dc3545;
+            border-radius: 50%;
+            border: 2px solid var(--text-light);
+        }
+
+        .notification-dropdown {
+            display: none;
+            position: absolute;
+            top: 55px;
+            right: 0;
+            width: 360px;
+            max-height: 450px;
+            background: var(--text-light);
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .notification-dropdown.hidden { display: none; }
+
+        .notification-dropdown-header {
+            padding: 15px;
+            background: var(--secondary-blue);
+            color: var(--text-light);
+            flex-shrink: 0;
+        }
+        .notification-dropdown-header h3 {
+             font-size: 1.1em;
+             margin: 0;
+        }
+        
+        .notification-list {
+            list-style: none;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .notification-list-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .notification-list-item:hover {
+            background-color: var(--background-light);
+        }
+        .notification-list-item:last-child {
+            border-bottom: none;
+        }
+        
+        .notification-icon {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #eaf6f6;
+        }
+        .notification-icon .material-symbols-outlined {
+            color: var(--primary-blue);
+            font-size: 24px;
+        }
+         .notification-icon.notice-icon .material-symbols-outlined {
+            color: #dc3545; /* Red for notices */
+        }
+        
+        .notification-content p {
+            margin: 0;
+            font-size: 1em;
+            line-height: 1.4;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        
+        .notification-content span.time {
+            font-size: 0.8em;
+            color: #6c757d;
+        }
+        .no-notification-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+        }
+        /* END: New Notification Styles */
 
         .hero-section {
             padding: 60px 0;
@@ -668,6 +770,7 @@
             color: #adb5bd;
         }
 
+        /* --- START: UPDATED INPUT FIELD STYLES --- */
         .input-group input, .input-group select {
             width: 100%;
             padding: 14px 15px 14px 45px;
@@ -675,14 +778,23 @@
             border-radius: 8px;
             font-family: 'Hind Siliguri', sans-serif;
             font-size: 1em;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+            background-color: var(--background-light); /* Softer background */
+            color: var(--text-dark);
         }
+
+        .input-group input::placeholder {
+          color: #8a94a1; /* Muted placeholder color */
+        }
+
 
         .input-group input:focus, .input-group select:focus {
             outline: none;
             border-color: var(--secondary-blue);
             box-shadow: 0 0 0 3px rgba(8, 131, 149, 0.2);
+            background-color: var(--text-light); /* Return to white on focus */
         }
+        /* --- END: UPDATED INPUT FIELD STYLES --- */
 
         .password-toggle {
             position: absolute;
@@ -1403,7 +1515,22 @@
                     <button class="btn btn-gradient" id="login-signup-btn">লগ ইন / সাইন আপ →</button>
                 </div>
                 <div id="logged-in-view" class="header-icons hidden">
-                    <span class="material-symbols-outlined">notifications</span>
+                    <!-- START: Notification Icon and Dropdown -->
+                    <div class="notification-icon-wrapper">
+                        <span class="material-symbols-outlined" id="notification-icon">notifications</span>
+                        <span id="notification-badge" class="notification-badge hidden"></span>
+                    </div>
+                    <div class="notification-dropdown hidden" id="notification-dropdown">
+                        <div class="notification-dropdown-header">
+                           <h3>নোটিফিকেশন</h3>
+                        </div>
+                        <ul class="notification-list" id="notification-list-container">
+                           <!-- JS will populate this -->
+                           <li class="no-notification-message">কোনো নতুন নোটিফিকেশন নেই।</li>
+                        </ul>
+                    </div>
+                    <!-- END: Notification Icon and Dropdown -->
+
                     <div class="profile-icon-wrapper">
                         <div class="profile-icon" id="profile-icon">
                             <span class="material-symbols-outlined">person</span>
@@ -1451,7 +1578,7 @@
                             <span class="material-symbols-outlined password-toggle" id="password-toggle">visibility_off</span>
                         </div>
                         <div class="login-links">
-                            <a href="#">পাসওয়ার্ড ভুলে গেছেন?</a>
+                            <a href="#" id="forgot-password-link">পাসওয়ার্ড ভুলে গেছেন?</a>
                         </div>
                         <button type="submit" class="btn btn-gradient">সাবমিট করুন →</button>
                     </form>
@@ -1496,6 +1623,27 @@
                 </div>
             </div>
         </div>
+
+        <!-- START: New Forgot Password Modal -->
+        <div class="login-modal hidden" id="forgot-password-modal">
+            <div class="login-card" style="max-width: 500px; display: block; text-align: center;">
+                <div class="modal-form-panel" style="width: 100%;">
+                    <h2 style="font-size: 1.8em; color: var(--text-dark);">Forgot password</h2>
+                    <p style="margin-top: -15px; margin-bottom: 30px; color: #6c757d;">আপনার ইমেইল আইডি দিন</p>
+                    <form id="forgot-password-form">
+                        <div class="input-group">
+                            <span class="material-symbols-outlined">mail</span>
+                            <input type="email" id="reset-email" placeholder="আপনার ইমেইল আইডি দিন" required>
+                        </div>
+                        <button type="submit" class="btn btn-gradient" style="width:100%; border-radius: 50px; padding: 14px;">সাবমিট করুন →</button>
+                    </form>
+                    <div class="signup-link">
+                        লগইন করতে ফিরে যেতে চান? <a href="#" id="back-to-login-link">ক্লিক করুন</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END: New Forgot Password Modal -->
 
 
         <!-- ======================= Main Content (Logged Out View) ======================= -->
@@ -1605,7 +1753,8 @@
                                 <img src="https://i.ibb.co/L1LQtBm/default-avatar.png" alt="avatar">
                                 <h4>স্বাগতম, শফিকুল</h4>
                             </div>
-                            <span class="material-symbols-outlined">notifications</span>
+                            <!-- This icon is no longer needed here as it's in the main header -->
+                            <!-- <span class="material-symbols-outlined">notifications</span> -->
                         </div>
                         <nav class="sidebar-nav">
                             <ul id="sidebar-menu">
@@ -1863,6 +2012,10 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
+        
+        // --- Global listener variable for notifications ---
+        let notificationListener = null;
+
 
         document.addEventListener('DOMContentLoaded', function() {
             // --- Variable Declarations ---
@@ -1871,11 +2024,16 @@
             const loginForm = document.getElementById('login-form');
             const passwordField = document.getElementById('login-password');
             const passwordToggle = document.getElementById('password-toggle');
-
+            
             const signupModal = document.getElementById('signup-modal');
             const signupForm = document.getElementById('signup-form');
             const showSignupBtn = document.getElementById('show-signup-modal-btn');
             const showLoginBtn = document.getElementById('show-login-modal-btn');
+            
+            const forgotPasswordModal = document.getElementById('forgot-password-modal');
+            const forgotPasswordLink = document.getElementById('forgot-password-link');
+            const forgotPasswordForm = document.getElementById('forgot-password-form');
+            const backToLoginLink = document.getElementById('back-to-login-link');
 
             const loggedOutView = document.getElementById('logged-out-view');
             const loggedInView = document.getElementById('logged-in-view');
@@ -1887,6 +2045,13 @@
             const dashboardLink = document.getElementById('dashboard-link');
             const myProfileLink = document.getElementById('my-profile-link');
             const logoutBtn = document.getElementById('logout-btn');
+            
+            // New Notification Variables
+            const notificationIcon = document.getElementById('notification-icon');
+            const notificationBadge = document.getElementById('notification-badge');
+            const notificationDropdown = document.getElementById('notification-dropdown');
+            const notificationListContainer = document.getElementById('notification-list-container');
+
 
             const sidebarMenuItems = document.querySelectorAll('#sidebar-menu li');
             const dashboardPages = document.querySelectorAll('.dashboard-page');
@@ -1920,7 +2085,6 @@
 
             const IMGBB_API_KEY = "41b94ddf4c1e99c53b0253d7daefadef";
             
-            // New Curriculum Page Variables
             const backToMyCoursesBtn = document.getElementById('back-to-my-courses');
 
 
@@ -1989,6 +2153,7 @@
 
             function showLoginModal() {
                 signupModal.classList.add('hidden');
+                forgotPasswordModal.classList.add('hidden');
                 loginModal.classList.remove('hidden');
             }
 
@@ -1998,11 +2163,22 @@
 
             function showSignupModal() {
                 loginModal.classList.add('hidden');
+                forgotPasswordModal.classList.add('hidden');
                 signupModal.classList.remove('hidden');
             }
 
             function hideSignupModal() {
                 signupModal.classList.add('hidden');
+            }
+            
+            function showForgotPasswordModal() {
+                loginModal.classList.add('hidden');
+                signupModal.classList.add('hidden');
+                forgotPasswordModal.classList.remove('hidden');
+            }
+
+            function hideForgotPasswordModal() {
+                forgotPasswordModal.classList.add('hidden');
             }
 
             function togglePassword() {
@@ -2093,6 +2269,42 @@
                         showToast(message, 'error');
                     });
             }
+            
+            function handlePasswordResetRequest(event) {
+                event.preventDefault();
+                const emailInput = document.getElementById('reset-email');
+                const email = emailInput.value.trim();
+
+                if (!email) {
+                    showToast("অনুগ্রহ করে আপনার ইমেইল আইডি দিন।", "error");
+                    return;
+                }
+
+                const submitBtn = forgotPasswordForm.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'প্রসেসিং...';
+
+                auth.sendPasswordResetEmail(email)
+                    .then(() => {
+                        showToast(`পাসওয়ার্ড রিসেট লিঙ্কটি ${email} এই ইমেইলে পাঠানো হয়েছে।`, 'success');
+                        hideForgotPasswordModal();
+                        emailInput.value = ''; 
+                    })
+                    .catch((error) => {
+                        let message = "একটি ত্রুটি ঘটেছে।";
+                        if (error.code === 'auth/user-not-found') {
+                            message = "এই ইমেইলের কোনো একাউন্ট পাওয়া যায়নি।";
+                        } else if (error.code === 'auth/invalid-email') {
+                            message = "দয়া করে একটি সঠিক ইমেইল দিন।";
+                        }
+                        console.error("Password Reset Error:", error);
+                        showToast(message, 'error');
+                    })
+                    .finally(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = 'সাবমিট করুন →';
+                    });
+            }
 
             function handleLogout() {
                 auth.signOut().then(() => {
@@ -2101,6 +2313,121 @@
                     showToast("লগ আউট করার সময় একটি সমস্যা হয়েছে।", "error");
                 });
             }
+            
+            // --- START: NEW NOTIFICATION FUNCTIONS ---
+            
+            // Function to format time for notifications
+            function formatNotificationTime(timestamp) {
+                if (!timestamp) return '';
+                const date = timestamp.toDate();
+                const now = new Date();
+                const diffSeconds = Math.floor((now - date) / 1000);
+                const diffMinutes = Math.floor(diffSeconds / 60);
+                const diffHours = Math.floor(diffMinutes / 60);
+                const diffDays = Math.floor(diffHours / 24);
+
+                if (diffSeconds < 60) return 'এখনই';
+                if (diffMinutes < 60) return `${diffMinutes} মিনিট আগে`;
+                if (diffHours < 24) return `${diffHours} ঘণ্টা আগে`;
+                if (diffDays === 1) return 'গতকাল';
+                
+                return new Intl.DateTimeFormat('bn-BD', {
+                    month: 'long', day: 'numeric', year: 'numeric'
+                }).format(date);
+            }
+
+            // Function to update the notification UI
+            function updateNotificationUI(notifications) {
+                notificationListContainer.innerHTML = ''; // Clear previous notifications
+                if (notifications.length === 0) {
+                    notificationListContainer.innerHTML = '<li class="no-notification-message">কোনো নতুন নোটিফিকেশন নেই।</li>';
+                    notificationBadge.classList.add('hidden');
+                    return;
+                }
+
+                // For simplicity, we'll consider all notifications as unread for now.
+                // A more complex implementation would track a 'read' status in Firestore.
+                notificationBadge.classList.remove('hidden');
+
+                notifications.forEach(notification => {
+                    const data = notification.data();
+                    let icon = 'notifications_active';
+                    let iconClass = '';
+                    if (data.type === 'class_notice') {
+                        icon = 'campaign';
+                        iconClass = 'notice-icon';
+                    } else if (data.type === 'new_course' || data.type === 'content_update') {
+                        icon = 'school';
+                    }
+                    
+                    const listItem = document.createElement('li');
+                    listItem.className = 'notification-list-item';
+                    listItem.innerHTML = `
+                        <div class="notification-icon ${iconClass}">
+                            <span class="material-symbols-outlined">${icon}</span>
+                        </div>
+                        <div class="notification-content">
+                            <p>${data.message || data.title}</p>
+                            <span class="time">${formatNotificationTime(data.timestamp)}</span>
+                        </div>
+                    `;
+                    notificationListContainer.appendChild(listItem);
+                });
+            }
+            
+            // Function to show a browser notification
+            function showBrowserNotification(notification) {
+                if (Notification.permission === 'granted') {
+                    const notif = new Notification(notification.title, {
+                        body: notification.message,
+                        icon: 'https://i.ibb.co/L1LQtBm/default-avatar.png' // Replace with your site's logo
+                    });
+                }
+            }
+
+
+            // Function to set up the real-time listener for notifications
+            function initializeNotifications() {
+                // Request permission for browser notifications
+                if (Notification.permission === 'default') {
+                    Notification.requestPermission();
+                }
+
+                // Detach any existing listener before attaching a new one
+                if (notificationListener) {
+                    notificationListener();
+                }
+
+                notificationListener = db.collection('notifications')
+                    .orderBy('timestamp', 'desc')
+                    .limit(20) // Get the latest 20 notifications
+                    .onSnapshot(snapshot => {
+                        updateNotificationUI(snapshot.docs);
+                        
+                        // Show browser notification only for new additions
+                        snapshot.docChanges().forEach(change => {
+                            if (change.type === 'added') {
+                                showBrowserNotification(change.doc.data());
+                            }
+                        });
+
+                    }, error => {
+                        console.error("Error fetching notifications: ", error);
+                        notificationListContainer.innerHTML = '<li class="no-notification-message">নোটিফিকেশন লোড করা যায়নি।</li>';
+                    });
+            }
+
+            // Function to clean up the listener on logout
+            function cleanupNotifications() {
+                if (notificationListener) {
+                    notificationListener(); // This detaches the listener
+                    notificationListener = null;
+                }
+                notificationListContainer.innerHTML = '<li class="no-notification-message">কোনো নতুন নোটিফিকেশন নেই।</li>';
+                notificationBadge.classList.add('hidden');
+            }
+            // --- END: NEW NOTIFICATION FUNCTIONS ---
+
 
             function populateProfileForm() {
                 const user = auth.currentUser;
@@ -2165,11 +2492,13 @@
                         dashboardContent.classList.add('hidden');
                         showPageSection('home');
                     }
+                     cleanupNotifications();
                 }
                 else if (user) {
                     loggedOutView.classList.add('hidden');
                     loggedInView.classList.remove('hidden');
                     profileDropdown.style.display = 'none';
+                    notificationDropdown.classList.add('hidden');
 
                     adminPanelLinkLi.classList.add('hidden');
 
@@ -2181,11 +2510,13 @@
                         }
                     });
                     displayMyCourses();
+                    initializeNotifications(); // Initialize notifications on login
                 } else {
                     loggedInView.classList.add('hidden');
                     loggedOutView.classList.remove('hidden');
                     adminPanelLinkLi.classList.add('hidden');
                     showPageSection('home');
+                    cleanupNotifications(); // Cleanup on logout
                 }
             });
 
@@ -2364,7 +2695,6 @@
                     });
                     grid.innerHTML = allCoursesHTML;
                     
-                    // Add event listeners AFTER appending the HTML
                     document.querySelectorAll('.start-course-btn').forEach(button => {
                         button.addEventListener('click', (event) => {
                             const courseName = event.currentTarget.dataset.courseName;
@@ -2379,8 +2709,6 @@
                     grid.innerHTML = '<p style="text-align: center; color: red;">আপনার কোর্সগুলো লোড করার সময় একটি সমস্যা হয়েছে।</p>';
                 }
             }
-            
-            // --- START: New functions for Curriculum Page ---
             
             function getYouTubeEmbedUrl(url) {
                 if (!url) return '';
@@ -2405,7 +2733,7 @@
                 const placeholder = document.getElementById('video-placeholder');
 
                 container.innerHTML = '<p>কারিকুলাম লোড হচ্ছে...</p>';
-                player.src = ''; // Clear previous video
+                player.src = ''; 
                 placeholder.classList.remove('hidden');
 
 
@@ -2451,7 +2779,6 @@
 
                     container.innerHTML = curriculumHTML || '<p>এই মডিউলে কোনো ভিডিও যোগ করা হয়নি।</p>';
 
-                    // Add event listeners for accordion
                     container.querySelectorAll('.module-header').forEach(header => {
                         header.addEventListener('click', () => {
                             header.classList.toggle('active');
@@ -2460,15 +2787,12 @@
                         });
                     });
 
-                    // Add event listeners for video links
                     container.querySelectorAll('.video-item-link').forEach(link => {
                         link.addEventListener('click', (e) => {
                             e.preventDefault();
                             
-                            // Remove playing class from all other links
                             container.querySelectorAll('.video-item-link').forEach(l => l.classList.remove('playing'));
                             
-                            // Add playing class to the clicked link
                             link.classList.add('playing');
                             
                             const videoUrl = link.dataset.videoUrl;
@@ -2495,9 +2819,6 @@
                 switchDashboardPage('course-curriculum-page');
                 fetchAndDisplayCurriculum(courseName, batch);
             }
-            
-            // --- END: New functions for Curriculum Page ---
-
 
             async function displayLiveClasses() {
                 const container = document.getElementById('live-class-schedule-container');
@@ -2604,7 +2925,6 @@
                     }
                 });
                 
-                // Keep sidebar active on curriculum page
                 if (targetPageId === 'course-curriculum-page') {
                      document.querySelector('#sidebar-menu li[data-page="my-courses-page"]').classList.add('active');
                 }
@@ -2825,12 +3145,18 @@
 
             // --- Event Listeners ---
             loginSignupBtn.addEventListener('click', showLoginModal);
-
+            
             loginModal.addEventListener('click', (e) => { if (e.target === loginModal) hideLoginModal(); });
             signupModal.addEventListener('click', (e) => { if (e.target === signupModal) hideSignupModal(); });
+            forgotPasswordModal.addEventListener('click', (e) => { if (e.target === forgotPasswordModal) hideForgotPasswordModal(); });
 
             showSignupBtn.addEventListener('click', (e) => { e.preventDefault(); showSignupModal(); });
             showLoginBtn.addEventListener('click', (e) => { e.preventDefault(); showLoginModal(); });
+            
+            forgotPasswordLink.addEventListener('click', (e) => { e.preventDefault(); showForgotPasswordModal(); });
+            backToLoginLink.addEventListener('click', (e) => { e.preventDefault(); showLoginModal(); });
+            forgotPasswordForm.addEventListener('submit', handlePasswordResetRequest);
+
 
             passwordToggle.addEventListener('click', togglePassword);
 
@@ -2838,16 +3164,31 @@
             signupForm.addEventListener('submit', handleSignup);
 
             profileUpdateForm.addEventListener('submit', handleProfileUpdate);
+            
+            // --- UPDATED Event Listeners for Dropdowns ---
+            notificationIcon.addEventListener('click', () => {
+                notificationDropdown.classList.toggle('hidden');
+                profileDropdown.style.display = 'none'; // Close profile dropdown
+                 // When opening, we can assume the user has seen them.
+                notificationBadge.classList.add('hidden');
+            });
 
             profileIcon.addEventListener('click', () => {
                 profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
+                 notificationDropdown.classList.add('hidden'); // Close notification dropdown
             });
 
             document.addEventListener('click', (e) => {
+                 // Close profile dropdown if clicked outside
                 if (!profileIcon.contains(e.target) && !profileDropdown.contains(e.target)){
                     profileDropdown.style.display = 'none';
                 }
+                // Close notification dropdown if clicked outside
+                 if (!notificationIcon.contains(e.target) && !notificationDropdown.contains(e.target)){
+                    notificationDropdown.classList.add('hidden');
+                }
             });
+            // --- END of UPDATED Listeners ---
 
             dashboardLink.addEventListener('click', (e) => {
                 e.preventDefault();
