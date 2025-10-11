@@ -604,63 +604,6 @@
             color: var(--accent-purple);
             font-weight: 600;
         }
-        
-        /* --- START: New Success Stats Section Styles --- */
-        .success-stats-section {
-            background-color: var(--primary-blue);
-            color: var(--text-light);
-            padding: 60px 0;
-            text-align: center;
-        }
-        .success-stats-section .section-title {
-            color: var(--text-light);
-            margin-bottom: 10px;
-        }
-        .stats-subtitle {
-            margin-bottom: 40px;
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 30px;
-        }
-        .stat-item {
-            padding: 20px;
-        }
-        .stat-number {
-            font-size: 3.5em;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-        .stat-label {
-            font-size: 1.1em;
-            font-weight: 500;
-        }
-
-        @media (max-width: 992px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-            .stat-number {
-                font-size: 3em;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .stat-number {
-                font-size: 2.5em;
-            }
-            .stat-label {
-                font-size: 1em;
-            }
-        }
-        /* --- END: New Success Stats Section Styles --- */
 
         .courses-section {
             padding: 60px 0;
@@ -1721,32 +1664,6 @@
                     </div>
                 </div>
             </section>
-            
-            <!-- ======================= Success Stats Section ======================= -->
-            <section class="section success-stats-section" id="success-stats">
-                <div class="container">
-                    <h2 class="section-title">আমাদের সাফল্যগুলি দেখুন</h2>
-                    <p class="stats-subtitle">সাফল্যই আমাদের অনুপ্রেরণা</p>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-number">100+</div>
-                            <div class="stat-label">মোট শিক্ষার্থী</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">90%</div>
-                            <div class="stat-label">কমপ্লিশন রেট</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">5+</div>
-                            <div class="stat-label">অভিজ্ঞ মেন্টর</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">10+</div>
-                            <div class="stat-label">লার্নিং ম্যাটেরিয়াল</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             <section class="section about-section page-section hidden" id="about">
                 <div class="container">
@@ -2172,6 +2089,23 @@
 
 
             // --- Functions ---
+            
+            async function loadLogoText() {
+                const logoElements = document.querySelectorAll('.logo');
+                if (!logoElements.length) return;
+
+                try {
+                    const doc = await db.collection('site_settings').doc('header_settings').get();
+                    if (doc.exists && doc.data().logoText) {
+                        const newLogoText = doc.data().logoText;
+                        logoElements.forEach(el => {
+                            el.textContent = newLogoText;
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error fetching logo text:", error);
+                }
+            }
 
             async function loadHeroImage() {
                 const heroImageElement = document.getElementById('hero-image');
@@ -2212,17 +2146,6 @@
                 mainContentSections.forEach(section => {
                     section.classList.add('hidden');
                 });
-                
-                // --- START: Added logic for stats section visibility ---
-                const statsSection = document.getElementById('success-stats');
-                if (statsSection) {
-                    if (targetId === 'home') {
-                        statsSection.classList.remove('hidden');
-                    } else {
-                        statsSection.classList.add('hidden');
-                    }
-                }
-                // --- END: Added logic for stats section visibility ---
 
                 const targetSection = document.getElementById(targetId);
                 if (targetSection) {
@@ -3388,6 +3311,7 @@
             displayCourses();
             displayNotices();
             loadHeroImage();
+            loadLogoText(); //  <-- এই ফাংশনটি এখানে কল করা হয়েছে
         });
     </script>
 </body>
