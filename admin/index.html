@@ -38,41 +38,67 @@
         }
         .hidden { display: none !important; }
 
-        /* --- Login Page --- */
+        /* --- START: GORGEOUS LOGIN PAGE STYLES --- */
         #login-page {
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: var(--primary-blue);
+            background: linear-gradient(135deg, #0a4d68 0%, #05bfdb 100%);
+            animation: gradient-animation 15s ease infinite;
+            background-size: 400% 400%;
         }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .login-box {
-            background: var(--text-light);
+            background: rgba(255, 255, 255, 0.1);
             padding: 40px;
-            border-radius: var(--card-radius);
-            box-shadow: var(--shadow);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             width: 90%;
             max-width: 400px;
             text-align: center;
         }
         .login-box h2 {
-            margin-bottom: 25px;
-            color: var(--primary-blue);
+            margin-bottom: 30px;
+            color: var(--text-light);
+            font-weight: 700;
+            font-size: 2em;
         }
         .login-box .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             text-align: left;
         }
         .login-box label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-light);
         }
         .login-box input {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid var(--border-color);
+            padding: 14px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--text-light);
+            font-size: 1em;
+        }
+        .login-box input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .login-box input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+            border-color: var(--light-blue);
         }
         .btn {
             padding: 12px 25px;
@@ -86,12 +112,20 @@
             transition: all 0.3s ease;
         }
         .btn-primary {
-            background-color: var(--primary-blue);
+            background: linear-gradient(90deg, var(--secondary-blue), var(--light-blue));
             color: var(--text-light);
             width: 100%;
             justify-content: center;
+            padding: 14px;
+            font-size: 1.1em;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
-        .btn-primary:hover { background-color: #083c52; }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        /* --- END: GORGEOUS LOGIN PAGE STYLES --- */
+
 
         /* --- Admin Panel Layout --- */
         #admin-panel {
@@ -386,7 +420,7 @@
                 </div>
                 <div class="input-group">
                     <label for="password">পাসওয়ার্ড</label>
-                    <input type="password" id="password" placeholder="password123" required>
+                    <input type="password" id="password" placeholder="••••••••" required>
                 </div>
                 <button type="submit" class="btn btn-primary">লগইন করুন</button>
             </form>
@@ -426,6 +460,13 @@
                         <div>
                             <h3 id="pending-payments">0</h3>
                             <p>পেন্ডিং পেমেন্ট</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="material-symbols-outlined icon">group</span>
+                        <div>
+                            <h3 id="total-students">0</h3>
+                            <p>মোট শিক্ষার্থী</p>
                         </div>
                     </div>
                     <div class="stat-card">
@@ -655,6 +696,19 @@
                         </div>
                         <button type="submit" class="btn btn-primary" style="width: auto; justify-content: flex-start;">সেটিংস সেভ করুন</button>
                     </form>
+                    
+                    <hr style="margin: 30px 0;">
+
+                    <!-- START: New Logo Settings Form -->
+                    <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">লোগো টেক্সট</h3>
+                    <form id="logo-settings-form">
+                        <div class="form-group">
+                            <label for="logo-text-input">হেডার লোগো টেক্সট</label>
+                            <input type="text" id="logo-text-input" placeholder="e.g., Dream's ACADEMY">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: auto; justify-content: flex-start;">লোগো টেক্সট সেভ করুন</button>
+                    </form>
+                    <!-- END: New Logo Settings Form -->
                 </div>
             </div>
         </main>
@@ -708,7 +762,8 @@
             const modalForm = document.getElementById('modal-form');
             const closeModalBtn = document.getElementById('close-modal');
             const heroSettingsForm = document.getElementById('hero-settings-form');
-            
+            const logoSettingsForm = document.getElementById('logo-settings-form'); // New form element
+
             // --- Authentication ---
             auth.onAuthStateChanged(user => {
                 if (user) {
@@ -774,8 +829,10 @@
                     const coursesSnapshot = await db.collection('courses').get();
                     const noticesSnapshot = await db.collection('notices').get();
                     const pendingPaymentsSnapshot = await db.collection('payments').where('status', '==', 'pending').get();
+                    const usersSnapshot = await db.collection('users').get(); // <-- নতুন কোড
 
                     document.getElementById('pending-payments').textContent = pendingPaymentsSnapshot.size;
+                    document.getElementById('total-students').textContent = usersSnapshot.size; // <-- নতুন কোড
                     document.getElementById('total-services').textContent = servicesSnapshot.size;
                     document.getElementById('total-courses').textContent = coursesSnapshot.size;
                     document.getElementById('total-notices').textContent = noticesSnapshot.size;
@@ -787,17 +844,28 @@
             async function renderSettings() {
                 const heroImageUrlInput = document.getElementById('hero-image-url');
                 const heroImagePreview = document.getElementById('hero-image-preview');
+                const logoTextInput = document.getElementById('logo-text-input');
 
                 try {
-                    const doc = await db.collection('site_settings').doc('hero_section').get();
-                    if (doc.exists && doc.data().imageUrl) {
-                        const imageUrl = doc.data().imageUrl;
+                    // Fetch hero image settings
+                    const heroDoc = await db.collection('site_settings').doc('hero_section').get();
+                    if (heroDoc.exists && heroDoc.data().imageUrl) {
+                        const imageUrl = heroDoc.data().imageUrl;
                         heroImageUrlInput.value = imageUrl;
                         heroImagePreview.src = imageUrl;
                     } else {
                          heroImageUrlInput.value = '';
                          heroImagePreview.src = 'https://i.ibb.co/JqgWkCg/placeholder.png';
                     }
+
+                    // Fetch logo text settings
+                    const logoDoc = await db.collection('site_settings').doc('header_settings').get();
+                    if (logoDoc.exists && logoDoc.data().logoText) {
+                        logoTextInput.value = logoDoc.data().logoText;
+                    } else {
+                        logoTextInput.value = '';
+                    }
+
                 } catch (error) {
                     console.error("Error fetching settings:", error);
                     alert("সেটিংস লোড করতে সমস্যা হয়েছে।");
@@ -823,6 +891,28 @@
                     alert("সেটিংস সেভ করতে সমস্যা হয়েছে। \nত্রুটি: " + error.message);
                 }
             });
+            
+            // New Event Listener for Logo Settings Form
+            logoSettingsForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const newLogoText = document.getElementById('logo-text-input').value;
+                if (!newLogoText.trim()) {
+                    alert("অনুগ্রহ করে লোগোর জন্য টেক্সট লিখুন।");
+                    return;
+                }
+
+                try {
+                    await db.collection('site_settings').doc('header_settings').set({
+                        logoText: newLogoText
+                    }, { merge: true });
+                    alert("লোগো টেক্সট সফলভাবে সেভ করা হয়েছে!");
+                    renderSettings(); // Refresh the input field
+                } catch (error) {
+                    console.error("Error saving logo text:", error);
+                    alert("লোগো টেক্সট সেভ করতে সমস্যা হয়েছে। \nত্রুটি: " + error.message);
+                }
+            });
+
 
             // --- CRUD Operations ---
             
