@@ -1670,7 +1670,7 @@
                     <h2 class="section-title">আমাদের সম্পর্কে জানুন</h2>
                     <div class="about-grid">
                         <div class="about-image">
-                            <img src="https://i.ibb.co/hK4k1g2/about-us-image.jpg" alt="আমাদের সম্পর্কে">
+                            <img id="about-us-image" src="https://i.ibb.co/hK4k1g2/about-us-image.jpg" alt="আমাদের সম্পর্কে">
                         </div>
                         <div class="about-content">
                             <h3>আমাদের লক্ষ্য আপনার সফলতায় সাহায্য করা</h3>
@@ -2089,23 +2089,6 @@
 
 
             // --- Functions ---
-            
-            async function loadLogoText() {
-                const logoElements = document.querySelectorAll('.logo');
-                if (!logoElements.length) return;
-
-                try {
-                    const doc = await db.collection('site_settings').doc('header_settings').get();
-                    if (doc.exists && doc.data().logoText) {
-                        const newLogoText = doc.data().logoText;
-                        logoElements.forEach(el => {
-                            el.textContent = newLogoText;
-                        });
-                    }
-                } catch (error) {
-                    console.error("Error fetching logo text:", error);
-                }
-            }
 
             async function loadHeroImage() {
                 const heroImageElement = document.getElementById('hero-image');
@@ -2121,6 +2104,20 @@
                 } catch (error) {
                     console.error("Error fetching hero image:", error);
                     heroImageElement.src = 'https://i.ibb.co/6y15g7p/learning-concept-illustration-114360-6186-removebg-preview.png';
+                }
+            }
+            
+            async function loadAboutUsImage() {
+                const aboutImageElement = document.getElementById('about-us-image');
+                if (!aboutImageElement) return;
+
+                try {
+                    const doc = await db.collection('site_settings').doc('about_us_section').get();
+                    if (doc.exists && doc.data().imageUrl) {
+                        aboutImageElement.src = doc.data().imageUrl;
+                    }
+                } catch (error) {
+                    console.error("Error fetching 'About Us' image:", error);
                 }
             }
 
@@ -3311,7 +3308,7 @@
             displayCourses();
             displayNotices();
             loadHeroImage();
-            loadLogoText(); //  <-- এই ফাংশনটি এখানে কল করা হয়েছে
+            loadAboutUsImage();
         });
     </script>
 </body>
