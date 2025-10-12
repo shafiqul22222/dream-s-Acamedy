@@ -699,7 +699,6 @@
                     
                     <hr style="margin: 30px 0;">
 
-                    <!-- START: New Logo Settings Form -->
                     <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">লোগো টেক্সট</h3>
                     <form id="logo-settings-form">
                         <div class="form-group">
@@ -708,7 +707,21 @@
                         </div>
                         <button type="submit" class="btn btn-primary" style="width: auto; justify-content: flex-start;">লোগো টেক্সট সেভ করুন</button>
                     </form>
-                    <!-- END: New Logo Settings Form -->
+                    
+                    <hr style="margin: 30px 0;">
+
+                    <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">আমাদের সম্পর্কে সেকশন</h3>
+                    <form id="about-us-settings-form">
+                        <div class="form-group">
+                            <label for="about-us-image-url">'আমাদের সম্পর্কে' পাতার ইমেজ URL</label>
+                            <input type="text" id="about-us-image-url" placeholder="আপনার ছবির লিংক এখানে দিন">
+                        </div>
+                        <div class="form-group">
+                            <label>বর্তমান ছবি প্রিভিউ</label>
+                            <img id="about-us-image-preview" src="https://i.ibb.co/JqgWkCg/placeholder.png" alt="About Us Image Preview" style="max-width: 100%; max-height: 250px; border: 1px solid var(--border-color); border-radius: 8px; object-fit: cover;">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: auto; justify-content: flex-start;">সেটিংস সেভ করুন</button>
+                    </form>
                 </div>
             </div>
         </main>
@@ -762,7 +775,8 @@
             const modalForm = document.getElementById('modal-form');
             const closeModalBtn = document.getElementById('close-modal');
             const heroSettingsForm = document.getElementById('hero-settings-form');
-            const logoSettingsForm = document.getElementById('logo-settings-form'); // New form element
+            const logoSettingsForm = document.getElementById('logo-settings-form');
+            const aboutUsSettingsForm = document.getElementById('about-us-settings-form');
 
             // --- Authentication ---
             auth.onAuthStateChanged(user => {
@@ -845,6 +859,9 @@
                 const heroImageUrlInput = document.getElementById('hero-image-url');
                 const heroImagePreview = document.getElementById('hero-image-preview');
                 const logoTextInput = document.getElementById('logo-text-input');
+                const aboutUsImageUrlInput = document.getElementById('about-us-image-url');
+                const aboutUsImagePreview = document.getElementById('about-us-image-preview');
+
 
                 try {
                     // Fetch hero image settings
@@ -864,6 +881,17 @@
                         logoTextInput.value = logoDoc.data().logoText;
                     } else {
                         logoTextInput.value = '';
+                    }
+                    
+                    // Fetch About Us image settings
+                    const aboutUsDoc = await db.collection('site_settings').doc('about_us_section').get();
+                    if (aboutUsDoc.exists && aboutUsDoc.data().imageUrl) {
+                        const imageUrl = aboutUsDoc.data().imageUrl;
+                        aboutUsImageUrlInput.value = imageUrl;
+                        aboutUsImagePreview.src = imageUrl;
+                    } else {
+                        aboutUsImageUrlInput.value = '';
+                        aboutUsImagePreview.src = 'https://i.ibb.co/JqgWkCg/placeholder.png';
                     }
 
                 } catch (error) {
@@ -892,7 +920,6 @@
                 }
             });
             
-            // New Event Listener for Logo Settings Form
             logoSettingsForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const newLogoText = document.getElementById('logo-text-input').value;
@@ -910,6 +937,26 @@
                 } catch (error) {
                     console.error("Error saving logo text:", error);
                     alert("লোগো টেক্সট সেভ করতে সমস্যা হয়েছে। \nত্রুটি: " + error.message);
+                }
+            });
+            
+            aboutUsSettingsForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const newUrl = document.getElementById('about-us-image-url').value;
+                if (!newUrl) {
+                    alert("অনুগ্রহ করে একটি ইমেজ URL দিন।");
+                    return;
+                }
+
+                try {
+                    await db.collection('site_settings').doc('about_us_section').set({
+                        imageUrl: newUrl
+                    }, { merge: true });
+                    alert("'আমাদের সম্পর্কে' পাতার ইমেজ সফলভাবে আপডেট করা হয়েছে!");
+                    renderSettings(); // Refresh the preview
+                } catch (error) {
+                    console.error("Error saving 'About Us' image settings:", error);
+                    alert("সেটিংস সেভ করতে সমস্যা হয়েছে। \nত্রুটি: " + error.message);
                 }
             });
 
