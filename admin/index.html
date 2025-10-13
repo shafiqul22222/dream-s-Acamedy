@@ -141,6 +141,8 @@
             left: 0;
             display: flex;
             flex-direction: column;
+            z-index: 2000; /* Mobile responsive change */
+            transition: transform 0.3s ease-in-out; /* Mobile responsive change */
         }
         .sidebar-header {
             padding: 20px;
@@ -148,6 +150,16 @@
             font-weight: 700;
             color: var(--primary-blue);
             border-bottom: 1px solid var(--border-color);
+            display: flex; /* Mobile responsive change */
+            justify-content: space-between; /* Mobile responsive change */
+            align-items: center; /* Mobile responsive change */
+        }
+         #close-sidebar-btn { /* Mobile responsive change */
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--primary-blue);
         }
         .sidebar-nav {
             list-style: none;
@@ -400,11 +412,119 @@
         .video-entry input { padding: 8px; }
         .video-entry .btn-remove { align-self: center; height: 42px; }
         /* --- END: Curriculum Modal Specific Styles --- */
-
-        @media (max-width: 768px) {
-            .sidebar { display: none; }
-            .main-content { margin-left: 0; width: 100%; }
+        
+        /* --- START: Mobile Responsive Styles --- */
+        .mobile-header {
+            display: none; /* Hidden on desktop */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background-color: var(--text-light);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            align-items: center;
+            padding: 0 15px;
+            z-index: 1001;
         }
+        #hamburger-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--primary-blue);
+        }
+        #mobile-page-title {
+            color: var(--primary-blue);
+            font-size: 1.2em;
+            margin-left: 15px;
+        }
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1999; /* Below sidebar, above content */
+        }
+        
+        @media (max-width: 992px) { /* Changed from 768px to a more standard breakpoint */
+            .sidebar { 
+                transform: translateX(-100%);
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            #close-sidebar-btn {
+                display: block;
+            }
+            .main-content { 
+                margin-left: 0; 
+                width: 100%;
+                padding: 80px 15px 15px 15px; /* Added top padding for fixed header */
+            }
+            .mobile-header {
+                display: flex;
+            }
+            .page-header {
+                display: none; /* Hide desktop page header */
+            }
+            .content-box {
+                padding: 15px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr; /* Stack cards on mobile */
+            }
+            .video-entry {
+                grid-template-columns: 1fr; /* Stack video inputs */
+            }
+            .video-entry .btn-remove {
+                grid-row: 4; /* Move remove button to the bottom */
+                width: 100%;
+                margin-top: 5px;
+                justify-content: center;
+            }
+            
+            /* Responsive Tables */
+            .data-table thead {
+                display: none;
+            }
+            .data-table tr {
+                display: block;
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                margin-bottom: 15px;
+                padding: 15px;
+                background: var(--text-light);
+            }
+            .data-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                text-align: right !important; /* Override default */
+                padding: 8px 0;
+                border-bottom: 1px dotted var(--border-color);
+            }
+            .data-table td:last-child {
+                border-bottom: none;
+            }
+            .data-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                text-align: left;
+                margin-right: 15px;
+                color: var(--primary-blue);
+            }
+            .actions-cell {
+                justify-content: flex-end !important;
+                padding-top: 10px;
+            }
+             .actions-cell::before {
+                display: none; /* No label for actions */
+            }
+        }
+        /* --- END: Mobile Responsive Styles --- */
     </style>
 </head>
 <body>
@@ -430,8 +550,11 @@
     <!-- ======================= Admin Panel ======================= -->
     <div id="admin-panel" class="hidden">
         <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">Dream's Academy</div>
+        <aside class="sidebar" id="sidebar">
+             <div class="sidebar-header">
+                <span>Dream's Academy</span>
+                <button id="close-sidebar-btn" class="material-symbols-outlined">close</button>
+            </div>
             <ul class="sidebar-nav">
                 <li class="active" data-page="dashboard-page"><a href="#"><span class="material-symbols-outlined">dashboard</span> ড্যাশবোর্ড</a></li>
                 <li data-page="payments-page"><a href="#"><span class="material-symbols-outlined">receipt_long</span> পেমেন্ট ম্যানেজমেন্ট</a></li>
@@ -449,6 +572,12 @@
 
         <!-- Main Content -->
         <main class="main-content">
+             <!-- Mobile Header -->
+            <div class="mobile-header">
+                <button id="hamburger-btn" class="material-symbols-outlined">menu</button>
+                <h1 id="mobile-page-title">ড্যাশবোর্ড</h1>
+            </div>
+            
             <!-- Dashboard Page -->
             <div id="dashboard-page" class="page active">
                 <div class="page-header">
@@ -725,6 +854,7 @@
                 </div>
             </div>
         </main>
+        <div id="overlay" class="hidden"></div>
     </div>
 
     <!-- ======================= Modal for Add/Edit ======================= -->
@@ -778,6 +908,14 @@
             const logoSettingsForm = document.getElementById('logo-settings-form');
             const aboutUsSettingsForm = document.getElementById('about-us-settings-form');
 
+            // --- Mobile Responsive Elements (New) ---
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const mobilePageTitle = document.getElementById('mobile-page-title');
+
+
             // --- Authentication ---
             auth.onAuthStateChanged(user => {
                 if (user) {
@@ -805,13 +943,33 @@
                 auth.signOut();
             });
 
+            // --- Mobile Navigation Logic (New) ---
+            function openSidebar() {
+                sidebar.classList.add('show');
+                overlay.classList.remove('hidden');
+            }
+            function closeSidebar() {
+                sidebar.classList.remove('show');
+                overlay.classList.add('hidden');
+            }
+            hamburgerBtn.addEventListener('click', openSidebar);
+            closeSidebarBtn.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', closeSidebar);
+
+
             // --- Navigation ---
             function navigateTo(pageId) {
                 pages.forEach(p => p.classList.remove('active'));
-                document.getElementById(pageId).classList.add('active');
+                const activePage = document.getElementById(pageId);
+                activePage.classList.add('active');
 
                 sidebarLinks.forEach(l => l.classList.remove('active'));
-                document.querySelector(`.sidebar-nav li[data-page="${pageId}"]`).classList.add('active');
+                const activeLink = document.querySelector(`.sidebar-nav li[data-page="${pageId}"]`);
+                activeLink.classList.add('active');
+                
+                // Update mobile header title
+                mobilePageTitle.textContent = activeLink.querySelector('a').textContent;
+
 
                 // Refresh data on page navigation
                 switch(pageId) {
@@ -833,6 +991,7 @@
                     e.preventDefault();
                     const pageId = link.getAttribute('data-page');
                     navigateTo(pageId);
+                    closeSidebar(); // Close sidebar after navigation on mobile
                 });
             });
 
@@ -1030,15 +1189,15 @@
                         // বাটনে সরাসরি onclick অ্যাট্রিবিউট ব্যবহার করা হয়েছে
                         const row = `
                             <tr>
-                                <td>${payment.userEmail}</td>
-                                <td>${payment.itemName}</td>
-                                <td>৳ ${payment.amount}</td>
-                                <td>${payment.transactionId}</td>
-                                <td>${timestamp}</td>
-                                <td>
+                                <td data-label="ইমেইল">${payment.userEmail}</td>
+                                <td data-label="কোর্স/সার্ভিস">${payment.itemName}</td>
+                                <td data-label="পরিমাণ">৳ ${payment.amount}</td>
+                                <td data-label="TrxID">${payment.transactionId}</td>
+                                <td data-label="সময়">${timestamp}</td>
+                                <td data-label="স্ট্যাটাস">
                                     <span class="status-badge ${statusClass}">${payment.status}</span>
                                 </td>
-                                <td class="actions-cell">
+                                <td data-label="অ্যাকশন" class="actions-cell">
                                     <select class="status-select" id="status-select-${payment.id}">
                                         <option value="pending" ${payment.status === 'pending' ? 'selected' : ''}>Pending</option>
                                         <option value="approved" ${payment.status === 'approved' ? 'selected' : ''}>Approved</option>
@@ -1086,11 +1245,11 @@
                         const user = { id: doc.id, ...doc.data() };
                         const row = `
                             <tr>
-                                <td>${user.name || 'N/A'}</td>
-                                <td>${user.email}</td>
-                                <td>${user.mobile || 'N/A'}</td>
-                                <td>${user.title || 'N/A'}</td>
-                                <td class="actions-cell">
+                                <td data-label="নাম">${user.name || 'N/A'}</td>
+                                <td data-label="ইমেইল">${user.email}</td>
+                                <td data-label="মোবাইল">${user.mobile || 'N/A'}</td>
+                                <td data-label="টাইটেল">${user.title || 'N/A'}</td>
+                                <td data-label="অ্যাকশন" class="actions-cell">
                                     <button class="btn-delete" onclick="deleteItem('users', '${user.id}')"><span class="material-symbols-outlined">delete</span></button>
                                 </td>
                             </tr>
@@ -1117,10 +1276,10 @@
                         const service = { id: doc.id, ...doc.data() };
                         const row = `
                             <tr>
-                                <td>${service.name}</td>
-                                <td>৳ ${service.currentPrice}</td>
-                                <td>৳ ${service.oldPrice}</td>
-                                <td class="actions-cell">
+                                <td data-label="সার্ভিসের নাম">${service.name}</td>
+                                <td data-label="বর্তমান মূল্য">৳ ${service.currentPrice}</td>
+                                <td data-label="পূর্বের মূল্য">৳ ${service.oldPrice}</td>
+                                <td data-label="অ্যাকশন" class="actions-cell">
                                     <button class="btn-edit" onclick="openModalForEdit('services', '${service.id}')"><span class="material-symbols-outlined">edit</span></button>
                                     <button class="btn-delete" onclick="deleteItem('services', '${service.id}')"><span class="material-symbols-outlined">delete</span></button>
                                 </td>
@@ -1142,10 +1301,10 @@
                         const course = { id: doc.id, ...doc.data() };
                         const row = `
                             <tr>
-                                <td>${course.name}</td>
-                                <td>${course.instructor}</td>
-                                <td>৳ ${course.price}</td>
-                                <td class="actions-cell">
+                                <td data-label="কোর্সের নাম">${course.name}</td>
+                                <td data-label="প্রশিক্ষক">${course.instructor}</td>
+                                <td data-label="মূল্য">৳ ${course.price}</td>
+                                <td data-label="অ্যাকশন" class="actions-cell">
                                     <button class="btn-edit" onclick="openModalForEdit('courses', '${course.id}')"><span class="material-symbols-outlined">edit</span></button>
                                     <button class="btn-delete" onclick="deleteItem('courses', '${course.id}')"><span class="material-symbols-outlined">delete</span></button>
                                 </td>
@@ -1174,10 +1333,10 @@
                         const enrollment = { id: doc.id, ...doc.data() };
                         const row = `
                             <tr>
-                                <td>${enrollment.studentEmail}</td>
-                                <td>${enrollment.courseName}</td>
-                                <td>${enrollment.batch}</td>
-                                <td class="actions-cell">
+                                <td data-label="শিক্ষার্থীর ইমেইল">${enrollment.studentEmail}</td>
+                                <td data-label="কোর্সের নাম">${enrollment.courseName}</td>
+                                <td data-label="ব্যাচ নং">${enrollment.batch}</td>
+                                <td data-label="অ্যাকশন" class="actions-cell">
                                     <button class="btn-delete" onclick="deleteItem('enrollments', '${enrollment.id}')"><span class="material-symbols-outlined">delete</span></button>
                                 </td>
                             </tr>
@@ -1208,10 +1367,10 @@
                         const moduleCount = curriculum.modules ? curriculum.modules.length : 0;
                         const row = `
                             <tr>
-                                <td>${curriculum.courseName}</td>
-                                <td>${curriculum.batch}</td>
-                                <td>${moduleCount}</td>
-                                <td class="actions-cell">
+                                <td data-label="কোর্সের নাম">${curriculum.courseName}</td>
+                                <td data-label="ব্যাচ নং">${curriculum.batch}</td>
+                                <td data-label="মডিউল সংখ্যা">${moduleCount}</td>
+                                <td data-label="অ্যাকশন" class="actions-cell">
                                      <button class="btn-edit" onclick="openModalForEdit('curriculum', '${curriculum.id}')"><span class="material-symbols-outlined">edit</span></button>
                                     <button class="btn-delete" onclick="deleteItem('curriculum', '${curriculum.id}')"><span class="material-symbols-outlined">delete</span></button>
                                 </td>
@@ -1235,9 +1394,9 @@
                         const notice = { id: doc.id, ...doc.data() };
                         const row = `
                             <tr>
-                                <td>${notice.title}</td>
-                                <td>${(notice.description || '').substring(0, 50)}...</td>
-                                <td class="actions-cell">
+                                <td data-label="শিরোনাম">${notice.title}</td>
+                                <td data-label="বর্ণনা">${(notice.description || '').substring(0, 50)}...</td>
+                                <td data-label="অ্যাকশন" class="actions-cell">
                                     <button class="btn-edit" onclick="openModalForEdit('notices', '${notice.id}')"><span class="material-symbols-outlined">edit</span></button>
                                     <button class="btn-delete" onclick="deleteItem('notices', '${notice.id}')"><span class="material-symbols-outlined">delete</span></button>
                                 </td>
@@ -1260,12 +1419,12 @@
                         const classTime = classInfo.dateTime ? new Date(classInfo.dateTime.seconds * 1000).toLocaleString('bn-BD') : 'N/A';
                         const row = `
                             <tr>
-                                <td>${classInfo.courseName}</td>
-                                <td>${classInfo.batch || 'N/A'}</td>
-                                <td>${classInfo.topic || 'N/A'}</td>
-                                <td><a href="${classInfo.link}" target="_blank">ক্লাস লিঙ্ক</a></td>
-                                <td>${classTime}</td>
-                                <td class="actions-cell">
+                                <td data-label="কোর্সের নাম">${classInfo.courseName}</td>
+                                <td data-label="ব্যাচ নং">${classInfo.batch || 'N/A'}</td>
+                                <td data-label="টপিক">${classInfo.topic || 'N/A'}</td>
+                                <td data-label="ক্লাসের লিঙ্ক"><a href="${classInfo.link}" target="_blank">ক্লাস লিঙ্ক</a></td>
+                                <td data-label="সময়">${classTime}</td>
+                                <td data-label="অ্যাকশন" class="actions-cell">
                                     <button class="btn-edit" onclick="openModalForEdit('joinClass', '${classInfo.id}')"><span class="material-symbols-outlined">edit</span></button>
                                     <button class="btn-delete" onclick="deleteItem('joinClass', '${classInfo.id}')"><span class="material-symbols-outlined">delete</span></button>
                                 </td>
