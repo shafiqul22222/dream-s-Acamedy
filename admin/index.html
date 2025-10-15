@@ -148,6 +148,9 @@
             font-weight: 700;
             color: var(--primary-blue);
             border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .sidebar-nav {
             list-style: none;
@@ -400,6 +403,58 @@
         .video-entry input { padding: 8px; }
         .video-entry .btn-remove { align-self: center; height: 42px; }
         /* --- END: Curriculum Modal Specific Styles --- */
+        
+        /* START: Notification Styles */
+        .notification-wrapper {
+            position: relative;
+        }
+        .notification-icon {
+            cursor: pointer;
+            color: var(--primary-blue);
+        }
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            width: 20px;
+            height: 20px;
+            background-color: var(--accent-red);
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid var(--text-light);
+        }
+        .notification-dropdown {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            width: 350px;
+            background: white;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            z-index: 1001;
+            max-height: 400px;
+            overflow-y: auto;
+            list-style: none;
+            padding: 0;
+            border: 1px solid var(--border-color);
+        }
+        .notification-dropdown li {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .notification-dropdown li:last-child { border-bottom: none; }
+        .notification-dropdown h5 { margin: 0 0 5px 0; font-size: 1em; }
+        .notification-dropdown p { margin: 0; font-size: 0.9em; color: #6c757d; }
+        .notification-dropdown .time { font-size: 0.8em; color: #adb5bd; display: block; margin-top: 5px; }
+        .no-notifications { text-align: center; padding: 20px; color: #6c757d; }
+        /* END: Notification Styles */
+
 
         /* --- START: Mobile Responsive Styles --- */
         .mobile-header {
@@ -490,7 +545,16 @@
 
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="sidebar-header">Dream's Academy</div>
+            <div class="sidebar-header">
+                <span>Dream's Academy</span>
+                <div class="notification-wrapper">
+                    <span class="material-symbols-outlined notification-icon" id="admin-notification-icon">notifications</span>
+                    <span class="notification-badge hidden" id="admin-notification-badge">0</span>
+                    <ul class="notification-dropdown" id="admin-notification-list">
+                       <li class="no-notifications">কোনো নোটিফিকেশন নেই</li>
+                    </ul>
+                </div>
+            </div>
             <ul class="sidebar-nav">
                 <li class="active" data-page="dashboard-page"><a href="#"><span class="material-symbols-outlined">dashboard</span> ড্যাশবোর্ড</a></li>
                 <li data-page="payments-page"><a href="#"><span class="material-symbols-outlined">receipt_long</span> পেমেন্ট ম্যানেজমেন্ট</a></li>
@@ -823,6 +887,8 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
+        let notificationListener = null; // Global listener variable
+
         document.addEventListener('DOMContentLoaded', function() {
             // --- DOM Elements ---
             const loginPage = document.getElementById('login-page');
@@ -845,6 +911,88 @@
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
             const mobilePageTitle = document.getElementById('mobile-page-title');
             const overlay = document.getElementById('overlay');
+            
+            // --- Notification Cleanup Function ---
+            function cleanupAdminNotifications() {
+                if (notificationListener) {
+                    notificationListener(); // Unsubscribe from the listener
+                    notificationListener = null;
+                }
+            }
+            
+            // --- Notification Initialization Function ---
+            function initializeAdminNotifications() {
+                // Request permission for browser notifications on login
+                if (Notification.permission === 'default') {
+                    Notification.requestPermission();
+                }
+
+                const notificationIcon = document.getElementById('admin-notification-icon');
+                const notificationBadge = document.getElementById('admin-notification-badge');
+                const notificationList = document.getElementById('admin-notification-list');
+                const dropdown = document.querySelector('.notification-dropdown');
+
+                notificationIcon.onclick = () => {
+                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                    // Hide badge when dropdown is opened
+                    notificationBadge.classList.add('hidden');
+                    notificationBadge.textContent = '0';
+                };
+                 
+                document.addEventListener('click', (e) => {
+                    if (!notificationIcon.contains(e.target) && !dropdown.contains(e.target)){
+                        dropdown.style.display = 'none';
+                    }
+                });
+
+                const query = db.collection('notifications').orderBy('timestamp', 'desc').limit(15);
+
+                notificationListener = query.onSnapshot(snapshot => {
+                    // Update the dropdown list UI
+                    if (snapshot.empty) {
+                        notificationList.innerHTML = '<li class="no-notifications">কোনো নোটিফিকেশন নেই</li>';
+                    } else {
+                        notificationList.innerHTML = ''; // Clear previous list
+                        snapshot.forEach(doc => {
+                            const notif = doc.data();
+                            const time = notif.timestamp ? new Date(notif.timestamp.seconds * 1000).toLocaleString('bn-BD') : '';
+                            const li = document.createElement('li');
+                            li.innerHTML = `
+                                <h5>${notif.title}</h5>
+                                <p>${notif.message}</p>
+                                <span class="time">${time}</span>
+                            `;
+                            notificationList.appendChild(li);
+                        });
+                    }
+                    
+                    // Handle new notifications for badge and browser push notification
+                    snapshot.docChanges().forEach(change => {
+                        if (change.type === 'added') {
+                            const notifData = change.doc.data();
+                            
+                            // Show browser notification if permission is granted
+                            if (Notification.permission === 'granted') {
+                                new Notification(notifData.title, {
+                                    body: notifData.message,
+                                    icon: 'https://i.ibb.co/6y15g7p/learning-concept-illustration-114360-6186-removebg-preview.png' // You can use your academy's logo URL
+                                });
+                            }
+                            
+                            // Update badge count if dropdown is not open
+                            if(dropdown.style.display !== 'block'){
+                                const currentBadgeCount = parseInt(notificationBadge.textContent) || 0;
+                                const newCount = currentBadgeCount + 1;
+                                notificationBadge.textContent = newCount;
+                                notificationBadge.classList.remove('hidden');
+                            }
+                        }
+                    });
+
+                }, error => {
+                    console.error("Notification listener error:", error);
+                });
+            }
 
 
             // --- Authentication ---
@@ -853,9 +1001,11 @@
                     loginPage.classList.add('hidden');
                     adminPanel.classList.remove('hidden');
                     navigateTo('dashboard-page');
+                    initializeAdminNotifications(); // Start listening for notifications
                 } else {
                     loginPage.classList.remove('hidden');
                     adminPanel.classList.add('hidden');
+                    cleanupAdminNotifications(); // Stop listening for notifications
                 }
             });
 
@@ -871,6 +1021,7 @@
             });
 
             logoutBtn.addEventListener('click', () => {
+                cleanupAdminNotifications(); // Stop listener before signing out
                 auth.signOut();
             });
             
