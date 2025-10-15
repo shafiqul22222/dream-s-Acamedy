@@ -47,7 +47,7 @@
 
         .container {
             width: 90%;
-            max-width: 1400px; /* Changed from 1200px to make it wider on large screens */
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -120,6 +120,11 @@
             font-weight: 700;
             color: var(--primary-blue);
             text-decoration: none;
+        }
+        
+        .logo img {
+            max-height: 55px;
+            display: block;
         }
 
         .main-nav ul {
@@ -246,7 +251,6 @@
         .profile-dropdown-menu li a:hover { background: var(--background-light); }
         .profile-dropdown-menu .material-symbols-outlined { color: var(--primary-blue); }
         
-        /* START: New Notification Styles */
         .notification-icon-wrapper {
             position: relative;
         }
@@ -346,8 +350,8 @@
             padding: 40px 20px;
             color: #6c757d;
         }
-        /* END: New Notification Styles */
-
+        
+        /* --- Hero Section --- */
         .hero-section {
             padding: 60px 0;
             background-color: #ffffff;
@@ -437,6 +441,7 @@
             }
         }
 
+        /* --- Common Section Styles --- */
         .section {
             padding: 60px 0;
         }
@@ -448,6 +453,7 @@
             font-weight: 700;
         }
 
+        /* --- About Section --- */
         .about-section {
             background-color: var(--text-light);
         }
@@ -514,6 +520,7 @@
             }
         }
 
+        /* --- Services Section --- */
         .services-section {
             background-color: var(--text-light);
         }
@@ -605,6 +612,7 @@
             font-weight: 600;
         }
 
+        /* --- Courses Section --- */
         .courses-section {
             padding: 60px 0;
         }
@@ -695,6 +703,7 @@
             color: var(--primary-blue);
         }
 
+        /* --- START: UPDATED MODAL & INPUT STYLES --- */
         .login-modal {
             position: fixed;
             top: 0;
@@ -707,8 +716,31 @@
             align-items: center;
             z-index: 2000;
             backdrop-filter: blur(5px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
         }
 
+        .login-modal:not(.hidden) {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .login-modal:not(.hidden) .login-card {
+            animation: modalZoomIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+
+        @keyframes modalZoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
         .login-card {
             background: var(--text-light);
             border-radius: var(--card-radius);
@@ -716,16 +748,33 @@
             max-width: 850px;
             display: flex;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             padding: 0;
             text-align: left;
+            transform: scale(0.95); /* Initial state for animation */
+        }
+        
+        .close-modal-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            font-size: 2.5em;
+            color: #aaa;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+            transition: color 0.3s ease;
+        }
+        .close-modal-btn:hover {
+            color: var(--text-dark);
         }
 
         .modal-info-panel {
             width: 45%;
-            padding: 40px;
-            background: linear-gradient(rgba(10, 77, 104, 0.85), rgba(8, 131, 149, 0.85)), url('https://i.ibb.co/6y15g7p/learning-concept-illustration-114360-6186-removebg-preview.png') no-repeat center center;
-            background-size: cover;
+            padding: 50px 40px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
             color: var(--text-light);
             display: flex;
             flex-direction: column;
@@ -734,119 +783,169 @@
 
         .modal-info-panel .logo {
             color: var(--text-light);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .modal-info-panel h2 {
-            font-size: 2em;
+            font-size: 2.2em;
             margin-bottom: 15px;
+            line-height: 1.3;
         }
         .modal-info-panel p {
             font-size: 1.1em;
             line-height: 1.7;
+            opacity: 0.9;
         }
 
         .modal-form-panel {
             width: 55%;
-            padding: 40px;
+            padding: 50px 40px;
+            position: relative;
         }
 
         .modal-form-panel h2 {
             color: var(--primary-blue);
-            font-size: 1.8em;
-            margin-bottom: 25px;
+            font-size: 2em;
+            margin-bottom: 30px;
+            font-weight: 700;
         }
 
         .input-group {
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
-
+        
+        /* New Floating Label Styles */
         .input-group .material-symbols-outlined {
             position: absolute;
             left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
+            top: 15px;
             color: #adb5bd;
+            transition: color 0.3s ease;
         }
-
-        /* --- START: UPDATED INPUT FIELD STYLES --- */
+        
         .input-group input, .input-group select {
             width: 100%;
-            padding: 14px 15px 14px 45px;
+            padding: 15px 15px 15px 50px;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             font-family: 'Hind Siliguri', sans-serif;
             font-size: 1em;
-            transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
-            background-color: var(--background-light); /* Softer background */
+            transition: all 0.3s ease;
+            background-color: var(--background-light);
             color: var(--text-dark);
         }
 
         .input-group input::placeholder {
-          color: #8a94a1; /* Muted placeholder color */
+          color: transparent; /* Hide placeholder by default */
         }
 
+        .input-group label {
+            position: absolute;
+            left: 50px;
+            top: 16px;
+            color: #8a94a1;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
 
-        .input-group input:focus, .input-group select:focus {
+        .input-group input:focus,
+        .input-group input:not(:placeholder-shown) {
             outline: none;
             border-color: var(--secondary-blue);
-            box-shadow: 0 0 0 3px rgba(8, 131, 149, 0.2);
-            background-color: var(--text-light); /* Return to white on focus */
+            background-color: var(--text-light);
+            box-shadow: 0 0 0 3px rgba(8, 131, 149, 0.15);
         }
-        /* --- END: UPDATED INPUT FIELD STYLES --- */
+
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: -10px;
+            left: 45px;
+            font-size: 0.85em;
+            color: var(--secondary-blue);
+            background-color: var(--text-light);
+            padding: 0 5px;
+        }
+        
+        .input-group input:focus ~ .material-symbols-outlined {
+            color: var(--secondary-blue);
+        }
 
         .password-toggle {
             position: absolute;
             right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
+            top: 16px;
             cursor: pointer;
         }
 
         .login-links {
             text-align: right;
-            margin-top: -10px;
-            margin-bottom: 20px;
+            margin-top: -15px;
+            margin-bottom: 25px;
         }
 
         .login-links a {
             color: var(--secondary-blue);
             text-decoration: none;
             font-size: 0.9em;
+            font-weight: 500;
         }
-
+        .login-links a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Updated Button Styles */
         .modal-form-panel .btn {
             width: 100%;
-            padding: 14px;
+            padding: 15px;
             font-size: 1.1em;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-form-panel .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(8, 131, 149, 0.3);
+        }
+        .modal-form-panel .btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(8, 131, 149, 0.3);
         }
 
         .signup-link {
             text-align: center;
             margin-top: 15px;
+            font-weight: 500;
         }
 
         .signup-link a {
             color: var(--secondary-blue);
-            font-weight: 600;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .signup-link a:hover {
+            text-decoration: underline;
         }
 
         @media (max-width: 768px) {
             .login-card {
                 flex-direction: column;
                 max-width: 450px;
+                max-height: 90vh;
+                overflow-y: auto;
             }
             .modal-info-panel {
                 display: none;
             }
             .modal-form-panel {
                 width: 100%;
+                padding: 40px 25px;
             }
         }
-
+        /* --- END: UPDATED MODAL & INPUT STYLES --- */
+        
+        /* --- Dashboard Styles --- */
         .dashboard {
             padding: 40px 0;
         }
@@ -1063,7 +1162,6 @@
             justify-self: start;
         }
         
-        /* --- START: New Styles for Curriculum Page --- */
         #course-curriculum-page .content-header {
             align-items: flex-start;
         }
@@ -1211,9 +1309,8 @@
                 max-height: none;
             }
         }
-        /* --- END: New Styles for Curriculum Page --- */
 
-
+        /* --- Footer --- */
         .main-footer {
             background-color: var(--text-light);
             padding: 60px 0 20px;
@@ -1290,6 +1387,7 @@
             visibility: visible;
         }
 
+        /* --- Toast Notifications --- */
         #toast-container {
             position: fixed;
             top: 20px;
@@ -1336,7 +1434,8 @@
                 transform: translateX(100%);
             }
         }
-
+        
+        /* --- Mobile Specific Styles --- */
         .mobile-bottom-nav {
             display: none;
             position: fixed;
@@ -1374,12 +1473,9 @@
             color: var(--secondary-blue);
         }
 
-        /* START: New Mobile WhatsApp Button Style */
         .btn-whatsapp-mobile {
             display: none; /* Hide on desktop by default */
         }
-        /* END: New Mobile WhatsApp Button Style */
-
 
         @media (max-width: 768px) {
             .mobile-bottom-nav {
@@ -1433,7 +1529,6 @@
                 display: none;
             }
             
-            /* START: Show and style mobile WhatsApp button */
             .btn-whatsapp-mobile {
                 display: inline-flex; /* Show button on mobile */
                 background: #25D366 !important; /* WhatsApp green, !important to override .btn-gradient */
@@ -1442,8 +1537,6 @@
             .btn-whatsapp-mobile:hover {
                 background: #128C7E !important; /* Darker green on hover */
             }
-            /* END: Show and style mobile WhatsApp button */
-
 
             .section-title {
                 font-size: 2.1em;
@@ -1501,7 +1594,6 @@
                 justify-content: center;
             }
         }
-
     </style>
 </head>
 <body>
@@ -1509,7 +1601,9 @@
     <!-- ======================= Header ======================= -->
     <header class="main-header">
         <div class="container">
-            <a href="#" class="logo">Dream's ACADEMY</a>
+            <a href="#" class="logo">
+                <img id="header-logo-img" src="https://i.ibb.co/JqgWkCg/placeholder.png" alt="Dream's Academy">
+            </a>
             <nav class="main-nav">
                 <ul>
                     <li class="active"><a href="#home">হোম</a></li>
@@ -1534,7 +1628,6 @@
                     <button class="btn btn-gradient" id="login-signup-btn">লগ ইন / সাইন আপ →</button>
                 </div>
                 <div id="logged-in-view" class="header-icons hidden">
-                    <!-- START: Notification Icon and Dropdown -->
                     <div class="notification-icon-wrapper">
                         <span class="material-symbols-outlined" id="notification-icon">notifications</span>
                         <span id="notification-badge" class="notification-badge hidden"></span>
@@ -1544,11 +1637,9 @@
                            <h3>নোটিফিকেশন</h3>
                         </div>
                         <ul class="notification-list" id="notification-list-container">
-                           <!-- JS will populate this -->
                            <li class="no-notification-message">কোনো নতুন নোটিফিকেশন নেই।</li>
                         </ul>
                     </div>
-                    <!-- END: Notification Icon and Dropdown -->
 
                     <div class="profile-icon-wrapper">
                         <div class="profile-icon" id="profile-icon">
@@ -1576,24 +1667,29 @@
     </header>
 
     <main>
-        <!-- Login/Signup Modals -->
+        <!-- START: UPDATED LOGIN/SIGNUP MODALS -->
         <div class="login-modal hidden" id="login-modal">
             <div class="login-card">
                 <div class="modal-info-panel">
-                    <a href="#" class="logo">Dream's ACADEMY</a>
+                    <a href="#" class="logo">
+                         <img id="header-logo-img-modal" src="https://i.ibb.co/JqgWkCg/placeholder.png" alt="Dream's Academy" style="filter: brightness(0) invert(1); max-height: 45px;">
+                    </a>
                     <h2>দক্ষতার জগতে স্বাগতম!</h2>
                     <p>আপনার অ্যাকাউন্টে লগইন করে নতুন কিছু শেখার अद्भुत যাত্রা শুরু করুন।</p>
                 </div>
                 <div class="modal-form-panel">
+                    <button class="close-modal-btn" aria-label="Close">&times;</button>
                     <h2>লগ ইন করুন</h2>
                     <form id="login-form">
                         <div class="input-group">
                             <span class="material-symbols-outlined">mail</span>
                             <input type="email" id="login-email" placeholder="আপনার ইমেইল দিন" required>
+                            <label for="login-email">ইমেইল</label>
                         </div>
                         <div class="input-group">
                             <span class="material-symbols-outlined">lock</span>
                             <input type="password" id="login-password" placeholder="পাসওয়ার্ড দিন" required>
+                            <label for="login-password">পাসওয়ার্ড</label>
                             <span class="material-symbols-outlined password-toggle" id="password-toggle">visibility_off</span>
                         </div>
                         <div class="login-links">
@@ -1610,29 +1706,36 @@
 
         <div class="login-modal hidden" id="signup-modal">
             <div class="login-card">
-                <div class="modal-info-panel">
-                     <a href="#" class="logo">Dream's ACADEMY</a>
+                 <div class="modal-info-panel">
+                     <a href="#" class="logo">
+                         <img id="header-logo-img-modal2" src="https://i.ibb.co/JqgWkCg/placeholder.png" alt="Dream's Academy" style="filter: brightness(0) invert(1); max-height: 45px;">
+                     </a>
                     <h2>আমাদের সাথে যোগ দিন</h2>
                     <p>একটি নতুন অ্যাকাউন্ট তৈরি করে আপনার দক্ষতা বিকাশের পথে প্রথম পদক্ষেপ নিন।</p>
                 </div>
                 <div class="modal-form-panel">
+                    <button class="close-modal-btn" aria-label="Close">&times;</button>
                     <h2>নতুন একাউন্ট তৈরি করুন</h2>
                     <form id="signup-form">
                         <div class="input-group">
                             <span class="material-symbols-outlined">person</span>
                             <input type="text" id="signup-name" placeholder="আপনার পুরো নাম দিন" required>
+                            <label for="signup-name">পুরো নাম</label>
                         </div>
                         <div class="input-group">
                             <span class="material-symbols-outlined">mail</span>
                             <input type="email" id="signup-email" placeholder="আপনার ইমেইল দিন" required>
+                            <label for="signup-email">ইমেইল</label>
                         </div>
                         <div class="input-group">
                             <span class="material-symbols-outlined">lock</span>
                             <input type="password" id="signup-password" placeholder="পাসওয়ার্ড দিন (কমপক্ষে ৬ অক্ষর)" required>
+                            <label for="signup-password">পাসওয়ার্ড</label>
                         </div>
                          <div class="input-group">
                             <span class="material-symbols-outlined">lock</span>
                             <input type="password" id="signup-confirm-password" placeholder="পাসওয়ার্ডটি পুনরায় দিন" required>
+                            <label for="signup-confirm-password">পাসওয়ার্ডটি পুনরায় দিন</label>
                         </div>
                         <button type="submit" class="btn btn-gradient">সাইন আপ করুন →</button>
                     </form>
@@ -1642,19 +1745,22 @@
                 </div>
             </div>
         </div>
+        <!-- END: UPDATED LOGIN/SIGNUP MODALS -->
 
-        <!-- START: New Forgot Password Modal -->
+
         <div class="login-modal hidden" id="forgot-password-modal">
             <div class="login-card" style="max-width: 500px; display: block; text-align: center;">
                 <div class="modal-form-panel" style="width: 100%;">
+                    <button class="close-modal-btn" aria-label="Close">&times;</button>
                     <h2 style="font-size: 1.8em; color: var(--text-dark);">Forgot password</h2>
                     <p style="margin-top: -15px; margin-bottom: 30px; color: #6c757d;">আপনার ইমেইল আইডি দিন</p>
                     <form id="forgot-password-form">
                         <div class="input-group">
                             <span class="material-symbols-outlined">mail</span>
                             <input type="email" id="reset-email" placeholder="আপনার ইমেইল আইডি দিন" required>
+                             <label for="reset-email">আপনার ইমেইল</label>
                         </div>
-                        <button type="submit" class="btn btn-gradient" style="width:100%; border-radius: 50px; padding: 14px;">সাবমিট করুন →</button>
+                        <button type="submit" class="btn btn-gradient" style="width:100%; border-radius: 8px; padding: 14px;">সাবমিট করুন →</button>
                     </form>
                     <div class="signup-link">
                         লগইন করতে ফিরে যেতে চান? <a href="#" id="back-to-login-link">ক্লিক করুন</a>
@@ -1662,7 +1768,6 @@
                 </div>
             </div>
         </div>
-        <!-- END: New Forgot Password Modal -->
 
 
         <!-- ======================= Main Content (Logged Out View) ======================= -->
@@ -1676,14 +1781,12 @@
                         <div class="hero-buttons">
                             <a href="#courses" class="btn btn-gradient internal-link-btn">আমার কোর্স →</a>
                             <a href="#" id="whatsapp-chat-btn" class="btn btn-outline">সাপোর্ট চ্যাট করুন</a>
-                            <!-- START: Mobile Only WhatsApp Button -->
                             <a href="#" id="whatsapp-chat-btn-mobile" class="btn btn-whatsapp-mobile">
                                 <svg style="width:24px;height:24px;fill:white;" viewBox="0 0 24 24">
                                     <path d="M16.75,13.96C17,14.26 17.25,14.81 17.25,15.11C17.25,15.41 17.25,16.5 16.35,17.35C15.5,18.25 14.31,19.04 13.36,19.04C12.41,19.04 10.46,18.5 8.61,16.65C6.76,14.8 5,12.58 5,10.63C5,9.68 5.75,8.5 6.65,7.6C7.5,6.75 8.5,6.75 8.8,6.75C9.1,6.75 9.3,6.75 9.5,7.2C9.7,7.65 10.15,8.8 10.25,9C10.35,9.2 10.25,9.5 10,9.75L9.5,10.25C9.25,10.5 9.11,10.71 9.25,11C9.39,11.29 9.89,12.04 10.59,12.74C11.29,13.44 12.04,13.89 12.34,14.04C12.59,14.16 12.8,14.11 13,13.86L13.5,13.36C13.75,13.11 14,13 14.25,13.1C14.5,13.2 15.65,13.75 15.9,13.85C16.15,13.95 16.45,14 16.5,14.05C16.55,14.1 16.75,13.96 16.75,13.96M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22C13.66,22 15.25,21.54 16.62,20.75L21.5,22L20.75,17.14C21.58,15.74 22,14 22,12A10,10 0 0,0 12,2M12,4C16.42,4 20,7.58 20,12C20,13.81 19.42,15.5 18.46,16.86L19.5,20.5L15.86,19.46C14.5,20.42 12.81,21 11,21C6.58,21 3,17.42 3,13C3,8.58 6.58,5 11,5C11.33,5 11.66,5.04 12,5.09V4.05C12,4.03 12,4.02 12,4Z" />
                                 </svg>
                                 সাপোর্ট চ্যাট করুন
                             </a>
-                            <!-- END: Mobile Only WhatsApp Button -->
                         </div>
                     </div>
                     <div class="hero-image-wrapper">
@@ -1703,7 +1806,6 @@
                             <h3>আমাদের লক্ষ্য আপনার সফলতায় সাহায্য করা</h3>
                             <p>Dream's Academy একটি অনলাইন শিক্ষা প্ল্যাটফর্ম যার মূল লক্ষ্য হলো বাংলাদেশের তরুণদের মাঝে প্রয়োজনীয় দক্ষতা তৈরি করে বেকারত্ব দূর করা। আমরা বিশ্বাস করি, সঠিক প্রশিক্ষণের মাধ্যমে যে কেউ নিজের ক্যারিয়ার গড়তে পারে এবং আর্থিকভাবে স্বাবলম্বী হতে পারে।</p>
                             <p>আমাদের প্রতিটি কোর্স অভিজ্ঞ প্রশিক্ষকদের দ্বারা এমনভাবে ডিজাইন করা হয়েছে, যেন শিক্ষার্থীরা সহজভাবে কঠিন বিষয়গুলো আয়ত্ত করতে পারে এবং বাস্তব জীবনে প্রয়োগ করতে পারে।</p>
-
                             <div class="about-features">
                                 <div class="feature-item">
                                     <span class="material-symbols-outlined icon">school</span>
@@ -1773,15 +1875,12 @@
         <div id="dashboard-content" class="hidden">
             <section class="dashboard">
                 <div class="container dashboard-container">
-                    <!-- Dashboard Sidebar -->
                     <aside class="dashboard-sidebar">
                         <div class="sidebar-welcome-card">
                             <div class="sidebar-user">
                                 <img src="https://i.ibb.co/L1LQtBm/default-avatar.png" alt="avatar">
                                 <h4>স্বাগতম, শফিকুল</h4>
                             </div>
-                            <!-- This icon is no longer needed here as it's in the main header -->
-                            <!-- <span class="material-symbols-outlined">notifications</span> -->
                         </div>
                         <nav class="sidebar-nav">
                             <ul id="sidebar-menu">
@@ -1801,9 +1900,7 @@
                         </div>
                     </aside>
 
-                    <!-- Dashboard Main Content -->
                     <main class="dashboard-content">
-                        <!-- My Courses Page -->
                         <div class="dashboard-page" id="my-courses-page">
                            <div class="content-header"><h2>আমার কোর্সগুলি</h2></div>
                            <div class="course-grid" id="my-courses-grid">
@@ -1811,7 +1908,6 @@
                            </div>
                         </div>
 
-                        <!-- Class Joining Page -->
                         <div class="dashboard-page hidden" id="class-joining-page">
                             <div class="content-card">
                                 <div class="content-header"><h2>লাইভ ক্লাস শিডিউল</h2></div>
@@ -1821,7 +1917,6 @@
                             </div>
                         </div>
 
-                        <!-- My Profile Page -->
                         <div class="dashboard-page hidden" id="my-profile-page">
                              <div class="content-card">
                                 <div class="content-header">
@@ -1867,7 +1962,6 @@
                              </div>
                         </div>
                         
-                        <!-- START: New Course Curriculum Page -->
                         <div class="dashboard-page hidden" id="course-curriculum-page">
                             <div class="content-header">
                                 <h2 id="curriculum-course-title">কোর্সের নাম লোড হচ্ছে...</h2>
@@ -1891,8 +1985,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- END: New Course Curriculum Page -->
-
 
                     </main>
                 </div>
@@ -1905,7 +1997,7 @@
     <div class="login-modal hidden" id="payment-modal">
         <div class="login-card" style="max-width: 500px; display: block; text-align: left; padding: 0;">
             <div class="modal-form-panel" style="width: 100%; position: relative;">
-                <span id="close-payment-modal" style="position: absolute; top: 15px; right: 25px; font-size: 2.5em; cursor: pointer; color: #333; line-height: 1;">&times;</span>
+                <button id="close-payment-modal" class="close-modal-btn">&times;</button>
                 <h2>পেমেন্ট তথ্য জমা দিন</h2>
                 <div style="background: var(--background-light); padding: 15px; border-radius: 8px; margin-bottom: 25px;">
                      <p style="margin-bottom: 5px;">কোর্স: <strong id="payment-course-name-display"></strong></p>
@@ -1931,7 +2023,7 @@
 
                     <div class="input-group">
                          <span class="material-symbols-outlined">payments</span>
-                         <select id="payment-account-type" required style="width: 100%; padding: 14px 15px 14px 45px; border: 1px solid var(--border-color); border-radius: 8px; font-family: 'Hind Siliguri', sans-serif; font-size: 1em; -webkit-appearance: none; appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236c757d%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 15px center; background-size: 12px;">
+                         <select id="payment-account-type" required style="padding: 15px 15px 15px 50px; -webkit-appearance: none; appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236c757d%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 15px center; background-size: 12px;">
                             <option value="Bkash">বিকাশ</option>
                             <option value="Nagad">নগদ</option>
                          </select>
@@ -1959,7 +2051,9 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <h4 class="logo">Dream's ACADEMY</h4>
+                    <a href="#" class="logo">
+                        <img id="footer-logo-img" src="https://i.ibb.co/JqgWkCg/placeholder.png" alt="Dream's Academy">
+                    </a>
                     <p>ডাউনলোড করুন আমাদের মোবাইল অ্যাপ</p><br>
                     <a href="#" class="app-download-badge">Download for Android</a>
                 </div>
@@ -2040,7 +2134,6 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
         
-        // --- Global listener variable for notifications ---
         let notificationListener = null;
 
 
@@ -2073,7 +2166,6 @@
             const myProfileLink = document.getElementById('my-profile-link');
             const logoutBtn = document.getElementById('logout-btn');
             
-            // New Notification Variables
             const notificationIcon = document.getElementById('notification-icon');
             const notificationBadge = document.getElementById('notification-badge');
             const notificationDropdown = document.getElementById('notification-dropdown');
@@ -2090,7 +2182,7 @@
             const logoLink = document.querySelector('header .logo');
 
             const whatsappChatBtn = document.getElementById('whatsapp-chat-btn');
-            const whatsappChatBtnMobile = document.getElementById('whatsapp-chat-btn-mobile'); // New mobile button
+            const whatsappChatBtnMobile = document.getElementById('whatsapp-chat-btn-mobile');
 
             const profileUpdateForm = document.getElementById('profile-update-form');
 
@@ -2117,6 +2209,31 @@
 
 
             // --- Functions ---
+            
+            async function loadHeaderLogo() {
+                const logoElements = [
+                    document.getElementById('header-logo-img'),
+                    document.getElementById('header-logo-img-modal'),
+                    document.getElementById('header-logo-img-modal2'),
+                    document.getElementById('footer-logo-img')
+                ].filter(el => el);
+
+                if (logoElements.length === 0) return;
+                
+                const defaultLogo = 'https://i.ibb.co/JqgWkCg/placeholder.png';
+
+                try {
+                    const doc = await db.collection('site_settings').doc('header_settings').get();
+                    let logoUrl = defaultLogo;
+                    if (doc.exists && doc.data().logoImageUrl) {
+                        logoUrl = doc.data().logoImageUrl;
+                    }
+                    logoElements.forEach(img => img.src = logoUrl);
+                } catch (error) {
+                    console.error("Error fetching header logo:", error);
+                    logoElements.forEach(img => img.src = defaultLogo);
+                }
+            }
 
             async function loadHeroImage() {
                 const heroImageElement = document.getElementById('hero-image');
@@ -2224,13 +2341,12 @@
             }
 
             function togglePassword() {
-                if (passwordField.type === 'password') {
-                    passwordField.type = 'text';
-                    passwordToggle.textContent = 'visibility';
-                } else {
-                    passwordField.type = 'password';
-                    passwordToggle.textContent = 'visibility_off';
-                }
+                const allPasswordFields = document.querySelectorAll('input[type="password"], input[type="text"]');
+                const targetField = document.getElementById(passwordToggle.previousElementSibling.id);
+                const isPassword = targetField.type === 'password';
+
+                targetField.type = isPassword ? 'text' : 'password';
+                passwordToggle.textContent = isPassword ? 'visibility' : 'visibility_off';
             }
 
             function populateUI(userData) {
@@ -2297,7 +2413,6 @@
                         });
                     })
                     .then(() => {
-                        // NEW: Send notification to admin
                         db.collection('notifications').add({
                             title: 'নতুন শিক্ষার্থী রেজিস্ট্রেশন',
                             message: `একজন নতুন শিক্ষার্থী (${email}) সাইন আপ করেছেন।`,
@@ -2365,9 +2480,6 @@
                 });
             }
             
-            // --- START: NEW NOTIFICATION FUNCTIONS ---
-            
-            // Function to format time for notifications
             function formatNotificationTime(timestamp) {
                 if (!timestamp) return '';
                 const date = timestamp.toDate();
@@ -2387,17 +2499,14 @@
                 }).format(date);
             }
 
-            // Function to update the notification UI
             function updateNotificationUI(notifications) {
-                notificationListContainer.innerHTML = ''; // Clear previous notifications
+                notificationListContainer.innerHTML = ''; 
                 if (notifications.length === 0) {
                     notificationListContainer.innerHTML = '<li class="no-notification-message">কোনো নতুন নোটিফিকেশন নেই।</li>';
                     notificationBadge.classList.add('hidden');
                     return;
                 }
-
-                // For simplicity, we'll consider all notifications as unread for now.
-                // A more complex implementation would track a 'read' status in Firestore.
+                
                 notificationBadge.classList.remove('hidden');
 
                 notifications.forEach(notification => {
@@ -2426,36 +2535,28 @@
                 });
             }
             
-            // Function to show a browser notification
             function showBrowserNotification(notification) {
                 if (Notification.permission === 'granted') {
                     const notif = new Notification(notification.title, {
                         body: notification.message,
-                        icon: 'https://i.ibb.co/L1LQtBm/default-avatar.png' // Replace with your site's logo
+                        icon: 'https://i.ibb.co/L1LQtBm/default-avatar.png'
                     });
                 }
             }
 
-
-            // Function to set up the real-time listener for notifications
             function initializeNotifications() {
-                // Request permission for browser notifications
                 if (Notification.permission === 'default') {
                     Notification.requestPermission();
                 }
-
-                // Detach any existing listener before attaching a new one
                 if (notificationListener) {
                     notificationListener();
                 }
-
                 notificationListener = db.collection('notifications')
                     .orderBy('timestamp', 'desc')
-                    .limit(20) // Get the latest 20 notifications
+                    .limit(20)
                     .onSnapshot(snapshot => {
                         updateNotificationUI(snapshot.docs);
                         
-                        // Show browser notification only for new additions
                         snapshot.docChanges().forEach(change => {
                             if (change.type === 'added') {
                                 showBrowserNotification(change.doc.data());
@@ -2468,17 +2569,14 @@
                     });
             }
 
-            // Function to clean up the listener on logout
             function cleanupNotifications() {
                 if (notificationListener) {
-                    notificationListener(); // This detaches the listener
+                    notificationListener(); 
                     notificationListener = null;
                 }
                 notificationListContainer.innerHTML = '<li class="no-notification-message">কোনো নতুন নোটিফিকেশন নেই।</li>';
                 notificationBadge.classList.add('hidden');
             }
-            // --- END: NEW NOTIFICATION FUNCTIONS ---
-
 
             function populateProfileForm() {
                 const user = auth.currentUser;
@@ -2561,13 +2659,13 @@
                         }
                     });
                     displayMyCourses();
-                    initializeNotifications(); // Initialize notifications on login
+                    initializeNotifications();
                 } else {
                     loggedInView.classList.add('hidden');
                     loggedOutView.classList.remove('hidden');
                     adminPanelLinkLi.classList.add('hidden');
                     showPageSection('home');
-                    cleanupNotifications(); // Cleanup on logout
+                    cleanupNotifications();
                 }
             });
 
@@ -3116,7 +3214,6 @@
 
                 db.collection('payments').add(paymentData)
                     .then(() => {
-                        // NEW: Send notification to admin
                         db.collection('notifications').add({
                             title: 'নতুন পেমেন্ট',
                             message: `${paymentData.userEmail} ${paymentData.amount} টাকার একটি পেমেন্ট (${paymentData.itemName}) জমা দিয়েছেন।`,
@@ -3206,9 +3303,19 @@
             // --- Event Listeners ---
             loginSignupBtn.addEventListener('click', showLoginModal);
             
-            loginModal.addEventListener('click', (e) => { if (e.target === loginModal) hideLoginModal(); });
-            signupModal.addEventListener('click', (e) => { if (e.target === signupModal) hideSignupModal(); });
-            forgotPasswordModal.addEventListener('click', (e) => { if (e.target === forgotPasswordModal) hideForgotPasswordModal(); });
+            // Close modals with close button or by clicking outside
+            document.querySelectorAll('.login-modal').forEach(modal => {
+                modal.addEventListener('click', (e) => { 
+                    if (e.target === modal) {
+                        modal.classList.add('hidden');
+                    }
+                });
+            });
+            document.querySelectorAll('.close-modal-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.closest('.login-modal').classList.add('hidden');
+                });
+            });
 
             showSignupBtn.addEventListener('click', (e) => { e.preventDefault(); showSignupModal(); });
             showLoginBtn.addEventListener('click', (e) => { e.preventDefault(); showLoginModal(); });
@@ -3225,30 +3332,25 @@
 
             profileUpdateForm.addEventListener('submit', handleProfileUpdate);
             
-            // --- UPDATED Event Listeners for Dropdowns ---
             notificationIcon.addEventListener('click', () => {
                 notificationDropdown.classList.toggle('hidden');
-                profileDropdown.style.display = 'none'; // Close profile dropdown
-                 // When opening, we can assume the user has seen them.
+                profileDropdown.style.display = 'none';
                 notificationBadge.classList.add('hidden');
             });
 
             profileIcon.addEventListener('click', () => {
                 profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
-                 notificationDropdown.classList.add('hidden'); // Close notification dropdown
+                 notificationDropdown.classList.add('hidden');
             });
 
             document.addEventListener('click', (e) => {
-                 // Close profile dropdown if clicked outside
                 if (!profileIcon.contains(e.target) && !profileDropdown.contains(e.target)){
                     profileDropdown.style.display = 'none';
                 }
-                // Close notification dropdown if clicked outside
                  if (!notificationIcon.contains(e.target) && !notificationDropdown.contains(e.target)){
                     notificationDropdown.classList.add('hidden');
                 }
             });
-            // --- END of UPDATED Listeners ---
 
             dashboardLink.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -3331,17 +3433,12 @@
                 window.open(`https://wa.me/8801703743441`, 'whatsappPopup', 'width=800,height=700');
             });
             
-            // START: New listener for the mobile WhatsApp button
             whatsappChatBtnMobile.addEventListener('click', (event) => {
                 event.preventDefault();
                 window.open(`https://wa.me/8801703743441`, 'whatsappPopup', 'width=800,height=700');
             });
-            // END: New listener
 
             paymentForm.addEventListener('submit', handlePaymentSubmit);
-
-            closePaymentModalBtn.addEventListener('click', () => paymentModal.classList.add('hidden'));
-            paymentModal.addEventListener('click', (e) => { if (e.target === paymentModal) paymentModal.classList.add('hidden'); });
 
             copyPaymentNumberBtn.addEventListener('click', () => {
                 navigator.clipboard.writeText(document.getElementById('payment-number').textContent)
@@ -3362,6 +3459,7 @@
             displayNotices();
             loadHeroImage();
             loadAboutUsImage();
+            loadHeaderLogo();
         });
     </script>
 </body>
