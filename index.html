@@ -47,7 +47,7 @@
 
         .container {
             width: 90%;
-            max-width: 1200px;
+            max-width: 1400px; /* Changed from 1200px to make it wider on large screens */
             margin: 0 auto;
         }
 
@@ -1374,6 +1374,13 @@
             color: var(--secondary-blue);
         }
 
+        /* START: New Mobile WhatsApp Button Style */
+        .btn-whatsapp-mobile {
+            display: none; /* Hide on desktop by default */
+        }
+        /* END: New Mobile WhatsApp Button Style */
+
+
         @media (max-width: 768px) {
             .mobile-bottom-nav {
                 display: flex;
@@ -1425,6 +1432,18 @@
             .hero-buttons .btn-outline {
                 display: none;
             }
+            
+            /* START: Show and style mobile WhatsApp button */
+            .btn-whatsapp-mobile {
+                display: inline-flex; /* Show button on mobile */
+                background: #25D366 !important; /* WhatsApp green, !important to override .btn-gradient */
+                border: none;
+            }
+            .btn-whatsapp-mobile:hover {
+                background: #128C7E !important; /* Darker green on hover */
+            }
+            /* END: Show and style mobile WhatsApp button */
+
 
             .section-title {
                 font-size: 2.1em;
@@ -1657,6 +1676,14 @@
                         <div class="hero-buttons">
                             <a href="#courses" class="btn btn-gradient internal-link-btn">আমার কোর্স →</a>
                             <a href="#" id="whatsapp-chat-btn" class="btn btn-outline">সাপোর্ট চ্যাট করুন</a>
+                            <!-- START: Mobile Only WhatsApp Button -->
+                            <a href="#" id="whatsapp-chat-btn-mobile" class="btn btn-whatsapp-mobile">
+                                <svg style="width:24px;height:24px;fill:white;" viewBox="0 0 24 24">
+                                    <path d="M16.75,13.96C17,14.26 17.25,14.81 17.25,15.11C17.25,15.41 17.25,16.5 16.35,17.35C15.5,18.25 14.31,19.04 13.36,19.04C12.41,19.04 10.46,18.5 8.61,16.65C6.76,14.8 5,12.58 5,10.63C5,9.68 5.75,8.5 6.65,7.6C7.5,6.75 8.5,6.75 8.8,6.75C9.1,6.75 9.3,6.75 9.5,7.2C9.7,7.65 10.15,8.8 10.25,9C10.35,9.2 10.25,9.5 10,9.75L9.5,10.25C9.25,10.5 9.11,10.71 9.25,11C9.39,11.29 9.89,12.04 10.59,12.74C11.29,13.44 12.04,13.89 12.34,14.04C12.59,14.16 12.8,14.11 13,13.86L13.5,13.36C13.75,13.11 14,13 14.25,13.1C14.5,13.2 15.65,13.75 15.9,13.85C16.15,13.95 16.45,14 16.5,14.05C16.55,14.1 16.75,13.96 16.75,13.96M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22C13.66,22 15.25,21.54 16.62,20.75L21.5,22L20.75,17.14C21.58,15.74 22,14 22,12A10,10 0 0,0 12,2M12,4C16.42,4 20,7.58 20,12C20,13.81 19.42,15.5 18.46,16.86L19.5,20.5L15.86,19.46C14.5,20.42 12.81,21 11,21C6.58,21 3,17.42 3,13C3,8.58 6.58,5 11,5C11.33,5 11.66,5.04 12,5.09V4.05C12,4.03 12,4.02 12,4Z" />
+                                </svg>
+                                সাপোর্ট চ্যাট করুন
+                            </a>
+                            <!-- END: Mobile Only WhatsApp Button -->
                         </div>
                     </div>
                     <div class="hero-image-wrapper">
@@ -2063,6 +2090,7 @@
             const logoLink = document.querySelector('header .logo');
 
             const whatsappChatBtn = document.getElementById('whatsapp-chat-btn');
+            const whatsappChatBtnMobile = document.getElementById('whatsapp-chat-btn-mobile'); // New mobile button
 
             const profileUpdateForm = document.getElementById('profile-update-form');
 
@@ -2269,6 +2297,15 @@
                         });
                     })
                     .then(() => {
+                        // NEW: Send notification to admin
+                        db.collection('notifications').add({
+                            title: 'নতুন শিক্ষার্থী রেজিস্ট্রেশন',
+                            message: `একজন নতুন শিক্ষার্থী (${email}) সাইন আপ করেছেন।`,
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                            type: 'new_user',
+                            read: false
+                        });
+
                         showToast("সাইন আপ সফল হয়েছে! এখন লগ ইন করুন।", 'success');
                         signupForm.reset();
                         showLoginModal();
@@ -3079,6 +3116,15 @@
 
                 db.collection('payments').add(paymentData)
                     .then(() => {
+                        // NEW: Send notification to admin
+                        db.collection('notifications').add({
+                            title: 'নতুন পেমেন্ট',
+                            message: `${paymentData.userEmail} ${paymentData.amount} টাকার একটি পেমেন্ট (${paymentData.itemName}) জমা দিয়েছেন।`,
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                            type: 'new_payment',
+                            read: false
+                        });
+
                         showToast("আপনার পেমেন্ট তথ্য সফলভাবে জমা হয়েছে।", "success");
                         paymentForm.reset();
                         paymentModal.classList.add('hidden');
@@ -3284,6 +3330,13 @@
                 event.preventDefault();
                 window.open(`https://wa.me/8801703743441`, 'whatsappPopup', 'width=800,height=700');
             });
+            
+            // START: New listener for the mobile WhatsApp button
+            whatsappChatBtnMobile.addEventListener('click', (event) => {
+                event.preventDefault();
+                window.open(`https://wa.me/8801703743441`, 'whatsappPopup', 'width=800,height=700');
+            });
+            // END: New listener
 
             paymentForm.addEventListener('submit', handlePaymentSubmit);
 
