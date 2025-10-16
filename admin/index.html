@@ -325,6 +325,10 @@
         .stat-card p { color: #6c757d; }
         .stat-card.pending-card { border-left-color: var(--accent-yellow); }
         .stat-card.pending-card .icon { color: var(--accent-yellow); }
+        /* START: NEW STYLES FOR SALES CARDS */
+        .stat-card.sales-card { border-left-color: var(--accent-green); }
+        .stat-card.sales-card .icon { color: var(--accent-green); }
+        /* END: NEW STYLES FOR SALES CARDS */
 
 
         /* Modal Styles */
@@ -491,7 +495,7 @@
 </head>
 <body>
 
-    <!-- ======================= Login Page (MODIFIED) ======================= -->
+    <!-- ======================= Login Page ======================= -->
     <div id="login-page">
         <div class="login-box">
             <h2>অ্যাডমিন লগইন</h2>
@@ -509,9 +513,9 @@
         </div>
     </div>
 
-    <!-- ======================= Admin Panel (UNCHANGED) ======================= -->
+    <!-- ======================= Admin Panel ======================= -->
     <div id="admin-panel" class="hidden">
-        <!-- NEW: Mobile Header -->
+        <!-- Mobile Header -->
         <header class="mobile-header">
             <button id="mobile-menu-btn" class="material-symbols-outlined">menu</button>
             <span id="mobile-page-title">ড্যাশবোর্ড</span>
@@ -535,7 +539,7 @@
             <button class="logout-btn" id="logout-btn"><span class="material-symbols-outlined">logout</span> লগ আউট</button>
         </aside>
 
-        <!-- NEW: Overlay for mobile menu -->
+        <!-- Overlay for mobile menu -->
         <div id="overlay" class="hidden"></div>
 
         <!-- Main Content -->
@@ -545,7 +549,38 @@
                 <div class="page-header">
                     <h1>ড্যাশবোর্ড</h1>
                 </div>
+                <!-- START: MODIFIED DASHBOARD GRID -->
                 <div class="stats-grid">
+                    <div class="stat-card sales-card">
+                        <span class="material-symbols-outlined icon">payments</span>
+                        <div>
+                            <h3 id="total-sales">৳0</h3>
+                            <p>মোট টাকার সেলস</p>
+                        </div>
+                    </div>
+                    <div class="stat-card sales-card">
+                        <span class="material-symbols-outlined icon">today</span>
+                        <div>
+                            <h3 id="current-month-sales">৳0</h3>
+                            <p>বর্তমান মাসের সেলস</p>
+                        </div>
+                    </div>
+                    <!-- NEW PROFIT CARDS START -->
+                    <div class="stat-card sales-card">
+                        <span class="material-symbols-outlined icon">trending_up</span>
+                        <div>
+                            <h3 id="total-profit">৳0</h3>
+                            <p>মোট লাভ</p>
+                        </div>
+                    </div>
+                    <div class="stat-card sales-card">
+                        <span class="material-symbols-outlined icon">show_chart</span>
+                        <div>
+                            <h3 id="current-month-profit">৳0</h3>
+                            <p>বর্তমান মাসের লাভ</p>
+                        </div>
+                    </div>
+                    <!-- NEW PROFIT CARDS END -->
                     <div class="stat-card pending-card">
                         <span class="material-symbols-outlined icon">pending_actions</span>
                         <div>
@@ -582,6 +617,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- END: MODIFIED DASHBOARD GRID -->
             </div>
 
             <!-- Payments Page -->
@@ -596,6 +632,7 @@
                                 <th>ইমেইল</th>
                                 <th>কোর্স/সার্ভিস</th>
                                 <th>পরিমাণ</th>
+                                <th>লাভ</th>
                                 <th>TrxID</th>
                                 <th>সময়</th>
                                 <th>স্ট্যাটাস</th>
@@ -642,6 +679,7 @@
                         <thead>
                             <tr>
                                 <th>সার্ভিসের নাম</th>
+                                <th>ক্রয়মূল্য</th>
                                 <th>বর্তমান মূল্য</th>
                                 <th>পূর্বের মূল্য</th>
                                 <th>অ্যাকশন</th>
@@ -699,7 +737,7 @@
                 </div>
             </div>
             
-            <!-- START: New Curriculum Page -->
+            <!-- Curriculum Page -->
             <div id="curriculum-page" class="page">
                 <div class="page-header">
                     <h1>কারিকুলাম ম্যানেজমেন্ট</h1>
@@ -721,7 +759,6 @@
                     </table>
                 </div>
             </div>
-            <!-- END: New Curriculum Page -->
 
             <!-- Notices Page -->
             <div id="notices-page" class="page">
@@ -788,7 +825,6 @@
                         <button type="submit" class="btn btn-primary" style="width: auto; justify-content: flex-start;">সেটিংস সেভ করুন</button>
                     </form>
                     
-                    <!-- START: MODIFIED CODE -->
                     <hr style="margin: 30px 0;">
                     <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">লোগো ইমেজ</h3>
                     <form id="logo-settings-form">
@@ -802,7 +838,6 @@
                         </div>
                         <button type="submit" class="btn btn-primary" style="width: auto; justify-content: flex-start;">লোগো ইমেজ সেভ করুন</button>
                     </form>
-                    <!-- END: MODIFIED CODE -->
                     
                     <hr style="margin: 30px 0;">
 
@@ -823,7 +858,7 @@
         </main>
     </div>
 
-    <!-- ======================= Modal for Add/Edit (UNCHANGED) ======================= -->
+    <!-- ======================= Modal for Add/Edit ======================= -->
     <div id="admin-modal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
@@ -875,7 +910,7 @@
             const logoSettingsForm = document.getElementById('logo-settings-form');
             const aboutUsSettingsForm = document.getElementById('about-us-settings-form');
 
-            // --- NEW: Mobile Navigation Elements ---
+            // --- Mobile Navigation Elements ---
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
             const mobilePageTitle = document.getElementById('mobile-page-title');
             const overlay = document.getElementById('overlay');
@@ -908,7 +943,7 @@
                 auth.signOut();
             });
             
-            // --- NEW: Mobile Navigation Logic ---
+            // --- Mobile Navigation Logic ---
             if (mobileMenuBtn) {
                 mobileMenuBtn.addEventListener('click', () => {
                     sidebar.classList.add('open');
@@ -931,19 +966,15 @@
                 const activeLink = document.querySelector(`.sidebar-nav li[data-page="${pageId}"]`);
                 activeLink.classList.add('active');
                 
-                // NEW: Update mobile header title
                 if (mobilePageTitle && activeLink) {
                     const linkAnchor = activeLink.querySelector('a');
-                    // Get the text content of the last node (which is the text) to avoid the icon's text
                     mobilePageTitle.textContent = linkAnchor.childNodes[linkAnchor.childNodes.length - 1].textContent.trim();
                 }
                 
-                // NEW: Close sidebar after navigation on mobile
                 if (window.innerWidth <= 768) {
                     sidebar.classList.remove('open');
                     overlay.classList.add('hidden');
                 }
-
 
                 // Refresh data on page navigation
                 switch(pageId) {
@@ -974,11 +1005,44 @@
                     const servicesSnapshot = await db.collection('services').get();
                     const coursesSnapshot = await db.collection('courses').get();
                     const noticesSnapshot = await db.collection('notices').get();
-                    const pendingPaymentsSnapshot = await db.collection('payments').where('status', '==', 'pending').get();
-                    const usersSnapshot = await db.collection('users').get(); // <-- নতুন কোড
+                    const usersSnapshot = await db.collection('users').get();
+                    
+                    const paymentsSnapshot = await db.collection('payments').get();
+                    
+                    let totalSales = 0;
+                    let currentMonthSales = 0;
+                    let totalProfit = 0;
+                    let currentMonthProfit = 0;
+                    let pendingPaymentsCount = 0;
 
-                    document.getElementById('pending-payments').textContent = pendingPaymentsSnapshot.size;
-                    document.getElementById('total-students').textContent = usersSnapshot.size; // <-- নতুন কোড
+                    const now = new Date();
+                    const currentMonth = now.getMonth();
+                    const currentYear = now.getFullYear();
+
+                    paymentsSnapshot.forEach(doc => {
+                        const payment = doc.data();
+                        if (payment.status === 'approved') {
+                            totalSales += payment.amount || 0;
+                            totalProfit += payment.profit || 0;
+                            
+                            if (payment.timestamp) {
+                                const paymentDate = new Date(payment.timestamp.seconds * 1000);
+                                if (paymentDate.getMonth() === currentMonth && paymentDate.getFullYear() === currentYear) {
+                                    currentMonthSales += payment.amount || 0;
+                                    currentMonthProfit += payment.profit || 0;
+                                }
+                            }
+                        } else if (payment.status === 'pending') {
+                            pendingPaymentsCount++;
+                        }
+                    });
+
+                    document.getElementById('total-sales').textContent = `৳${totalSales.toLocaleString('bn-BD')}`;
+                    document.getElementById('current-month-sales').textContent = `৳${currentMonthSales.toLocaleString('bn-BD')}`;
+                    document.getElementById('total-profit').textContent = `৳${totalProfit.toLocaleString('bn-BD')}`;
+                    document.getElementById('current-month-profit').textContent = `৳${currentMonthProfit.toLocaleString('bn-BD')}`;
+                    document.getElementById('pending-payments').textContent = pendingPaymentsCount;
+                    document.getElementById('total-students').textContent = usersSnapshot.size;
                     document.getElementById('total-services').textContent = servicesSnapshot.size;
                     document.getElementById('total-courses').textContent = coursesSnapshot.size;
                     document.getElementById('total-notices').textContent = noticesSnapshot.size;
@@ -987,7 +1051,7 @@
                 }
             }
             
-            // START: MODIFIED CODE
+            // --- Settings ---
             async function renderSettings() {
                 const heroImageUrlInput = document.getElementById('hero-image-url');
                 const heroImagePreview = document.getElementById('hero-image-preview');
@@ -996,9 +1060,7 @@
                 const aboutUsImageUrlInput = document.getElementById('about-us-image-url');
                 const aboutUsImagePreview = document.getElementById('about-us-image-preview');
 
-
                 try {
-                    // Fetch hero image settings
                     const heroDoc = await db.collection('site_settings').doc('hero_section').get();
                     if (heroDoc.exists && heroDoc.data().imageUrl) {
                         const imageUrl = heroDoc.data().imageUrl;
@@ -1009,7 +1071,6 @@
                          heroImagePreview.src = 'https://i.ibb.co/JqgWkCg/placeholder.png';
                     }
 
-                    // Fetch logo image settings
                     const logoDoc = await db.collection('site_settings').doc('header_settings').get();
                     if (logoDoc.exists && logoDoc.data().logoImageUrl) {
                         const logoUrl = logoDoc.data().logoImageUrl;
@@ -1020,7 +1081,6 @@
                         logoImagePreview.src = 'https://i.ibb.co/JqgWkCg/placeholder.png';
                     }
                     
-                    // Fetch About Us image settings
                     const aboutUsDoc = await db.collection('site_settings').doc('about_us_section').get();
                     if (aboutUsDoc.exists && aboutUsDoc.data().imageUrl) {
                         const imageUrl = aboutUsDoc.data().imageUrl;
@@ -1030,13 +1090,11 @@
                         aboutUsImageUrlInput.value = '';
                         aboutUsImagePreview.src = 'https://i.ibb.co/JqgWkCg/placeholder.png';
                     }
-
                 } catch (error) {
                     console.error("Error fetching settings:", error);
                     alert("সেটিংস লোড করতে সমস্যা হয়েছে।");
                 }
             }
-            // END: MODIFIED CODE
 
             heroSettingsForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -1045,20 +1103,16 @@
                     alert("অনুগ্রহ করে একটি ইমেজ URL দিন।");
                     return;
                 }
-
                 try {
-                    await db.collection('site_settings').doc('hero_section').set({
-                        imageUrl: newUrl
-                    }, { merge: true });
+                    await db.collection('site_settings').doc('hero_section').set({ imageUrl: newUrl }, { merge: true });
                     alert("হিরো ইমেজ সফলভাবে আপডেট করা হয়েছে!");
-                    renderSettings(); // Refresh the preview
+                    renderSettings();
                 } catch (error) {
                     console.error("Error saving settings:", error);
                     alert("সেটিংস সেভ করতে সমস্যা হয়েছে। \nত্রুটি: " + error.message);
                 }
             });
             
-            // START: MODIFIED CODE
             logoSettingsForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const newLogoUrl = document.getElementById('logo-image-url').value;
@@ -1066,19 +1120,15 @@
                     alert("অনুগ্রহ করে লোগোর জন্য একটি ইমেজ URL দিন।");
                     return;
                 }
-
                 try {
-                    await db.collection('site_settings').doc('header_settings').set({
-                        logoImageUrl: newLogoUrl
-                    }, { merge: true });
+                    await db.collection('site_settings').doc('header_settings').set({ logoImageUrl: newLogoUrl }, { merge: true });
                     alert("লোগো ইমেজ সফলভাবে সেভ করা হয়েছে!");
-                    renderSettings(); // Refresh the preview and input field
+                    renderSettings();
                 } catch (error) {
                     console.error("Error saving logo image:", error);
                     alert("লোগো ইমেজ সেভ করতে সমস্যা হয়েছে। \nত্রুটি: " + error.message);
                 }
             });
-            // END: MODIFIED CODE
             
             aboutUsSettingsForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -1087,27 +1137,20 @@
                     alert("অনুগ্রহ করে একটি ইমেজ URL দিন।");
                     return;
                 }
-
                 try {
-                    await db.collection('site_settings').doc('about_us_section').set({
-                        imageUrl: newUrl
-                    }, { merge: true });
+                    await db.collection('site_settings').doc('about_us_section').set({ imageUrl: newUrl }, { merge: true });
                     alert("'আমাদের সম্পর্কে' পাতার ইমেজ সফলভাবে আপডেট করা হয়েছে!");
-                    renderSettings(); // Refresh the preview
+                    renderSettings();
                 } catch (error) {
                     console.error("Error saving 'About Us' image settings:", error);
                     alert("সেটিংস সেভ করতে সমস্যা হয়েছে। \nত্রুটি: " + error.message);
                 }
             });
 
-
             // --- CRUD Operations ---
-            
-            // ##################################################################
-            // ### START: নতুন এবং সংশোধিত কোড ###
-            // ##################################################################
-
-            // এই ফাংশনটি window অবজেক্টের সাথে যুক্ত করা হয়েছে
+            // =================================================================
+            // START: *** লাভ গণনার জন্য সংশোধিত এবং নির্ভুল ফাংশন ***
+            // =================================================================
             window.updatePaymentStatus = async (docId) => {
                 const selectElement = document.getElementById(`status-select-${docId}`);
                 if (!selectElement) {
@@ -1125,10 +1168,43 @@
                 }
 
                 try {
-                    await db.collection('payments').doc(docId).update({ status: newStatus });
+                    const paymentDoc = await db.collection('payments').doc(docId).get();
+                    if (!paymentDoc.exists) {
+                        throw new Error("Payment document not found.");
+                    }
+                    const paymentData = paymentDoc.data();
+                    let updateData = { status: newStatus };
+
+                    // লাভ গণনার জন্য নতুন উন্নত লজিক
+                    if (newStatus === 'approved') {
+                        // প্রথমে, এটি সার্ভিস কিনা তা জানার জন্য 'services' collection-এ খোঁজা হবে
+                        const serviceQuery = await db.collection('services').where('name', '==', paymentData.itemName).limit(1).get();
+                        
+                        if (!serviceQuery.empty) {
+                            // যদি সার্ভিসটি পাওয়া যায়, তাহলে ক্রয়মূল্যের উপর ভিত্তি করে লাভ গণনা হবে
+                            const serviceData = serviceQuery.docs[0].data();
+                            
+                            // *** START: মূল সমাধান ***
+                            // নিশ্চিত করা হচ্ছে যে উভয় মানই সংখ্যা (Number) এবং তারপর গণনা করা হচ্ছে
+                            const sellingPrice = Number(paymentData.amount) || 0;
+                            const purchasePrice = Number(serviceData.purchasePrice) || 0;
+
+                            updateData.profit = sellingPrice - purchasePrice;
+                            // *** END: মূল সমাধান ***
+
+                        } else {
+                            // যদি সার্ভিস হিসেবে পাওয়া না যায়, তাহলে এটিকে কোর্স হিসেবে ধরা হবে
+                            // কোর্সের ক্ষেত্রে, সম্পূর্ণ বিক্রয়মূল্যই লাভ
+                            updateData.profit = Number(paymentData.amount) || 0;
+                        }
+                    } else { // newStatus 'approved' না হলে
+                        // যদি স্ট্যাটাস পরিবর্তন করে pending বা rejected করা হয়, তাহলে profit ফিল্ডটি মুছে ফেলা হবে
+                        updateData.profit = firebase.firestore.FieldValue.delete();
+                    }
+
+                    await db.collection('payments').doc(docId).update(updateData);
                     alert('স্ট্যাটাস সফলভাবে আপডেট করা হয়েছে!');
                     
-                    // ডেটা পুনরায় লোড করা হচ্ছে
                     renderPayments();
                     renderDashboard();
 
@@ -1148,31 +1224,31 @@
                     }
                 }
             };
+            // =================================================================
+            // END: *** সংশোধিত ফাংশন শেষ ***
+            // =================================================================
 
             async function renderPayments() {
                 const tableBody = document.getElementById('payments-table-body');
-                tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center;">পেমেন্টের তথ্য লোড হচ্ছে...</td></tr>`;
-
+                tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center;">পেমেন্টের তথ্য লোড হচ্ছে...</td></tr>`;
                 try {
                     const snapshot = await db.collection('payments').orderBy('timestamp', 'desc').get();
-
                     if (snapshot.empty) {
-                        tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center;">এখনও কোনো পেমেন্টের তথ্য জমা পড়েনি।</td></tr>`;
+                        tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center;">এখনও কোনো পেমেন্টের তথ্য জমা পড়েনি।</td></tr>`;
                         return;
                     }
-
                     let tableHTML = '';
                     snapshot.forEach(doc => {
                         const payment = { id: doc.id, ...doc.data() };
                         const timestamp = payment.timestamp ? new Date(payment.timestamp.seconds * 1000).toLocaleString('bn-BD') : 'N/A';
                         const statusClass = (payment.status || 'pending').toLowerCase();
-
-                        // বাটনে সরাসরি onclick অ্যাট্রিবিউট ব্যবহার করা হয়েছে
+                        const profit = (payment.status === 'approved' && payment.profit != null) ? `৳ ${payment.profit}` : 'N/A';
                         const row = `
                             <tr>
                                 <td>${payment.userEmail}</td>
                                 <td>${payment.itemName}</td>
                                 <td>৳ ${payment.amount}</td>
+                                <td>${profit}</td>
                                 <td>${payment.transactionId}</td>
                                 <td>${timestamp}</td>
                                 <td>
@@ -1184,9 +1260,7 @@
                                         <option value="approved" ${payment.status === 'approved' ? 'selected' : ''}>Approved</option>
                                         <option value="rejected" ${payment.status === 'rejected' ? 'selected' : ''}>Rejected</option>
                                     </select>
-                                    
                                     <button class="btn btn-save-status" onclick="updatePaymentStatus('${payment.id}')">Save</button>
-                                    
                                     <button class="btn-delete" onclick="deleteItem('payments', '${payment.id}')"><span class="material-symbols-outlined">delete</span></button>
                                 </td>
                             </tr>
@@ -1196,31 +1270,23 @@
                     tableBody.innerHTML = tableHTML;
                 } catch(error) {
                     console.error("--- Payment Rendering Error ---", error);
-                    let errorMessage = `<tr><td colspan="7" style="color: red; text-align: center;">An error occurred. Check the console.</td></tr>`;
+                    let errorMessage = `<tr><td colspan="8" style="color: red; text-align: center;">An error occurred. Check the console.</td></tr>`;
                     if (error.code === 'permission-denied') {
-                        errorMessage = `<tr><td colspan="7" style="color: red; text-align: center;">Error: Permission Denied. Check your Firestore Security Rules.</td></tr>`;
+                        errorMessage = `<tr><td colspan="8" style="color: red; text-align: center;">Error: Permission Denied. Check your Firestore Security Rules.</td></tr>`;
                     }
                     tableBody.innerHTML = errorMessage;
                 }
             }
-            
-            // ##################################################################
-            // ### END: নতুন এবং সংশোধিত কোড ###
-            // ##################################################################
-
 
             async function renderUsers() {
                 const tableBody = document.getElementById('users-table-body');
                 tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">শিক্ষার্থীদের তথ্য লোড হচ্ছে...</td></tr>`;
-
                 try {
                     const snapshot = await db.collection('users').get();
-
                     if (snapshot.empty) {
                         tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">কোনো নিবন্ধিত শিক্ষার্থী পাওয়া যায়নি।</td></tr>`;
                         return;
                     }
-
                     let tableHTML = '';
                     snapshot.forEach(doc => {
                         const user = { id: doc.id, ...doc.data() };
@@ -1258,6 +1324,7 @@
                         const row = `
                             <tr>
                                 <td>${service.name}</td>
+                                <td>৳ ${service.purchasePrice || 0}</td>
                                 <td>৳ ${service.currentPrice}</td>
                                 <td>৳ ${service.oldPrice}</td>
                                 <td class="actions-cell">
@@ -1303,12 +1370,10 @@
                 try {
                     tableBody.innerHTML = `<tr><td colspan="4" style="text-align: center;">এনরোলমেন্টের তথ্য লোড হচ্ছে...</td></tr>`;
                     const snapshot = await db.collection('enrollments').orderBy('enrollmentDate', 'desc').get();
-
                     if (snapshot.empty) {
                         tableBody.innerHTML = `<tr><td colspan="4" style="text-align: center;">কোনো এনরোলমেন্ট পাওয়া যায়নি।</td></tr>`;
                         return;
                     }
-
                     let tableHTML = '';
                     snapshot.forEach(doc => {
                         const enrollment = { id: doc.id, ...doc.data() };
@@ -1336,12 +1401,10 @@
                  tableBody.innerHTML = `<tr><td colspan="4" style="text-align: center;">কারিকুলাম তথ্য লোড হচ্ছে...</td></tr>`;
                 try {
                     const snapshot = await db.collection('curriculum').get();
-
                     if (snapshot.empty) {
                         tableBody.innerHTML = `<tr><td colspan="4" style="text-align: center;">কোনো কারিকুলাম পাওয়া যায়নি।</td></tr>`;
                         return;
                     }
-                    
                     let tableHTML = '';
                     snapshot.forEach(doc => {
                         const curriculum = { id: doc.id, ...doc.data() };
@@ -1441,7 +1504,6 @@
                         } else {
                             formFieldsHTML = getFormFields(collection, {}, { courseOptions });
                         }
-
                     } catch (error) {
                         console.error("Error fetching data for modal:", error);
                         alert(`${loadingMessage} আনতে সমস্যা হয়েছে।`);
@@ -1467,21 +1529,18 @@
                         console.error("No such document!");
                         return;
                     }
-
                     const itemData = doc.data();
                     let formFieldsHTML = '';
 
                     if (collection === 'joinClass' || collection === 'curriculum') {
                         modalForm.innerHTML = `<p style="text-align:center;">কোর্সের তালিকা লোড হচ্ছে...</p>`;
                         adminModal.classList.remove('hidden');
-
                         const coursesSnapshot = await db.collection('courses').get();
                         let courseOptions = coursesSnapshot.docs.map(courseDoc => {
                             const courseName = courseDoc.data().name;
                             const isSelected = courseName === itemData.courseName ? 'selected' : '';
                             return `<option value="${courseName}" ${isSelected}>${courseName}</option>`;
                         }).join('');
-
                         formFieldsHTML = getFormFields(collection, itemData, { courseOptions });
                     } else {
                         formFieldsHTML = getFormFields(collection, itemData);
@@ -1495,7 +1554,6 @@
                         e.preventDefault();
                         saveItem(collection, id);
                     };
-
                 } catch(error) {
                     console.error("Error opening edit modal:", error);
                     alert("এডিট করার জন্য তথ্য লোড করতে সমস্যা হয়েছে।");
@@ -1509,7 +1567,7 @@
                         alert('সফলভাবে ডিলিট করা হয়েছে।');
                         const currentPageId = document.querySelector('.page.active').id;
                         navigateTo(currentPageId);
-                        renderDashboard(); // Update dashboard counts
+                        renderDashboard();
                     } catch(error) {
                         console.error("Error deleting item:", error);
                         alert('ডিলিট করার সময় একটি সমস্যা হয়েছে।');
@@ -1526,6 +1584,7 @@
                     newItem = {
                         name: (formData.get('name') || '').trim(),
                         description: (formData.get('description') || '').trim(),
+                        purchasePrice: Number(formData.get('purchasePrice')) || 0,
                         oldPrice: Number(formData.get('oldPrice')) || 0,
                         currentPrice: Number(formData.get('currentPrice')) || 0,
                         features: (formData.get('features') || '').split(',').map(f => f.trim())
@@ -1544,19 +1603,16 @@
                     const studentData = (formData.get('student') || '|').split('|');
                     const courseName = formData.get('courseName');
                     const batch = (formData.get('batch') || '').trim();
-
                     if (!studentData[0] || !courseName || !batch) {
                         alert("অনুগ্রহ করে সকল তথ্য পূরণ করুন।");
                         return;
                     }
-                    
                     const courseQuery = await db.collection('courses').where('name', '==', courseName).limit(1).get();
                      if (courseQuery.empty) {
                         alert("নির্বাচিত কোর্সটি খুঁজে পাওয়া যায়নি।");
                         return;
                     }
                     const courseDetails = courseQuery.docs[0].data();
-                    
                     newItem = {
                         studentUid: studentData[0],
                         studentEmail: studentData[1],
@@ -1603,16 +1659,15 @@
                 }
 
                 try {
-                    if (id) { // Edit mode
+                    if (id) {
                         await db.collection(collection).doc(id).set(newItem, { merge: true });
-                    } else { // Add mode
+                    } else {
                         await db.collection(collection).add(newItem);
                     }
-
                     adminModal.classList.add('hidden');
                     const currentPageId = document.querySelector('.page.active').id;
                     navigateTo(currentPageId);
-                    renderDashboard(); // Update dashboard counts
+                    renderDashboard();
                 } catch(error) {
                     console.error("Error saving item:", error);
                     alert("তথ্য সংরক্ষণ করার সময় একটি সমস্যা হয়েছে।");
@@ -1629,7 +1684,6 @@
                     const container = document.getElementById('curriculum-modules-container');
                     container.insertAdjacentHTML('beforeend', getModuleHTML());
                 }
-                
                 if (addVideoBtn) {
                     e.preventDefault();
                     const videosContainer = addVideoBtn.previousElementSibling;
@@ -1637,7 +1691,6 @@
                         videosContainer.insertAdjacentHTML('beforeend', getVideoHTML());
                     }
                 }
-                
                 if (removeBtn) {
                      e.preventDefault();
                      removeBtn.closest('.module-container, .video-entry').remove();
@@ -1656,7 +1709,6 @@
                 return 'নোটিশ';
             }
 
-            // --- HTML Generators for Dynamic Curriculum Form ---
             function getModuleHTML(module = { title: '', videos: [] }) {
                  return `
                     <div class="module-container">
@@ -1699,7 +1751,11 @@
                             <textarea name="description" rows="3">${data.description || ''}</textarea>
                         </div>
                         <div class="form-group">
-                            <label>বর্তমান মূল্য</label>
+                            <label>ক্রয়মূল্য (Purchase Price)</label>
+                            <input type="number" name="purchasePrice" value="${data.purchasePrice || ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>বর্তমান মূল্য (Selling Price)</label>
                             <input type="number" name="currentPrice" value="${data.currentPrice || ''}" required>
                         </div>
                         <div class="form-group">
