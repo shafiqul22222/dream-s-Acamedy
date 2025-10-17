@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
@@ -529,9 +529,7 @@
                 <li data-page="payments-page"><a href="#"><span class="material-symbols-outlined">receipt_long</span> পেমেন্ট ম্যানেজমেন্ট</a></li>
                 <li data-page="users-page"><a href="#"><span class="material-symbols-outlined">group</span> শিক্ষার্থী ম্যানেজমেন্ট</a></li>
                 <li data-page="services-page"><a href="#"><span class="material-symbols-outlined">construction</span> সার্ভিস ম্যানেজ</a></li>
-                <!-- START: New Navigation Link -->
                 <li data-page="send-service-page"><a href="#"><span class="material-symbols-outlined">send</span> সার্ভিস পাঠান</a></li>
-                <!-- END: New Navigation Link -->
                 <li data-page="courses-page"><a href="#"><span class="material-symbols-outlined">school</span> কোর্স ম্যানেজ</a></li>
                 <li data-page="enrollments-page"><a href="#"><span class="material-symbols-outlined">assignment_ind</span> কোর্স এনরোলমেন্ট</a></li>
                 <li data-page="curriculum-page"><a href="#"><span class="material-symbols-outlined">list_alt</span> কারিকুলাম ম্যানেজ</a></li>
@@ -695,7 +693,7 @@
                 </div>
             </div>
             
-            <!-- START: New Send Service Page -->
+            <!-- Send Service Page -->
             <div id="send-service-page" class="page">
                 <div class="page-header">
                     <h1>হোয়াটসঅ্যাপে সার্ভিস পাঠান</h1>
@@ -720,12 +718,13 @@
                             <span class="material-symbols-outlined">send</span> পাঠিয়ে দিন
                         </button>
                     </form>
+                    <!-- START: Updated Instructional Text -->
                     <p style="margin-top: 20px; font-size: 0.9em; color: #6c757d;">
-                        <strong>লক্ষ্য করুন:</strong> "পাঠিয়ে দিন" বাটনে ক্লিক করলে আপনার ব্রাউজারে একটি নতুন ট্যাবে হোয়াটসঅ্যাপ ওয়েব খুলবে। মেসেজটি সেখানে স্বয়ংক্রিয়ভাবে লেখা থাকবে, আপনাকে শুধু পাঠাতে হবে। নিশ্চিত করুন যে আপনার অ্যাডমিন নম্বর (01701126965) দিয়ে হোয়াটসঅ্যাপ ওয়েব-এ লগইন করা আছে।
+                        <strong>লক্ষ্য করুন:</strong> "পাঠিয়ে দিন" বাটনে ক্লিক করলে আপনার মোবাইলে সরাসরি হোয়াটসঅ্যাপ অ্যাপ খুলবে অথবা কম্পিউটারে হোয়াটসঅ্যাপ ওয়েব খুলবে। মেসেজটি সেখানে স্বয়ংক্রিয়ভাবে লেখা থাকবে, আপনাকে শুধু পাঠাতে হবে। নিশ্চিত করুন যে আপনার অ্যাডমিন নম্বর (01701126965) দিয়ে হোয়াটসঅ্যাপ-এ লগইন করা আছে।
                     </p>
+                    <!-- END: Updated Instructional Text -->
                 </div>
             </div>
-            <!-- END: New Send Service Page -->
 
             <!-- Courses Page -->
             <div id="courses-page" class="page">
@@ -945,9 +944,7 @@
             const logoSettingsForm = document.getElementById('logo-settings-form');
             const aboutUsSettingsForm = document.getElementById('about-us-settings-form');
             
-            // START: New Element for Send Service Form
             const sendServiceForm = document.getElementById('send-service-form');
-            // END: New Element
 
             // --- Mobile Navigation Elements ---
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -1021,7 +1018,7 @@
                     case 'payments-page': renderPayments(); break;
                     case 'users-page': renderUsers(); break;
                     case 'services-page': renderServices(); break;
-                    case 'send-service-page': renderSendServicePage(); break; // New case
+                    case 'send-service-page': renderSendServicePage(); break;
                     case 'courses-page': renderCourses(); break;
                     case 'enrollments-page': renderEnrollments(); break;
                     case 'curriculum-page': renderCurriculum(); break;
@@ -1091,7 +1088,7 @@
                 }
             }
 
-            // --- START: New Send Service Page Functions ---
+            // --- Send Service Page Functions ---
             async function renderSendServicePage() {
                 const serviceSelect = document.getElementById('service-selection');
                 serviceSelect.innerHTML = '<option value="">সার্ভিস তালিকা লোড হচ্ছে...</option>';
@@ -1126,21 +1123,17 @@
                         return;
                     }
 
-                    // Construct the message
                     const message = `*Service:* ${selectedService}\n\n*Details:*\n${serviceInfo}`;
-
-                    // Encode the message for the URL
                     const encodedMessage = encodeURIComponent(message);
                     
-                    // Create the WhatsApp Web URL
-                    // The admin's number isn't used here; it's the account logged into web.whatsapp.com
-                    const whatsappUrl = `https://web.whatsapp.com/send?phone=${recipientNumber}&text=${encodedMessage}`;
+                    // START: Updated Universal WhatsApp URL
+                    // This URL works for both mobile (opens app) and desktop (opens web.whatsapp.com)
+                    const whatsappUrl = `https://api.whatsapp.com/send?phone=${recipientNumber}&text=${encodedMessage}`;
+                    // END: Updated Universal WhatsApp URL
                     
-                    // Open the URL in a new tab
                     window.open(whatsappUrl, '_blank');
                 });
             }
-            // --- END: New Send Service Page Functions ---
             
             // --- Settings ---
             async function renderSettings() {
@@ -1239,9 +1232,6 @@
             });
 
             // --- CRUD Operations ---
-            // =================================================================
-            // START: *** লাভ গণনার জন্য সংশোধিত এবং নির্ভুল ফাংশন ***
-            // =================================================================
             window.updatePaymentStatus = async (docId) => {
                 const selectElement = document.getElementById(`status-select-${docId}`);
                 if (!selectElement) {
@@ -1266,30 +1256,18 @@
                     const paymentData = paymentDoc.data();
                     let updateData = { status: newStatus };
 
-                    // লাভ গণনার জন্য নতুন উন্নত লজিক
                     if (newStatus === 'approved') {
-                        // প্রথমে, এটি সার্ভিস কিনা তা জানার জন্য 'services' collection-এ খোঁজা হবে
                         const serviceQuery = await db.collection('services').where('name', '==', paymentData.itemName).limit(1).get();
                         
                         if (!serviceQuery.empty) {
-                            // যদি সার্ভিসটি পাওয়া যায়, তাহলে ক্রয়মূল্যের উপর ভিত্তি করে লাভ গণনা হবে
                             const serviceData = serviceQuery.docs[0].data();
-                            
-                            // *** START: মূল সমাধান ***
-                            // নিশ্চিত করা হচ্ছে যে উভয় মানই সংখ্যা (Number) এবং তারপর গণনা করা হচ্ছে
                             const sellingPrice = Number(paymentData.amount) || 0;
                             const purchasePrice = Number(serviceData.purchasePrice) || 0;
-
                             updateData.profit = sellingPrice - purchasePrice;
-                            // *** END: মূল সমাধান ***
-
                         } else {
-                            // যদি সার্ভিস হিসেবে পাওয়া না যায়, তাহলে এটিকে কোর্স হিসেবে ধরা হবে
-                            // কোর্সের ক্ষেত্রে, সম্পূর্ণ বিক্রয়মূল্যই লাভ
                             updateData.profit = Number(paymentData.amount) || 0;
                         }
-                    } else { // newStatus 'approved' না হলে
-                        // যদি স্ট্যাটাস পরিবর্তন করে pending বা rejected করা হয়, তাহলে profit ফিল্ডটি মুছে ফেলা হবে
+                    } else {
                         updateData.profit = firebase.firestore.FieldValue.delete();
                     }
 
@@ -1315,9 +1293,6 @@
                     }
                 }
             };
-            // =================================================================
-            // END: *** সংশোধিত ফাংশন শেষ ***
-            // =================================================================
 
             async function renderPayments() {
                 const tableBody = document.getElementById('payments-table-body');
