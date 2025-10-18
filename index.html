@@ -1727,6 +1727,13 @@
                             <input type="email" id="signup-email" placeholder="আপনার ইমেইল দিন" required>
                             <label for="signup-email">ইমেইল</label>
                         </div>
+                        <!-- === START: WHATSAPP FIELD ADDED === -->
+                        <div class="input-group">
+                            <span class="material-symbols-outlined">call</span>
+                            <input type="tel" id="signup-whatsapp" placeholder="আপনার হোয়াটসঅ্যাপ নাম্বার দিন" required>
+                            <label for="signup-whatsapp">হোয়াটসঅ্যাপ নাম্বার</label>
+                        </div>
+                        <!-- === END: WHATSAPP FIELD ADDED === -->
                         <div class="input-group">
                             <span class="material-symbols-outlined">lock</span>
                             <input type="password" id="signup-password" placeholder="পাসওয়ার্ড দিন (কমপক্ষে ৬ অক্ষর)" required>
@@ -1945,7 +1952,7 @@
                                             <input type="email" id="email" value="arafatislamshofiqul@gmail.com" readonly style="background-color: #e9ecef; cursor: not-allowed;">
                                         </div>
                                         <div class="form-group">
-                                            <label for="mobile"> হটসঅ্যাপ  নাম্বার</label>
+                                            <label for="mobile">হোয়াটসঅ্যাপ নম্বর</label>
                                             <input type="text" id="mobile" value="01703743441">
                                         </div>
                                         <div class="form-group">
@@ -2387,11 +2394,13 @@
                         showToast(message, 'error');
                     });
             }
-
+            
+            // === START: JAVASCRIPT MODIFIED FOR WHATSAPP FIELD ===
             function handleSignup(event) {
                 event.preventDefault();
                 const name = document.getElementById('signup-name').value;
                 const email = document.getElementById('signup-email').value;
+                const whatsapp = document.getElementById('signup-whatsapp').value;
                 const password = document.getElementById('signup-password').value;
                 const confirmPassword = document.getElementById('signup-confirm-password').value;
 
@@ -2406,7 +2415,7 @@
                         return db.collection('users').doc(user.uid).set({
                             name: name,
                             email: email,
-                            mobile: '',
+                            mobile: whatsapp, // Saving whatsapp number to 'mobile' field
                             dob: '',
                             title: '',
                             photoURL: ''
@@ -2435,6 +2444,7 @@
                         showToast(message, 'error');
                     });
             }
+            // === END: JAVASCRIPT MODIFIED FOR WHATSAPP FIELD ===
             
             function handlePasswordResetRequest(event) {
                 event.preventDefault();
