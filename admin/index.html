@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dream's Academy - অ্যাডমিন প্যানেল</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/JqgWkCg/placeholder.png">
     <!-- Google Fonts: Hind Siluri for Bengali -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -717,14 +718,14 @@
                             <input type="text" id="whatsapp-number" placeholder="যেমন: 88017XXXXXXXX" required>
                         </div>
                         <div class="form-group">
-                            <label for="service-selection">সার্ভিস নির্বাচন করুন</label>
+                            <label for="service-selection">সার্ভিস বা কোর্স নির্বাচন করুন</label>
                             <select id="service-selection" required>
                                 <option value="">লোড হচ্ছে...</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="service-info">সার্ভিসের তথ্য (যা পাঠাতে চান)</label>
-                            <textarea id="service-info" rows="6" placeholder="এখানে সার্ভিসের বিস্তারিত তথ্য, যেমন - লগইন আইডি, পাসওয়ার্ড বা অন্য কোনো জরুরি বার্তা লিখুন।" required></textarea>
+                            <textarea id="service-info" rows="8" placeholder="এখানে সার্ভিসের বিস্তারিত তথ্য, যেমন - লগইন আইডি, পাসওয়ার্ড বা অন্য কোনো জরুরি বার্তা লিখুন।" required></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary" style="width: auto;">
                             <span class="material-symbols-outlined">send</span> পাঠিয়ে দিন
@@ -957,6 +958,8 @@
             const aboutUsSettingsForm = document.getElementById('about-us-settings-form');
             
             const sendServiceForm = document.getElementById('send-service-form');
+            const serviceSelection = document.getElementById('service-selection');
+            const serviceInfoTextarea = document.getElementById('service-info');
 
             // --- Mobile Navigation Elements ---
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -1100,26 +1103,69 @@
                 }
             }
 
-            // --- Send Service Page Functions ---
+            // --- START: MODIFIED Send Service Page Functions ---
             async function renderSendServicePage() {
-                const serviceSelect = document.getElementById('service-selection');
-                serviceSelect.innerHTML = '<option value="">সার্ভিস তালিকা লোড হচ্ছে...</option>';
+                serviceSelection.innerHTML = '<option value="">তালিকা লোড হচ্ছে...</option>';
                 try {
                     const servicesSnapshot = await db.collection('services').get();
-                    if (servicesSnapshot.empty) {
-                        serviceSelect.innerHTML = '<option value="">কোনো সার্ভিস পাওয়া যায়নি</option>';
+                    const coursesSnapshot = await db.collection('courses').get();
+
+                    if (servicesSnapshot.empty && coursesSnapshot.empty) {
+                        serviceSelection.innerHTML = '<option value="">কোনো সার্ভিস বা কোর্স পাওয়া যায়নি</option>';
                         return;
                     }
-                    let optionsHTML = '<option value="" disabled selected>একটি সার্ভিস নির্বাচন করুন</option>';
+
+                    let optionsHTML = '<option value="" disabled selected>একটি সার্ভিস বা কোর্স নির্বাচন করুন</option>';
+                    
+                    optionsHTML += '<optgroup label="সার্ভিস সমূহ">';
                     servicesSnapshot.forEach(doc => {
                         const service = doc.data();
-                        optionsHTML += `<option value="${service.name}">${service.name}</option>`;
+                        optionsHTML += `<option value="${service.name}" data-type="service">${service.name}</option>`;
                     });
-                    serviceSelect.innerHTML = optionsHTML;
+                    optionsHTML += '</optgroup>';
+
+                    optionsHTML += '<optgroup label="কোর্স সমূহ">';
+                    coursesSnapshot.forEach(doc => {
+                        const course = doc.data();
+                        optionsHTML += `<option value="${course.name}" data-type="course" data-price="${course.price}" data-duration="${course.duration}">${course.name}</option>`;
+                    });
+                    optionsHTML += '</optgroup>';
+                    
+                    serviceSelection.innerHTML = optionsHTML;
                 } catch (error) {
-                    console.error("Error fetching services for dropdown:", error);
-                    serviceSelect.innerHTML = '<option value="">লোড করতে সমস্যা হয়েছে</option>';
+                    console.error("Error fetching services/courses for dropdown:", error);
+                    serviceSelection.innerHTML = '<option value="">লোড করতে সমস্যা হয়েছে</option>';
                 }
+            }
+            
+            function updateServiceInfoTemplate() {
+                const selectedOption = serviceSelection.options[serviceSelection.selectedIndex];
+                const selectedValue = selectedOption.value;
+                const type = selectedOption.dataset.type;
+                const today = new Date().toLocaleDateString('en-GB'); // Format: DD/MM/YYYY
+
+                let template = '';
+
+                if (type === 'service') {
+                    if (selectedValue.toLowerCase().includes('vps')) {
+                        template = `Date: ${today}\nService Name: ${selectedValue}\nAddress: \nUser ID: \nPassword: \nStatus: Order Complete`;
+                    } else if (selectedValue.toLowerCase().includes('ip service')) {
+                        template = `Date: ${today}\nService Name: ${selectedValue}\nTop up ID: \nIP Amount: \nStatus: Order Complete`;
+                    } else {
+                        // Generic service template
+                         template = `Date: ${today}\nService Name: ${selectedValue}\n\nDetails:\n\nStatus: Order Complete`;
+                    }
+                } else if (type === 'course') {
+                    const price = selectedOption.dataset.price || 'N/A';
+                    const duration = selectedOption.dataset.duration || 'N/A';
+                    template = `Date: ${today}\nCourse Name: ${selectedValue}\nCourse Price: ${price} BDT\nDuration: ${duration}\nStatus: Enrollment Complete`;
+                }
+                
+                serviceInfoTextarea.value = template;
+            }
+
+            if(serviceSelection) {
+                serviceSelection.addEventListener('change', updateServiceInfoTemplate);
             }
 
             if (sendServiceForm) {
@@ -1127,25 +1173,20 @@
                     e.preventDefault();
                     
                     const recipientNumber = document.getElementById('whatsapp-number').value.trim();
-                    const selectedService = document.getElementById('service-selection').value;
-                    const serviceInfo = document.getElementById('service-info').value.trim();
+                    const serviceInfo = serviceInfoTextarea.value.trim();
                     
-                    if (!recipientNumber || !selectedService || !serviceInfo) {
+                    if (!recipientNumber || !serviceInfo) {
                         alert("অনুগ্রহ করে সকল তথ্য পূরণ করুন।");
                         return;
                     }
-
-                    const message = `*Service:* ${selectedService}\n\n*Details:*\n${serviceInfo}`;
-                    const encodedMessage = encodeURIComponent(message);
                     
-                    // START: Updated Universal WhatsApp URL
-                    // This URL works for both mobile (opens app) and desktop (opens web.whatsapp.com)
+                    const encodedMessage = encodeURIComponent(serviceInfo);
                     const whatsappUrl = `https://api.whatsapp.com/send?phone=${recipientNumber}&text=${encodedMessage}`;
-                    // END: Updated Universal WhatsApp URL
                     
                     window.open(whatsappUrl, '_blank');
                 });
             }
+            // --- END: MODIFIED Send Service Page Functions ---
             
             // --- Settings ---
             async function renderSettings() {
@@ -1306,7 +1347,7 @@
                 }
             };
             
-            // START: ================== MODIFIED FUNCTION TO SEND WHATSAPP RECEIPT ==================
+            // START: FUNCTION TO SEND WHATSAPP RECEIPT (UPDATED TEMPLATE)
             window.sendWhatsAppReceipt = async (paymentId) => {
                 try {
                     const paymentDoc = await db.collection('payments').doc(paymentId).get();
@@ -1330,19 +1371,6 @@
                         return;
                     }
 
-                    // --- START: Automatic Country Code Addition ---
-                    let formattedMobile = studentMobile.trim().replace(/\s+/g, ''); // Remove spaces
-
-                    if (formattedMobile.startsWith('+880')) {
-                        // If number starts with +880, remove the '+'
-                        formattedMobile = formattedMobile.substring(1);
-                    } else if (formattedMobile.startsWith('01')) {
-                        // If number starts with 01 (local format), replace 0 with country code 880
-                        formattedMobile = '880' + formattedMobile.substring(1);
-                    }
-                    // If the number already starts with 880 (without +), no changes are needed.
-                    // --- END: Automatic Country Code Addition ---
-
                     // Data for the template
                     const date = new Date().toLocaleDateString('en-GB'); // Format: DD/MM/YYYY
                     const studentName = userData.name || 'N/A';
@@ -1361,8 +1389,7 @@ TrxID                  : ${trxID}
 Payment Status : ${paymentStatus}`;
                     
                     const encodedMessage = encodeURIComponent(message);
-                    // Use the newly formatted number in the URL
-                    const whatsappUrl = `https://api.whatsapp.com/send?phone=${formattedMobile}&text=${encodedMessage}`;
+                    const whatsappUrl = `https://api.whatsapp.com/send?phone=${studentMobile}&text=${encodedMessage}`;
                     
                     window.open(whatsappUrl, '_blank');
 
@@ -1371,7 +1398,7 @@ Payment Status : ${paymentStatus}`;
                     alert("হোয়াটসঅ্যাপ মেসেজ প্রস্তুত করার সময় একটি সমস্যা হয়েছে।");
                 }
             };
-            // END: ================== MODIFIED FUNCTION TO SEND WHATSAPP RECEIPT ==================
+            // END: FUNCTION TO SEND WHATSAPP RECEIPT (UPDATED TEMPLATE)
 
             async function renderPayments() {
                 const tableBody = document.getElementById('payments-table-body');
