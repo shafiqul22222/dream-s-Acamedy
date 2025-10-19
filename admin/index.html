@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
@@ -274,6 +274,15 @@
         .btn-edit:hover .material-symbols-outlined { color: var(--primary-blue); }
         .btn-delete .material-symbols-outlined { color: var(--accent-red); }
         .btn-delete:hover .material-symbols-outlined { color: #b02a37; }
+
+        /* START: WHATSAPP BUTTON STYLE */
+        .btn-whatsapp {
+            color: var(--accent-green);
+        }
+        .btn-whatsapp:hover {
+            color: #1e7e34;
+        }
+        /* END: WHATSAPP BUTTON STYLE */
 
         .status-select {
             padding: 6px 10px;
@@ -647,6 +656,7 @@
                 </div>
             </div>
 
+            <!-- START: MODIFIED USER MANAGEMENT PAGE -->
             <div id="users-page" class="page">
                 <div class="page-header">
                     <h1>শিক্ষার্থী ম্যানেজমেন্ট</h1>
@@ -659,6 +669,7 @@
                                 <th>ইমেইল</th>
                                 <th>মোবাইল</th>
                                 <th>টাইটেল</th>
+                                <th>পাসওয়ার্ড</th>
                                 <th>অ্যাকশন</th>
                             </tr>
                         </thead>
@@ -668,6 +679,7 @@
                     </table>
                 </div>
             </div>
+            <!-- END: MODIFIED USER MANAGEMENT PAGE -->
 
             <!-- Services Page -->
             <div id="services-page" class="page">
@@ -1293,6 +1305,59 @@
                     }
                 }
             };
+            
+            // START: FUNCTION TO SEND WHATSAPP RECEIPT (UPDATED TEMPLATE)
+            window.sendWhatsAppReceipt = async (paymentId) => {
+                try {
+                    const paymentDoc = await db.collection('payments').doc(paymentId).get();
+                    if (!paymentDoc.exists) {
+                        alert('পেমেন্টটি খুঁজে পাওয়া যায়নি!');
+                        return;
+                    }
+                    const paymentData = paymentDoc.data();
+
+                    const userQuery = await db.collection('users').where('email', '==', paymentData.userEmail).limit(1).get();
+                    if (userQuery.empty) {
+                        alert(`শিক্ষার্থীকে খুঁজে পাওয়া যায়নি। অনুগ্রহ করে নিশ্চিত করুন '${paymentData.userEmail}' ইমেইলের শিক্ষার্থীর প্রোফাইল তৈরি করা আছে।`);
+                        return;
+                    }
+                    
+                    const userData = userQuery.docs[0].data();
+                    const studentMobile = userData.mobile;
+
+                    if (!studentMobile || studentMobile.trim() === '') {
+                        alert(`'${userData.name || userData.email}' এর প্রোফাইলের কোনো মোবাইল নম্বর পাওয়া যায়নি। অনুগ্রহ করে শিক্ষার্থীর প্রোফাইলে হোয়াটসঅ্যাপ নম্বর যোগ করুন।`);
+                        return;
+                    }
+
+                    // Data for the template
+                    const date = new Date().toLocaleDateString('en-GB'); // Format: DD/MM/YYYY
+                    const studentName = userData.name || 'N/A';
+                    const itemName = paymentData.itemName;
+                    const amount = paymentData.amount;
+                    const trxID = paymentData.transactionId || 'N/A';
+                    const paymentStatus = 'Payment Successfull';
+                    
+                    // The new English template
+                    const message = 
+`Date                   : ${date}
+Student Name   : ${studentName}
+Service/Course : ${itemName}
+Amount              : ${amount} BDT
+TrxID                  : ${trxID}
+Payment Status : ${paymentStatus}`;
+                    
+                    const encodedMessage = encodeURIComponent(message);
+                    const whatsappUrl = `https://api.whatsapp.com/send?phone=${studentMobile}&text=${encodedMessage}`;
+                    
+                    window.open(whatsappUrl, '_blank');
+
+                } catch (error) {
+                    console.error("Error preparing WhatsApp receipt:", error);
+                    alert("হোয়াটসঅ্যাপ মেসেজ প্রস্তুত করার সময় একটি সমস্যা হয়েছে।");
+                }
+            };
+            // END: FUNCTION TO SEND WHATSAPP RECEIPT (UPDATED TEMPLATE)
 
             async function renderPayments() {
                 const tableBody = document.getElementById('payments-table-body');
@@ -1309,6 +1374,13 @@
                         const timestamp = payment.timestamp ? new Date(payment.timestamp.seconds * 1000).toLocaleString('bn-BD') : 'N/A';
                         const statusClass = (payment.status || 'pending').toLowerCase();
                         const profit = (payment.status === 'approved' && payment.profit != null) ? `৳ ${payment.profit}` : 'N/A';
+
+                        // Add WhatsApp button if status is 'approved'
+                        let whatsappButtonHTML = '';
+                        if (payment.status === 'approved') {
+                            whatsappButtonHTML = `<button class="btn-whatsapp" onclick="sendWhatsAppReceipt('${payment.id}')" title="Send WhatsApp Receipt"><span class="material-symbols-outlined">send</span></button>`;
+                        }
+
                         const row = `
                             <tr>
                                 <td>${payment.userEmail}</td>
@@ -1327,6 +1399,7 @@
                                         <option value="rejected" ${payment.status === 'rejected' ? 'selected' : ''}>Rejected</option>
                                     </select>
                                     <button class="btn btn-save-status" onclick="updatePaymentStatus('${payment.id}')">Save</button>
+                                    ${whatsappButtonHTML} <!-- Button is added here -->
                                     <button class="btn-delete" onclick="deleteItem('payments', '${payment.id}')"><span class="material-symbols-outlined">delete</span></button>
                                 </td>
                             </tr>
@@ -1343,14 +1416,14 @@
                     tableBody.innerHTML = errorMessage;
                 }
             }
-
+            
             async function renderUsers() {
                 const tableBody = document.getElementById('users-table-body');
-                tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">শিক্ষার্থীদের তথ্য লোড হচ্ছে...</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">শিক্ষার্থীদের তথ্য লোড হচ্ছে...</td></tr>`;
                 try {
                     const snapshot = await db.collection('users').get();
                     if (snapshot.empty) {
-                        tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">কোনো নিবন্ধিত শিক্ষার্থী পাওয়া যায়নি।</td></tr>`;
+                        tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">কোনো নিবন্ধিত শিক্ষার্থী পাওয়া যায়নি।</td></tr>`;
                         return;
                     }
                     let tableHTML = '';
@@ -1362,7 +1435,9 @@
                                 <td>${user.email}</td>
                                 <td>${user.mobile || 'N/A'}</td>
                                 <td>${user.title || 'N/A'}</td>
+                                <td>${user.password || 'N/A'}</td>
                                 <td class="actions-cell">
+                                    <button class="btn-edit" onclick="openModalForEdit('users', '${user.id}')"><span class="material-symbols-outlined">edit</span></button>
                                     <button class="btn-delete" onclick="deleteItem('users', '${user.id}')"><span class="material-symbols-outlined">delete</span></button>
                                 </td>
                             </tr>
@@ -1372,9 +1447,9 @@
                     tableBody.innerHTML = tableHTML;
                 } catch(error) {
                     console.error("--- User Rendering Error ---", error);
-                    let errorMessage = `<tr><td colspan="5" style="color: red; text-align: center;">An error occurred. Check the console.</td></tr>`;
+                    let errorMessage = `<tr><td colspan="6" style="color: red; text-align: center;">An error occurred. Check the console.</td></tr>`;
                     if (error.code === 'permission-denied') {
-                        errorMessage = `<tr><td colspan="5" style="color: red; text-align: center;">ত্রুটি: ডাটা পড়ার অনুমতি নেই। আপনার Firestore Security Rules চেক করুন।</td></tr>`;
+                        errorMessage = `<tr><td colspan="6" style="color: red; text-align: center;">ত্রুটি: ডাটা পড়ার অনুমতি নেই। আপনার Firestore Security Rules চেক করুন।</td></tr>`;
                     }
                     tableBody.innerHTML = errorMessage;
                 }
@@ -1657,6 +1732,7 @@
                 }
             };
 
+            // START: ================== MODIFIED `saveItem` FUNCTION ==================
             async function saveItem(collection, id = null) {
                 const formData = new FormData(modalForm);
                 let newItem;
@@ -1732,6 +1808,19 @@
                         batch: (formData.get('batch') || '').trim(),
                         modules: modules
                     };
+                } else if (type === 'users') {
+                    // Base object with fields that are always updated
+                    newItem = {
+                        name: (formData.get('name') || '').trim(),
+                        mobile: (formData.get('mobile') || '').trim(),
+                        title: (formData.get('title') || '').trim(),
+                    };
+                    
+                    // Conditionally add password to the object only if it's not empty
+                    const password = (formData.get('password') || '').trim();
+                    if (password) {
+                        newItem.password = password;
+                    }
                 } else { // notices
                     newItem = {
                         title: (formData.get('title') || '').trim(),
@@ -1755,6 +1844,7 @@
                     alert("তথ্য সংরক্ষণ করার সময় একটি সমস্যা হয়েছে।");
                 }
             }
+            // END: ================== MODIFIED `saveItem` FUNCTION ==================
             
             modalForm.addEventListener('click', function(e) {
                 const addModuleBtn = e.target.closest('#add-module-btn');
@@ -1788,6 +1878,7 @@
                 if (collection === 'enrollments') return 'এনরোলমেন্ট';
                 if (collection === 'joinClass') return 'ক্লাস লিঙ্ক';
                 if (collection === 'curriculum') return 'কারিকুলাম';
+                if (collection === 'users') return 'শিক্ষার্থী';
                 return 'নোটিশ';
             }
 
@@ -1821,6 +1912,7 @@
                 `;
             }
 
+            // START: ================== MODIFIED `getFormFields` FUNCTION ==================
             function getFormFields(type, data = {}, extra = {}) {
                 if (type === 'services') {
                     return `
@@ -1956,8 +2048,33 @@
                         </div>
                     `;
                 }
+                if (type === 'users') {
+                    return `
+                        <div class="form-group">
+                            <label>নাম</label>
+                            <input type="text" name="name" value="${data.name || ''}" >
+                        </div>
+                        <div class="form-group">
+                            <label>ইমেইল (সম্পাদনাযোগ্য নয়)</label>
+                            <input type="email" name="email" value="${data.email || ''}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>মোবাইল</label>
+                            <input type="text" name="mobile" value="${data.mobile || ''}" >
+                        </div>
+                        <div class="form-group">
+                            <label>টাইটেল</label>
+                            <input type="text" name="title" value="${data.title || ''}" >
+                        </div>
+                        <div class="form-group">
+                            <label>নতুন পাসওয়ার্ড</label>
+                            <input type="text" name="password" placeholder="খালি রাখলে পাসওয়ার্ড পরিবর্তন হবে না">
+                        </div>
+                    `;
+                }
                 return '';
             }
+            // END: ================== MODIFIED `getFormFields` FUNCTION ==================
 
             function getFormFooter() {
                 return `
