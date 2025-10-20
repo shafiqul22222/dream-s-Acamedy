@@ -1347,7 +1347,7 @@
                 }
             };
             
-            // START: FUNCTION TO SEND WHATSAPP RECEIPT (UPDATED TEMPLATE)
+            // START: ================== MODIFIED FUNCTION TO SEND WHATSAPP RECEIPT ==================
             window.sendWhatsAppReceipt = async (paymentId) => {
                 try {
                     const paymentDoc = await db.collection('payments').doc(paymentId).get();
@@ -1371,6 +1371,17 @@
                         return;
                     }
 
+                    // --- New Logic to Format Phone Number ---
+                    let formattedMobile = studentMobile.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+                    
+                    if (formattedMobile.startsWith('01') && formattedMobile.length === 11) {
+                        // It's a local BD number, so format it with country code
+                        formattedMobile = '880' + formattedMobile.substring(1);
+                    } else if (formattedMobile.startsWith('8801') && formattedMobile.length === 13) {
+                        // It already has the correct country code, do nothing
+                    }
+                    // --- End of New Logic ---
+
                     // Data for the template
                     const date = new Date().toLocaleDateString('en-GB'); // Format: DD/MM/YYYY
                     const studentName = userData.name || 'N/A';
@@ -1379,7 +1390,6 @@
                     const trxID = paymentData.transactionId || 'N/A';
                     const paymentStatus = 'Payment Successfull';
                     
-                    // The new English template
                     const message = 
 `Date                   : ${date}
 Student Name   : ${studentName}
@@ -1389,7 +1399,8 @@ TrxID                  : ${trxID}
 Payment Status : ${paymentStatus}`;
                     
                     const encodedMessage = encodeURIComponent(message);
-                    const whatsappUrl = `https://api.whatsapp.com/send?phone=${studentMobile}&text=${encodedMessage}`;
+                    // Use the newly formatted mobile number
+                    const whatsappUrl = `https://api.whatsapp.com/send?phone=${formattedMobile}&text=${encodedMessage}`;
                     
                     window.open(whatsappUrl, '_blank');
 
@@ -1398,7 +1409,7 @@ Payment Status : ${paymentStatus}`;
                     alert("হোয়াটসঅ্যাপ মেসেজ প্রস্তুত করার সময় একটি সমস্যা হয়েছে।");
                 }
             };
-            // END: FUNCTION TO SEND WHATSAPP RECEIPT (UPDATED TEMPLATE)
+            // END: ================== MODIFIED FUNCTION TO SEND WHATSAPP RECEIPT ==================
 
             async function renderPayments() {
                 const tableBody = document.getElementById('payments-table-body');
