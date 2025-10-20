@@ -1227,6 +1227,36 @@
             font-size: 60px;
             margin-bottom: 15px;
         }
+        
+        /* === START: NEW STYLES FOR CLASS NOTE === */
+        #class-note-container {
+            margin-top: 25px;
+            background: var(--text-light);
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+        }
+        #class-note-container.hidden {
+            display: none;
+        }
+        #class-note-container h4 {
+            font-size: 1.5em;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        #class-note-container .note-content {
+            line-height: 1.7;
+            white-space: pre-wrap;
+            word-wrap: break-word; 
+        }
+        #class-note-container .note-content a {
+            color: var(--secondary-blue);
+            text-decoration: underline;
+        }
+        /* === END: NEW STYLES FOR CLASS NOTE === */
+        
         .curriculum-list-wrapper {
             background: var(--text-light);
             padding: 20px;
@@ -1978,13 +2008,20 @@
                                 </a>
                             </div>
                             <div class="curriculum-layout">
-                                <div class="video-player-wrapper">
-                                    <div id="video-placeholder">
-                                        <span class="material-symbols-outlined">play_circle</span>
-                                        <h3>ভিডিও প্লেয়ার</h3>
-                                        <p>শুরু করার জন্য ডান পাশ থেকে একটি ক্লাস সিলেক্ট করুন।</p>
+                                <div>
+                                    <div class="video-player-wrapper">
+                                        <div id="video-placeholder">
+                                            <span class="material-symbols-outlined">play_circle</span>
+                                            <h3>ভিডিও প্লেয়ার</h3>
+                                            <p>শুরু করার জন্য ডান পাশ থেকে একটি ক্লাস সিলেক্ট করুন।</p>
+                                        </div>
+                                        <iframe id="youtube-player" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                     </div>
-                                    <iframe id="youtube-player" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    <!-- === START: NEWLY ADDED CLASS NOTE CONTAINER === -->
+                                    <div id="class-note-container" class="hidden">
+                                        <!-- Note content will be dynamically injected here by JavaScript -->
+                                    </div>
+                                    <!-- === END: NEWLY ADDED CLASS NOTE CONTAINER === -->
                                 </div>
                                 <div class="curriculum-list-wrapper">
                                     <div id="curriculum-list-container">
@@ -2891,10 +2928,14 @@
                 const container = document.getElementById('curriculum-list-container');
                 const player = document.getElementById('youtube-player');
                 const placeholder = document.getElementById('video-placeholder');
+                const noteContainer = document.getElementById('class-note-container');
+
 
                 container.innerHTML = '<p>কারিকুলাম লোড হচ্ছে...</p>';
                 player.src = ''; 
                 placeholder.classList.remove('hidden');
+                noteContainer.classList.add('hidden'); // Hide note container initially
+                noteContainer.innerHTML = '';
 
 
                 try {
@@ -2921,17 +2962,20 @@
                                     <span class="material-symbols-outlined">expand_more</span>
                                 </div>
                                 <ul class="module-videos" id="module-videos-${index}">
-                                    ${(module.videos || []).map(video => `
-                                        <li>
-                                            <a href="#" class="video-item-link" data-video-url="${video.youtubeLink}">
-                                                <div class="video-title-wrapper">
-                                                    <span class="material-symbols-outlined">play_circle</span>
-                                                    <span>${video.title}</span>
-                                                </div>
-                                                <span class="video-duration">${video.duration || ''}</span>
-                                            </a>
-                                        </li>
-                                    `).join('')}
+                                    ${(module.videos || []).map(video => {
+                                        const noteData = video.classNote || '';
+                                        return `
+                                            <li>
+                                                <a href="#" class="video-item-link" data-video-url="${video.youtubeLink}" data-note="${encodeURIComponent(noteData)}">
+                                                    <div class="video-title-wrapper">
+                                                        <span class="material-symbols-outlined">play_circle</span>
+                                                        <span>${video.title}</span>
+                                                    </div>
+                                                    <span class="video-duration">${video.duration || ''}</span>
+                                                </a>
+                                            </li>
+                                        `;
+                                    }).join('')}
                                 </ul>
                             </div>
                          `;
@@ -2955,6 +2999,7 @@
                             
                             link.classList.add('playing');
                             
+                            // Handle Video
                             const videoUrl = link.dataset.videoUrl;
                             const embedUrl = getYouTubeEmbedUrl(videoUrl);
                             if (embedUrl) {
@@ -2962,7 +3007,25 @@
                                 player.src = embedUrl;
                             } else {
                                 showToast("দুঃখিত, ভিডিও লিঙ্কটি সঠিক নয়।", "error");
+                                placeholder.classList.remove('hidden');
+                                player.src = '';
                             }
+
+                            // === START: NEW LOGIC FOR DISPLAYING NOTE ===
+                            const encodedNote = link.dataset.note;
+                            const noteContent = decodeURIComponent(encodedNote);
+
+                            if (noteContent && noteContent.trim() !== '') {
+                                noteContainer.innerHTML = `
+                                    <h4>নোট</h4>
+                                    <div class="note-content">${noteContent}</div>
+                                `;
+                                noteContainer.classList.remove('hidden');
+                            } else {
+                                noteContainer.innerHTML = '';
+                                noteContainer.classList.add('hidden');
+                            }
+                            // === END: NEW LOGIC FOR DISPLAYING NOTE ===
                         });
                     });
 
