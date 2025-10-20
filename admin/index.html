@@ -391,7 +391,7 @@
         }
         .btn-cancel { background: #6c757d; color: white; margin-right: 10px; }
 
-        /* --- START: Curriculum Modal Specific Styles --- */
+        /* --- START: UPDATED Curriculum Modal Specific Styles --- */
         #curriculum-modules-container {
             margin-top: 20px;
         }
@@ -427,10 +427,9 @@
             margin-top: 10px;
         }
         .video-entry {
-            display: grid;
-            grid-template-columns: 2fr 3fr 1fr auto;
+            display: flex;
+            flex-direction: column;
             gap: 10px;
-            align-items: center;
             border-top: 1px solid var(--border-color);
             padding-top: 15px;
             margin-top: 15px;
@@ -440,9 +439,24 @@
             padding-top: 0;
             margin-top: 0;
         }
-        .video-entry input { padding: 8px; }
+        .video-entry-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr 100px auto;
+            gap: 10px;
+            align-items: center;
+        }
+        .video-entry input, .video-entry textarea {
+            padding: 8px;
+            width: 100%;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+        .video-entry textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
         .video-entry .btn-remove { align-self: center; height: 42px; }
-        /* --- END: Curriculum Modal Specific Styles --- */
+        /* --- END: UPDATED Curriculum Modal Specific Styles --- */
 
         /* --- START: Mobile Responsive Styles --- */
         .mobile-header {
@@ -497,6 +511,13 @@
             }
             .sidebar.open {
                 left: 0; /* Slide into view */
+            }
+            /* Adjust video entry grid for smaller screens */
+            .video-entry-inputs {
+                grid-template-columns: 1fr; /* Stack inputs vertically */
+            }
+            .video-entry .btn-remove {
+                justify-self: start; /* Align button to the left */
             }
         }
         /* --- END: Mobile Responsive Styles --- */
@@ -1783,8 +1804,7 @@ Payment Status : ${paymentStatus}`;
                     }
                 }
             };
-
-            // START: ================== MODIFIED `saveItem` FUNCTION ==================
+            
             async function saveItem(collection, id = null) {
                 const formData = new FormData(modalForm);
                 let newItem;
@@ -1850,7 +1870,8 @@ Payment Status : ${paymentStatus}`;
                             videos.push({
                                 title: videoEl.querySelector('input[name="videoTitle"]').value,
                                 youtubeLink: videoEl.querySelector('input[name="videoLink"]').value,
-                                duration: videoEl.querySelector('input[name="videoDuration"]').value
+                                duration: videoEl.querySelector('input[name="videoDuration"]').value,
+                                classNote: videoEl.querySelector('textarea[name="classNote"]').value // Save class note
                             });
                         });
                         modules.push({ title: moduleTitle, videos: videos });
@@ -1896,7 +1917,6 @@ Payment Status : ${paymentStatus}`;
                     alert("তথ্য সংরক্ষণ করার সময় একটি সমস্যা হয়েছে।");
                 }
             }
-            // END: ================== MODIFIED `saveItem` FUNCTION ==================
             
             modalForm.addEventListener('click', function(e) {
                 const addModuleBtn = e.target.closest('#add-module-btn');
@@ -1953,18 +1973,22 @@ Payment Status : ${paymentStatus}`;
                  `;
             }
             
-            function getVideoHTML(video = { title: '', youtubeLink: '', duration: '' }) {
+            // START: ================== UPDATED getVideoHTML FUNCTION ==================
+            function getVideoHTML(video = { title: '', youtubeLink: '', duration: '', classNote: '' }) {
                 return `
                     <div class="video-entry">
-                        <input type="text" name="videoTitle" placeholder="ভিডিওর শিরোনাম" value="${video.title || ''}" required>
-                        <input type="text" name="videoLink" placeholder="ইউটিউব লিঙ্ক" value="${video.youtubeLink || ''}" required>
-                        <input type="text" name="videoDuration" placeholder="সময়কাল (e.g., 10:45)" value="${video.duration || ''}">
-                        <button type="button" class="btn btn-remove"><span class="material-symbols-outlined">delete</span></button>
+                        <div class="video-entry-inputs">
+                            <input type="text" name="videoTitle" placeholder="ভিডিওর শিরোনাম" value="${video.title || ''}" required>
+                            <input type="text" name="videoLink" placeholder="ইউটিউব লিঙ্ক" value="${video.youtubeLink || ''}" required>
+                            <input type="text" name="videoDuration" placeholder="সময়কাল (e.g., 10:45)" value="${video.duration || ''}">
+                            <button type="button" class="btn-remove"><span class="material-symbols-outlined">delete</span></button>
+                        </div>
+                        <textarea name="classNote" placeholder="ক্লাসের নোট এখানে লিখুন... (ঐচ্ছিক)">${video.classNote || ''}</textarea>
                     </div>
                 `;
             }
+            // END: ================== UPDATED getVideoHTML FUNCTION ==================
 
-            // START: ================== MODIFIED `getFormFields` FUNCTION ==================
             function getFormFields(type, data = {}, extra = {}) {
                 if (type === 'services') {
                     return `
@@ -2126,7 +2150,6 @@ Payment Status : ${paymentStatus}`;
                 }
                 return '';
             }
-            // END: ================== MODIFIED `getFormFields` FUNCTION ==================
 
             function getFormFooter() {
                 return `
