@@ -108,7 +108,7 @@
             position: fixed;
             display: flex;
             flex-direction: column;
-            transition: transform 0.3s ease-in-out; /* Added for smooth transition */
+            transition: transform 0.3s ease-in-out;
         }
         .sidebar-header {
             padding: 20px;
@@ -198,7 +198,6 @@
             border-radius: 8px;
             cursor: pointer;
         }
-        /* Withdraw Page Specific Styles */
         #withdraw-form .form-group { margin-bottom: 20px; }
         #withdraw-form label { font-weight: 600; display: block; margin-bottom: 8px; }
         #withdraw-form input[type="radio"] { margin-right: 8px; }
@@ -214,108 +213,84 @@
         }
         .status-badge.pending { background-color: var(--accent-yellow); color: var(--text-dark); }
         .status-badge.paid { background-color: var(--accent-green); }
+        .hamburger-menu { display: none; position: fixed; top: 15px; left: 15px; z-index: 1001; background: var(--primary-blue); color: white; border: none; border-radius: 8px; padding: 8px; cursor: pointer; }
+        .close-btn { display: none; position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 2.5em; line-height: 1; cursor: pointer; color: var(--primary-blue); }
+        #mobile-menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 998; }
 
-        /* --- New Hamburger Menu Styles --- */
-        .hamburger-menu {
-            display: none; /* Hidden by default */
+        /* --- নতুন উন্নত নোটিফিকেশন স্টাইল --- */
+        #toast-container {
             position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 1001;
-            background: var(--primary-blue);
-            color: white;
-            border: none;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+        .toast {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: var(--primary-blue);
+            color: var(--text-light);
+            padding: 16px 24px;
             border-radius: 8px;
-            padding: 8px;
-            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateX(120%);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            position: relative;
+            overflow: hidden; /* ভেতরের বারটি যেন বাইরে না যায় */
+            min-width: 280px;
         }
-        .close-btn {
-            display: none; /* Hidden by default */
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .toast.success { background-color: var(--accent-green); }
+        .toast.error { background-color: #dc3545; }
+        
+        /* প্রোগ্রেস বারের স্টাইল */
+        .toast-progress {
             position: absolute;
-            top: 10px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 2.5em;
-            line-height: 1;
-            cursor: pointer;
-            color: var(--primary-blue);
-        }
-        #mobile-menu-overlay {
-            position: fixed;
-            top: 0;
+            bottom: 0;
             left: 0;
+            height: 4px;
             width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 998;
+            background-color: rgba(255, 255, 255, 0.7);
+            animation: progress-timer linear forwards;
+        }
+        
+        /* প্রোগ্রেস বারের অ্যানিমেশন */
+        @keyframes progress-timer {
+            from { width: 100%; }
+            to { width: 0%; }
         }
 
-        /* --- Mobile Responsive Styles --- */
         @media (max-width: 768px) {
-            .hamburger-menu, .close-btn {
-                display: block; /* Show on mobile */
-            }
-
-            .sidebar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100vh;
-                z-index: 999;
-                transform: translateX(-100%); /* Initially hidden off-screen */
-            }
-
-            .sidebar.open {
-                transform: translateX(0); /* Slide in when open */
-            }
-
-            .main-content {
-                margin-left: 0; /* Full width content on mobile */
-                width: 100%;
-                padding: 60px 20px 20px; /* Increased top padding to avoid overlap */
-            }
-            
-            .page-header h1 {
-                font-size: 1.6em;
-                margin-bottom: 20px;
-            }
-            
-            .content-box, .login-box {
-                padding: 20px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
+            .hamburger-menu, .close-btn { display: block; }
+            .sidebar { position: fixed; top: 0; left: 0; height: 100vh; z-index: 999; transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; width: 100%; padding: 60px 20px 20px; }
+            .page-header h1 { font-size: 1.6em; margin-bottom: 20px; }
+            .content-box, .login-box { padding: 20px; }
+            .stats-grid { grid-template-columns: 1fr; }
         }
-
         @media (max-width: 480px) {
-            .content-box {
-                padding: 15px;
-            }
-
-            .data-table th, .data-table td {
-                padding: 10px 8px;
-                font-size: 0.9em;
-            }
-            .stat-card h3, .referral-code-box span {
-                font-size: 1.6em;
-            }
-            .balance-display {
-                font-size: 1.2em;
-            }
+            .content-box { padding: 15px; }
+            .data-table th, .data-table td { padding: 10px 8px; font-size: 0.9em; }
+            .stat-card h3, .referral-code-box span { font-size: 1.6em; }
+            .balance-display { font-size: 1.2em; }
+            #toast-container { right: 10px; top: 10px; left: 10px; align-items: stretch; }
         }
     </style>
 </head>
 <body>
-    <!-- Hamburger Menu Button -->
     <button class="hamburger-menu" id="hamburger-btn">
         <span class="material-symbols-outlined">menu</span>
     </button>
-    
-    <!-- Mobile Menu Overlay -->
     <div id="mobile-menu-overlay" class="hidden"></div>
+    
+    <div id="toast-container"></div>
 
     <div id="login-page">
         <div class="login-box">
@@ -351,18 +326,10 @@
 
         <main class="main-content">
             <div id="dashboard-page" class="page active">
-                <div class="page-header">
-                    <h1>ড্যাশবোর্ড</h1>
-                </div>
+                <div class="page-header"> <h1>ড্যাশবোর্ড</h1> </div>
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3 id="total-balance">৳0</h3>
-                        <p>মোট আয়</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3 id="total-referrals">0</h3>
-                        <p>মোট রেফারেল</p>
-                    </div>
+                    <div class="stat-card"> <h3 id="total-balance">৳0</h3> <p>মোট আয়</p> </div>
+                    <div class="stat-card"> <h3 id="total-referrals">0</h3> <p>মোট রেফারেল</p> </div>
                 </div>
                 <div class="referral-code-box">
                     <p>আপনার রেফারেল কোড</p>
@@ -371,45 +338,24 @@
             </div>
 
             <div id="students-page" class="page">
-                <div class="page-header">
-                    <h1>আপনার রেফার করা স্টুডেন্টদের তালিকা</h1>
-                </div>
+                <div class="page-header"> <h1>আপনার রেফার করা স্টুডেন্টদের তালিকা</h1> </div>
                 <div class="content-box">
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>স্টুডেন্টের ইমেইল</th>
-                                <th>কোর্স/সার্ভিস</th>
-                                <th>পেমেন্টের পরিমাণ</th>
-                                <th>আপনার কমিশন</th>
-                                <th>তারিখ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="students-table-body">
-                           <!-- Data populated by JS -->
-                        </tbody>
+                        <thead> <tr> <th>স্টুডেন্টের ইমেইল</th> <th>কোর্স/সার্ভিস</th> <th>পেমেন্টের পরিমাণ</th> <th>আপনার কমিশন</th> <th>তারিখ</th> </tr> </thead>
+                        <tbody id="students-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
             <div id="downline-page" class="page">
-                <div class="page-header">
-                     <h1>আপনার ডাউনলাইন</h1>
-                </div>
-                 <div class="content-box">
-                    <p>এই ফিচারটি ভবিষ্যতে যুক্ত করা হবে।</p>
-                </div>
+                <div class="page-header"> <h1>আপনার ডাউনলাইন</h1> </div>
+                <div class="content-box"> <p>এই ফিচারটি ভবিষ্যতে যুক্ত করা হবে।</p> </div>
             </div>
 
-            <!-- NEW WITHDRAW PAGE -->
             <div id="withdraw-page" class="page">
-                <div class="page-header">
-                    <h1>টাকা উত্তোলন করুন</h1>
-                </div>
+                <div class="page-header"> <h1>টাকা উত্তোলন করুন</h1> </div>
                 <div class="content-box">
-                    <div class="balance-display">
-                        আপনার বর্তমান ব্যালেন্স: <span id="withdraw-balance">৳0</span>
-                    </div>
+                    <div class="balance-display"> আপনার বর্তমান ব্যালেন্স: <span id="withdraw-balance">৳0</span> </div>
                     <form id="withdraw-form">
                         <div class="form-group">
                             <label>উত্তোলন মাধ্যম নির্বাচন করুন</label>
@@ -427,28 +373,14 @@
                         <button type="submit" class="btn btn-primary" style="width: auto;">অনুরোধ পাঠান</button>
                     </form>
                 </div>
-
-                <div class="page-header" style="margin-top: 40px;">
-                    <h1>উত্তোলনের ইতিহাস</h1>
-                </div>
+                <div class="page-header" style="margin-top: 40px;"> <h1>উত্তোলনের ইতিহাস</h1> </div>
                 <div class="content-box">
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>তারিখ</th>
-                                <th>পরিমাণ</th>
-                                <th>মাধ্যম</th>
-                                <th>অ্যাকাউন্ট নম্বর</th>
-                                <th>স্ট্যাটাস</th>
-                            </tr>
-                        </thead>
-                        <tbody id="withdraw-history-table-body">
-                            <!-- Data populated by JS -->
-                        </tbody>
+                        <thead> <tr> <th>তারিখ</th> <th>পরিমাণ</th> <th>মাধ্যম</th> <th>অ্যাকাউন্ট নম্বর</th> <th>স্ট্যাটাস</th> </tr> </thead>
+                        <tbody id="withdraw-history-table-body"></tbody>
                     </table>
                 </div>
             </div>
-
         </main>
     </div>
 
@@ -477,14 +409,10 @@
             const logoutBtn = document.getElementById('logout-btn');
             const sidebarLinks = document.querySelectorAll('.sidebar-nav li');
             const pages = document.querySelectorAll('.page');
-            
-            // --- New Hamburger Menu Elements ---
             const sidebar = document.getElementById('sidebar');
             const hamburgerBtn = document.getElementById('hamburger-btn');
             const closeSidebarBtn = document.getElementById('close-sidebar-btn');
             const overlay = document.getElementById('mobile-menu-overlay');
-            
-            // Withdraw form elements
             const withdrawForm = document.getElementById('withdraw-form');
             const accountNumberGroup = document.getElementById('account-number-group');
             const accountNumberLabel = document.getElementById('account-number-label');
@@ -492,12 +420,42 @@
             const withdrawAmountGroup = document.getElementById('withdraw-amount-group');
             let currentBalance = 0;
 
+            // --- নতুন উন্নত নোটিফিকেশন ফাংশন ---
+            function showToast(message, type = 'success', duration = 4000) {
+                const container = document.getElementById('toast-container');
+                
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                
+                const messageSpan = document.createElement('span');
+                messageSpan.textContent = message;
+                
+                const progressBar = document.createElement('div');
+                progressBar.className = 'toast-progress';
+                // JS থেকে অ্যানিমেশনের সময়কাল সেট করা হচ্ছে
+                progressBar.style.animationDuration = `${duration / 1000}s`;
+
+                toast.appendChild(messageSpan);
+                toast.appendChild(progressBar);
+                container.appendChild(toast);
+
+                // অ্যানিমেশন শুরু করার জন্য সামান্য দেরি
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 100);
+
+                // নির্দিষ্ট সময় পর নোটিফিকেশনটি সরিয়ে দেওয়া
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    // ট্রানজিশন শেষ হওয়ার পর DOM থেকে মুছে ফেলা
+                    toast.addEventListener('transitionend', () => toast.remove());
+                }, duration);
+            }
 
             auth.onAuthStateChanged(async user => {
                 if (user) {
                     loginPage.classList.add('hidden');
                     affiliatePanel.classList.remove('hidden');
-                    // Show hamburger button only when logged in on mobile
                     if (window.innerWidth <= 768) {
                         hamburgerBtn.classList.remove('hidden');
                     }
@@ -506,7 +464,7 @@
                 } else {
                     loginPage.classList.remove('hidden');
                     affiliatePanel.classList.add('hidden');
-                    hamburgerBtn.classList.add('hidden'); // Hide if not logged in
+                    hamburgerBtn.classList.add('hidden');
                 }
             });
 
@@ -517,46 +475,26 @@
                 auth.signInWithEmailAndPassword(email, password)
                     .catch(error => {
                         console.error("Login Error:", error);
-                        alert('ভুল ইমেল অথবা পাসওয়ার্ড!');
+                        showToast('ভুল ইমেল অথবা পাসওয়ার্ড!', 'error');
                     });
             });
 
             logoutBtn.addEventListener('click', () => auth.signOut());
 
-            // --- New Menu Open/Close Logic ---
-            function openMenu() {
-                sidebar.classList.add('open');
-                overlay.classList.remove('hidden');
-            }
-
-            function closeMenu() {
-                sidebar.classList.remove('open');
-                overlay.classList.add('hidden');
-            }
-
+            function openMenu() { sidebar.classList.add('open'); overlay.classList.remove('hidden'); hamburgerBtn.classList.add('hidden'); }
+            function closeMenu() { sidebar.classList.remove('open'); overlay.classList.add('hidden'); hamburgerBtn.classList.remove('hidden'); }
             hamburgerBtn.addEventListener('click', openMenu);
             closeSidebarBtn.addEventListener('click', closeMenu);
             overlay.addEventListener('click', closeMenu);
 
-
             function navigateTo(pageId) {
                 pages.forEach(p => p.classList.remove('active'));
                 document.getElementById(pageId).classList.add('active');
-
                 sidebarLinks.forEach(l => l.classList.remove('active'));
                 document.querySelector(`.sidebar-nav li[data-page="${pageId}"]`).classList.add('active');
-                
-                if (pageId === 'students-page' && auth.currentUser) {
-                    renderStudentList(auth.currentUser.uid);
-                }
-                if (pageId === 'withdraw-page' && auth.currentUser) {
-                    renderWithdrawPage(auth.currentUser.uid);
-                }
-                
-                // Close menu on navigation in mobile
-                if (window.innerWidth <= 768) {
-                    closeMenu();
-                }
+                if (pageId === 'students-page' && auth.currentUser) renderStudentList(auth.currentUser.uid);
+                if (pageId === 'withdraw-page' && auth.currentUser) renderWithdrawPage(auth.currentUser.uid);
+                if (window.innerWidth <= 768) closeMenu();
             }
 
             sidebarLinks.forEach(link => {
@@ -573,50 +511,29 @@
                         const userData = userDoc.data();
                         currentBalance = userData.affiliateBalance || 0;
                         document.getElementById('user-name').textContent = userData.name || 'N/A';
-                        // The profile picture line is removed from the original logic as well
                         document.getElementById('total-balance').textContent = `৳${(currentBalance).toLocaleString('bn-BD')}`;
                         document.getElementById('withdraw-balance').textContent = `৳${(currentBalance).toLocaleString('bn-BD')}`;
                         document.getElementById('referral-code').textContent = userData.referralCode || 'কোড সেট করা হয়নি';
-                        
-                        const paymentsSnapshot = await db.collection('payments')
-                            .where('referrerId', '==', uid)
-                            .where('status', '==', 'approved').get();
+                        const paymentsSnapshot = await db.collection('payments').where('referrerId', '==', uid).where('status', '==', 'approved').get();
                         document.getElementById('total-referrals').textContent = paymentsSnapshot.size;
-
-                    } else {
-                        console.error("Affiliate user data not found in 'users' collection.");
-                    }
-                } catch (error) {
-                    console.error("Error loading affiliate data:", error);
-                }
+                    } else { console.error("Affiliate user data not found."); }
+                } catch (error) { console.error("Error loading affiliate data:", error); }
             }
 
             async function renderStudentList(uid) {
                 const tableBody = document.getElementById('students-table-body');
                 tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">তালিকা লোড হচ্ছে...</td></tr>`;
                 try {
-                    const snapshot = await db.collection('payments')
-                        .where('referrerId', '==', uid)
-                        .where('status', '==', 'approved')
-                        .orderBy('timestamp', 'desc')
-                        .get();
+                    const snapshot = await db.collection('payments').where('referrerId', '==', uid).where('status', '==', 'approved').orderBy('timestamp', 'desc').get();
                     if (snapshot.empty) {
                         tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">আপনার রেফারে এখনো কেউ কোনো সার্ভিস কেনেনি।</td></tr>`;
                         return;
                     }
                     let tableHTML = '';
                     snapshot.forEach(doc => {
-                        const payment = doc.data();
-                        const timestamp = payment.timestamp ? new Date(payment.timestamp.seconds * 1000).toLocaleDateString('bn-BD') : 'N/A';
-                        tableHTML += `
-                            <tr>
-                                <td>${payment.userEmail}</td>
-                                <td>${payment.itemName}</td>
-                                <td>৳ ${payment.amount}</td>
-                                <td>৳ ${payment.commissionAwarded || 0}</td>
-                                <td>${timestamp}</td>
-                            </tr>
-                        `;
+                        const p = doc.data();
+                        const ts = p.timestamp ? new Date(p.timestamp.seconds * 1000).toLocaleDateString('bn-BD') : 'N/A';
+                        tableHTML += `<tr><td>${p.userEmail}</td><td>${p.itemName}</td><td>৳ ${p.amount}</td><td>৳ ${p.commissionAwarded || 0}</td><td>${ts}</td></tr>`;
                     });
                     tableBody.innerHTML = tableHTML;
                 } catch (error) {
@@ -625,37 +542,22 @@
                 }
             }
 
-            // --- NEW WITHDRAW PAGE FUNCTIONS ---
             async function renderWithdrawPage(uid) {
-                await loadAffiliateData(uid); // Refresh balance
+                await loadAffiliateData(uid);
                 const tableBody = document.getElementById('withdraw-history-table-body');
                 tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">ইতিহাস লোড হচ্ছে...</td></tr>`;
-
                 try {
-                    const snapshot = await db.collection('withdrawals')
-                        .where('userId', '==', uid)
-                        .orderBy('requestDate', 'desc')
-                        .get();
-
+                    const snapshot = await db.collection('withdrawals').where('userId', '==', uid).orderBy('requestDate', 'desc').get();
                     if (snapshot.empty) {
                         tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">আপনি এখনো কোনো উত্তোলনের অনুরোধ করেননি।</td></tr>`;
                         return;
                     }
-
                     let tableHTML = '';
                     snapshot.forEach(doc => {
-                        const req = doc.data();
-                        const date = req.requestDate ? new Date(req.requestDate.seconds * 1000).toLocaleDateString('bn-BD') : 'N/A';
-                        const statusClass = (req.status || 'pending').toLowerCase();
-                        tableHTML += `
-                            <tr>
-                                <td>${date}</td>
-                                <td>৳ ${req.amount.toLocaleString('bn-BD')}</td>
-                                <td>${req.method}</td>
-                                <td>${req.accountNumber}</td>
-                                <td><span class="status-badge ${statusClass}">${req.status}</span></td>
-                            </tr>
-                        `;
+                        const r = doc.data();
+                        const date = r.requestDate ? new Date(r.requestDate.seconds * 1000).toLocaleDateString('bn-BD') : 'N/A';
+                        const statusClass = (r.status || 'pending').toLowerCase();
+                        tableHTML += `<tr><td>${date}</td><td>৳ ${r.amount.toLocaleString('bn-BD')}</td><td>${r.method}</td><td>${r.accountNumber}</td><td><span class="status-badge ${statusClass}">${r.status}</span></td></tr>`;
                     });
                     tableBody.innerHTML = tableHTML;
                 } catch (error) {
@@ -664,78 +566,56 @@
                 }
             }
             
-            // Event listener for withdraw method change
-            withdrawForm.addEventListener('change', function(e) {
+            withdrawForm.addEventListener('change', (e) => {
                 if (e.target.name === 'withdraw-method') {
-                    const selectedMethod = e.target.value;
-                    accountNumberLabel.textContent = `আপনার ${selectedMethod} নাম্বারটি দিন`;
+                    const method = e.target.value;
+                    accountNumberLabel.textContent = `আপনার ${method} নাম্বারটি দিন`;
                     accountNumberGroup.classList.remove('hidden');
                 }
             });
 
-            // Event listener for account number input
-            accountNumberInput.addEventListener('input', function() {
-                if (accountNumberInput.value.trim().length >= 11) { // Basic validation
+            accountNumberInput.addEventListener('input', () => {
+                if (accountNumberInput.value.trim().length >= 11) {
                     withdrawAmountGroup.classList.remove('hidden');
                 } else {
                     withdrawAmountGroup.classList.add('hidden');
                 }
             });
             
-            // Event listener for withdraw form submission
-            withdrawForm.addEventListener('submit', async function(e) {
+            withdrawForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const user = auth.currentUser;
                 if (!user) return;
-
                 const amount = Number(document.getElementById('withdraw-amount').value);
                 const method = document.querySelector('input[name="withdraw-method"]:checked').value;
                 const accountNumber = accountNumberInput.value;
-
-                if (amount <= 0) {
-                    alert("দয়া করে সঠিক পরিমাণ লিখুন।");
-                    return;
-                }
-                if (amount > currentBalance) {
-                    alert("দুঃখিত, আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই।");
-                    return;
-                }
-
+                if (amount <= 0) { showToast("দয়া করে সঠিক পরিমাণ লিখুন।", "error"); return; }
+                if (amount > currentBalance) { showToast("দুঃখিত, আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই।", "error"); return; }
                 try {
-                    await db.collection('withdrawals').add({
-                        userId: user.uid,
-                        userEmail: user.email,
-                        amount: amount,
-                        method: method,
-                        accountNumber: accountNumber,
-                        status: 'pending',
-                        requestDate: new Date()
-                    });
-                    alert('আপনার উত্তোলনের অনুরোধ সফলভাবে পাঠানো হয়েছে।');
+                    await db.collection('withdrawals').add({ userId: user.uid, userEmail: user.email, amount, method, accountNumber, status: 'pending', requestDate: new Date() });
+                    showToast('উত্তোলন অনুরোধ সফল হয়েছে');
                     withdrawForm.reset();
                     accountNumberGroup.classList.add('hidden');
                     withdrawAmountGroup.classList.add('hidden');
-                    renderWithdrawPage(user.uid); // Refresh history
+                    renderWithdrawPage(user.uid);
                 } catch (error) {
                     console.error("Error submitting withdrawal request:", error);
-                    alert('অনুরোধ পাঠাতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
+                    showToast('অনুরোধ পাঠাতে সমস্যা হয়েছে।', 'error');
                 }
             });
-
 
             const referralCodeEl = document.getElementById('referral-code');
             if (referralCodeEl) {
                 referralCodeEl.addEventListener('click', () => {
-                    if(referralCodeEl.textContent && referralCodeEl.textContent !== 'লোড হচ্ছে...' && referralCodeEl.textContent !== 'কোড সেট করা হয়নি') {
-                        navigator.clipboard.writeText(referralCodeEl.textContent).then(() => {
-                            alert('রেফারেল কোড কপি করা হয়েছে!');
-                        }).catch(err => {
-                            console.error('Could not copy text: ', err);
-                        });
+                    const code = referralCodeEl.textContent;
+                    if(code && code !== 'লোড হচ্ছে...' && code !== 'কোড সেট করা হয়নি') {
+                        navigator.clipboard.writeText(code).then(() => {
+                            showToast('রেফারেল কোড কপি হয়েছে');
+                        }).catch(err => console.error('Could not copy text: ', err));
                     }
                 });
             }
         });
     </script>
 </body>
-</html>
+</html>```
