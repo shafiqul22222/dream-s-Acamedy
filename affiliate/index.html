@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream's Academy - অ্যাফিলিয়েট প্যানেল</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/JqgWkCg/placeholder.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <style>
+        :root {
+            --primary-blue: #0a4d68;
+            --secondary-blue: #088395;
+            --light-blue: #05bfdb;
+            --accent-green: #28a745;
+            --accent-yellow: #ffc107;
+            --background-light: #f8f9fa;
+            --text-dark: #212529;
+            --text-light: #ffffff;
+            --border-color: #dee2e6;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            --card-radius: 12px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        .hidden { display: none !important; }
+        #login-page {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #0a4d68 0%, #05bfdb 100%);
+        }
+        .login-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-box h2 {
+            margin-bottom: 35px;
+            color: var(--text-light);
+            font-weight: 700;
+        }
+        .login-box .input-group {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        .login-box .input-group input {
+            width: 100%;
+            padding: 14px 10px;
+            border: none;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+            background: transparent;
+            color: var(--text-light);
+            font-size: 1em;
+        }
+        .login-box .input-group label {
+            position: absolute;
+            top: 14px;
+            left: 10px;
+            color: rgba(255, 255, 255, 0.8);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .login-box .input-group input:focus {
+            outline: none;
+            border-bottom-color: var(--light-blue);
+        }
+        .login-box .input-group input:focus + label,
+        .login-box .input-group input:valid + label {
+            top: -12px;
+            font-size: 0.85em;
+            color: var(--light-blue);
+        }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, var(--secondary-blue), var(--light-blue));
+            color: var(--text-light);
+            width: 100%;
+            font-size: 1.1em;
+        }
+        #affiliate-panel { display: flex; }
+        .sidebar {
+            width: 260px;
+            background: var(--text-light);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            height: 100vh;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease-in-out; /* Added for smooth transition */
+        }
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+            position: relative;
+        }
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 3px solid var(--secondary-blue);
+        }
+        .sidebar-header h3 { color: var(--primary-blue); font-size: 1.2em; margin-top: 10px; }
+        .sidebar-nav { list-style: none; flex-grow: 1; }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            border-left: 4px solid transparent;
+        }
+        .sidebar-nav li.active a, .sidebar-nav a:hover {
+            background: #eaf6f6;
+            color: var(--secondary-blue);
+            border-left-color: var(--secondary-blue);
+        }
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            border-top: 1px solid var(--border-color);
+        }
+        .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 30px; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .page-header h1 { color: var(--primary-blue); margin-bottom: 30px;}
+        .content-box {
+            background: var(--text-light);
+            padding: 30px;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+            margin-bottom: 25px;
+        }
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th, .data-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .data-table th { background-color: var(--background-light); }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            padding: 25px;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+        }
+        .stat-card h3 { font-size: 2.5em; }
+        .stat-card p { font-size: 1.1em; opacity: 0.9; }
+        .referral-code-box {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: var(--card-radius);
+            text-align: center;
+            border: 2px dashed var(--secondary-blue);
+        }
+        .referral-code-box p { font-size: 1.1em; margin-bottom: 10px;}
+        .referral-code-box span {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--primary-blue);
+            background: #eaf6f6;
+            padding: 5px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        /* Withdraw Page Specific Styles */
+        #withdraw-form .form-group { margin-bottom: 20px; }
+        #withdraw-form label { font-weight: 600; display: block; margin-bottom: 8px; }
+        #withdraw-form input[type="radio"] { margin-right: 8px; }
+        #withdraw-form input[type="text"], #withdraw-form input[type="number"] {
+            width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px;
+        }
+        .balance-display {
+            font-size: 1.5em; font-weight: 700; color: var(--primary-blue); margin-bottom: 20px;
+            padding-bottom: 15px; border-bottom: 1px solid var(--border-color);
+        }
+        .status-badge {
+            padding: 5px 12px; border-radius: 50px; font-weight: 600; font-size: 0.85em; color: var(--text-light);
+        }
+        .status-badge.pending { background-color: var(--accent-yellow); color: var(--text-dark); }
+        .status-badge.paid { background-color: var(--accent-green); }
+
+        /* --- New Hamburger Menu Styles --- */
+        .hamburger-menu {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px;
+            cursor: pointer;
+        }
+        .close-btn {
+            display: none; /* Hidden by default */
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 2.5em;
+            line-height: 1;
+            cursor: pointer;
+            color: var(--primary-blue);
+        }
+        #mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 998;
+        }
+
+        /* --- Mobile Responsive Styles --- */
+        @media (max-width: 768px) {
+            .hamburger-menu, .close-btn {
+                display: block; /* Show on mobile */
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 999;
+                transform: translateX(-100%); /* Initially hidden off-screen */
+            }
+
+            .sidebar.open {
+                transform: translateX(0); /* Slide in when open */
+            }
+
+            .main-content {
+                margin-left: 0; /* Full width content on mobile */
+                width: 100%;
+                padding: 60px 20px 20px; /* Increased top padding to avoid overlap */
+            }
+            
+            .page-header h1 {
+                font-size: 1.6em;
+                margin-bottom: 20px;
+            }
+            
+            .content-box, .login-box {
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content-box {
+                padding: 15px;
+            }
+
+            .data-table th, .data-table td {
+                padding: 10px 8px;
+                font-size: 0.9em;
+            }
+            .stat-card h3, .referral-code-box span {
+                font-size: 1.6em;
+            }
+            .balance-display {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hamburger Menu Button -->
+    <button class="hamburger-menu" id="hamburger-btn">
+        <span class="material-symbols-outlined">menu</span>
+    </button>
+    
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu-overlay" class="hidden"></div>
+
+    <div id="login-page">
+        <div class="login-box">
+            <h2>অ্যাফিলিয়েট লগইন</h2>
+            <form id="login-form">
+                <div class="input-group">
+                    <input type="email" id="email" required>
+                    <label for="email">ইমেল</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" required>
+                    <label for="password">পাসওয়ার্ড</label>
+                </div>
+                <button type="submit" class="btn btn-primary">লগইন করুন</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="affiliate-panel" class="hidden">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3 id="user-name">লোড হচ্ছে...</h3>
+                <button class="close-btn" id="close-sidebar-btn">&times;</button>
+            </div>
+            <ul class="sidebar-nav">
+                <li class="active" data-page="dashboard-page"><a href="#"><span class="material-symbols-outlined">dashboard</span> ড্যাশবোর্ড</a></li>
+                <li data-page="students-page"><a href="#"><span class="material-symbols-outlined">group</span> স্টুডেন্ট লিস্ট</a></li>
+                <li data-page="downline-page"><a href="#"><span class="material-symbols-outlined">hub</span> ডাউনলাইন</a></li>
+                <li data-page="withdraw-page"><a href="#"><span class="material-symbols-outlined">request_quote</span> উত্তোলন</a></li>
+            </ul>
+            <button class="logout-btn" id="logout-btn"><span class="material-symbols-outlined">logout</span> লগ আউট</button>
+        </aside>
+
+        <main class="main-content">
+            <div id="dashboard-page" class="page active">
+                <div class="page-header">
+                    <h1>ড্যাশবোর্ড</h1>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 id="total-balance">৳0</h3>
+                        <p>মোট আয়</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="total-referrals">0</h3>
+                        <p>মোট রেফারেল</p>
+                    </div>
+                </div>
+                <div class="referral-code-box">
+                    <p>আপনার রেফারেল কোড</p>
+                    <span id="referral-code" title="কপি করতে ক্লিক করুন">লোড হচ্ছে...</span>
+                </div>
+            </div>
+
+            <div id="students-page" class="page">
+                <div class="page-header">
+                    <h1>আপনার রেফার করা স্টুডেন্টদের তালিকা</h1>
+                </div>
+                <div class="content-box">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>স্টুডেন্টের ইমেইল</th>
+                                <th>কোর্স/সার্ভিস</th>
+                                <th>পেমেন্টের পরিমাণ</th>
+                                <th>আপনার কমিশন</th>
+                                <th>তারিখ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="students-table-body">
+                           <!-- Data populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="downline-page" class="page">
+                <div class="page-header">
+                     <h1>আপনার ডাউনলাইন</h1>
+                </div>
+                 <div class="content-box">
+                    <p>এই ফিচারটি ভবিষ্যতে যুক্ত করা হবে।</p>
+                </div>
+            </div>
+
+            <!-- NEW WITHDRAW PAGE -->
+            <div id="withdraw-page" class="page">
+                <div class="page-header">
+                    <h1>টাকা উত্তোলন করুন</h1>
+                </div>
+                <div class="content-box">
+                    <div class="balance-display">
+                        আপনার বর্তমান ব্যালেন্স: <span id="withdraw-balance">৳0</span>
+                    </div>
+                    <form id="withdraw-form">
+                        <div class="form-group">
+                            <label>উত্তোলন মাধ্যম নির্বাচন করুন</label>
+                            <label><input type="radio" name="withdraw-method" value="bKash" required> বিকাশ</label>
+                            <label style="margin-left: 20px;"><input type="radio" name="withdraw-method" value="Nagad" required> নগদ</label>
+                        </div>
+                        <div class="form-group hidden" id="account-number-group">
+                            <label id="account-number-label" for="account-number">আপনার নম্বরটি দিন</label>
+                            <input type="text" id="account-number" name="account-number" required>
+                        </div>
+                        <div class="form-group hidden" id="withdraw-amount-group">
+                            <label for="withdraw-amount">উত্তোলনের পরিমাণ</label>
+                            <input type="number" id="withdraw-amount" name="withdraw-amount" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: auto;">অনুরোধ পাঠান</button>
+                    </form>
+                </div>
+
+                <div class="page-header" style="margin-top: 40px;">
+                    <h1>উত্তোলনের ইতিহাস</h1>
+                </div>
+                <div class="content-box">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>তারিখ</th>
+                                <th>পরিমাণ</th>
+                                <th>মাধ্যম</th>
+                                <th>অ্যাকাউন্ট নম্বর</th>
+                                <th>স্ট্যাটাস</th>
+                            </tr>
+                        </thead>
+                        <tbody id="withdraw-history-table-body">
+                            <!-- Data populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyAu6Lo33AH6GWFDHusaP14fmAHb0LEzWOQ",
+          authDomain: "go-pixel-f1c13.firebaseapp.com",
+          projectId: "go-pixel-f1c13",
+          storageBucket: "go-pixel-f1c13.appspot.com",
+          messagingSenderId: "390711689002",
+          appId: "1:390711689002:web:0ce672f38aeca40d2f6853"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginPage = document.getElementById('login-page');
+            const affiliatePanel = document.getElementById('affiliate-panel');
+            const loginForm = document.getElementById('login-form');
+            const logoutBtn = document.getElementById('logout-btn');
+            const sidebarLinks = document.querySelectorAll('.sidebar-nav li');
+            const pages = document.querySelectorAll('.page');
+            
+            // --- New Hamburger Menu Elements ---
+            const sidebar = document.getElementById('sidebar');
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+            const overlay = document.getElementById('mobile-menu-overlay');
+            
+            // Withdraw form elements
+            const withdrawForm = document.getElementById('withdraw-form');
+            const accountNumberGroup = document.getElementById('account-number-group');
+            const accountNumberLabel = document.getElementById('account-number-label');
+            const accountNumberInput = document.getElementById('account-number');
+            const withdrawAmountGroup = document.getElementById('withdraw-amount-group');
+            let currentBalance = 0;
+
+
+            auth.onAuthStateChanged(async user => {
+                if (user) {
+                    loginPage.classList.add('hidden');
+                    affiliatePanel.classList.remove('hidden');
+                    // Show hamburger button only when logged in on mobile
+                    if (window.innerWidth <= 768) {
+                        hamburgerBtn.classList.remove('hidden');
+                    }
+                    await loadAffiliateData(user.uid);
+                    navigateTo('dashboard-page');
+                } else {
+                    loginPage.classList.remove('hidden');
+                    affiliatePanel.classList.add('hidden');
+                    hamburgerBtn.classList.add('hidden'); // Hide if not logged in
+                }
+            });
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                auth.signInWithEmailAndPassword(email, password)
+                    .catch(error => {
+                        console.error("Login Error:", error);
+                        alert('ভুল ইমেল অথবা পাসওয়ার্ড!');
+                    });
+            });
+
+            logoutBtn.addEventListener('click', () => auth.signOut());
+
+            // --- New Menu Open/Close Logic ---
+            function openMenu() {
+                sidebar.classList.add('open');
+                overlay.classList.remove('hidden');
+            }
+
+            function closeMenu() {
+                sidebar.classList.remove('open');
+                overlay.classList.add('hidden');
+            }
+
+            hamburgerBtn.addEventListener('click', openMenu);
+            closeSidebarBtn.addEventListener('click', closeMenu);
+            overlay.addEventListener('click', closeMenu);
+
+
+            function navigateTo(pageId) {
+                pages.forEach(p => p.classList.remove('active'));
+                document.getElementById(pageId).classList.add('active');
+
+                sidebarLinks.forEach(l => l.classList.remove('active'));
+                document.querySelector(`.sidebar-nav li[data-page="${pageId}"]`).classList.add('active');
+                
+                if (pageId === 'students-page' && auth.currentUser) {
+                    renderStudentList(auth.currentUser.uid);
+                }
+                if (pageId === 'withdraw-page' && auth.currentUser) {
+                    renderWithdrawPage(auth.currentUser.uid);
+                }
+                
+                // Close menu on navigation in mobile
+                if (window.innerWidth <= 768) {
+                    closeMenu();
+                }
+            }
+
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    navigateTo(link.getAttribute('data-page'));
+                });
+            });
+
+            async function loadAffiliateData(uid) {
+                try {
+                    const userDoc = await db.collection('users').doc(uid).get();
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        currentBalance = userData.affiliateBalance || 0;
+                        document.getElementById('user-name').textContent = userData.name || 'N/A';
+                        // The profile picture line is removed from the original logic as well
+                        document.getElementById('total-balance').textContent = `৳${(currentBalance).toLocaleString('bn-BD')}`;
+                        document.getElementById('withdraw-balance').textContent = `৳${(currentBalance).toLocaleString('bn-BD')}`;
+                        document.getElementById('referral-code').textContent = userData.referralCode || 'কোড সেট করা হয়নি';
+                        
+                        const paymentsSnapshot = await db.collection('payments')
+                            .where('referrerId', '==', uid)
+                            .where('status', '==', 'approved').get();
+                        document.getElementById('total-referrals').textContent = paymentsSnapshot.size;
+
+                    } else {
+                        console.error("Affiliate user data not found in 'users' collection.");
+                    }
+                } catch (error) {
+                    console.error("Error loading affiliate data:", error);
+                }
+            }
+
+            async function renderStudentList(uid) {
+                const tableBody = document.getElementById('students-table-body');
+                tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">তালিকা লোড হচ্ছে...</td></tr>`;
+                try {
+                    const snapshot = await db.collection('payments')
+                        .where('referrerId', '==', uid)
+                        .where('status', '==', 'approved')
+                        .orderBy('timestamp', 'desc')
+                        .get();
+                    if (snapshot.empty) {
+                        tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">আপনার রেফারে এখনো কেউ কোনো সার্ভিস কেনেনি।</td></tr>`;
+                        return;
+                    }
+                    let tableHTML = '';
+                    snapshot.forEach(doc => {
+                        const payment = doc.data();
+                        const timestamp = payment.timestamp ? new Date(payment.timestamp.seconds * 1000).toLocaleDateString('bn-BD') : 'N/A';
+                        tableHTML += `
+                            <tr>
+                                <td>${payment.userEmail}</td>
+                                <td>${payment.itemName}</td>
+                                <td>৳ ${payment.amount}</td>
+                                <td>৳ ${payment.commissionAwarded || 0}</td>
+                                <td>${timestamp}</td>
+                            </tr>
+                        `;
+                    });
+                    tableBody.innerHTML = tableHTML;
+                } catch (error) {
+                    console.error("Error fetching student list:", error);
+                    tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">তালিকা লোড করতে সমস্যা হয়েছে।</td></tr>`;
+                }
+            }
+
+            // --- NEW WITHDRAW PAGE FUNCTIONS ---
+            async function renderWithdrawPage(uid) {
+                await loadAffiliateData(uid); // Refresh balance
+                const tableBody = document.getElementById('withdraw-history-table-body');
+                tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">ইতিহাস লোড হচ্ছে...</td></tr>`;
+
+                try {
+                    const snapshot = await db.collection('withdrawals')
+                        .where('userId', '==', uid)
+                        .orderBy('requestDate', 'desc')
+                        .get();
+
+                    if (snapshot.empty) {
+                        tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">আপনি এখনো কোনো উত্তোলনের অনুরোধ করেননি।</td></tr>`;
+                        return;
+                    }
+
+                    let tableHTML = '';
+                    snapshot.forEach(doc => {
+                        const req = doc.data();
+                        const date = req.requestDate ? new Date(req.requestDate.seconds * 1000).toLocaleDateString('bn-BD') : 'N/A';
+                        const statusClass = (req.status || 'pending').toLowerCase();
+                        tableHTML += `
+                            <tr>
+                                <td>${date}</td>
+                                <td>৳ ${req.amount.toLocaleString('bn-BD')}</td>
+                                <td>${req.method}</td>
+                                <td>${req.accountNumber}</td>
+                                <td><span class="status-badge ${statusClass}">${req.status}</span></td>
+                            </tr>
+                        `;
+                    });
+                    tableBody.innerHTML = tableHTML;
+                } catch (error) {
+                    console.error("Error fetching withdrawal history:", error);
+                    tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">ইতিহাস লোড করতে সমস্যা হয়েছে।</td></tr>`;
+                }
+            }
+            
+            // Event listener for withdraw method change
+            withdrawForm.addEventListener('change', function(e) {
+                if (e.target.name === 'withdraw-method') {
+                    const selectedMethod = e.target.value;
+                    accountNumberLabel.textContent = `আপনার ${selectedMethod} নাম্বারটি দিন`;
+                    accountNumberGroup.classList.remove('hidden');
+                }
+            });
+
+            // Event listener for account number input
+            accountNumberInput.addEventListener('input', function() {
+                if (accountNumberInput.value.trim().length >= 11) { // Basic validation
+                    withdrawAmountGroup.classList.remove('hidden');
+                } else {
+                    withdrawAmountGroup.classList.add('hidden');
+                }
+            });
+            
+            // Event listener for withdraw form submission
+            withdrawForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const user = auth.currentUser;
+                if (!user) return;
+
+                const amount = Number(document.getElementById('withdraw-amount').value);
+                const method = document.querySelector('input[name="withdraw-method"]:checked').value;
+                const accountNumber = accountNumberInput.value;
+
+                if (amount <= 0) {
+                    alert("দয়া করে সঠিক পরিমাণ লিখুন।");
+                    return;
+                }
+                if (amount > currentBalance) {
+                    alert("দুঃখিত, আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই।");
+                    return;
+                }
+
+                try {
+                    await db.collection('withdrawals').add({
+                        userId: user.uid,
+                        userEmail: user.email,
+                        amount: amount,
+                        method: method,
+                        accountNumber: accountNumber,
+                        status: 'pending',
+                        requestDate: new Date()
+                    });
+                    alert('আপনার উত্তোলনের অনুরোধ সফলভাবে পাঠানো হয়েছে।');
+                    withdrawForm.reset();
+                    accountNumberGroup.classList.add('hidden');
+                    withdrawAmountGroup.classList.add('hidden');
+                    renderWithdrawPage(user.uid); // Refresh history
+                } catch (error) {
+                    console.error("Error submitting withdrawal request:", error);
+                    alert('অনুরোধ পাঠাতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
+                }
+            });
+
+
+            const referralCodeEl = document.getElementById('referral-code');
+            if (referralCodeEl) {
+                referralCodeEl.addEventListener('click', () => {
+                    if(referralCodeEl.textContent && referralCodeEl.textContent !== 'লোড হচ্ছে...' && referralCodeEl.textContent !== 'কোড সেট করা হয়নি') {
+                        navigator.clipboard.writeText(referralCodeEl.textContent).then(() => {
+                            alert('রেফারেল কোড কপি করা হয়েছে!');
+                        }).catch(err => {
+                            console.error('Could not copy text: ', err);
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
