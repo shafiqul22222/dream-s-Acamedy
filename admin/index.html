@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dream's Academy - অ্যাডমিন প্যানেল</title>
+    <title>Dream's Academy - অ্যাডমিন প্যানেল (Updated)</title>
     <link rel="icon" type="image/png" href="https://i.ibb.co/JqgWkCg/placeholder.png">
     <!-- Google Fonts: Hind Siluri for Bengali -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -292,6 +292,16 @@
             font-family: 'Hind Siliguri', sans-serif;
             font-size: 0.9em;
         }
+        /* NEW: Styles for referrer input */
+        .referrer-input {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            font-family: 'Hind Siliguri', sans-serif;
+            font-size: 0.9em;
+            margin-right: 5px;
+            width: 120px;
+        }
         .status-badge {
             padding: 5px 12px;
             border-radius: 50px;
@@ -302,6 +312,7 @@
         .status-badge.pending { background-color: var(--accent-yellow); color: var(--text-dark); }
         .status-badge.approved { background-color: var(--accent-green); }
         .status-badge.rejected { background-color: var(--accent-red); }
+        .status-badge.paid { background-color: var(--accent-green); } /* For Withdrawals */
         .btn-save-status {
             background-color: var(--secondary-blue);
             color: var(--text-light);
@@ -566,6 +577,7 @@
                 <li data-page="curriculum-page"><a href="#"><span class="material-symbols-outlined">list_alt</span> কারিকুলাম ম্যানেজ</a></li>
                 <li data-page="notices-page"><a href="#"><span class="material-symbols-outlined">campaign</span> নোটিশবোর্ড ম্যানেজ</a></li>
                 <li data-page="join-class-page"><a href="#"><span class="material-symbols-outlined">video_call</span> ক্লাস জয়েনিং</a></li>
+                <li data-page="withdrawals-page"><a href="#"><span class="material-symbols-outlined">paid</span> উত্তোলন</a></li>
                 <li data-page="settings-page"><a href="#"><span class="material-symbols-outlined">settings</span> ওয়েবসাইট সেটিংস</a></li>
             </ul>
             <button class="logout-btn" id="logout-btn"><span class="material-symbols-outlined">logout</span> লগ আউট</button>
@@ -690,8 +702,8 @@
                                 <th>নাম</th>
                                 <th>ইমেইল</th>
                                 <th>মোবাইল</th>
-                                <th>টাইটেল</th>
-                                <th>পাসওয়ার্ড</th>
+                                <th>রেফারেল কোড</th>
+                                <th>ব্যালেন্স</th>
                                 <th>অ্যাকশন</th>
                             </tr>
                         </thead>
@@ -716,7 +728,7 @@
                                 <th>সার্ভিসের নাম</th>
                                 <th>ক্রয়মূল্য</th>
                                 <th>বর্তমান মূল্য</th>
-                                <th>পূর্বের মূল্য</th>
+                                <th>কমিশন</th>
                                 <th>অ্যাকশন</th>
                             </tr>
                         </thead>
@@ -773,6 +785,7 @@
                                 <th>কোর্সের নাম</th>
                                 <th>প্রশিক্ষক</th>
                                 <th>মূল্য</th>
+                                <th>কমিশন</th>
                                 <th>অ্যাকশন</th>
                             </tr>
                         </thead>
@@ -874,6 +887,32 @@
                     </table>
                 </div>
             </div>
+            
+            <!-- NEW WITHDRAWAL REQUESTS PAGE -->
+            <div id="withdrawals-page" class="page">
+                <div class="page-header">
+                    <h1>উত্তোলনের অনুরোধ সমূহ</h1>
+                </div>
+                <div class="content-box">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ইমেইল</th>
+                                <th>পরিমাণ</th>
+                                <th>মাধ্যম</th>
+                                <th>অ্যাকাউন্ট নম্বর</th>
+                                <th>অনুরোধের তারিখ</th>
+                                <th>স্ট্যাটাস</th>
+                                <th>অ্যাকশন</th>
+                            </tr>
+                        </thead>
+                        <tbody id="withdrawals-table-body">
+                            <!-- Data will be populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
 
             <div id="settings-page" class="page">
                 <div class="page-header">
@@ -1060,6 +1099,7 @@
                     case 'curriculum-page': renderCurriculum(); break;
                     case 'notices-page': renderNotices(); break;
                     case 'join-class-page': renderJoinClass(); break;
+                    case 'withdrawals-page': renderWithdrawals(); break; // NEW
                     case 'settings-page': renderSettings(); break;
                 }
             }
@@ -1306,16 +1346,14 @@
             });
 
             // --- CRUD Operations ---
+            // ================== START: MAJOR UPDATE - AFFILIATE FUNCTIONALITY ==================
             window.updatePaymentStatus = async (docId) => {
                 const selectElement = document.getElementById(`status-select-${docId}`);
-                if (!selectElement) {
-                    console.error(`Could not find the select element for docId: ${docId}`);
-                    alert('একটি অপ্রত্যাশিত সমস্যা হয়েছে।');
-                    return;
-                }
-                
+                const referrerCodeInput = document.getElementById(`referrer-code-${docId}`);
+                const saveButton = selectElement.nextElementSibling;
+
                 const newStatus = selectElement.value;
-                const saveButton = selectElement.nextElementSibling; 
+                const referrerCode = referrerCodeInput.value.trim();
 
                 if(saveButton) {
                     saveButton.textContent = 'Saving...';
@@ -1323,21 +1361,54 @@
                 }
 
                 try {
-                    const paymentDoc = await db.collection('payments').doc(docId).get();
-                    if (!paymentDoc.exists) {
-                        throw new Error("Payment document not found.");
-                    }
+                    const paymentDocRef = db.collection('payments').doc(docId);
+                    const paymentDoc = await paymentDocRef.get();
+                    if (!paymentDoc.exists) throw new Error("Payment document not found.");
+
                     const paymentData = paymentDoc.data();
                     let updateData = { status: newStatus };
+                    
+                    // --- Commission Logic ---
+                    if (newStatus === 'approved' && paymentData.status !== 'approved' && referrerCode) {
+                        // Find the referrer
+                        const userQuery = await db.collection('users').where('referralCode', '==', referrerCode).limit(1).get();
+                        if (userQuery.empty) {
+                            alert(`রেফারেল কোড "${referrerCode}" দিয়ে কোনো ব্যবহারকারীকে পাওয়া যায়নি।`);
+                        } else {
+                            const referrerUser = userQuery.docs[0];
+                            
+                            // Find the item (course/service) to get commission
+                            let commission = 0;
+                            const courseQuery = await db.collection('courses').where('name', '==', paymentData.itemName).limit(1).get();
+                            const serviceQuery = await db.collection('services').where('name', '==', paymentData.itemName).limit(1).get();
+                            
+                            if (!courseQuery.empty) {
+                                commission = courseQuery.docs[0].data().commission || 0;
+                            } else if (!serviceQuery.empty) {
+                                commission = serviceQuery.docs[0].data().commission || 0;
+                            }
 
+                            if (commission > 0) {
+                                // Award commission
+                                await referrerUser.ref.update({
+                                    affiliateBalance: firebase.firestore.FieldValue.increment(commission)
+                                });
+                                // Mark payment with referrer info
+                                updateData.referrerId = referrerUser.id;
+                                updateData.commissionAwarded = commission;
+                                alert(`কমিশন ৳${commission} সফলভাবে ${referrerUser.data().name}-কে দেওয়া হয়েছে।`);
+                            } else {
+                                alert(`এই সার্ভিস/কোর্সের জন্য কোনো কমিশন সেট করা নেই।`);
+                            }
+                        }
+                    }
+
+                    // --- Profit Logic (as before) ---
                     if (newStatus === 'approved') {
                         const serviceQuery = await db.collection('services').where('name', '==', paymentData.itemName).limit(1).get();
-                        
                         if (!serviceQuery.empty) {
                             const serviceData = serviceQuery.docs[0].data();
-                            const sellingPrice = Number(paymentData.amount) || 0;
-                            const purchasePrice = Number(serviceData.purchasePrice) || 0;
-                            updateData.profit = sellingPrice - purchasePrice;
+                            updateData.profit = (Number(paymentData.amount) || 0) - (Number(serviceData.purchasePrice) || 0);
                         } else {
                             updateData.profit = Number(paymentData.amount) || 0;
                         }
@@ -1345,7 +1416,7 @@
                         updateData.profit = firebase.firestore.FieldValue.delete();
                     }
 
-                    await db.collection('payments').doc(docId).update(updateData);
+                    await paymentDocRef.update(updateData);
                     alert('স্ট্যাটাস সফলভাবে আপডেট করা হয়েছে!');
                     
                     renderPayments();
@@ -1353,20 +1424,15 @@
 
                 } catch (error) {
                     console.error("--- FIRESTORE UPDATE FAILED ---", error);
-                    let errorMessage = 'স্ট্যাটাস আপডেট করার সময় একটি গুরুতর সমস্যা হয়েছে।\n';
-                    if (error.code === 'permission-denied') {
-                        errorMessage += 'সম্ভাব্য কারণ: Firestore Security Rules আপনাকে এই ডেটা পরিবর্তনের অনুমতি দিচ্ছে না।';
-                    } else {
-                        errorMessage += `ত্রুটি: ${error.message}`;
-                    }
-                    alert(errorMessage);
-                    
+                    alert(`স্ট্যাটাস আপডেট করার সময় একটি সমস্যা হয়েছে: ${error.message}`);
+                } finally {
                      if(saveButton) {
                         saveButton.textContent = 'Save';
                         saveButton.disabled = false;
                     }
                 }
             };
+            // ================== END: MAJOR UPDATE - AFFILIATE FUNCTIONALITY ==================
             
             // START: ================== MODIFIED FUNCTION TO SEND WHATSAPP RECEIPT ==================
             window.sendWhatsAppReceipt = async (paymentId) => {
@@ -1447,17 +1513,18 @@ Payment Status : ${paymentStatus}`;
                         const timestamp = payment.timestamp ? new Date(payment.timestamp.seconds * 1000).toLocaleString('bn-BD') : 'N/A';
                         const statusClass = (payment.status || 'pending').toLowerCase();
                         const profit = (payment.status === 'approved' && payment.profit != null) ? `৳ ${payment.profit}` : 'N/A';
+                        const referrerInfo = payment.referrerId ? `<br><small style="color:green;">Ref: ${payment.referrerId.substring(0,6)}... (${payment.commissionAwarded}tk)</small>` : '';
 
-                        // Add WhatsApp button if status is 'approved'
                         let whatsappButtonHTML = '';
                         if (payment.status === 'approved') {
                             whatsappButtonHTML = `<button class="btn-whatsapp" onclick="sendWhatsAppReceipt('${payment.id}')" title="Send WhatsApp Receipt"><span class="material-symbols-outlined">send</span></button>`;
                         }
 
+                        // Added referrer code input
                         const row = `
                             <tr>
                                 <td>${payment.userEmail}</td>
-                                <td>${payment.itemName}</td>
+                                <td>${payment.itemName} ${referrerInfo}</td>
                                 <td>৳ ${payment.amount}</td>
                                 <td>${profit}</td>
                                 <td>${payment.transactionId}</td>
@@ -1466,13 +1533,14 @@ Payment Status : ${paymentStatus}`;
                                     <span class="status-badge ${statusClass}">${payment.status}</span>
                                 </td>
                                 <td class="actions-cell">
+                                    <input type="text" id="referrer-code-${payment.id}" class="referrer-input" placeholder="রেফার কোড" ${payment.status !== 'pending' ? 'disabled' : ''}>
                                     <select class="status-select" id="status-select-${payment.id}">
                                         <option value="pending" ${payment.status === 'pending' ? 'selected' : ''}>Pending</option>
                                         <option value="approved" ${payment.status === 'approved' ? 'selected' : ''}>Approved</option>
                                         <option value="rejected" ${payment.status === 'rejected' ? 'selected' : ''}>Rejected</option>
                                     </select>
                                     <button class="btn btn-save-status" onclick="updatePaymentStatus('${payment.id}')">Save</button>
-                                    ${whatsappButtonHTML} <!-- Button is added here -->
+                                    ${whatsappButtonHTML}
                                     <button class="btn-delete" onclick="deleteItem('payments', '${payment.id}')"><span class="material-symbols-outlined">delete</span></button>
                                 </td>
                             </tr>
@@ -1482,11 +1550,7 @@ Payment Status : ${paymentStatus}`;
                     tableBody.innerHTML = tableHTML;
                 } catch(error) {
                     console.error("--- Payment Rendering Error ---", error);
-                    let errorMessage = `<tr><td colspan="8" style="color: red; text-align: center;">An error occurred. Check the console.</td></tr>`;
-                    if (error.code === 'permission-denied') {
-                        errorMessage = `<tr><td colspan="8" style="color: red; text-align: center;">Error: Permission Denied. Check your Firestore Security Rules.</td></tr>`;
-                    }
-                    tableBody.innerHTML = errorMessage;
+                    tableBody.innerHTML = `<tr><td colspan="8" style="color: red; text-align: center;">An error occurred: ${error.message}</td></tr>`;
                 }
             }
             
@@ -1507,8 +1571,8 @@ Payment Status : ${paymentStatus}`;
                                 <td>${user.name || 'N/A'}</td>
                                 <td>${user.email}</td>
                                 <td>${user.mobile || 'N/A'}</td>
-                                <td>${user.title || 'N/A'}</td>
-                                <td>${user.password || 'N/A'}</td>
+                                <td>${user.referralCode || 'N/A'}</td>
+                                <td>৳ ${user.affiliateBalance || 0}</td>
                                 <td class="actions-cell">
                                     <button class="btn-edit" onclick="openModalForEdit('users', '${user.id}')"><span class="material-symbols-outlined">edit</span></button>
                                     <button class="btn-delete" onclick="deleteItem('users', '${user.id}')"><span class="material-symbols-outlined">delete</span></button>
@@ -1520,13 +1584,92 @@ Payment Status : ${paymentStatus}`;
                     tableBody.innerHTML = tableHTML;
                 } catch(error) {
                     console.error("--- User Rendering Error ---", error);
-                    let errorMessage = `<tr><td colspan="6" style="color: red; text-align: center;">An error occurred. Check the console.</td></tr>`;
-                    if (error.code === 'permission-denied') {
-                        errorMessage = `<tr><td colspan="6" style="color: red; text-align: center;">ত্রুটি: ডাটা পড়ার অনুমতি নেই। আপনার Firestore Security Rules চেক করুন।</td></tr>`;
-                    }
-                    tableBody.innerHTML = errorMessage;
+                    tableBody.innerHTML = `<tr><td colspan="6" style="color: red; text-align: center;">An error occurred: ${error.message}</td></tr>`;
                 }
             }
+            
+            // --- NEW WITHDRAWAL FUNCTIONS ---
+            async function renderWithdrawals() {
+                const tableBody = document.getElementById('withdrawals-table-body');
+                tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center;">অনুরোধগুলো লোড হচ্ছে...</td></tr>`;
+                try {
+                    const snapshot = await db.collection('withdrawals').orderBy('requestDate', 'desc').get();
+                    if (snapshot.empty) {
+                        tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center;">কোনো উত্তোলনের অনুরোধ পাওয়া যায়নি।</td></tr>`;
+                        return;
+                    }
+                    let tableHTML = '';
+                    snapshot.forEach(doc => {
+                        const req = { id: doc.id, ...doc.data() };
+                        const date = req.requestDate ? new Date(req.requestDate.seconds * 1000).toLocaleString('bn-BD') : 'N/A';
+                        const statusClass = (req.status || 'pending').toLowerCase();
+                        const row = `
+                            <tr>
+                                <td>${req.userEmail}</td>
+                                <td>৳ ${req.amount.toLocaleString('bn-BD')}</td>
+                                <td>${req.method}</td>
+                                <td>${req.accountNumber}</td>
+                                <td>${date}</td>
+                                <td><span class="status-badge ${statusClass}">${req.status}</span></td>
+                                <td class="actions-cell">
+                                    <select class="status-select" id="withdraw-status-${req.id}">
+                                        <option value="pending" ${req.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                        <option value="paid" ${req.status === 'paid' ? 'selected' : ''}>Paid</option>
+                                    </select>
+                                    <button class="btn btn-save-status" onclick="updateWithdrawalStatus('${req.id}', '${req.userId}', ${req.amount})">Save</button>
+                                </td>
+                            </tr>
+                        `;
+                        tableHTML += row;
+                    });
+                    tableBody.innerHTML = tableHTML;
+                } catch (error) {
+                    console.error("Error rendering withdrawals:", error);
+                    tableBody.innerHTML = `<tr><td colspan="7" style="color: red; text-align: center;">একটি সমস্যা হয়েছে: ${error.message}</td></tr>`;
+                }
+            }
+
+            window.updateWithdrawalStatus = async (docId, userId, amount) => {
+                const selectElement = document.getElementById(`withdraw-status-${docId}`);
+                const newStatus = selectElement.value;
+
+                try {
+                    const withdrawDocRef = db.collection('withdrawals').doc(docId);
+                    const userDocRef = db.collection('users').doc(userId);
+                    
+                    const withdrawDoc = await withdrawDocRef.get();
+                    const oldStatus = withdrawDoc.data().status;
+
+                    // Only perform balance deduction if status is changing TO 'paid' FROM 'pending'
+                    if (newStatus === 'paid' && oldStatus === 'pending') {
+                         // Use a transaction to ensure both operations succeed or fail together
+                        await db.runTransaction(async (transaction) => {
+                            const userDoc = await transaction.get(userDocRef);
+                            if (!userDoc.exists) {
+                                throw "User not found!";
+                            }
+                            // Decrement user's balance
+                            transaction.update(userDocRef, { 
+                                affiliateBalance: firebase.firestore.FieldValue.increment(-amount) 
+                            });
+                            // Update withdrawal status
+                            transaction.update(withdrawDocRef, { status: newStatus });
+                        });
+                        alert('স্ট্যাটাস সফলভাবে "Paid" করা হয়েছে এবং ব্যবহারকারীর ব্যালেন্স আপডেট করা হয়েছে।');
+                    } else {
+                        // If status is just being changed back to pending, or already paid, just update status
+                        await withdrawDocRef.update({ status: newStatus });
+                        alert('স্ট্যাটাস সফলভাবে আপডেট করা হয়েছে।');
+                    }
+
+                    renderWithdrawals(); // Refresh the list
+                } catch (error) {
+                    console.error("Error updating withdrawal status:", error);
+                    alert(`স্ট্যাটাস আপডেট করতে সমস্যা হয়েছে: ${error}`);
+                }
+            };
+            // --- END NEW WITHDRAWAL FUNCTIONS ---
+
 
             async function renderServices() {
                 try {
@@ -1544,7 +1687,7 @@ Payment Status : ${paymentStatus}`;
                                 <td>${service.name}</td>
                                 <td>৳ ${service.purchasePrice || 0}</td>
                                 <td>৳ ${service.currentPrice}</td>
-                                <td>৳ ${service.oldPrice}</td>
+                                <td>৳ ${service.commission || 0}</td>
                                 <td class="actions-cell">
                                     <button class="btn-edit" onclick="openModalForEdit('services', '${service.id}')"><span class="material-symbols-outlined">edit</span></button>
                                     <button class="btn-delete" onclick="deleteItem('services', '${service.id}')"><span class="material-symbols-outlined">delete</span></button>
@@ -1564,7 +1707,7 @@ Payment Status : ${paymentStatus}`;
                     const tableBody = document.getElementById('courses-table-body');
                     tableBody.innerHTML = '';
                      if (snapshot.empty) {
-                        tableBody.innerHTML = `<tr><td colspan="4" style="text-align: center;">কোনো কোর্স যোগ করা হয়নি।</td></tr>`;
+                        tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">কোনো কোর্স যোগ করা হয়নি।</td></tr>`;
                         return;
                     }
                     snapshot.forEach(doc => {
@@ -1574,6 +1717,7 @@ Payment Status : ${paymentStatus}`;
                                 <td>${course.name}</td>
                                 <td>${course.instructor}</td>
                                 <td>৳ ${course.price}</td>
+                                <td>৳ ${course.commission || 0}</td>
                                 <td class="actions-cell">
                                     <button class="btn-edit" onclick="openModalForEdit('courses', '${course.id}')"><span class="material-symbols-outlined">edit</span></button>
                                     <button class="btn-delete" onclick="deleteItem('courses', '${course.id}')"><span class="material-symbols-outlined">delete</span></button>
@@ -1817,6 +1961,7 @@ Payment Status : ${paymentStatus}`;
                         purchasePrice: Number(formData.get('purchasePrice')) || 0,
                         oldPrice: Number(formData.get('oldPrice')) || 0,
                         currentPrice: Number(formData.get('currentPrice')) || 0,
+                        commission: Number(formData.get('commission')) || 0, // Added commission
                         features: (formData.get('features') || '').split(',').map(f => f.trim())
                     };
                 } else if (type === 'courses') {
@@ -1824,6 +1969,7 @@ Payment Status : ${paymentStatus}`;
                         name: (formData.get('name') || '').trim(),
                         instructor: (formData.get('instructor') || '').trim(),
                         price: Number(formData.get('price')) || 0,
+                        commission: Number(formData.get('commission')) || 0, // Added commission
                         category: (formData.get('category') || '').trim(),
                         duration: (formData.get('duration') || '').trim(),
                         lectures: Number(formData.get('lectures')) || 0,
@@ -1882,14 +2028,13 @@ Payment Status : ${paymentStatus}`;
                         modules: modules
                     };
                 } else if (type === 'users') {
-                    // Base object with fields that are always updated
                     newItem = {
                         name: (formData.get('name') || '').trim(),
                         mobile: (formData.get('mobile') || '').trim(),
                         title: (formData.get('title') || '').trim(),
+                        referralCode: (formData.get('referralCode') || '').trim(), // Added field
+                        affiliateBalance: Number(formData.get('affiliateBalance')) || 0 // Added field
                     };
-                    
-                    // Conditionally add password to the object only if it's not empty
                     const password = (formData.get('password') || '').trim();
                     if (password) {
                         newItem.password = password;
@@ -1973,7 +2118,6 @@ Payment Status : ${paymentStatus}`;
                  `;
             }
             
-            // START: ================== UPDATED getVideoHTML FUNCTION ==================
             function getVideoHTML(video = { title: '', youtubeLink: '', duration: '', classNote: '' }) {
                 return `
                     <div class="video-entry">
@@ -1987,7 +2131,6 @@ Payment Status : ${paymentStatus}`;
                     </div>
                 `;
             }
-            // END: ================== UPDATED getVideoHTML FUNCTION ==================
 
             function getFormFields(type, data = {}, extra = {}) {
                 if (type === 'services') {
@@ -2002,15 +2145,19 @@ Payment Status : ${paymentStatus}`;
                         </div>
                         <div class="form-group">
                             <label>ক্রয়মূল্য (Purchase Price)</label>
-                            <input type="number" name="purchasePrice" value="${data.purchasePrice || ''}" required>
+                            <input type="number" name="purchasePrice" value="${data.purchasePrice || 0}" required>
                         </div>
                         <div class="form-group">
                             <label>বর্তমান মূল্য (Selling Price)</label>
-                            <input type="number" name="currentPrice" value="${data.currentPrice || ''}" required>
+                            <input type="number" name="currentPrice" value="${data.currentPrice || 0}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>কমিশন (টাকা)</label>
+                            <input type="number" name="commission" value="${data.commission || 0}">
                         </div>
                         <div class="form-group">
                             <label>পূর্বের মূল্য</label>
-                            <input type="number" name="oldPrice" value="${data.oldPrice || ''}">
+                            <input type="number" name="oldPrice" value="${data.oldPrice || 0}">
                         </div>
                         <div class="form-group">
                             <label>ফিচার সমূহ (কমা দিয়ে আলাদা করুন)</label>
@@ -2030,7 +2177,11 @@ Payment Status : ${paymentStatus}`;
                         </div>
                         <div class="form-group">
                             <label>মূল্য</label>
-                            <input type="number" name="price" value="${data.price || ''}" required>
+                            <input type="number" name="price" value="${data.price || 0}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>কমিশন (টাকা)</label>
+                            <input type="number" name="commission" value="${data.commission || 0}">
                         </div>
                         <div class="form-group">
                             <label>ক্যাটাগরি</label>
@@ -2042,7 +2193,7 @@ Payment Status : ${paymentStatus}`;
                         </div>
                         <div class="form-group">
                             <label>লেকচার সংখ্যা</label>
-                            <input type="number" name="lectures" value="${data.lectures || ''}" placeholder="e.g., 40">
+                            <input type="number" name="lectures" value="${data.lectures || 0}" placeholder="e.g., 40">
                         </div>
                         <div class="form-group">
                             <label>ছবি URL</label>
@@ -2138,9 +2289,17 @@ Payment Status : ${paymentStatus}`;
                             <label>মোবাইল</label>
                             <input type="text" name="mobile" value="${data.mobile || ''}" >
                         </div>
-                        <div class="form-group">
+                         <div class="form-group">
                             <label>টাইটেল</label>
                             <input type="text" name="title" value="${data.title || ''}" >
+                        </div>
+                        <div class="form-group">
+                            <label>রেফারেল কোড</label>
+                            <input type="text" name="referralCode" value="${data.referralCode || ''}" >
+                        </div>
+                         <div class="form-group">
+                            <label>অ্যাফিলিয়েট ব্যালেন্স</label>
+                            <input type="number" name="affiliateBalance" value="${data.affiliateBalance || 0}" >
                         </div>
                         <div class="form-group">
                             <label>নতুন পাসওয়ার্ড</label>
