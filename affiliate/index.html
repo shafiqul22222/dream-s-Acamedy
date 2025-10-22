@@ -213,11 +213,7 @@
         }
         .status-badge.pending { background-color: var(--accent-yellow); color: var(--text-dark); }
         .status-badge.paid { background-color: var(--accent-green); }
-        .hamburger-menu { display: none; position: fixed; top: 15px; left: 15px; z-index: 1001; background: var(--primary-blue); color: white; border: none; border-radius: 8px; padding: 8px; cursor: pointer; }
-        .close-btn { display: none; position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 2.5em; line-height: 1; cursor: pointer; color: var(--primary-blue); }
-        #mobile-menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 998; }
-
-        /* --- নতুন উন্নত নোটিফিকেশন স্টাইল --- */
+        .hamburger-menu { display: none; }
         #toast-container {
             position: fixed;
             top: 20px;
@@ -239,7 +235,7 @@
             transform: translateX(120%);
             transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             position: relative;
-            overflow: hidden; /* ভেতরের বারটি যেন বাইরে না যায় */
+            overflow: hidden;
             min-width: 280px;
         }
         .toast.show {
@@ -248,8 +244,6 @@
         }
         .toast.success { background-color: var(--accent-green); }
         .toast.error { background-color: #dc3545; }
-        
-        /* প্রোগ্রেস বারের স্টাইল */
         .toast-progress {
             position: absolute;
             bottom: 0;
@@ -259,25 +253,98 @@
             background-color: rgba(255, 255, 255, 0.7);
             animation: progress-timer linear forwards;
         }
-        
-        /* প্রোগ্রেস বারের অ্যানিমেশন */
         @keyframes progress-timer {
             from { width: 100%; }
             to { width: 0%; }
         }
 
+        /* --- নতুন মোবাইল নেভিগেশন স্টাইল --- */
+        .mobile-bottom-nav {
+            display: none; /* ডিফল্টভাবে লুকানো থাকবে */
+        }
+        
         @media (max-width: 768px) {
-            .hamburger-menu, .close-btn { display: block; }
-            .sidebar { position: fixed; top: 0; left: 0; height: 100vh; z-index: 999; transform: translateX(-100%); }
-            .sidebar.open { transform: translateX(0); }
-            .main-content { margin-left: 0; width: 100%; padding: 60px 20px 20px; }
+            .sidebar { display: none; } /* মোবাইলে সাইডবার লুকানো থাকবে */
+            .main-content { 
+                margin-left: 0; 
+                width: 100%; 
+                padding: 20px 20px 80px; /* নিচের নেভিগেশনের জন্য জায়গা রাখা */
+            }
             .page-header h1 { font-size: 1.6em; margin-bottom: 20px; }
             .content-box, .login-box { padding: 20px; }
             .stats-grid { grid-template-columns: 1fr; }
+
+            .mobile-bottom-nav {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background-color: var(--text-light);
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+                z-index: 1000;
+                justify-content: space-around;
+                padding: 6px 0;
+            }
+            .mobile-bottom-nav a {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+                color: var(--text-dark);
+                flex-grow: 1;
+                padding: 5px 0;
+                transition: color 0.2s ease;
+            }
+            .mobile-bottom-nav a .material-symbols-outlined {
+                font-size: 24px;
+            }
+            .mobile-bottom-nav a span.nav-text {
+                font-size: 12px;
+                font-weight: 500;
+                margin-top: 2px;
+            }
+            .mobile-bottom-nav a.active, .mobile-bottom-nav a:hover {
+                color: var(--secondary-blue);
+            }
+
+            /* --- নতুন পরিবর্তন: রেসপন্সিভ টেবিলের জন্য স্টাইল --- */
+            .data-table thead {
+                display: none; /* মোবাইলে টেবিলের হেডার লুকানো থাকবে */
+            }
+            .data-table tr {
+                display: block;
+                margin-bottom: 15px;
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            }
+            .data-table td {
+                display: block;
+                text-align: right; /* ডেটা ডান দিকে দেখাবে */
+                padding: 10px 15px;
+                border-bottom: 1px solid #f0f0f0;
+                position: relative;
+                padding-left: 50%; /* বাম দিকে লেবেলের জন্য জায়গা তৈরি */
+            }
+            .data-table td:last-child {
+                border-bottom: none;
+            }
+            .data-table td::before {
+                content: attr(data-label); /* data-label থেকে শিরোনাম নিবে */
+                position: absolute;
+                left: 15px;
+                width: calc(50% - 30px);
+                font-weight: 600;
+                text-align: left;
+                color: var(--primary-blue);
+            }
         }
+        
         @media (max-width: 480px) {
             .content-box { padding: 15px; }
-            .data-table th, .data-table td { padding: 10px 8px; font-size: 0.9em; }
+            .data-table th, .data-table td { padding: 10px 8px; font-size: 0.9em; padding-left: 45%; }
             .stat-card h3, .referral-code-box span { font-size: 1.6em; }
             .balance-display { font-size: 1.2em; }
             #toast-container { right: 10px; top: 10px; left: 10px; align-items: stretch; }
@@ -285,10 +352,6 @@
     </style>
 </head>
 <body>
-    <button class="hamburger-menu" id="hamburger-btn">
-        <span class="material-symbols-outlined">menu</span>
-    </button>
-    <div id="mobile-menu-overlay" class="hidden"></div>
     
     <div id="toast-container"></div>
 
@@ -313,7 +376,6 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h3 id="user-name">লোড হচ্ছে...</h3>
-                <button class="close-btn" id="close-sidebar-btn">&times;</button>
             </div>
             <ul class="sidebar-nav">
                 <li class="active" data-page="dashboard-page"><a href="#"><span class="material-symbols-outlined">dashboard</span> ড্যাশবোর্ড</a></li>
@@ -384,6 +446,27 @@
         </main>
     </div>
 
+    <!-- নতুন মোবাইল নেভিগেশন বার -->
+    <nav class="mobile-bottom-nav">
+        <a href="#" class="active" data-page="dashboard-page">
+            <span class="material-symbols-outlined">dashboard</span>
+            <span class="nav-text">ড্যাশবোর্ড</span>
+        </a>
+        <a href="#" data-page="students-page">
+            <span class="material-symbols-outlined">group</span>
+            <span class="nav-text">স্টুডেন্ট</span>
+        </a>
+        <a href="#" data-page="withdraw-page">
+            <span class="material-symbols-outlined">request_quote</span>
+            <span class="nav-text">উত্তোলন</span>
+        </a>
+        <a href="#" id="mobile-logout-btn">
+            <span class="material-symbols-outlined">logout</span>
+            <span class="nav-text">লগ আউট</span>
+        </a>
+    </nav>
+
+
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
@@ -409,45 +492,33 @@
             const logoutBtn = document.getElementById('logout-btn');
             const sidebarLinks = document.querySelectorAll('.sidebar-nav li');
             const pages = document.querySelectorAll('.page');
-            const sidebar = document.getElementById('sidebar');
-            const hamburgerBtn = document.getElementById('hamburger-btn');
-            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
-            const overlay = document.getElementById('mobile-menu-overlay');
             const withdrawForm = document.getElementById('withdraw-form');
             const accountNumberGroup = document.getElementById('account-number-group');
             const accountNumberLabel = document.getElementById('account-number-label');
             const accountNumberInput = document.getElementById('account-number');
             const withdrawAmountGroup = document.getElementById('withdraw-amount-group');
+            
+            // --- নতুন মোবাইল নেভিগেশন এর জন্য ---
+            const mobileNavLinks = document.querySelectorAll('.mobile-bottom-nav a');
+            const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
+
             let currentBalance = 0;
 
-            // --- নতুন উন্নত নোটিফিকেশন ফাংশন ---
             function showToast(message, type = 'success', duration = 4000) {
                 const container = document.getElementById('toast-container');
-                
                 const toast = document.createElement('div');
                 toast.className = `toast ${type}`;
-                
                 const messageSpan = document.createElement('span');
                 messageSpan.textContent = message;
-                
                 const progressBar = document.createElement('div');
                 progressBar.className = 'toast-progress';
-                // JS থেকে অ্যানিমেশনের সময়কাল সেট করা হচ্ছে
                 progressBar.style.animationDuration = `${duration / 1000}s`;
-
                 toast.appendChild(messageSpan);
                 toast.appendChild(progressBar);
                 container.appendChild(toast);
-
-                // অ্যানিমেশন শুরু করার জন্য সামান্য দেরি
-                setTimeout(() => {
-                    toast.classList.add('show');
-                }, 100);
-
-                // নির্দিষ্ট সময় পর নোটিফিকেশনটি সরিয়ে দেওয়া
+                setTimeout(() => { toast.classList.add('show'); }, 100);
                 setTimeout(() => {
                     toast.classList.remove('show');
-                    // ট্রানজিশন শেষ হওয়ার পর DOM থেকে মুছে ফেলা
                     toast.addEventListener('transitionend', () => toast.remove());
                 }, duration);
             }
@@ -456,15 +527,11 @@
                 if (user) {
                     loginPage.classList.add('hidden');
                     affiliatePanel.classList.remove('hidden');
-                    if (window.innerWidth <= 768) {
-                        hamburgerBtn.classList.remove('hidden');
-                    }
                     await loadAffiliateData(user.uid);
                     navigateTo('dashboard-page');
                 } else {
                     loginPage.classList.remove('hidden');
                     affiliatePanel.classList.add('hidden');
-                    hamburgerBtn.classList.add('hidden');
                 }
             });
 
@@ -480,21 +547,29 @@
             });
 
             logoutBtn.addEventListener('click', () => auth.signOut());
+            // মোবাইল লগআউট বাটন
+            mobileLogoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                auth.signOut();
+            });
 
-            function openMenu() { sidebar.classList.add('open'); overlay.classList.remove('hidden'); hamburgerBtn.classList.add('hidden'); }
-            function closeMenu() { sidebar.classList.remove('open'); overlay.classList.add('hidden'); hamburgerBtn.classList.remove('hidden'); }
-            hamburgerBtn.addEventListener('click', openMenu);
-            closeSidebarBtn.addEventListener('click', closeMenu);
-            overlay.addEventListener('click', closeMenu);
 
             function navigateTo(pageId) {
                 pages.forEach(p => p.classList.remove('active'));
                 document.getElementById(pageId).classList.add('active');
+                
+                // ডেস্কটপ সাইডবার একটিভ স্টেট
                 sidebarLinks.forEach(l => l.classList.remove('active'));
-                document.querySelector(`.sidebar-nav li[data-page="${pageId}"]`).classList.add('active');
+                const activeSidebarLink = document.querySelector(`.sidebar-nav li[data-page="${pageId}"]`);
+                if(activeSidebarLink) activeSidebarLink.classList.add('active');
+
+                // মোবাইল নেভিগেশন একটিভ স্টেট
+                mobileNavLinks.forEach(l => l.classList.remove('active'));
+                const activeMobileLink = document.querySelector(`.mobile-bottom-nav a[data-page="${pageId}"]`);
+                if(activeMobileLink) activeMobileLink.classList.add('active');
+                
                 if (pageId === 'students-page' && auth.currentUser) renderStudentList(auth.currentUser.uid);
                 if (pageId === 'withdraw-page' && auth.currentUser) renderWithdrawPage(auth.currentUser.uid);
-                if (window.innerWidth <= 768) closeMenu();
             }
 
             sidebarLinks.forEach(link => {
@@ -503,6 +578,18 @@
                     navigateTo(link.getAttribute('data-page'));
                 });
             });
+
+            // নতুন মোবাইল নেভিগেশন এর জন্য ইভেন্ট লিসেনার
+            mobileNavLinks.forEach(link => {
+                const pageId = link.getAttribute('data-page');
+                if (pageId) {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        navigateTo(pageId);
+                    });
+                }
+            });
+
 
             async function loadAffiliateData(uid) {
                 try {
@@ -533,7 +620,15 @@
                     snapshot.forEach(doc => {
                         const p = doc.data();
                         const ts = p.timestamp ? new Date(p.timestamp.seconds * 1000).toLocaleDateString('bn-BD') : 'N/A';
-                        tableHTML += `<tr><td>${p.userEmail}</td><td>${p.itemName}</td><td>৳ ${p.amount}</td><td>৳ ${p.commissionAwarded || 0}</td><td>${ts}</td></tr>`;
+                        // নতুন পরিবর্তন: data-label যোগ করা হয়েছে
+                        tableHTML += `
+                            <tr>
+                                <td data-label="স্টুডেন্টের ইমেইল">${p.userEmail}</td>
+                                <td data-label="কোর্স/সার্ভিস">${p.itemName}</td>
+                                <td data-label="পেমেন্টের পরিমাণ">৳ ${p.amount}</td>
+                                <td data-label="আপনার কমিশন">৳ ${p.commissionAwarded || 0}</td>
+                                <td data-label="তারিখ">${ts}</td>
+                            </tr>`;
                     });
                     tableBody.innerHTML = tableHTML;
                 } catch (error) {
@@ -557,7 +652,15 @@
                         const r = doc.data();
                         const date = r.requestDate ? new Date(r.requestDate.seconds * 1000).toLocaleDateString('bn-BD') : 'N/A';
                         const statusClass = (r.status || 'pending').toLowerCase();
-                        tableHTML += `<tr><td>${date}</td><td>৳ ${r.amount.toLocaleString('bn-BD')}</td><td>${r.method}</td><td>${r.accountNumber}</td><td><span class="status-badge ${statusClass}">${r.status}</span></td></tr>`;
+                         // নতুন পরিবর্তন: data-label যোগ করা হয়েছে
+                        tableHTML += `
+                            <tr>
+                                <td data-label="তারিখ">${date}</td>
+                                <td data-label="পরিমাণ">৳ ${r.amount.toLocaleString('bn-BD')}</td>
+                                <td data-label="মাধ্যম">${r.method}</td>
+                                <td data-label="অ্যাকাউন্ট নম্বর">${r.accountNumber}</td>
+                                <td data-label="স্ট্যাটাস"><span class="status-badge ${statusClass}">${r.status}</span></td>
+                            </tr>`;
                     });
                     tableBody.innerHTML = tableHTML;
                 } catch (error) {
@@ -618,4 +721,4 @@
         });
     </script>
 </body>
-</html>```
+</html>
