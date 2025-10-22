@@ -16,6 +16,7 @@
             --light-blue: #05bfdb;
             --accent-green: #28a745;
             --accent-yellow: #ffc107;
+            --accent-red: #dc3545;
             --background-light: #f8f9fa;
             --text-dark: #212529;
             --text-light: #ffffff;
@@ -92,12 +93,17 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
+            transition: background-color 0.3s ease;
         }
         .btn-primary {
             background: linear-gradient(90deg, var(--secondary-blue), var(--light-blue));
             color: var(--text-light);
             width: 100%;
             font-size: 1.1em;
+        }
+        .btn-danger {
+            background-color: var(--accent-red);
+            color: var(--text-light);
         }
         #affiliate-panel { display: flex; }
         .sidebar {
@@ -171,6 +177,7 @@
         .data-table { width: 100%; border-collapse: collapse; }
         .data-table th, .data-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
         .data-table th { background-color: var(--background-light); }
+        .data-table tbody tr { user-select: none; /* Long press selection disable */ }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
         .stat-card {
             background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
@@ -204,6 +211,7 @@
         .form-group input[type="text"],
         .form-group input[type="email"],
         .form-group input[type="number"],
+        .form-group input[type="password"],
         .form-group textarea,
         .form-group select {
             width: 100%; 
@@ -225,7 +233,7 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            z-index: 9999;
+            z-index: 10000;
             display: flex;
             flex-direction: column;
             align-items: flex-end;
@@ -250,7 +258,7 @@
             transform: translateX(0);
         }
         .toast.success { background-color: var(--accent-green); }
-        .toast.error { background-color: #dc3545; }
+        .toast.error { background-color: var(--accent-red); }
         .toast-progress {
             position: absolute;
             bottom: 0;
@@ -265,11 +273,7 @@
             to { width: 0%; }
         }
 
-        .mobile-bottom-nav {
-            display: none;
-        }
-
-        /* --- নতুন CSS কোড শুরু --- */
+        .mobile-bottom-nav { display: none; }
         .copyable-field {
             display: flex;
             justify-content: space-between;
@@ -279,12 +283,69 @@
             border-radius: 5px;
             transition: background-color 0.2s ease;
         }
-        .copyable-field:hover {
-            background-color: #eaf6f6;
+        .copyable-field:hover { background-color: #eaf6f6; }
+        .copyable-field .material-symbols-outlined { font-size: 18px; color: var(--secondary-blue); }
+
+        /* --- নতুন CSS কোড শুরু --- */
+        #leads-context-menu {
+            position: absolute;
+            z-index: 1000;
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            padding: 5px 0;
         }
-        .copyable-field .material-symbols-outlined {
-            font-size: 18px;
-            color: var(--secondary-blue);
+        #leads-context-menu button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        #leads-context-menu button:hover {
+            background-color: #f0f0f0;
+        }
+        #leads-context-menu button .material-symbols-outlined {
+            color: var(--primary-blue);
+        }
+        #delete-lead-btn .material-symbols-outlined {
+            color: var(--accent-red);
+        }
+        
+        #modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 10001;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #edit-lead-modal {
+            background: white;
+            padding: 30px;
+            border-radius: var(--card-radius);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+        }
+        #edit-lead-modal h2 {
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
         }
         /* --- নতুন CSS কোড শেষ --- */
         
@@ -322,21 +383,15 @@
                 padding: 5px 0;
                 transition: color 0.2s ease;
             }
-            .mobile-bottom-nav a .material-symbols-outlined {
-                font-size: 24px;
-            }
+            .mobile-bottom-nav a .material-symbols-outlined { font-size: 24px; }
             .mobile-bottom-nav a span.nav-text {
                 font-size: 12px;
                 font-weight: 500;
                 margin-top: 2px;
             }
-            .mobile-bottom-nav a.active, .mobile-bottom-nav a:hover {
-                color: var(--secondary-blue);
-            }
+            .mobile-bottom-nav a.active, .mobile-bottom-nav a:hover { color: var(--secondary-blue); }
 
-            .data-table thead {
-                display: none;
-            }
+            .data-table thead { display: none; }
             .data-table tr {
                 display: block;
                 margin-bottom: 15px;
@@ -352,11 +407,9 @@
                 position: relative;
                 padding-left: 50%;
                 overflow-wrap: break-word;
-                word-break: break-all; /* এই লাইনটি যোগ করা হয়েছে */
+                word-break: break-all;
             }
-            .data-table td:last-child {
-                border-bottom: none;
-            }
+            .data-table td:last-child { border-bottom: none; }
             .data-table td::before {
                 content: attr(data-label);
                 position: absolute;
@@ -374,6 +427,7 @@
             .stat-card h3, .referral-code-box span { font-size: 1.6em; }
             .balance-display { font-size: 1.2em; }
             #toast-container { right: 10px; top: 10px; left: 10px; align-items: stretch; }
+            #edit-lead-modal { padding: 20px; }
         }
 
         #more-options-menu {
@@ -400,9 +454,7 @@
             background-color: #eaf6f6;
             color: var(--secondary-blue);
         }
-        #more-options-menu a .nav-text {
-            font-size: 1em;
-        }
+        #more-options-menu a .nav-text { font-size: 1em; }
     </style>
 </head>
 <body>
@@ -434,11 +486,7 @@
             <ul class="sidebar-nav">
                 <li class="active" data-page="dashboard-page"><a href="#"><span class="material-symbols-outlined">dashboard</span> ড্যাশবোর্ড</a></li>
                 <li data-page="students-page"><a href="#"><span class="material-symbols-outlined">group</span> স্টুডেন্ট লিস্ট</a></li>
-                
-                <!-- লিড জেনারেশন বাটন শুরু -->
                 <li data-page="leads-page"><a href="#"><span class="material-symbols-outlined">edit_note</span> লিড জেনারেশন</a></li>
-                <!-- লিড জেনারেশন বাটন শেষ -->
-
                 <li data-page="downline-page"><a href="#"><span class="material-symbols-outlined">hub</span> ডাউনলাইন</a></li>
                 <li data-page="withdraw-page"><a href="#"><span class="material-symbols-outlined">request_quote</span> উত্তোলন</a></li>
             </ul>
@@ -468,52 +516,26 @@
                 </div>
             </div>
 
-            <!-- নতুন লিড জেনারেশন পেজ শুরু -->
             <div id="leads-page" class="page">
                 <div class="page-header"> <h1>লিড জেনারেশন</h1> </div>
                 <div class="content-box">
                     <form id="lead-form">
-                        <div class="form-group">
-                            <label for="lead-name">পুরো নাম</label>
-                            <input type="text" id="lead-name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="lead-email">ইমেইল</label>
-                            <input type="email" id="lead-email">
-                        </div>
-                        <div class="form-group">
-                            <label for="lead-mobile">মোবাইল নাম্বার</label>
-                            <input type="text" id="lead-mobile" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="lead-facebook">ফেসবুক আইডি (লিংক)</label>
-                            <input type="text" id="lead-facebook">
-                        </div>
-                        <div class="form-group">
-                            <label for="lead-comment">মন্তব্য</label>
-                            <textarea id="lead-comment" rows="3"></textarea>
-                        </div>
+                        <div class="form-group"> <label for="lead-name">পুরো নাম</label> <input type="text" id="lead-name" required> </div>
+                        <div class="form-group"> <label for="lead-email">ইমেইল</label> <input type="email" id="lead-email"> </div>
+                        <div class="form-group"> <label for="lead-mobile">মোবাইল নাম্বার</label> <input type="text" id="lead-mobile" required> </div>
+                        <div class="form-group"> <label for="lead-facebook">ফেসবুক আইডি (লিংক)</label> <input type="text" id="lead-facebook"> </div>
+                        <div class="form-group"> <label for="lead-comment">মন্তব্য</label> <textarea id="lead-comment" rows="3"></textarea> </div>
                         <button type="submit" class="btn btn-primary" style="width: auto;">লিড সেভ করুন</button>
                     </form>
                 </div>
-
                 <div class="page-header"> <h2>সংরক্ষিত লিড তালিকা</h2> </div>
                 <div class="content-box">
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>তারিখ</th>
-                                <th>পুরো নাম</th>
-                                <th>মোবাইল</th>
-                                <th>ফেসবুক আইডি</th>
-                                <th>মন্তব্য</th>
-                            </tr>
-                        </thead>
+                        <thead> <tr> <th>তারিখ</th> <th>পুরো নাম</th> <th>মোবাইল</th> <th>ফেসবুক আইডি</th> <th>মন্তব্য</th> </tr> </thead>
                         <tbody id="leads-table-body"></tbody>
                     </table>
                 </div>
             </div>
-            <!-- নতুন লিড জেনারেশন পেজ শেষ -->
 
             <div id="downline-page" class="page">
                 <div class="page-header"> <h1>আপনার ডাউনলাইন</h1> </div>
@@ -556,41 +578,42 @@
     </div>
 
     <div id="more-options-menu" class="hidden">
-        <a href="#" data-page="downline-page">
-            <span class="material-symbols-outlined">hub</span>
-            <span>ডাউনলাইন</span>
-        </a>
-        <a href="#" id="mobile-logout-btn">
-            <span class="material-symbols-outlined">logout</span>
-            <span>লগ আউট</span>
-        </a>
+        <a href="#" data-page="downline-page"> <span class="material-symbols-outlined">hub</span> <span>ডাউনলাইন</span> </a>
+        <a href="#" id="mobile-logout-btn"> <span class="material-symbols-outlined">logout</span> <span>লগ আউট</span> </a>
     </div>
 
     <nav class="mobile-bottom-nav hidden">
-        <a href="#" class="active" data-page="dashboard-page">
-            <span class="material-symbols-outlined">dashboard</span>
-            <span class="nav-text">ড্যাশবোর্ড</span>
-        </a>
-        <a href="#" data-page="students-page">
-            <span class="material-symbols-outlined">group</span>
-            <span class="nav-text">স্টুডেন্ট</span>
-        </a>
-        <!-- মোবাইল নেভিগেশনে নতুন বাটন শুরু -->
-         <a href="#" data-page="leads-page">
-            <span class="material-symbols-outlined">edit_note</span>
-            <span class="nav-text">লিড</span>
-        </a>
-        <!-- মোবাইল নেভিগেশনে নতুন বাটন শেষ -->
-        <a href="#" data-page="withdraw-page">
-            <span class="material-symbols-outlined">request_quote</span>
-            <span class="nav-text">উত্তোলন</span>
-        </a>
-        <a href="#" id="more-btn">
-            <span class="material-symbols-outlined">more_vert</span>
-            <span class="nav-text">আরও</span>
-        </a>
+        <a href="#" class="active" data-page="dashboard-page"> <span class="material-symbols-outlined">dashboard</span> <span class="nav-text">ড্যাশবোর্ড</span> </a>
+        <a href="#" data-page="students-page"> <span class="material-symbols-outlined">group</span> <span class="nav-text">স্টুডেন্ট</span> </a>
+        <a href="#" data-page="leads-page"> <span class="material-symbols-outlined">edit_note</span> <span class="nav-text">লিড</span> </a>
+        <a href="#" data-page="withdraw-page"> <span class="material-symbols-outlined">request_quote</span> <span class="nav-text">উত্তোলন</span> </a>
+        <a href="#" id="more-btn"> <span class="material-symbols-outlined">more_vert</span> <span class="nav-text">আরও</span> </a>
     </nav>
 
+    <!-- নতুন HTML কোড শুরু -->
+    <div id="leads-context-menu" class="hidden">
+        <button id="edit-lead-btn"><span class="material-symbols-outlined">edit</span> ইডিট</button>
+        <button id="delete-lead-btn"><span class="material-symbols-outlined">delete</span> ডিলিট</button>
+    </div>
+
+    <div id="modal-overlay" class="hidden">
+        <div id="edit-lead-modal">
+            <h2>লিড ইডিট করুন</h2>
+            <form id="edit-lead-form">
+                <input type="hidden" id="edit-lead-id">
+                <div class="form-group"> <label for="edit-lead-name">পুরো নাম</label> <input type="text" id="edit-lead-name" required> </div>
+                <div class="form-group"> <label for="edit-lead-email">ইমেইল</label> <input type="email" id="edit-lead-email"> </div>
+                <div class="form-group"> <label for="edit-lead-mobile">মোবাইল নাম্বার</label> <input type="text" id="edit-lead-mobile" required> </div>
+                <div class="form-group"> <label for="edit-lead-facebook">ফেসবুক আইডি (লিংক)</label> <input type="text" id="edit-lead-facebook"> </div>
+                <div class="form-group"> <label for="edit-lead-comment">মন্তব্য</label> <textarea id="edit-lead-comment" rows="3"></textarea> </div>
+                <div class="modal-buttons">
+                    <button type="button" id="cancel-edit-btn" class="btn">বাতিল</button>
+                    <button type="submit" class="btn btn-primary" style="width: auto;">সেভ করুন</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- নতুন HTML কোড শেষ -->
 
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
@@ -622,15 +645,25 @@
             const accountNumberLabel = document.getElementById('account-number-label');
             const accountNumberInput = document.getElementById('account-number');
             const withdrawAmountGroup = document.getElementById('withdraw-amount-group');
-            
             const mobileBottomNav = document.querySelector('.mobile-bottom-nav');
             const mobileNavLinks = document.querySelectorAll('.mobile-bottom-nav a:not(#more-btn)');
             const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
             const moreBtn = document.getElementById('more-btn');
             const moreOptionsMenu = document.getElementById('more-options-menu');
-            
-            // --- লিড জেনারেশন সেকশনের নতুন ভ্যারিয়েবল ---
             const leadForm = document.getElementById('lead-form');
+
+            // --- নতুন ভ্যারিয়েবল শুরু ---
+            const leadsTableBody = document.getElementById('leads-table-body');
+            const leadsContextMenu = document.getElementById('leads-context-menu');
+            const editLeadBtn = document.getElementById('edit-lead-btn');
+            const deleteLeadBtn = document.getElementById('delete-lead-btn');
+            const modalOverlay = document.getElementById('modal-overlay');
+            const editLeadModal = document.getElementById('edit-lead-modal');
+            const editLeadForm = document.getElementById('edit-lead-form');
+            const cancelEditBtn = document.getElementById('cancel-edit-btn');
+            let longPressTimer;
+            let targetLeadId = null;
+            // --- নতুন ভ্যারিয়েবল শেষ ---
 
             let currentBalance = 0;
 
@@ -681,71 +714,33 @@
             });
 
             logoutBtn.addEventListener('click', () => auth.signOut());
-            mobileLogoutBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                auth.signOut();
-            });
-
+            mobileLogoutBtn.addEventListener('click', (e) => { e.preventDefault(); auth.signOut(); });
 
             function navigateTo(pageId) {
                 pages.forEach(p => p.classList.remove('active'));
                 document.getElementById(pageId).classList.add('active');
-                
                 sidebarLinks.forEach(l => l.classList.remove('active'));
                 const activeSidebarLink = document.querySelector(`.sidebar-nav li[data-page="${pageId}"]`);
                 if(activeSidebarLink) activeSidebarLink.classList.add('active');
-
                 mobileNavLinks.forEach(l => l.classList.remove('active'));
                 const activeMobileLink = document.querySelector(`.mobile-bottom-nav a[data-page="${pageId}"]`);
                 if(activeMobileLink) activeMobileLink.classList.add('active');
-                
                 if (pageId === 'students-page' && auth.currentUser) renderStudentList(auth.currentUser.uid);
                 if (pageId === 'withdraw-page' && auth.currentUser) renderWithdrawPage(auth.currentUser.uid);
-                // --- নতুন ফাংশন কল ---
                 if (pageId === 'leads-page' && auth.currentUser) renderLeadsPage(auth.currentUser.uid);
             }
 
-            sidebarLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    navigateTo(link.getAttribute('data-page'));
-                });
-            });
-
-            mobileNavLinks.forEach(link => {
-                const pageId = link.getAttribute('data-page');
-                if (pageId) {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        navigateTo(pageId);
-                    });
-                }
-            });
-
-            moreBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                moreOptionsMenu.classList.toggle('hidden');
-            });
-            
-            moreOptionsMenu.querySelectorAll('a').forEach(link => {
-                const pageId = link.getAttribute('data-page');
-                if(pageId) {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        navigateTo(pageId);
-                        moreOptionsMenu.classList.add('hidden');
-                    });
-                }
-            });
-
+            sidebarLinks.forEach(link => { link.addEventListener('click', (e) => { e.preventDefault(); navigateTo(link.getAttribute('data-page')); }); });
+            mobileNavLinks.forEach(link => { const pageId = link.getAttribute('data-page'); if (pageId) { link.addEventListener('click', (e) => { e.preventDefault(); navigateTo(pageId); }); } });
+            moreBtn.addEventListener('click', (e) => { e.preventDefault(); moreOptionsMenu.classList.toggle('hidden'); });
+            moreOptionsMenu.querySelectorAll('a').forEach(link => { const pageId = link.getAttribute('data-page'); if(pageId) { link.addEventListener('click', (e) => { e.preventDefault(); navigateTo(pageId); moreOptionsMenu.classList.add('hidden'); }); } });
             document.addEventListener('click', function(event) {
                 const isClickInsideMenu = moreOptionsMenu.contains(event.target);
                 const isClickOnMoreBtn = moreBtn.contains(event.target);
-                if (!isClickInsideMenu && !isClickOnMoreBtn) {
-                    moreOptionsMenu.classList.add('hidden');
-                }
+                if (!isClickInsideMenu && !isClickOnMoreBtn) { moreOptionsMenu.classList.add('hidden'); }
+                // --- কনটেক্সট মেন্যু লুকানোর জন্য নতুন কোড ---
+                if (!leadsContextMenu.contains(event.target)) { leadsContextMenu.classList.add('hidden'); }
             });
-
 
             async function loadAffiliateData(uid) {
                 try {
@@ -768,28 +763,15 @@
                 tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">তালিকা লোড হচ্ছে...</td></tr>`;
                 try {
                     const snapshot = await db.collection('payments').where('referrerId', '==', uid).where('status', '==', 'approved').orderBy('timestamp', 'desc').get();
-                    if (snapshot.empty) {
-                        tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">আপনার রেফারে এখনো কেউ কোনো সার্ভিস কেনেনি।</td></tr>`;
-                        return;
-                    }
+                    if (snapshot.empty) { tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">আপনার রেফারে এখনো কেউ কোনো সার্ভিস কেনেনি।</td></tr>`; return; }
                     let tableHTML = '';
                     snapshot.forEach(doc => {
                         const p = doc.data();
                         const ts = p.timestamp ? new Date(p.timestamp.seconds * 1000).toLocaleDateString('bn-BD') : 'N/A';
-                        tableHTML += `
-                            <tr>
-                                <td data-label="স্টুডেন্টের ইমেইল">${p.userEmail}</td>
-                                <td data-label="কোর্স/সার্ভিস">${p.itemName}</td>
-                                <td data-label="পেমেন্টের পরিমাণ">৳ ${p.amount}</td>
-                                <td data-label="আপনার কমিশন">৳ ${p.commissionAwarded || 0}</td>
-                                <td data-label="তারিখ">${ts}</td>
-                            </tr>`;
+                        tableHTML += `<tr><td data-label="স্টুডেন্টের ইমেইল">${p.userEmail}</td><td data-label="কোর্স/সার্ভিস">${p.itemName}</td><td data-label="পেমেন্টের পরিমাণ">৳ ${p.amount}</td><td data-label="আপনার কমিশন">৳ ${p.commissionAwarded || 0}</td><td data-label="তারিখ">${ts}</td></tr>`;
                     });
                     tableBody.innerHTML = tableHTML;
-                } catch (error) {
-                    console.error("Error fetching student list:", error);
-                    tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">তালিকা লোড করতে সমস্যা হয়েছে।</td></tr>`;
-                }
+                } catch (error) { console.error("Error fetching student list:", error); tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">তালিকা লোড করতে সমস্যা হয়েছে।</td></tr>`; }
             }
 
             async function renderWithdrawPage(uid) {
@@ -798,59 +780,26 @@
                 tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">ইতিহাস লোড হচ্ছে...</td></tr>`;
                 try {
                     const snapshot = await db.collection('withdrawals').where('userId', '==', uid).orderBy('requestDate', 'desc').get();
-                    if (snapshot.empty) {
-                        tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">আপনি এখনো কোনো উত্তোলনের অনুরোধ করেননি।</td></tr>`;
-                        return;
-                    }
+                    if (snapshot.empty) { tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">আপনি এখনো কোনো উত্তোলনের অনুরোধ করেননি।</td></tr>`; return; }
                     let tableHTML = '';
                     snapshot.forEach(doc => {
                         const r = doc.data();
                         const date = r.requestDate ? new Date(r.requestDate.seconds * 1000).toLocaleDateString('bn-BD') : 'N/A';
                         const statusClass = (r.status || 'pending').toLowerCase();
-                        tableHTML += `
-                            <tr>
-                                <td data-label="তারিখ">${date}</td>
-                                <td data-label="পরিমাণ">৳ ${r.amount.toLocaleString('bn-BD')}</td>
-                                <td data-label="মাধ্যম">${r.method}</td>
-                                <td data-label="অ্যাকাউন্ট নম্বর">${r.accountNumber}</td>
-                                <td data-label="স্ট্যাটাস"><span class="status-badge ${statusClass}">${r.status}</span></td>
-                            </tr>`;
+                        tableHTML += `<tr><td data-label="তারিখ">${date}</td><td data-label="পরিমাণ">৳ ${r.amount.toLocaleString('bn-BD')}</td><td data-label="মাধ্যম">${r.method}</td><td data-label="অ্যাকাউন্ট নম্বর">${r.accountNumber}</td><td data-label="স্ট্যাটাস"><span class="status-badge ${statusClass}">${r.status}</span></td></tr>`;
                     });
                     tableBody.innerHTML = tableHTML;
-                } catch (error) {
-                    console.error("Error fetching withdrawal history:", error);
-                    tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">ইতিহাস লোড করতে সমস্যা হয়েছে।</td></tr>`;
-                }
+                } catch (error) { console.error("Error fetching withdrawal history:", error); tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">ইতিহাস লোড করতে সমস্যা হয়েছে।</td></tr>`; }
             }
             
-            withdrawForm.addEventListener('change', (e) => {
-                if (e.target.id === 'withdraw-method') {
-                    const method = e.target.value;
-                    if(method) {
-                        accountNumberLabel.textContent = `আপনার ${method} নাম্বারটি দিন`;
-                        accountNumberGroup.classList.remove('hidden');
-                    } else {
-                        accountNumberGroup.classList.add('hidden');
-                    }
-                }
-            });
-
-            accountNumberInput.addEventListener('input', () => {
-                if (accountNumberInput.value.trim().length >= 11) {
-                    withdrawAmountGroup.classList.remove('hidden');
-                } else {
-                    withdrawAmountGroup.classList.add('hidden');
-                }
-            });
-            
+            withdrawForm.addEventListener('change', (e) => { if (e.target.id === 'withdraw-method') { const method = e.target.value; if(method) { accountNumberLabel.textContent = `আপনার ${method} নাম্বারটি দিন`; accountNumberGroup.classList.remove('hidden'); } else { accountNumberGroup.classList.add('hidden'); } } });
+            accountNumberInput.addEventListener('input', () => { if (accountNumberInput.value.trim().length >= 11) { withdrawAmountGroup.classList.remove('hidden'); } else { withdrawAmountGroup.classList.add('hidden'); } });
             withdrawForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const user = auth.currentUser;
-                if (!user) return;
+                const user = auth.currentUser; if (!user) return;
                 const amount = Number(document.getElementById('withdraw-amount').value);
                 const method = document.getElementById('withdraw-method').value;
                 const accountNumber = accountNumberInput.value;
-
                 if (!method) { showToast("দয়া করে একটি উত্তোলন মাধ্যম নির্বাচন করুন।", "error"); return; }
                 if (amount <= 0) { showToast("দয়া করে সঠিক পরিমাণ লিখুন।", "error"); return; }
                 if (amount > currentBalance) { showToast("দুঃখিত, আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই।", "error"); return; }
@@ -861,113 +810,148 @@
                     accountNumberGroup.classList.add('hidden');
                     withdrawAmountGroup.classList.add('hidden');
                     renderWithdrawPage(user.uid);
-                } catch (error) {
-                    console.error("Error submitting withdrawal request:", error);
-                    showToast('অনুরোধ পাঠাতে সমস্যা হয়েছে।', 'error');
-                }
+                } catch (error) { console.error("Error submitting withdrawal request:", error); showToast('অনুরোধ পাঠাতে সমস্যা হয়েছে।', 'error'); }
             });
 
             const referralCodeEl = document.getElementById('referral-code');
-            if (referralCodeEl) {
-                referralCodeEl.addEventListener('click', () => {
-                    const code = referralCodeEl.textContent;
-                    if(code && code !== 'লোড হচ্ছে...' && code !== 'কোড সেট করা হয়নি') {
-                        navigator.clipboard.writeText(code).then(() => {
-                            showToast('রেফারেল কোড কপি হয়েছে');
-                        }).catch(err => console.error('Could not copy text: ', err));
-                    }
-                });
-            }
+            if (referralCodeEl) { referralCodeEl.addEventListener('click', () => { const code = referralCodeEl.textContent; if(code && code !== 'লোড হচ্ছে...' && code !== 'কোড সেট করা হয়নি') { navigator.clipboard.writeText(code).then(() => { showToast('রেফারেল কোড কপি হয়েছে'); }).catch(err => console.error('Could not copy text: ', err)); } }); }
 
-            // --- লিড জেনারেশন সেকশন শুরু ---
-
-            // লিড ফর্ম সাবমিট করার ফাংশন
+            // --- লিড জেনারেশন সেকশন (পরিবর্তিত) ---
             leadForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const user = auth.currentUser;
-                if (!user) {
-                    showToast('অনুগ্রহ করে আবার লগইন করুন।', 'error');
-                    return;
-                }
-
-                const leadData = {
-                    affiliateId: user.uid,
-                    name: document.getElementById('lead-name').value,
-                    email: document.getElementById('lead-email').value,
-                    mobile: document.getElementById('lead-mobile').value,
-                    facebook: document.getElementById('lead-facebook').value,
-                    comment: document.getElementById('lead-comment').value,
-                    timestamp: new Date()
-                };
-
-                try {
-                    await db.collection('leads').add(leadData);
-                    showToast('লিড সফলভাবে সেভ হয়েছে!');
-                    leadForm.reset();
-                    renderLeadsPage(user.uid); // তালিকা রিফ্রেশ করুন
-                } catch (error) {
-                    console.error("Error saving lead: ", error);
-                    showToast('লিড সেভ করতে সমস্যা হয়েছে।', 'error');
-                }
+                const user = auth.currentUser; if (!user) { showToast('অনুগ্রহ করে আবার লগইন করুন।', 'error'); return; }
+                const leadData = { affiliateId: user.uid, name: document.getElementById('lead-name').value, email: document.getElementById('lead-email').value, mobile: document.getElementById('lead-mobile').value, facebook: document.getElementById('lead-facebook').value, comment: document.getElementById('lead-comment').value, timestamp: new Date() };
+                try { await db.collection('leads').add(leadData); showToast('লিড সফলভাবে সেভ হয়েছে!'); leadForm.reset(); renderLeadsPage(user.uid); } catch (error) { console.error("Error saving lead: ", error); showToast('লিড সেভ করতে সমস্যা হয়েছে।', 'error'); }
             });
 
-            // সংরক্ষিত লিড তালিকা দেখানোর ফাংশন
             async function renderLeadsPage(uid) {
                 const tableBody = document.getElementById('leads-table-body');
                 tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">লিড তালিকা লোড হচ্ছে...</td></tr>`;
                 try {
                     const snapshot = await db.collection('leads').where('affiliateId', '==', uid).orderBy('timestamp', 'desc').get();
-                    if (snapshot.empty) {
-                        tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">আপনি এখনো কোনো লিড যোগ করেননি।</td></tr>`;
-                        return;
-                    }
+                    if (snapshot.empty) { tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">আপনি এখনো কোনো লিড যোগ করেননি।</td></tr>`; return; }
                     let tableHTML = '';
                     snapshot.forEach(doc => {
                         const lead = doc.data();
                         const date = lead.timestamp ? new Date(lead.timestamp.seconds * 1000).toLocaleDateString('bn-BD') : 'N/A';
+                        // --- এখানে প্রতিটা tr তে data-id যোগ করা হয়েছে ---
                         tableHTML += `
-                            <tr>
+                            <tr data-id="${doc.id}">
                                 <td data-label="তারিখ">${date}</td>
                                 <td data-label="পুরো নাম">${lead.name}</td>
-                                <td data-label="মোবাইল">
-                                    <div class="copyable-field" data-copy="${lead.mobile}">
-                                        <span>${lead.mobile}</span>
-                                        <span class="material-symbols-outlined">content_copy</span>
-                                    </div>
-                                </td>
-                                <td data-label="ফেসবুক আইডি">
-                                     <div class="copyable-field" data-copy="${lead.facebook}">
-                                        <span>${lead.facebook || 'N/A'}</span>
-                                        <span class="material-symbols-outlined">content_copy</span>
-                                    </div>
-                                </td>
+                                <td data-label="মোবাইল"><div class="copyable-field" data-copy="${lead.mobile}"><span>${lead.mobile}</span><span class="material-symbols-outlined">content_copy</span></div></td>
+                                <td data-label="ফেসবুক আইডি"><div class="copyable-field" data-copy="${lead.facebook}"><span>${lead.facebook || 'N/A'}</span><span class="material-symbols-outlined">content_copy</span></div></td>
                                 <td data-label="মন্তব্য">${lead.comment || 'N/A'}</td>
                             </tr>`;
                     });
                     tableBody.innerHTML = tableHTML;
-                } catch (error) {
-                    console.error("Error fetching leads:", error);
-                    tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">লিড তালিকা লোড করতে সমস্যা হয়েছে।</td></tr>`;
-                }
+                } catch (error) { console.error("Error fetching leads:", error); tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">লিড তালিকা লোড করতে সমস্যা হয়েছে।</td></tr>`; }
             }
             
-            // কপি করার জন্য ইভেন্ট লিসেনার (ইভেন্ট ডেলিগেশন ব্যবহার করে)
             document.body.addEventListener('click', function(event) {
                 const copyableElement = event.target.closest('.copyable-field');
                 if (copyableElement) {
                     const textToCopy = copyableElement.getAttribute('data-copy');
-                    if (textToCopy && textToCopy !== 'N/A') {
-                        navigator.clipboard.writeText(textToCopy).then(() => {
-                            showToast('কপি হয়েছে!');
-                        }).catch(err => {
-                            console.error('Could not copy text: ', err);
-                            showToast('কপি করতে সমস্যা হয়েছে।', 'error');
-                        });
+                    if (textToCopy && textToCopy !== 'N/A') { navigator.clipboard.writeText(textToCopy).then(() => { showToast('কপি হয়েছে!'); }).catch(err => { console.error('Could not copy text: ', err); showToast('কপি করতে সমস্যা হয়েছে।', 'error'); }); }
+                }
+            });
+
+            // --- নতুন ফাংশন এবং ইভেন্ট লিসেনার শুরু ---
+            function showContextMenu(x, y) {
+                leadsContextMenu.style.left = `${x}px`;
+                leadsContextMenu.style.top = `${y}px`;
+                leadsContextMenu.classList.remove('hidden');
+            }
+
+            function clearLongPressTimer() { clearTimeout(longPressTimer); }
+
+            leadsTableBody.addEventListener('mousedown', (e) => {
+                if (e.target.closest('.copyable-field')) return; // কপি ফিল্ডে কাজ করবে না
+                const targetRow = e.target.closest('tr');
+                if (!targetRow) return;
+                targetLeadId = targetRow.dataset.id;
+                longPressTimer = setTimeout(() => showContextMenu(e.pageX, e.pageY), 700);
+            });
+            leadsTableBody.addEventListener('mouseup', clearLongPressTimer);
+            leadsTableBody.addEventListener('mouseleave', clearLongPressTimer);
+
+            leadsTableBody.addEventListener('touchstart', (e) => {
+                 if (e.target.closest('.copyable-field')) return;
+                const targetRow = e.target.closest('tr');
+                if (!targetRow) return;
+                targetLeadId = targetRow.dataset.id;
+                longPressTimer = setTimeout(() => {
+                    const touch = e.touches[0];
+                    showContextMenu(touch.pageX, touch.pageY);
+                }, 700);
+            }, { passive: true });
+            leadsTableBody.addEventListener('touchend', clearLongPressTimer);
+            leadsTableBody.addEventListener('touchmove', clearLongPressTimer);
+
+            deleteLeadBtn.addEventListener('click', async () => {
+                leadsContextMenu.classList.add('hidden');
+                if (targetLeadId && confirm('আপনি কি নিশ্চিতভাবে এই লিডটি ডিলিট করতে চান?')) {
+                    try {
+                        await db.collection('leads').doc(targetLeadId).delete();
+                        showToast('লিড সফলভাবে ডিলিট করা হয়েছে।');
+                        renderLeadsPage(auth.currentUser.uid);
+                    } catch (error) {
+                        console.error("Error deleting lead: ", error);
+                        showToast('লিড ডিলিট করতে সমস্যা হয়েছে।', 'error');
                     }
                 }
             });
 
-            // --- লিড জেনারেশন সেকশন শেষ ---
+            editLeadBtn.addEventListener('click', async () => {
+                leadsContextMenu.classList.add('hidden');
+                if (targetLeadId) {
+                    try {
+                        const docRef = db.collection('leads').doc(targetLeadId);
+                        const doc = await docRef.get();
+                        if (doc.exists) {
+                            const leadData = doc.data();
+                            document.getElementById('edit-lead-id').value = targetLeadId;
+                            document.getElementById('edit-lead-name').value = leadData.name;
+                            document.getElementById('edit-lead-email').value = leadData.email || '';
+                            document.getElementById('edit-lead-mobile').value = leadData.mobile;
+                            document.getElementById('edit-lead-facebook').value = leadData.facebook || '';
+                            document.getElementById('edit-lead-comment').value = leadData.comment || '';
+                            modalOverlay.classList.remove('hidden');
+                        } else {
+                            showToast('লিড খুঁজে পাওয়া যায়নি।', 'error');
+                        }
+                    } catch (error) {
+                        console.error("Error fetching lead for edit:", error);
+                        showToast('ইডিটের জন্য লিড আনতে সমস্যা হয়েছে।', 'error');
+                    }
+                }
+            });
+
+            function hideEditModal() { modalOverlay.classList.add('hidden'); }
+            cancelEditBtn.addEventListener('click', hideEditModal);
+            modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) { hideEditModal(); } });
+
+            editLeadForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const id = document.getElementById('edit-lead-id').value;
+                const updatedData = {
+                    name: document.getElementById('edit-lead-name').value,
+                    email: document.getElementById('edit-lead-email').value,
+                    mobile: document.getElementById('edit-lead-mobile').value,
+                    facebook: document.getElementById('edit-lead-facebook').value,
+                    comment: document.getElementById('edit-lead-comment').value,
+                };
+                try {
+                    await db.collection('leads').doc(id).update(updatedData);
+                    showToast('লিড সফলভাবে আপডেট হয়েছে।');
+                    hideEditModal();
+                    renderLeadsPage(auth.currentUser.uid);
+                } catch (error) {
+                    console.error("Error updating lead: ", error);
+                    showToast('লিড আপডেট করতে সমস্যা হয়েছে।', 'error');
+                }
+            });
+            // --- নতুন ফাংশন এবং ইভেন্ট লিসেনার শেষ ---
 
         });
     </script>
