@@ -1629,6 +1629,7 @@ Payment Status : ${paymentStatus}`;
                 }
             }
 
+            // ================== START: MODIFIED/FIXED CODE ==================
             window.updateWithdrawalStatus = async (docId, userId, amount) => {
                 const selectElement = document.getElementById(`withdraw-status-${docId}`);
                 const newStatus = selectElement.value;
@@ -1638,37 +1639,62 @@ Payment Status : ${paymentStatus}`;
                     const userDocRef = db.collection('users').doc(userId);
                     
                     const withdrawDoc = await withdrawDocRef.get();
+                    if (!withdrawDoc.exists) {
+                        throw new Error("উত্তোলনের অনুরোধটি পাওয়া যায়নি।");
+                    }
                     const oldStatus = withdrawDoc.data().status;
 
-                    // Only perform balance deduction if status is changing TO 'paid' FROM 'pending'
-                    if (newStatus === 'paid' && oldStatus === 'pending') {
-                         // Use a transaction to ensure both operations succeed or fail together
+                    // যদি স্ট্যাটাস পরিবর্তন না হয়, তাহলে কিছুই করার দরকার নেই
+                    if (oldStatus === newStatus) {
+                        alert('স্ট্যাটাস পরিবর্তন হয়নি।');
+                        return;
+                    }
+
+                    // কেস ১: Pending থেকে Paid করা হচ্ছে (ব্যালেন্স কেটে নেওয়া হবে)
+                    if (oldStatus === 'pending' && newStatus === 'paid') {
                         await db.runTransaction(async (transaction) => {
                             const userDoc = await transaction.get(userDocRef);
                             if (!userDoc.exists) {
-                                throw "User not found!";
+                                throw new Error("ব্যবহারকারীকে খুঁজে পাওয়া যায়নি!");
                             }
-                            // Decrement user's balance
+                            // ব্যবহারকারীর ব্যালেন্স কমানো হচ্ছে
                             transaction.update(userDocRef, { 
                                 affiliateBalance: firebase.firestore.FieldValue.increment(-amount) 
                             });
-                            // Update withdrawal status
+                            // উত্তোলনের স্ট্যাটাস আপডেট করা হচ্ছে
                             transaction.update(withdrawDocRef, { status: newStatus });
                         });
-                        alert('স্ট্যাটাস সফলভাবে "Paid" করা হয়েছে এবং ব্যবহারকারীর ব্যালেন্স আপডেট করা হয়েছে।');
+                        alert('স্ট্যাটাস "Paid" করা হয়েছে এবং ব্যবহারকারীর ব্যালেন্স থেকে টাকা কেটে নেওয়া হয়েছে।');
+                    
+                    // কেস ২: Paid থেকে Pending করা হচ্ছে (ব্যালেন্স ফেরত দেওয়া হবে)
+                    } else if (oldStatus === 'paid' && newStatus === 'pending') {
+                         await db.runTransaction(async (transaction) => {
+                            const userDoc = await transaction.get(userDocRef);
+                            if (!userDoc.exists) {
+                                throw new Error("ব্যবহারকারীকে খুঁজে পাওয়া যায়নি!");
+                            }
+                            // ব্যবহারকারীর ব্যালেন্স বাড়ানো হচ্ছে (ফেরত)
+                            transaction.update(userDocRef, { 
+                                affiliateBalance: firebase.firestore.FieldValue.increment(amount) 
+                            });
+                            // উত্তোলনের স্ট্যাটাস আপডেট করা হচ্ছে
+                            transaction.update(withdrawDocRef, { status: newStatus });
+                        });
+                        alert('স্ট্যাটাস "Pending" করা হয়েছে এবং ব্যবহারকারীর ব্যালেন্সে টাকা ফেরত দেওয়া হয়েছে।');
+
+                    // কেস ৩: অন্য কোনো স্ট্যাটাস পরিবর্তন হলে শুধু স্ট্যাটাস আপডেট হবে
                     } else {
-                        // If status is just being changed back to pending, or already paid, just update status
                         await withdrawDocRef.update({ status: newStatus });
                         alert('স্ট্যাটাস সফলভাবে আপডেট করা হয়েছে।');
                     }
 
-                    renderWithdrawals(); // Refresh the list
+                    renderWithdrawals(); // তালিকা রিফ্রেশ করা হচ্ছে
                 } catch (error) {
                     console.error("Error updating withdrawal status:", error);
-                    alert(`স্ট্যাটাস আপডেট করতে সমস্যা হয়েছে: ${error}`);
+                    alert(`স্ট্যাটাস আপডেট করতে সমস্যা হয়েছে: ${error.message}`);
                 }
             };
-            // --- END NEW WITHDRAWAL FUNCTIONS ---
+            // ================== END: MODIFIED/FIXED CODE ==================
 
 
             async function renderServices() {
