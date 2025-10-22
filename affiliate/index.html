@@ -159,6 +159,7 @@
         .page { display: none; }
         .page.active { display: block; }
         .page-header h1 { color: var(--primary-blue); margin-bottom: 30px;}
+        .page-header h2 { color: var(--primary-blue); margin-top: 40px; margin-bottom: 20px;}
         .content-box {
             background: var(--text-light);
             padding: 30px;
@@ -198,11 +199,17 @@
             border-radius: 8px;
             cursor: pointer;
         }
-        #withdraw-form .form-group { margin-bottom: 20px; }
-        #withdraw-form label { font-weight: 600; display: block; margin-bottom: 8px; }
-        #withdraw-form input[type="radio"] { margin-right: 8px; }
-        #withdraw-form input[type="text"], #withdraw-form input[type="number"] {
-            width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px;
+        .form-group { margin-bottom: 20px; }
+        .form-group label { font-weight: 600; display: block; margin-bottom: 8px; }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="number"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid var(--border-color); 
+            border-radius: 6px;
         }
         .balance-display {
             font-size: 1.5em; font-weight: 700; color: var(--primary-blue); margin-bottom: 20px;
@@ -261,6 +268,25 @@
         .mobile-bottom-nav {
             display: none;
         }
+
+        /* --- নতুন CSS কোড শুরু --- */
+        .copyable-field {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.2s ease;
+        }
+        .copyable-field:hover {
+            background-color: #eaf6f6;
+        }
+        .copyable-field .material-symbols-outlined {
+            font-size: 18px;
+            color: var(--secondary-blue);
+        }
+        /* --- নতুন CSS কোড শেষ --- */
         
         @media (max-width: 768px) {
             .sidebar { display: none; }
@@ -325,7 +351,8 @@
                 border-bottom: 1px solid #f0f0f0;
                 position: relative;
                 padding-left: 50%;
-                overflow-wrap: break-word; /* লম্বা টেক্সট ভেঙে দেওয়ার জন্য এই লাইনটি যোগ করা হয়েছে */
+                overflow-wrap: break-word;
+                word-break: break-all; /* এই লাইনটি যোগ করা হয়েছে */
             }
             .data-table td:last-child {
                 border-bottom: none;
@@ -347,6 +374,34 @@
             .stat-card h3, .referral-code-box span { font-size: 1.6em; }
             .balance-display { font-size: 1.2em; }
             #toast-container { right: 10px; top: 10px; left: 10px; align-items: stretch; }
+        }
+
+        #more-options-menu {
+            position: fixed;
+            bottom: 75px; 
+            right: 15px;
+            background-color: var(--text-light);
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            z-index: 1001;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        #more-options-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        #more-options-menu a:hover {
+            background-color: #eaf6f6;
+            color: var(--secondary-blue);
+        }
+        #more-options-menu a .nav-text {
+            font-size: 1em;
         }
     </style>
 </head>
@@ -379,6 +434,11 @@
             <ul class="sidebar-nav">
                 <li class="active" data-page="dashboard-page"><a href="#"><span class="material-symbols-outlined">dashboard</span> ড্যাশবোর্ড</a></li>
                 <li data-page="students-page"><a href="#"><span class="material-symbols-outlined">group</span> স্টুডেন্ট লিস্ট</a></li>
+                
+                <!-- লিড জেনারেশন বাটন শুরু -->
+                <li data-page="leads-page"><a href="#"><span class="material-symbols-outlined">edit_note</span> লিড জেনারেশন</a></li>
+                <!-- লিড জেনারেশন বাটন শেষ -->
+
                 <li data-page="downline-page"><a href="#"><span class="material-symbols-outlined">hub</span> ডাউনলাইন</a></li>
                 <li data-page="withdraw-page"><a href="#"><span class="material-symbols-outlined">request_quote</span> উত্তোলন</a></li>
             </ul>
@@ -408,6 +468,53 @@
                 </div>
             </div>
 
+            <!-- নতুন লিড জেনারেশন পেজ শুরু -->
+            <div id="leads-page" class="page">
+                <div class="page-header"> <h1>লিড জেনারেশন</h1> </div>
+                <div class="content-box">
+                    <form id="lead-form">
+                        <div class="form-group">
+                            <label for="lead-name">পুরো নাম</label>
+                            <input type="text" id="lead-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lead-email">ইমেইল</label>
+                            <input type="email" id="lead-email">
+                        </div>
+                        <div class="form-group">
+                            <label for="lead-mobile">মোবাইল নাম্বার</label>
+                            <input type="text" id="lead-mobile" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lead-facebook">ফেসবুক আইডি (লিংক)</label>
+                            <input type="text" id="lead-facebook">
+                        </div>
+                        <div class="form-group">
+                            <label for="lead-comment">মন্তব্য</label>
+                            <textarea id="lead-comment" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: auto;">লিড সেভ করুন</button>
+                    </form>
+                </div>
+
+                <div class="page-header"> <h2>সংরক্ষিত লিড তালিকা</h2> </div>
+                <div class="content-box">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>তারিখ</th>
+                                <th>পুরো নাম</th>
+                                <th>মোবাইল</th>
+                                <th>ফেসবুক আইডি</th>
+                                <th>মন্তব্য</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leads-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- নতুন লিড জেনারেশন পেজ শেষ -->
+
             <div id="downline-page" class="page">
                 <div class="page-header"> <h1>আপনার ডাউনলাইন</h1> </div>
                 <div class="content-box"> <p>এই ফিচারটি ভবিষ্যতে যুক্ত করা হবে।</p> </div>
@@ -419,9 +526,12 @@
                     <div class="balance-display"> আপনার বর্তমান ব্যালেন্স: <span id="withdraw-balance">৳0</span> </div>
                     <form id="withdraw-form">
                         <div class="form-group">
-                            <label>উত্তোলন মাধ্যম নির্বাচন করুন</label>
-                            <label><input type="radio" name="withdraw-method" value="bKash" required> বিকাশ</label>
-                            <label style="margin-left: 20px;"><input type="radio" name="withdraw-method" value="Nagad" required> নগদ</label>
+                            <label for="withdraw-method">উত্তোলন মাধ্যম নির্বাচন করুন</label>
+                            <select id="withdraw-method" name="withdraw-method" required>
+                                <option value="" disabled selected>-- মাধ্যম নির্বাচন করুন --</option>
+                                <option value="bKash">বিকাশ</option>
+                                <option value="Nagad">নগদ</option>
+                            </select>
                         </div>
                         <div class="form-group hidden" id="account-number-group">
                             <label id="account-number-label" for="account-number">আপনার নম্বরটি দিন</label>
@@ -445,6 +555,17 @@
         </main>
     </div>
 
+    <div id="more-options-menu" class="hidden">
+        <a href="#" data-page="downline-page">
+            <span class="material-symbols-outlined">hub</span>
+            <span>ডাউনলাইন</span>
+        </a>
+        <a href="#" id="mobile-logout-btn">
+            <span class="material-symbols-outlined">logout</span>
+            <span>লগ আউট</span>
+        </a>
+    </div>
+
     <nav class="mobile-bottom-nav hidden">
         <a href="#" class="active" data-page="dashboard-page">
             <span class="material-symbols-outlined">dashboard</span>
@@ -454,13 +575,19 @@
             <span class="material-symbols-outlined">group</span>
             <span class="nav-text">স্টুডেন্ট</span>
         </a>
+        <!-- মোবাইল নেভিগেশনে নতুন বাটন শুরু -->
+         <a href="#" data-page="leads-page">
+            <span class="material-symbols-outlined">edit_note</span>
+            <span class="nav-text">লিড</span>
+        </a>
+        <!-- মোবাইল নেভিগেশনে নতুন বাটন শেষ -->
         <a href="#" data-page="withdraw-page">
             <span class="material-symbols-outlined">request_quote</span>
             <span class="nav-text">উত্তোলন</span>
         </a>
-        <a href="#" id="mobile-logout-btn">
-            <span class="material-symbols-outlined">logout</span>
-            <span class="nav-text">লগ আউট</span>
+        <a href="#" id="more-btn">
+            <span class="material-symbols-outlined">more_vert</span>
+            <span class="nav-text">আরও</span>
         </a>
     </nav>
 
@@ -496,9 +623,14 @@
             const accountNumberInput = document.getElementById('account-number');
             const withdrawAmountGroup = document.getElementById('withdraw-amount-group');
             
-            const mobileNavLinks = document.querySelectorAll('.mobile-bottom-nav a');
-            const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
             const mobileBottomNav = document.querySelector('.mobile-bottom-nav');
+            const mobileNavLinks = document.querySelectorAll('.mobile-bottom-nav a:not(#more-btn)');
+            const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
+            const moreBtn = document.getElementById('more-btn');
+            const moreOptionsMenu = document.getElementById('more-options-menu');
+            
+            // --- লিড জেনারেশন সেকশনের নতুন ভ্যারিয়েবল ---
+            const leadForm = document.getElementById('lead-form');
 
             let currentBalance = 0;
 
@@ -520,18 +652,20 @@
                     toast.addEventListener('transitionend', () => toast.remove());
                 }, duration);
             }
-
+            
             auth.onAuthStateChanged(async user => {
                 if (user) {
                     loginPage.classList.add('hidden');
                     affiliatePanel.classList.remove('hidden');
                     mobileBottomNav.classList.remove('hidden');
+                    moreOptionsMenu.classList.add('hidden');
                     await loadAffiliateData(user.uid);
                     navigateTo('dashboard-page');
                 } else {
                     loginPage.classList.remove('hidden');
                     affiliatePanel.classList.add('hidden');
                     mobileBottomNav.classList.add('hidden');
+                    moreOptionsMenu.classList.add('hidden');
                 }
             });
 
@@ -567,6 +701,8 @@
                 
                 if (pageId === 'students-page' && auth.currentUser) renderStudentList(auth.currentUser.uid);
                 if (pageId === 'withdraw-page' && auth.currentUser) renderWithdrawPage(auth.currentUser.uid);
+                // --- নতুন ফাংশন কল ---
+                if (pageId === 'leads-page' && auth.currentUser) renderLeadsPage(auth.currentUser.uid);
             }
 
             sidebarLinks.forEach(link => {
@@ -583,6 +719,30 @@
                         e.preventDefault();
                         navigateTo(pageId);
                     });
+                }
+            });
+
+            moreBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                moreOptionsMenu.classList.toggle('hidden');
+            });
+            
+            moreOptionsMenu.querySelectorAll('a').forEach(link => {
+                const pageId = link.getAttribute('data-page');
+                if(pageId) {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        navigateTo(pageId);
+                        moreOptionsMenu.classList.add('hidden');
+                    });
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                const isClickInsideMenu = moreOptionsMenu.contains(event.target);
+                const isClickOnMoreBtn = moreBtn.contains(event.target);
+                if (!isClickInsideMenu && !isClickOnMoreBtn) {
+                    moreOptionsMenu.classList.add('hidden');
                 }
             });
 
@@ -664,10 +824,14 @@
             }
             
             withdrawForm.addEventListener('change', (e) => {
-                if (e.target.name === 'withdraw-method') {
+                if (e.target.id === 'withdraw-method') {
                     const method = e.target.value;
-                    accountNumberLabel.textContent = `আপনার ${method} নাম্বারটি দিন`;
-                    accountNumberGroup.classList.remove('hidden');
+                    if(method) {
+                        accountNumberLabel.textContent = `আপনার ${method} নাম্বারটি দিন`;
+                        accountNumberGroup.classList.remove('hidden');
+                    } else {
+                        accountNumberGroup.classList.add('hidden');
+                    }
                 }
             });
 
@@ -684,8 +848,10 @@
                 const user = auth.currentUser;
                 if (!user) return;
                 const amount = Number(document.getElementById('withdraw-amount').value);
-                const method = document.querySelector('input[name="withdraw-method"]:checked').value;
+                const method = document.getElementById('withdraw-method').value;
                 const accountNumber = accountNumberInput.value;
+
+                if (!method) { showToast("দয়া করে একটি উত্তোলন মাধ্যম নির্বাচন করুন।", "error"); return; }
                 if (amount <= 0) { showToast("দয়া করে সঠিক পরিমাণ লিখুন।", "error"); return; }
                 if (amount > currentBalance) { showToast("দুঃখিত, আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই।", "error"); return; }
                 try {
@@ -712,6 +878,97 @@
                     }
                 });
             }
+
+            // --- লিড জেনারেশন সেকশন শুরু ---
+
+            // লিড ফর্ম সাবমিট করার ফাংশন
+            leadForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const user = auth.currentUser;
+                if (!user) {
+                    showToast('অনুগ্রহ করে আবার লগইন করুন।', 'error');
+                    return;
+                }
+
+                const leadData = {
+                    affiliateId: user.uid,
+                    name: document.getElementById('lead-name').value,
+                    email: document.getElementById('lead-email').value,
+                    mobile: document.getElementById('lead-mobile').value,
+                    facebook: document.getElementById('lead-facebook').value,
+                    comment: document.getElementById('lead-comment').value,
+                    timestamp: new Date()
+                };
+
+                try {
+                    await db.collection('leads').add(leadData);
+                    showToast('লিড সফলভাবে সেভ হয়েছে!');
+                    leadForm.reset();
+                    renderLeadsPage(user.uid); // তালিকা রিফ্রেশ করুন
+                } catch (error) {
+                    console.error("Error saving lead: ", error);
+                    showToast('লিড সেভ করতে সমস্যা হয়েছে।', 'error');
+                }
+            });
+
+            // সংরক্ষিত লিড তালিকা দেখানোর ফাংশন
+            async function renderLeadsPage(uid) {
+                const tableBody = document.getElementById('leads-table-body');
+                tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">লিড তালিকা লোড হচ্ছে...</td></tr>`;
+                try {
+                    const snapshot = await db.collection('leads').where('affiliateId', '==', uid).orderBy('timestamp', 'desc').get();
+                    if (snapshot.empty) {
+                        tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">আপনি এখনো কোনো লিড যোগ করেননি।</td></tr>`;
+                        return;
+                    }
+                    let tableHTML = '';
+                    snapshot.forEach(doc => {
+                        const lead = doc.data();
+                        const date = lead.timestamp ? new Date(lead.timestamp.seconds * 1000).toLocaleDateString('bn-BD') : 'N/A';
+                        tableHTML += `
+                            <tr>
+                                <td data-label="তারিখ">${date}</td>
+                                <td data-label="পুরো নাম">${lead.name}</td>
+                                <td data-label="মোবাইল">
+                                    <div class="copyable-field" data-copy="${lead.mobile}">
+                                        <span>${lead.mobile}</span>
+                                        <span class="material-symbols-outlined">content_copy</span>
+                                    </div>
+                                </td>
+                                <td data-label="ফেসবুক আইডি">
+                                     <div class="copyable-field" data-copy="${lead.facebook}">
+                                        <span>${lead.facebook || 'N/A'}</span>
+                                        <span class="material-symbols-outlined">content_copy</span>
+                                    </div>
+                                </td>
+                                <td data-label="মন্তব্য">${lead.comment || 'N/A'}</td>
+                            </tr>`;
+                    });
+                    tableBody.innerHTML = tableHTML;
+                } catch (error) {
+                    console.error("Error fetching leads:", error);
+                    tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">লিড তালিকা লোড করতে সমস্যা হয়েছে।</td></tr>`;
+                }
+            }
+            
+            // কপি করার জন্য ইভেন্ট লিসেনার (ইভেন্ট ডেলিগেশন ব্যবহার করে)
+            document.body.addEventListener('click', function(event) {
+                const copyableElement = event.target.closest('.copyable-field');
+                if (copyableElement) {
+                    const textToCopy = copyableElement.getAttribute('data-copy');
+                    if (textToCopy && textToCopy !== 'N/A') {
+                        navigator.clipboard.writeText(textToCopy).then(() => {
+                            showToast('কপি হয়েছে!');
+                        }).catch(err => {
+                            console.error('Could not copy text: ', err);
+                            showToast('কপি করতে সমস্যা হয়েছে।', 'error');
+                        });
+                    }
+                }
+            });
+
+            // --- লিড জেনারেশন সেকশন শেষ ---
+
         });
     </script>
 </body>
