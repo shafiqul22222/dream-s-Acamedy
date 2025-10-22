@@ -258,17 +258,16 @@
             to { width: 0%; }
         }
 
-        /* --- নতুন মোবাইল নেভিগেশন স্টাইল --- */
         .mobile-bottom-nav {
-            display: none; /* ডিফল্টভাবে লুকানো থাকবে */
+            display: none;
         }
         
         @media (max-width: 768px) {
-            .sidebar { display: none; } /* মোবাইলে সাইডবার লুকানো থাকবে */
+            .sidebar { display: none; }
             .main-content { 
                 margin-left: 0; 
                 width: 100%; 
-                padding: 20px 20px 80px; /* নিচের নেভিগেশনের জন্য জায়গা রাখা */
+                padding: 20px 20px 80px;
             }
             .page-header h1 { font-size: 1.6em; margin-bottom: 20px; }
             .content-box, .login-box { padding: 20px; }
@@ -309,9 +308,8 @@
                 color: var(--secondary-blue);
             }
 
-            /* --- নতুন পরিবর্তন: রেসপন্সিভ টেবিলের জন্য স্টাইল --- */
             .data-table thead {
-                display: none; /* মোবাইলে টেবিলের হেডার লুকানো থাকবে */
+                display: none;
             }
             .data-table tr {
                 display: block;
@@ -322,17 +320,18 @@
             }
             .data-table td {
                 display: block;
-                text-align: right; /* ডেটা ডান দিকে দেখাবে */
+                text-align: right;
                 padding: 10px 15px;
                 border-bottom: 1px solid #f0f0f0;
                 position: relative;
-                padding-left: 50%; /* বাম দিকে লেবেলের জন্য জায়গা তৈরি */
+                padding-left: 50%;
+                overflow-wrap: break-word; /* লম্বা টেক্সট ভেঙে দেওয়ার জন্য এই লাইনটি যোগ করা হয়েছে */
             }
             .data-table td:last-child {
                 border-bottom: none;
             }
             .data-table td::before {
-                content: attr(data-label); /* data-label থেকে শিরোনাম নিবে */
+                content: attr(data-label);
                 position: absolute;
                 left: 15px;
                 width: calc(50% - 30px);
@@ -446,8 +445,7 @@
         </main>
     </div>
 
-    <!-- নতুন মোবাইল নেভিগেশন বার -->
-    <nav class="mobile-bottom-nav">
+    <nav class="mobile-bottom-nav hidden">
         <a href="#" class="active" data-page="dashboard-page">
             <span class="material-symbols-outlined">dashboard</span>
             <span class="nav-text">ড্যাশবোর্ড</span>
@@ -498,9 +496,9 @@
             const accountNumberInput = document.getElementById('account-number');
             const withdrawAmountGroup = document.getElementById('withdraw-amount-group');
             
-            // --- নতুন মোবাইল নেভিগেশন এর জন্য ---
             const mobileNavLinks = document.querySelectorAll('.mobile-bottom-nav a');
             const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
+            const mobileBottomNav = document.querySelector('.mobile-bottom-nav');
 
             let currentBalance = 0;
 
@@ -527,11 +525,13 @@
                 if (user) {
                     loginPage.classList.add('hidden');
                     affiliatePanel.classList.remove('hidden');
+                    mobileBottomNav.classList.remove('hidden');
                     await loadAffiliateData(user.uid);
                     navigateTo('dashboard-page');
                 } else {
                     loginPage.classList.remove('hidden');
                     affiliatePanel.classList.add('hidden');
+                    mobileBottomNav.classList.add('hidden');
                 }
             });
 
@@ -547,7 +547,6 @@
             });
 
             logoutBtn.addEventListener('click', () => auth.signOut());
-            // মোবাইল লগআউট বাটন
             mobileLogoutBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 auth.signOut();
@@ -558,12 +557,10 @@
                 pages.forEach(p => p.classList.remove('active'));
                 document.getElementById(pageId).classList.add('active');
                 
-                // ডেস্কটপ সাইডবার একটিভ স্টেট
                 sidebarLinks.forEach(l => l.classList.remove('active'));
                 const activeSidebarLink = document.querySelector(`.sidebar-nav li[data-page="${pageId}"]`);
                 if(activeSidebarLink) activeSidebarLink.classList.add('active');
 
-                // মোবাইল নেভিগেশন একটিভ স্টেট
                 mobileNavLinks.forEach(l => l.classList.remove('active'));
                 const activeMobileLink = document.querySelector(`.mobile-bottom-nav a[data-page="${pageId}"]`);
                 if(activeMobileLink) activeMobileLink.classList.add('active');
@@ -579,7 +576,6 @@
                 });
             });
 
-            // নতুন মোবাইল নেভিগেশন এর জন্য ইভেন্ট লিসেনার
             mobileNavLinks.forEach(link => {
                 const pageId = link.getAttribute('data-page');
                 if (pageId) {
@@ -620,7 +616,6 @@
                     snapshot.forEach(doc => {
                         const p = doc.data();
                         const ts = p.timestamp ? new Date(p.timestamp.seconds * 1000).toLocaleDateString('bn-BD') : 'N/A';
-                        // নতুন পরিবর্তন: data-label যোগ করা হয়েছে
                         tableHTML += `
                             <tr>
                                 <td data-label="স্টুডেন্টের ইমেইল">${p.userEmail}</td>
@@ -652,7 +647,6 @@
                         const r = doc.data();
                         const date = r.requestDate ? new Date(r.requestDate.seconds * 1000).toLocaleDateString('bn-BD') : 'N/A';
                         const statusClass = (r.status || 'pending').toLowerCase();
-                         // নতুন পরিবর্তন: data-label যোগ করা হয়েছে
                         tableHTML += `
                             <tr>
                                 <td data-label="তারিখ">${date}</td>
