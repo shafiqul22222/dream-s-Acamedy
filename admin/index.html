@@ -530,6 +530,98 @@
             .video-entry .btn-remove {
                 justify-self: start; /* Align button to the left */
             }
+            
+            /* START: New Responsive Table Styles for Mobile */
+            #payments-page .data-table thead,
+            #users-page .data-table thead {
+                display: none; /* Hide table headers on mobile */
+            }
+
+            #payments-page .data-table tr,
+            #users-page .data-table tr {
+                display: block;
+                margin-bottom: 15px;
+                border: 1px solid var(--border-color);
+                border-radius: var(--card-radius);
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                padding: 15px;
+                background-color: var(--text-light);
+            }
+
+            #payments-page .data-table td,
+            #users-page .data-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 5px;
+                text-align: right;
+                border-bottom: 1px dotted #e9ecef;
+            }
+
+            #payments-page .data-table tr td:last-child,
+            #users-page .data-table tr td:last-child {
+                border-bottom: none;
+            }
+
+            #payments-page .data-table td::before,
+            #users-page .data-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                text-align: left;
+                margin-right: 15px;
+                color: var(--primary-blue);
+            }
+
+            /* Center align action cells */
+            .data-table .actions-cell {
+                justify-content: center;
+                padding-top: 15px;
+            }
+            
+            /* --- START: MODIFIED CODE --- */
+            /* Handle complex cells like status updates - IMPROVED FOR MOBILE */
+            #payments-page .data-table .actions-cell {
+                display: flex;
+                flex-direction: column;
+                align-items: center; /* Center all controls horizontally */
+                gap: 8px; /* Add space between each control */
+                padding-top: 15px;
+            }
+
+            #payments-page .data-table .actions-cell .referrer-input,
+            #payments-page .data-table .actions-cell .status-select,
+            #payments-page .data-table .actions-cell .btn-save-status {
+                width: 90%; /* Make them wide, but with some breathing room */
+                max-width: 300px; /* Set a generous max width */
+                margin: 0; /* Reset any default margins */
+                display: block; /* Ensure block-level behavior */
+                box-sizing: border-box; /* Include padding in width calculation */
+                padding: 12px; /* Add generous padding to make them easy to tap */
+                font-size: 1em; /* Ensure font size is readable */
+            }
+
+            /* Center the text within the select dropdown */
+            #payments-page .data-table .actions-cell .status-select {
+                text-align: center;
+                text-align-last: center;
+            }
+            
+            /* Ensure secondary buttons are nicely spaced */
+            #payments-page .data-table .actions-cell .btn-whatsapp,
+            #payments-page .data-table .actions-cell .btn-delete {
+                margin-top: 5px; /* Add a little extra space above them */
+            }
+            /* --- END: MODIFIED CODE --- */
+
+            /* Style for copyable mobile number */
+            .copyable-mobile {
+                cursor: pointer;
+                padding: 5px;
+                border-radius: 4px;
+                transition: background-color 0.2s;
+                -webkit-tap-highlight-color: rgba(0,0,0,0.1); /* Remove tap highlight on mobile */
+            }
+            /* END: New Responsive Table Styles for Mobile */
         }
         /* --- END: Mobile Responsive Styles --- */
 
@@ -1068,6 +1160,21 @@
                 });
             }
 
+            // --- START: Helper for Click-to-Copy ---
+            window.copyToClipboard = function(text) {
+                if (!text || text.trim() === 'N/A' || text.trim() === '') {
+                    alert("কোনো মোবাইল নম্বর পাওয়া যায়নি।");
+                    return;
+                }
+                navigator.clipboard.writeText(text).then(function() {
+                    alert(`নম্বরটি "${text}" ক্লিপবোর্ডে কপি করা হয়েছে।`);
+                }, function(err) {
+                    console.error('Async: Could not copy text: ', err);
+                    alert('দুঃখিত, নম্বরটি কপি করা যায়নি।');
+                });
+            }
+            // --- END: Helper for Click-to-Copy ---
+
             // --- Navigation ---
             function navigateTo(pageId) {
                 pages.forEach(p => p.classList.remove('active'));
@@ -1520,16 +1627,16 @@ Payment Status : ${paymentStatus}`;
                             whatsappButtonHTML = `<button class="btn-whatsapp" onclick="sendWhatsAppReceipt('${payment.id}')" title="Send WhatsApp Receipt"><span class="material-symbols-outlined">send</span></button>`;
                         }
 
-                        // Added referrer code input
+                        // Added data-label attributes for mobile view
                         const row = `
                             <tr>
-                                <td>${payment.userEmail}</td>
-                                <td>${payment.itemName} ${referrerInfo}</td>
-                                <td>৳ ${payment.amount}</td>
-                                <td>${profit}</td>
-                                <td>${payment.transactionId}</td>
-                                <td>${timestamp}</td>
-                                <td>
+                                <td data-label="ইমেইল">${payment.userEmail}</td>
+                                <td data-label="কোর্স/সার্ভিস">${payment.itemName} ${referrerInfo}</td>
+                                <td data-label="পরিমাণ">৳ ${payment.amount}</td>
+                                <td data-label="লাভ">${profit}</td>
+                                <td data-label="TrxID">${payment.transactionId}</td>
+                                <td data-label="সময়">${timestamp}</td>
+                                <td data-label="স্ট্যাটাস">
                                     <span class="status-badge ${statusClass}">${payment.status}</span>
                                 </td>
                                 <td class="actions-cell">
@@ -1566,13 +1673,17 @@ Payment Status : ${paymentStatus}`;
                     let tableHTML = '';
                     snapshot.forEach(doc => {
                         const user = { id: doc.id, ...doc.data() };
+                        // Added data-label attributes and click-to-copy functionality for mobile
+                        const userMobile = user.mobile || 'N/A';
                         const row = `
                             <tr>
-                                <td>${user.name || 'N/A'}</td>
-                                <td>${user.email}</td>
-                                <td>${user.mobile || 'N/A'}</td>
-                                <td>${user.referralCode || 'N/A'}</td>
-                                <td>৳ ${user.affiliateBalance || 0}</td>
+                                <td data-label="নাম">${user.name || 'N/A'}</td>
+                                <td data-label="ইমেইল">${user.email}</td>
+                                <td data-label="মোবাইল">
+                                    <span class="copyable-mobile" onclick="copyToClipboard('${userMobile}')" title="কপি করতে ক্লিক করুন">${userMobile}</span>
+                                </td>
+                                <td data-label="রেফারেল কোড">${user.referralCode || 'N/A'}</td>
+                                <td data-label="ব্যালেন্স">৳ ${user.affiliateBalance || 0}</td>
                                 <td class="actions-cell">
                                     <button class="btn-edit" onclick="openModalForEdit('users', '${user.id}')"><span class="material-symbols-outlined">edit</span></button>
                                     <button class="btn-delete" onclick="deleteItem('users', '${user.id}')"><span class="material-symbols-outlined">delete</span></button>
