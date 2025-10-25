@@ -2050,7 +2050,7 @@
                 </div>
 
                 <div style="padding: 15px; border: 1px dashed var(--secondary-blue); border-radius: 8px; margin-bottom: 25px; text-align: center;">
-                    <p style="margin-bottom: 10px; font-weight: 500;">এই নম্বরে টাকা পাঠান (বিকাশ/নগদ)</p>
+                    <p style="margin-bottom: 10px; font-weight: 500;">নিচের নাম্বারটি কপি করে সেন্ডমানি করুন (বিকাশ/নগদ)</p>
                     <div style="display: flex; justify-content: center; align-items: center; gap: 10px; background: #eaf6f6; padding: 10px; border-radius: 8px;">
                         <strong id="payment-number" style="font-size: 1.4em; color: var(--primary-blue); letter-spacing: 1px;">01703743441</strong>
                         <button type="button" id="copy-payment-number-btn" title="নম্বরটি কপি করুন" style="background: var(--secondary-blue); color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;">
@@ -2064,6 +2064,7 @@
                     <div class="input-group">
                         <span class="material-symbols-outlined">mail</span>
                         <input type="email" id="payment-email" placeholder="আপনার ইমেইল" readonly style="background-color: #e9ecef; cursor: not-allowed;">
+                        <label for="payment-email">আপনার ইমেইল</label>
                     </div>
 
                     <div class="input-group">
@@ -2077,11 +2078,13 @@
                     <div class="input-group">
                         <span class="material-symbols-outlined">attach_money</span>
                         <input type="text" id="payment-amount" placeholder="টাকার পরিমাণ" readonly style="background-color: #e9ecef; cursor: not-allowed;">
+                        <label for="payment-amount">টাকার পরিমাণ</label>
                     </div>
 
                     <div class="input-group">
                         <span class="material-symbols-outlined">pin</span>
-                        <input type="text" id="payment-trx-id" placeholder="TrxID দিন" required>
+                        <input type="text" id="payment-trx-id" placeholder="আপনার সেন্ডমানির ট্রান্সজেকশন আইডি দিন" required>
+                        <label for="payment-trx-id">আপনার সেন্ডমানির ট্রান্সজেকশন আইডি দিন</label>
                     </div>
 
                     <button type="submit" class="btn btn-gradient" style="width: 100%; padding: 14px; border-radius: 8px;">সাবমিট করুন →</button>
