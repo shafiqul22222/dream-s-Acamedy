@@ -248,6 +248,24 @@
             box-shadow: var(--shadow);
             overflow-x: auto;
         }
+        /* START: NEW SEARCH BAR STYLE */
+        .search-bar-container {
+            margin-bottom: 20px;
+        }
+        #user-search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+        #user-search-input:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 0 2px rgba(8, 131, 149, 0.2);
+        }
+        /* END: NEW SEARCH BAR STYLE */
         .data-table {
             width: 100%;
             border-collapse: collapse;
@@ -787,6 +805,11 @@
                 <div class="page-header">
                     <h1>শিক্ষার্থী ম্যানেজমেন্ট</h1>
                 </div>
+                <!-- START: ADDED SEARCH BAR -->
+                <div class="search-bar-container">
+                    <input type="text" id="user-search-input" placeholder="আপনার কাঙ্ক্ষিত স্টূডেন্টকে খুজুন">
+                </div>
+                <!-- END: ADDED SEARCH BAR -->
                 <div class="content-box">
                     <table class="data-table">
                         <thead>
@@ -839,8 +862,8 @@
                 <div class="content-box">
                     <form id="send-service-form">
                         <div class="form-group">
-                            <label for="whatsapp-number">শিক্ষার্থীর হোয়াটসঅ্যাপ নম্বর (দেশের কোড সহ)</label>
-                            <input type="text" id="whatsapp-number" placeholder="যেমন: 88017XXXXXXXX" required>
+                            <label for="whatsapp-number">শিক্ষার্থীর হোয়াটসঅ্যাপ নম্বর</label>
+                            <input type="text" id="whatsapp-number" placeholder="যেমন: 017XXXXXXXX" required>
                         </div>
                         <div class="form-group">
                             <label for="service-selection">সার্ভিস বা কোর্স নির্বাচন করুন</label>
@@ -1118,6 +1141,28 @@
             const mobilePageTitle = document.getElementById('mobile-page-title');
             const overlay = document.getElementById('overlay');
 
+            // --- START: USER SEARCH FUNCTIONALITY ---
+            const userSearchInput = document.getElementById('user-search-input');
+            if(userSearchInput) {
+                userSearchInput.addEventListener('keyup', () => {
+                    const searchTerm = userSearchInput.value.toLowerCase().trim();
+                    const tableBody = document.getElementById('users-table-body');
+                    const rows = tableBody.getElementsByTagName('tr');
+
+                    Array.from(rows).forEach(row => {
+                        // Check if the row is a data row by looking for 'td' elements
+                        if (row.getElementsByTagName('td').length > 0) {
+                            const rowText = row.textContent || row.innerText;
+                            if (rowText.toLowerCase().includes(searchTerm)) {
+                                row.style.display = ""; // Reverts to CSS defined display (block on mobile, table-row on desktop)
+                            } else {
+                                row.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            }
+            // --- END: USER SEARCH FUNCTIONALITY ---
 
             // --- Authentication ---
             auth.onAuthStateChanged(user => {
@@ -1315,10 +1360,21 @@
                 let template = '';
 
                 if (type === 'service') {
-                    if (selectedValue.toLowerCase().includes('vps')) {
+                    // --- START: MODIFIED CODE ---
+                    const lowerCaseValue = selectedValue.toLowerCase();
+                    if (lowerCaseValue.includes('ip service')) {
+                        let ipAmount = '';
+                        if (lowerCaseValue.includes('premium')) {
+                            ipAmount = '200 Pis';
+                        } else if (lowerCaseValue.includes('standard')) {
+                            ipAmount = '100 Pis';
+                        } else if (lowerCaseValue.includes('basic')) {
+                            ipAmount = '50 Pis';
+                        }
+                        template = `Date: ${today}\nService Name: ${selectedValue}\nTop up ID: \nIP Amount: ${ipAmount}\nStatus: Order Complete`;
+                    } else if (lowerCaseValue.includes('vps')) {
+                         // --- END: MODIFIED CODE ---
                         template = `Date: ${today}\nService Name: ${selectedValue}\nAddress: \nUser ID: \nPassword: \nStatus: Order Complete`;
-                    } else if (selectedValue.toLowerCase().includes('ip service')) {
-                        template = `Date: ${today}\nService Name: ${selectedValue}\nTop up ID: \nIP Amount: \nStatus: Order Complete`;
                     } else {
                         // Generic service template
                          template = `Date: ${today}\nService Name: ${selectedValue}\n\nDetails:\n\nStatus: Order Complete`;
@@ -1340,13 +1396,23 @@
                 sendServiceForm.addEventListener('submit', function(e) {
                     e.preventDefault();
                     
-                    const recipientNumber = document.getElementById('whatsapp-number').value.trim();
+                    let recipientNumber = document.getElementById('whatsapp-number').value.trim();
                     const serviceInfo = serviceInfoTextarea.value.trim();
                     
                     if (!recipientNumber || !serviceInfo) {
                         alert("অনুগ্রহ করে সকল তথ্য পূরণ করুন।");
                         return;
                     }
+
+                    // --- START: MODIFIED CODE ---
+                    // Automatically format the phone number
+                    recipientNumber = recipientNumber.replace(/[^0-9]/g, ''); // Remove all non-numeric characters
+                    if (recipientNumber.startsWith('01') && recipientNumber.length === 11) {
+                        // If it's a local number like 017..., convert to 88017...
+                        recipientNumber = '880' + recipientNumber.substring(1);
+                    }
+                    // No 'else' needed; if it's already 880..., it will be used as is.
+                    // --- END: MODIFIED CODE ---
                     
                     const encodedMessage = encodeURIComponent(serviceInfo);
                     const whatsappUrl = `https://api.whatsapp.com/send?phone=${recipientNumber}&text=${encodedMessage}`;
@@ -1728,6 +1794,8 @@ Payment Status : ${paymentStatus}`;
                                         <option value="paid" ${req.status === 'paid' ? 'selected' : ''}>Paid</option>
                                     </select>
                                     <button class="btn btn-save-status" onclick="updateWithdrawalStatus('${req.id}', '${req.userId}', ${req.amount})">Save</button>
+                                    <button class="btn-edit" onclick="openModalForEdit('withdrawals', '${req.id}')"><span class="material-symbols-outlined">edit</span></button>
+                                    <button class="btn-delete" onclick="deleteItem('withdrawals', '${req.id}')"><span class="material-symbols-outlined">delete</span></button>
                                 </td>
                             </tr>
                         `;
@@ -2164,6 +2232,12 @@ Payment Status : ${paymentStatus}`;
                         batch: (formData.get('batch') || '').trim(),
                         modules: modules
                     };
+                } else if (type === 'withdrawals') { // MODIFIED: Added this block
+                    newItem = {
+                        amount: Number(formData.get('amount')) || 0,
+                        method: (formData.get('method') || '').trim(),
+                        accountNumber: (formData.get('accountNumber') || '').trim()
+                    };
                 } else if (type === 'users') {
                     newItem = {
                         name: (formData.get('name') || '').trim(),
@@ -2233,6 +2307,7 @@ Payment Status : ${paymentStatus}`;
                 if (collection === 'joinClass') return 'ক্লাস লিঙ্ক';
                 if (collection === 'curriculum') return 'কারিকুলাম';
                 if (collection === 'users') return 'শিক্ষার্থী';
+                if (collection === 'withdrawals') return 'উত্তোলনের অনুরোধ'; // MODIFIED: Added this line
                 return 'নোটিশ';
             }
 
@@ -2398,6 +2473,26 @@ Payment Status : ${paymentStatus}`;
                            ${(data.modules && data.modules.length > 0) ? data.modules.map(getModuleHTML).join('') : getModuleHTML()}
                         </div>
                         <button type="button" id="add-module-btn" class="btn btn-add-small"><span class="material-symbols-outlined">add</span> নতুন মডিউল যোগ করুন</button>
+                    `;
+                }
+                if (type === 'withdrawals') { // MODIFIED: Added this block
+                    return `
+                        <div class="form-group">
+                            <label>শিক্ষার্থীর ইমেইল (সম্পাদনাযোগ্য নয়)</label>
+                            <input type="email" name="userEmail" value="${data.userEmail || ''}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>পরিমাণ</label>
+                            <input type="number" name="amount" value="${data.amount || 0}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>মাধ্যম (e.g., Bkash, Nagad)</label>
+                            <input type="text" name="method" value="${data.method || ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>অ্যাকাউন্ট নম্বর</label>
+                            <input type="text" name="accountNumber" value="${data.accountNumber || ''}" required>
+                        </div>
                     `;
                 }
                 if (type === 'notices') {
