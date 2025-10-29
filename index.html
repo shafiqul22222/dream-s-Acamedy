@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dream's Academy</title>
+    <title>Dream's Academy - অনলাইন শিক্ষা প্ল্যাটফর্ম</title>
     <link rel="icon" type="image/png" href="https://i.ibb.co/JqgWkCg/placeholder.png">
     <!-- Google Fonts: Hind Siluri for Bengali -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1039,22 +1039,11 @@
 
         #my-courses-page .course-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
 
-        /* === START: NEW NOTICEBOARD STYLES === */
-        .notice-layout-grid {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 30px;
-            align-items: flex-start;
+        .notice-list-public {
+            max-width: 800px;
+            margin: 0 auto;
         }
-        .notice-list-panel {
-            background-color: var(--text-light);
-            border-radius: var(--card-radius);
-            box-shadow: var(--shadow);
-            padding: 15px;
-            max-height: 600px;
-            overflow-y: auto;
-        }
-        .notice-list-panel .notice-item {
+        .notice-item {
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 10px;
@@ -1062,114 +1051,17 @@
             display: flex;
             gap: 15px;
             align-items: center;
-            cursor: pointer;
+            background: var(--text-light);
             transition: all 0.3s ease;
         }
-        .notice-list-panel .notice-item:hover {
-            border-left: 4px solid var(--secondary-blue);
+        .notice-item:hover {
+            border-left: 3px solid var(--secondary-blue);
             background-color: #eaf6f6;
             transform: translateX(5px);
         }
-        .notice-list-panel .notice-item.active {
-            border-color: var(--secondary-blue);
-            background-color: #eaf6f6;
-            border-left: 4px solid var(--secondary-blue);
-        }
-        .notice-list-panel .notice-item .notice-icon {
-            flex-shrink: 0;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #e9ecef;
-            color: var(--primary-blue);
-            font-size: 24px;
-        }
-        .notice-list-panel .notice-item.active .notice-icon {
-            background-color: var(--secondary-blue);
-            color: var(--text-light);
-        }
-        .notice-details h4 { 
-            margin: 0 0 5px;
-            font-size: 1.1em;
-            color: var(--primary-blue);
-        }
-        .notice-details p { 
-            font-size: 0.9em; 
-            color: #6c757d; 
-            margin: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 250px;
-        }
-        .notice-detail-panel {
-            background: var(--text-light);
-            border: 1px solid var(--secondary-blue);
-            border-radius: var(--card-radius);
-            padding: 30px;
-            box-shadow: var(--shadow);
-            min-height: 400px;
-        }
-        .notice-detail-panel h3 {
-            font-size: 1.8em;
-            color: var(--primary-blue);
-            margin-bottom: 20px;
-        }
-        .detail-item {
-            margin-bottom: 15px;
-            font-size: 1.1em;
-        }
-        .detail-item strong {
-            color: var(--text-dark);
-            display: inline-block;
-            width: 120px;
-        }
-        .detail-item a {
-            color: var(--secondary-blue);
-            font-weight: 600;
-            word-break: break-all;
-        }
-        .notice-detail-panel-placeholder {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            text-align: center;
-            color: #6c757d;
-        }
-        .notice-back-btn {
-            display: none; /* Hidden on desktop */
-            margin-bottom: 20px;
-            background: transparent;
-            border: 1px solid var(--border-color);
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            align-items: center;
-            gap: 5px;
-            font-weight: 600;
-        }
-        .notice-back-btn:hover {
-            background-color: var(--background-light);
-        }
-        @media (max-width: 992px) {
-            .notice-layout-grid {
-                grid-template-columns: 1fr;
-            }
-            .notice-detail-panel.mobile-hidden {
-                display: none;
-            }
-            .notice-list-panel.mobile-hidden {
-                display: none;
-            }
-            .notice-back-btn {
-                display: inline-flex;
-            }
-        }
-        /* === END: NEW NOTICEBOARD STYLES === */
+        .notice-item .material-symbols-outlined { color: var(--primary-blue); font-size: 28px; }
+        .notice-details p { font-size: 0.9em; color: #6c757d; margin-bottom: 0; }
+        .notice-details h4 { margin-bottom: 5px; }
 
         .class-schedule-table {
             width: 100%;
@@ -2006,19 +1898,12 @@
                 </div>
             </section>
 
-            <section class="section page-section hidden" id="noticeboard">
+            <section class="courses-section page-section hidden" id="noticeboard">
                 <div class="container">
                     <h2 class="section-title">সাম্প্রতিক নোটিশ</h2>
-                    <!-- === START: MODIFIED NOTICEBOARD STRUCTURE === -->
-                    <div class="notice-layout-grid" id="notice-board-container">
-                        <div class="notice-list-panel" id="notice-list-column">
-                            <!-- JS will populate this list -->
-                        </div>
-                        <div class="notice-detail-panel" id="notice-detail-column">
-                            <!-- JS will populate this detail view -->
-                        </div>
+                    <div class="notice-list-public" id="notice-board">
+                        <!-- Dynamic notices will be added here -->
                     </div>
-                    <!-- === END: MODIFIED NOTICEBOARD STRUCTURE === -->
                 </div>
             </section>
 
@@ -2938,134 +2823,39 @@
                 }
             }
 
-            // === START: MODIFIED displayNotices FUNCTION ===
             async function displayNotices() {
-                const listColumn = document.getElementById('notice-list-column');
-                const detailColumn = document.getElementById('notice-detail-column');
-
-                if (!listColumn || !detailColumn) return;
-
-                const placeholderHTML = `
-                    <div class="notice-detail-panel-placeholder">
-                        <p>বাম পাশ থেকে একটি নোটিশ নির্বাচন করুন।</p>
-                    </div>`;
-
-                listColumn.innerHTML = '<em>নোটিশ লোড হচ্ছে...</em>';
-                detailColumn.innerHTML = placeholderHTML;
+                const container = document.getElementById('notice-board');
+                if (!container) return;
 
                 try {
+                    container.innerHTML = '<em>নোটিশ লোড হচ্ছে...</em>';
                     const snapshot = await db.collection('notices').orderBy('timestamp', 'desc').get();
-
-                    if (snapshot.empty) {
-                        listColumn.innerHTML = '<p>এই মুহূর্তে কোনো নতুন নোটিশ নেই।</p>';
-                        return;
-                    }
-
-                    // Function to update the detail view
-                    const updateDetailView = (noticeData) => {
-                        const noticeDate = noticeData.timestamp.toDate();
-                        const formattedDate = new Intl.DateTimeFormat('bn-BD', {
-                            year: 'numeric', month: 'long', day: 'numeric'
-                        }).format(noticeDate);
-                        const formattedTime = new Intl.DateTimeFormat('bn-BD', {
-                            hour: 'numeric', minute: 'numeric', hour12: true
-                        }).format(noticeDate);
-
-                        detailColumn.innerHTML = `
-                            <button class="notice-back-btn">
-                                <span class="material-symbols-outlined">arrow_back</span>
-                                সকল নোটিশ
-                            </button>
-                            <h3>${noticeData.title}</h3>
-                            <div class="detail-item">
-                                <strong>টপিক:</strong> ${noticeData.description}
-                            </div>
-                            <div class="detail-item">
-                                <strong>প্রকাশের তারিখ:</strong> ${formattedDate}
-                            </div>
-                             <div class="detail-item">
-                                <strong>সময়:</strong> ${formattedTime}
-                            </div>
-                            ${noticeData.zoomLink ? `
-                                <div class="detail-item">
-                                    <strong>মিটিং লিঙ্ক:</strong> <a href="${noticeData.zoomLink}" target="_blank">এখানে ক্লিক করে জয়েন করুন</a>
-                                </div>
-                                <div class="detail-item">
-                                    <strong>মিটিং আইডি:</strong> ${noticeData.meetingId || 'N/A'}
-                                </div>
-                                <div class="detail-item">
-                                    <strong>পাসকোড:</strong> ${noticeData.passcode || 'N/A'}
-                                </div>
-                            ` : ''}
-                        `;
-                        
-                        const backButton = detailColumn.querySelector('.notice-back-btn');
-                        if (backButton) {
-                            backButton.addEventListener('click', () => {
-                                listColumn.classList.remove('mobile-hidden');
-                                detailColumn.classList.add('mobile-hidden');
-                            });
-                        }
-                    };
-
-                    // Populate the list
                     let allNoticesHTML = '';
-                    snapshot.docs.forEach((doc, index) => {
-                        const notice = doc.data();
-                        const noticeDate = notice.timestamp.toDate();
-                        const formattedPostTime = new Intl.DateTimeFormat('bn-BD-u-nu-latn', {
-                            month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true
-                        }).format(noticeDate);
 
-                        const noticeItem = document.createElement('div');
-                        noticeItem.className = 'notice-item';
-                        if (index === 0) {
-                            noticeItem.classList.add('active');
-                        }
-                        noticeItem.innerHTML = `
-                            <span class="notice-icon material-symbols-outlined">campaign</span>
-                            <div class="notice-details">
-                                <h4>${notice.title}</h4>
-                                <p>${formattedPostTime}</p>
+                    snapshot.forEach(doc => {
+                        const notice = doc.data();
+                        const noticeHTML = `
+                            <div class="notice-item">
+                                <span class="material-symbols-outlined">campaign</span>
+                                <div class="notice-details">
+                                    <h4>${notice.title}</h4>
+                                    <p>${notice.description}</p>
+                                </div>
                             </div>
                         `;
-
-                        // Store data and add event listener
-                        noticeItem.addEventListener('click', () => {
-                            // Update active state
-                            listColumn.querySelectorAll('.notice-item').forEach(item => item.classList.remove('active'));
-                            noticeItem.classList.add('active');
-                            
-                            // Update detail view
-                            updateDetailView(notice);
-
-                            // Handle mobile view
-                            if (window.innerWidth <= 992) {
-                                listColumn.classList.add('mobile-hidden');
-                                detailColumn.classList.remove('mobile-hidden');
-                            }
-                        });
-                        
-                        listColumn.appendChild(noticeItem);
+                        allNoticesHTML += noticeHTML;
                     });
-                     listColumn.firstChild.innerHTML = listColumn.firstChild.innerHTML; // Clear loading text
 
-                    // Display the first notice's details by default
-                    updateDetailView(snapshot.docs[0].data());
-
-                    // Initial mobile view setup
-                     if (window.innerWidth <= 992) {
-                        detailColumn.classList.add('mobile-hidden');
+                     if (allNoticesHTML === '') {
+                        container.innerHTML = '<p>এই মুহূর্তে কোনো নতুন নোটিশ নেই।</p>';
+                    } else {
+                        container.innerHTML = allNoticesHTML;
                     }
-
-
                 } catch (error) {
                     console.error("Error fetching notices:", error);
-                    listColumn.innerHTML = '<p>নোটিশ লোড করার সময় একটি সমস্যা হয়েছে।</p>';
+                    container.innerHTML = '<p>নোটিশ লোড করার সময় একটি সমস্যা হয়েছে।</p>';
                 }
             }
-            // === END: MODIFIED displayNotices FUNCTION ===
-
 
             async function displayMyCourses() {
                 const grid = document.getElementById('my-courses-grid');
