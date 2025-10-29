@@ -521,9 +521,65 @@
             }
         }
 
+        /* START: SLIDER STYLES FOR TRUST SCREENSHOT SECTION */
+        .trust-section {
+            background-color: var(--text-light);
+        }
+        .slider-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+        }
+        .screenshot-grid {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .screenshot-item {
+            flex: 0 0 100%;
+            min-width: 100%;
+            box-sizing: border-box;
+            background-color: var(--text-light);
+        }
+        .screenshot-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(10, 77, 104, 0.6);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+        .slider-btn:hover {
+            background-color: rgba(10, 77, 104, 0.9);
+        }
+        .slider-btn.prev-btn {
+            left: 15px;
+        }
+        .slider-btn.next-btn {
+            right: 15px;
+        }
+        /* END: SLIDER STYLES FOR TRUST SCREENSHOT SECTION */
+
         /* --- Services Section --- */
         .services-section {
-            background-color: var(--text-light);
+            background-color: var(--background-light); /* Changed for visual separation */
         }
         .service-grid {
             display: grid;
@@ -1418,6 +1474,34 @@
             visibility: visible;
         }
 
+        /* --- Floating WhatsApp Button --- */
+        #floating-whatsapp-btn {
+            position: fixed;
+            left: 30px;
+            bottom: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: #25D366;
+            color: var(--text-light);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: var(--shadow);
+            z-index: 1002; /* Higher than header and mobile nav */
+            text-decoration: none;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        #floating-whatsapp-btn .material-symbols-outlined {
+            font-size: 30px;
+        }
+
+        #floating-whatsapp-btn:hover {
+            transform: scale(1.1);
+            background-color: #128C7E;
+        }
+
         /* --- Toast Notifications --- */
         #toast-container {
             position: fixed;
@@ -1639,6 +1723,9 @@
                 <ul>
                     <li class="active"><a href="#home">হোম</a></li>
                     <li><a href="#about">আমাদের সম্পর্কে</a></li>
+                     <!-- START: NEW NAV LINK ADDED -->
+                    <li><a href="#trust">সাফল্যের চিত্র</a></li>
+                    <!-- END: NEW NAV LINK ADDED -->
                     <li><a href="#services">সার্ভিস সমূহ</a></li>
                     <li class="nav-dropdown">
                         <a href="#courses">কোর্স</a>
@@ -1818,13 +1905,6 @@
                         <p>বেকার বসে না থেকে আপনার হাতে থাকা ডিভাইসটি কাজে লাগিয়ে ইনকাম শুরু করুন প্রথম ক্লাস থেকেই  আমাদের গাইড লাইন ফলো করে।</p>
                         <div class="hero-buttons">
                             <a href="#courses" class="btn btn-gradient internal-link-btn">আমার কোর্স →</a>
-                            <a href="#" id="whatsapp-chat-btn" class="btn btn-outline">সাপোর্ট চ্যাট করুন</a>
-                            <a href="#" id="whatsapp-chat-btn-mobile" class="btn btn-whatsapp-mobile">
-                                <svg style="width:24px;height:24px;fill:white;" viewBox="0 0 24 24">
-                                    <path d="M16.75,13.96C17,14.26 17.25,14.81 17.25,15.11C17.25,15.41 17.25,16.5 16.35,17.35C15.5,18.25 14.31,19.04 13.36,19.04C12.41,19.04 10.46,18.5 8.61,16.65C6.76,14.8 5,12.58 5,10.63C5,9.68 5.75,8.5 6.65,7.6C7.5,6.75 8.5,6.75 8.8,6.75C9.1,6.75 9.3,6.75 9.5,7.2C9.7,7.65 10.15,8.8 10.25,9C10.35,9.2 10.25,9.5 10,9.75L9.5,10.25C9.25,10.5 9.11,10.71 9.25,11C9.39,11.29 9.89,12.04 10.59,12.74C11.29,13.44 12.04,13.89 12.34,14.04C12.59,14.16 12.8,14.11 13,13.86L13.5,13.36C13.75,13.11 14,13 14.25,13.1C14.5,13.2 15.65,13.75 15.9,13.85C16.15,13.95 16.45,14 16.5,14.05C16.55,14.1 16.75,13.96 16.75,13.96M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22C13.66,22 15.25,21.54 16.62,20.75L21.5,22L20.75,17.14C21.58,15.74 22,14 22,12A10,10 0 0,0 12,2M12,4C16.42,4 20,7.58 20,12C20,13.81 19.42,15.5 18.46,16.86L19.5,20.5L15.86,19.46C14.5,20.42 12.81,21 11,21C6.58,21 3,17.42 3,13C3,8.58 6.58,5 11,5C11.33,5 11.66,5.04 12,5.09V4.05C12,4.03 12,4.02 12,4Z" />
-                                </svg>
-                                সাপোর্ট চ্যাট করুন
-                            </a>
                         </div>
                     </div>
                     <div class="hero-image-wrapper">
@@ -1879,6 +1959,25 @@
                     </div>
                 </div>
             </section>
+
+            <!-- START: MODIFIED TRUST SCREENSHOT SECTION -->
+            <section class="section trust-section page-section" id="trust">
+                <div class="container">
+                    <h2 class="section-title">আমাদের সার্ভিস যারা নিয়েছে</h2>
+                    <div class="slider-wrapper">
+                        <div class="screenshot-grid" id="screenshot-container">
+                            <!-- Dynamic screenshot cards will be added here by JS -->
+                        </div>
+                        <button class="slider-btn prev-btn">
+                            <span class="material-symbols-outlined">arrow_back_ios</span>
+                        </button>
+                        <button class="slider-btn next-btn">
+                            <span class="material-symbols-outlined">arrow_forward_ios</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <!-- END: MODIFIED TRUST SCREENSHOT SECTION -->
 
             <section class="section services-section page-section hidden" id="services">
                 <div class="container">
@@ -2141,6 +2240,11 @@
         <button id="scrollTopBtn"><span class="material-symbols-outlined">arrow_upward</span></button>
     </footer>
 
+    <!-- Floating WhatsApp Icon -->
+    <a href="https://wa.me/8801701126965" target="_blank" id="floating-whatsapp-btn" aria-label="Chat on WhatsApp">
+        <span class="material-symbols-outlined">message</span>
+    </a>
+
     <div id="toast-container"></div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -2228,9 +2332,6 @@
             const mainNavLinks = document.querySelectorAll('.main-nav a[href^="#"]');
             const navLiElements = document.querySelectorAll('.main-nav ul > li');
             const logoLink = document.querySelector('header .logo');
-
-            const whatsappChatBtn = document.getElementById('whatsapp-chat-btn');
-            const whatsappChatBtnMobile = document.getElementById('whatsapp-chat-btn-mobile');
 
             const profileUpdateForm = document.getElementById('profile-update-form');
 
@@ -2719,6 +2820,110 @@
                     cleanupNotifications();
                 }
             });
+
+            // START: NEW FUNCTION TO INITIALIZE THE SLIDER
+            function initTrustSlider() {
+                const sliderContainer = document.querySelector('#screenshot-container');
+                const slides = document.querySelectorAll('.screenshot-item');
+                const prevBtn = document.querySelector('.prev-btn');
+                const nextBtn = document.querySelector('.next-btn');
+
+                if (!sliderContainer || !prevBtn || !nextBtn || slides.length <= 1) {
+                    if(prevBtn) prevBtn.style.display = 'none';
+                    if(nextBtn) nextBtn.style.display = 'none';
+                    return;
+                }
+                
+                prevBtn.style.display = 'flex';
+                nextBtn.style.display = 'flex';
+
+                let currentIndex = 0;
+                let slideInterval;
+
+                function goToSlide(index) {
+                    if (index < 0) {
+                        index = slides.length - 1;
+                    } else if (index >= slides.length) {
+                        index = 0;
+                    }
+                    sliderContainer.style.transform = `translateX(-${index * 100}%)`;
+                    currentIndex = index;
+                }
+
+                function nextSlide() {
+                    goToSlide(currentIndex + 1);
+                }
+
+                function prevSlide() {
+                    goToSlide(currentIndex - 1);
+                }
+
+                function startSlider() {
+                    stopSlider(); // Ensure no multiple intervals are running
+                    slideInterval = setInterval(nextSlide, 3000); // Change slide every 3 seconds
+                }
+
+                function stopSlider() {
+                    clearInterval(slideInterval);
+                }
+
+                nextBtn.addEventListener('click', () => {
+                    nextSlide();
+                    stopSlider();
+                    startSlider();
+                });
+                
+                prevBtn.addEventListener('click', () => {
+                    prevSlide();
+                    stopSlider();
+                    startSlider();
+                });
+
+                const sliderWrapper = document.querySelector('.slider-wrapper');
+                if(sliderWrapper) {
+                    sliderWrapper.addEventListener('mouseenter', stopSlider);
+                    sliderWrapper.addEventListener('mouseleave', startSlider);
+                }
+
+                startSlider();
+            }
+
+            // MODIFIED FUNCTION TO DISPLAY TRUST SCREENSHOTS
+            async function displayTrustScreenshots() {
+                const container = document.getElementById('screenshot-container');
+                if (!container) return;
+
+                try {
+                    container.innerHTML = '<em>সফলতার চিত্র লোড হচ্ছে...</em>';
+                    const snapshot = await db.collection('trust_screenshots').orderBy('timestamp', 'desc').get();
+                    let allScreenshotsHTML = '';
+
+                    snapshot.forEach(doc => {
+                        const screenshot = doc.data();
+                        const screenshotHTML = `
+                            <div class="screenshot-item">
+                                <img src="${screenshot.imageUrl}" alt="${screenshot.title || 'Trust Screenshot'}">
+                            </div>
+                        `;
+                        allScreenshotsHTML += screenshotHTML;
+                    });
+
+                    if (allScreenshotsHTML === '') {
+                        container.innerHTML = '<p>এই মুহূর্তে কোনো স্ক্রিনশট পাওয়া যায়নি।</p>';
+                        const sliderWrapper = container.closest('.slider-wrapper');
+                        if (sliderWrapper) {
+                            sliderWrapper.querySelector('.prev-btn').style.display = 'none';
+                            sliderWrapper.querySelector('.next-btn').style.display = 'none';
+                        }
+                    } else {
+                        container.innerHTML = allScreenshotsHTML;
+                        initTrustSlider(); // Initialize the slider after images are loaded
+                    }
+                } catch (error) {
+                    console.error("Error fetching trust screenshots:", error);
+                    container.innerHTML = '<p>স্ক্রিনশট লোড করার সময় একটি সমস্যা হয়েছে।</p>';
+                }
+            }
 
 
             async function displayServices() {
@@ -3505,16 +3710,6 @@
             window.addEventListener('scroll', handleScroll);
             scrollTopBtn.addEventListener('click', scrollToTop);
 
-            whatsappChatBtn.addEventListener('click', (event) => {
-                event.preventDefault();
-                window.open(`https://wa.me/8801701126965`, 'whatsappPopup', 'width=800,height=700');
-            });
-            
-            whatsappChatBtnMobile.addEventListener('click', (event) => {
-                event.preventDefault();
-                window.open(`https://wa.me/8801701126965`, 'whatsappPopup', 'width=800,height=700');
-            });
-
             paymentForm.addEventListener('submit', handlePaymentSubmit);
 
             copyPaymentNumberBtn.addEventListener('click', () => {
@@ -3531,12 +3726,15 @@
             startCountdown();
             switchDashboardPage('my-courses-page');
 
+            // START: CALLING ALL DATA DISPLAY FUNCTIONS ON PAGE LOAD
             displayServices();
             displayCourses();
             displayNotices();
+            displayTrustScreenshots(); // NEW
             loadHeroImage();
             loadAboutUsImage();
             loadHeaderLogo();
+            // END: CALLING ALL DATA DISPLAY FUNCTIONS ON PAGE LOAD
         });
     </script>
 </body>
