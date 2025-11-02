@@ -4,6 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dream's Academy-</title>
+
+    <!-- START: Social Share Meta Tags (আপনার অনুরোধ অনুযায়ী যোগ করা হয়েছে) -->
+    <!-- এই ট্যাগগুলো লিঙ্ক শেয়ার করলে প্রিভিউতে লোগো ও তথ্য দেখাতে সাহায্য করে -->
+    <meta property="og:title" content="Dream's Academy - আপনার সফলতার পথে">
+    <meta property="og:description" content="অনলাইন সার্ভে করে ইনকাম করতে যোগ দিন আমাদের ড্রিমস একাডেমির সাথে! প্রথম ক্লাস থেকেই ইনকাম শুরু করুন।">
+    <meta property="og:image" content="https://i.ibb.co/JqgWkCg/placeholder.png">
+    <meta property="og:url" content="https://dreamsedu.publicvm.com/"> <!-- এখানে আপনার ওয়েবসাইটের আসল লিঙ্ক দিন -->
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://your-live-website-url.com/"> <!-- এখানে আপনার ওয়েবসাইটের আসল লিঙ্ক দিন -->
+    <meta name="twitter:title" content="Dream's Academy - আপনার সফলতার পথে">
+    <meta name="twitter:description" content="অনলাইন সার্ভে করে ইনকাম করতে যোগ দিন আমাদের ড্রিমস একাডেমির সাথে! প্রথম ক্লাস থেকেই ইনকাম শুরু করুন।">
+    <meta name="twitter:image" content="https://i.ibb.co/JqgWkCg/placeholder.png">
+    <!-- END: Social Share Meta Tags -->
+
+    <!-- THIS IS THE CORRECT LINE FOR YOUR FAVICON -->
     <link rel="icon" type="image/png" href="https://i.ibb.co/JqgWkCg/placeholder.png">
     <!-- Google Fonts: Hind Siluri for Bengali -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2186,7 +2204,7 @@
                         <label for="payment-trx-id">ট্রান্সজেকশন আইডি</label>
                     </div>
 
-                    <button type="submit" class="btn btn-gradient" style="width: 100%; padding: 14px; border-radius: 8px;">ভেরিফাই করুন →</button>
+                    <button type="submit" class="btn btn-gradient" style="width: 100%; padding: 14px; border-radius: 8px;">সাবমিট করুন →</button>
                 </form>
             </div>
         </div>
@@ -3490,7 +3508,7 @@
                 if (!paymentData.transactionId.trim()) {
                     showToast("অনুগ্রহ করে TrxID দিন।", "error");
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = 'পেমেন্ট ভেরিফাই করুন →';
+                    submitBtn.innerHTML = 'সাবমিট করুন →';
                     return;
                 }
 
@@ -3504,7 +3522,7 @@
                             read: false
                         });
 
-                        showToast("আপনার পেমেন্ট তথ্য ভেরিফাই করা হচ্ছে দয়া করে অল্প সময় সময় অপেক্ষা করুন।", "success");
+                        showToast("আপনার পেমেন্ট তথ্য ভেরিফাই করা হচ্ছে দয়া করে অল্প সময় সময় অপেক্ষা করুন", "success");
                         paymentForm.reset();
                         paymentModal.classList.add('hidden');
                     })
