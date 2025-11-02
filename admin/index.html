@@ -500,6 +500,27 @@
         .video-entry .btn-remove { align-self: center; height: 42px; }
         /* --- END: UPDATED Curriculum Modal Specific Styles --- */
 
+        /* START: MODIFIED Social Media Settings Styles */
+        .social-link-entry {
+            display: grid;
+            grid-template-columns: 1fr 2fr auto;
+            gap: 10px;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .social-link-entry input, .social-link-entry select {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: 'Hind Siliguri', sans-serif;
+            font-size: 1em;
+        }
+        /* END: MODIFIED Social Media Settings Styles */
+
+
         /* --- START: Mobile Responsive Styles --- */
         .mobile-header {
             display: none; /* Hidden on desktop */
@@ -1308,6 +1329,22 @@
                         </div>
                         <button type="submit" class="btn btn-primary" style="width: auto; justify-content: flex-start;">সেটিংস সেভ করুন</button>
                     </form>
+
+                    <!-- START: MODIFIED SOCIAL MEDIA SECTION -->
+                    <hr style="margin: 30px 0;">
+                    <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Social Media Setup</h3>
+                    <form id="social-media-form">
+                        <div id="social-links-container">
+                            <!-- Dynamic social link inputs will be added here -->
+                        </div>
+                        <button type="button" id="add-social-link-btn" class="btn btn-add-small" style="margin-top: 10px; margin-bottom: 20px;">
+                            <span class="material-symbols-outlined">add</span> নতুন লিঙ্ক যোগ করুন
+                        </button>
+                        <br>
+                        <button type="submit" class="btn btn-primary" style="width: auto; justify-content: flex-start;">সোশ্যাল মিডিয়া লিঙ্ক সেভ করুন</button>
+                    </form>
+                    <!-- END: MODIFIED SOCIAL MEDIA SECTION -->
+
                 </div>
             </div>
         </main>
@@ -1364,6 +1401,12 @@
             const heroSettingsForm = document.getElementById('hero-settings-form');
             const logoSettingsForm = document.getElementById('logo-settings-form');
             const aboutUsSettingsForm = document.getElementById('about-us-settings-form');
+            
+            // START: MODIFIED SOCIAL MEDIA ELEMENTS
+            const socialMediaForm = document.getElementById('social-media-form');
+            const addSocialLinkBtn = document.getElementById('add-social-link-btn');
+            const socialLinksContainer = document.getElementById('social-links-container');
+            // END: MODIFIED SOCIAL MEDIA ELEMENTS
             
             const sendServiceForm = document.getElementById('send-service-form');
             const serviceSelection = document.getElementById('service-selection');
@@ -2021,6 +2064,7 @@
                 const aboutUsImagePreview = document.getElementById('about-us-image-preview');
 
                 try {
+                    // Hero Image
                     const heroDoc = await db.collection('site_settings').doc('hero_section').get();
                     if (heroDoc.exists && heroDoc.data().imageUrl) {
                         const imageUrl = heroDoc.data().imageUrl;
@@ -2031,6 +2075,7 @@
                          heroImagePreview.src = 'https://i.ibb.co/JqgWkCg/placeholder.png';
                     }
 
+                    // Logo Image
                     const logoDoc = await db.collection('site_settings').doc('header_settings').get();
                     if (logoDoc.exists && logoDoc.data().logoImageUrl) {
                         const logoUrl = logoDoc.data().logoImageUrl;
@@ -2041,6 +2086,7 @@
                         logoImagePreview.src = 'https://i.ibb.co/JqgWkCg/placeholder.png';
                     }
                     
+                    // About Us Image
                     const aboutUsDoc = await db.collection('site_settings').doc('about_us_section').get();
                     if (aboutUsDoc.exists && aboutUsDoc.data().imageUrl) {
                         const imageUrl = aboutUsDoc.data().imageUrl;
@@ -2050,6 +2096,15 @@
                         aboutUsImageUrlInput.value = '';
                         aboutUsImagePreview.src = 'https://i.ibb.co/JqgWkCg/placeholder.png';
                     }
+
+                    // START: MODIFIED SOCIAL MEDIA RENDER
+                    const socialDoc = await db.collection('site_settings').doc('social_media').get();
+                    socialLinksContainer.innerHTML = '';
+                    if (socialDoc.exists && socialDoc.data().links) {
+                        socialDoc.data().links.forEach(createSocialLinkInput);
+                    }
+                    // END: MODIFIED SOCIAL MEDIA RENDER
+
                 } catch (error) {
                     console.error("Error fetching settings:", error);
                     showToast("সেটিংস লোড করতে সমস্যা হয়েছে।", "error");
@@ -2097,6 +2152,70 @@
                     showToast("সেটিংস সেভ করতে সমস্যা হয়েছে।", "error");
                 }
             });
+
+            // --- START: MODIFIED SOCIAL MEDIA SCRIPT ---
+            function createSocialLinkInput(link = { platform: 'facebook', link: '' }) {
+                const entryDiv = document.createElement('div');
+                entryDiv.className = 'social-link-entry';
+                
+                const platformSelectHTML = `
+                    <select class="social-platform-select" required>
+                        <option value="facebook" ${link.platform === 'facebook' ? 'selected' : ''}>Facebook</option>
+                        <option value="youtube" ${link.platform === 'youtube' ? 'selected' : ''}>YouTube</option>
+                        <option value="whatsapp" ${link.platform === 'whatsapp' ? 'selected' : ''}>WhatsApp</option>
+                        <option value="instagram" ${link.platform === 'instagram' ? 'selected' : ''}>Instagram</option>
+                        <option value="twitter" ${link.platform === 'twitter' ? 'selected' : ''}>Twitter / X</option>
+                        <option value="linkedin" ${link.platform === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
+                    </select>
+                `;
+
+                entryDiv.innerHTML = `
+                    ${platformSelectHTML}
+                    <input type="url" class="social-link-url" placeholder="সম্পূর্ণ লিঙ্ক (https://...)" value="${link.link || ''}" required>
+                    <button type="button" class="btn btn-remove remove-social-link-btn"><span class="material-symbols-outlined">delete</span></button>
+                `;
+                socialLinksContainer.appendChild(entryDiv);
+            }
+
+            addSocialLinkBtn.addEventListener('click', () => {
+                createSocialLinkInput();
+            });
+
+            socialLinksContainer.addEventListener('click', (e) => {
+                if (e.target.closest('.remove-social-link-btn')) {
+                    e.target.closest('.social-link-entry').remove();
+                }
+            });
+
+            socialMediaForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const links = [];
+                const entries = socialLinksContainer.querySelectorAll('.social-link-entry');
+                
+                let hasError = false;
+                entries.forEach(entry => {
+                    const platform = entry.querySelector('.social-platform-select').value;
+                    const link = entry.querySelector('.social-link-url').value.trim();
+                    if (link) { // Only add if link is not empty
+                        links.push({ platform, link });
+                    } else {
+                        showToast("অনুগ্রহ করে সব লিঙ্ক ইনপুট পূরণ করুন।", "error");
+                        hasError = true;
+                    }
+                });
+                
+                if(hasError) return;
+
+                try {
+                    await db.collection('site_settings').doc('social_media').set({ links });
+                    showToast("সোশ্যাল মিডিয়া লিঙ্ক সফলভাবে সেভ করা হয়েছে!");
+                } catch (error) {
+                    console.error("Error saving social media links:", error);
+                    showToast("লিঙ্ক সেভ করতে সমস্যা হয়েছে।", "error");
+                }
+            });
+            // --- END: MODIFIED SOCIAL MEDIA SCRIPT ---
+
 
             // --- CRUD Operations ---
             window.updatePaymentStatus = async (docId) => {
