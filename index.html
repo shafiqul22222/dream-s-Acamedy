@@ -2225,10 +2225,10 @@
                 <div class="footer-col">
                     <h4>হেল্পফুল লিংকস</h4>
                     <ul>
-                        <li><a href="#">সকল কোর্স</a></li>
-                        <li><a href="#">আমাদের সম্পর্কে</a></li>
-                        <li><a href="#">স্টুডেন্ট ফিডব্যাক</a></li>
-                        <li><a href="#">হেল্পডেস্ক</a></li>
+                        <li><a href="#courses">সকল কোর্স</a></li>
+                        <li><a href="#about">আমাদের সম্পর্কে</a></li>
+                        <li><a href="#trust">স্টুডেন্ট ফিডব্যাক</a></li>
+                        <li><a href="https://wa.me/8801701126965" target="_blank">হেল্পডেস্ক</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -3704,6 +3704,16 @@
                     }
                 });
             });
+            
+            // START: ADDED CODE FOR FOOTER LINKS
+            document.querySelectorAll('.footer-col a[href^="#"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    showPageSection(targetId);
+                });
+            });
+            // END: ADDED CODE FOR FOOTER LINKS
 
             logoLink.addEventListener('click', (e) => {
                 e.preventDefault();
