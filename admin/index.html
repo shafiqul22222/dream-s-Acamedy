@@ -1345,6 +1345,74 @@
                     </form>
                     <!-- END: MODIFIED SOCIAL MEDIA SECTION -->
 
+                    <!-- START: PAYMENT GATEWAY SETUP -->
+                    <hr style="margin: 30px 0;">
+                    <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">পেমেন্ট গেটওয়ে সেটআপ</h3>
+                    <form id="payment-gateway-form">
+                        <div class="form-group">
+                            <label for="gateway-selector">কোন পেমেন্ট গেটওয়ে ব্যবহার করতে চান?</label>
+                            <select id="gateway-selector" class="form-group">
+                                <option value="none">কোনোটিই নয় (ম্যানুয়াল)</option>
+                                <option value="sslcommerz">SSLCOMMERZ</option>
+                                <option value="aamarpay">aamarPay</option>
+                                <option value="zinipay">ZiniPay</option>
+                                <option value="stripe">Stripe</option>
+                                <option value="paypal">PayPal</option>
+                            </select>
+                        </div>
+
+                        <!-- SSLCommerz Fields -->
+                        <div id="sslcommerz-fields" class="gateway-fields hidden">
+                            <div class="form-group">
+                                <label for="ssl-store-id">Store ID</label>
+                                <input type="text" id="ssl-store-id" placeholder="আপনার SSLCOMMERZ Store ID">
+                            </div>
+                            <div class="form-group">
+                                <label for="ssl-store-password">Store Password</label>
+                                <input type="text" id="ssl-store-password" placeholder="আপনার SSLCOMMERZ Store Password">
+                            </div>
+                            <div class="form-group">
+                                <label for="ssl-sandbox-mode">টেস্ট মোড (Sandbox)</label>
+                                <select id="ssl-sandbox-mode" class="form-group">
+                                    <option value="true">হ্যাঁ (টেস্টিং এর জন্য)</option>
+                                    <option value="false">না (লাইভ পেমেন্টের জন্য)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- aamarPay Fields -->
+                        <div id="aamarpay-fields" class="gateway-fields hidden">
+                            <div class="form-group">
+                                <label for="aamarpay-store-id">Store ID</label>
+                                <input type="text" id="aamarpay-store-id" placeholder="আপনার aamarPay Store ID">
+                            </div>
+                            <div class="form-group">
+                                <label for="aamarpay-signature-key">Signature Key</label>
+                                <input type="text" id="aamarpay-signature-key" placeholder="আপনার aamarPay Signature Key">
+                            </div>
+                             <div class="form-group">
+                                <label for="aamarpay-sandbox-mode">টেস্ট মোড (Sandbox)</label>
+                                <select id="aamarpay-sandbox-mode" class="form-group">
+                                    <option value="true">হ্যাঁ (টেস্টিং এর জন্য)</option>
+                                    <option value="false">না (লাইভ পেমেন্টের জন্য)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- ZiniPay Fields -->
+                        <div id="zinipay-fields" class="gateway-fields hidden">
+                             <div class="form-group">
+                                <label for="zinipay-merchant-key">Merchant Key</label>
+                                <input type="text" id="zinipay-merchant-key" placeholder="আপনার ZiniPay Merchant Key">
+                            </div>
+                        </div>
+
+                        <!-- Add other gateway fields (Stripe, PayPal) similarly -->
+
+                        <button type="submit" class="btn btn-primary" style="width: auto; justify-content: flex-start;">গেটওয়ে সেটিংস সেভ করুন</button>
+                    </form>
+                    <!-- END: PAYMENT GATEWAY SETUP -->
+
                 </div>
             </div>
         </main>
@@ -1407,6 +1475,12 @@
             const addSocialLinkBtn = document.getElementById('add-social-link-btn');
             const socialLinksContainer = document.getElementById('social-links-container');
             // END: MODIFIED SOCIAL MEDIA ELEMENTS
+
+            // START: PAYMENT GATEWAY ELEMENTS
+            const paymentGatewayForm = document.getElementById('payment-gateway-form');
+            const gatewaySelector = document.getElementById('gateway-selector');
+            const gatewayFields = document.querySelectorAll('.gateway-fields');
+            // END: PAYMENT GATEWAY ELEMENTS
             
             const sendServiceForm = document.getElementById('send-service-form');
             const serviceSelection = document.getElementById('service-selection');
@@ -2105,6 +2179,33 @@
                     }
                     // END: MODIFIED SOCIAL MEDIA RENDER
 
+                    // START: PAYMENT GATEWAY RENDER
+                    const gatewayDoc = await db.collection('site_settings').doc('payment_gateway').get();
+                    if (gatewayDoc.exists) {
+                        const data = gatewayDoc.data();
+                        gatewaySelector.value = data.active_gateway || 'none';
+                        
+                        if (data.sslcommerz) {
+                            document.getElementById('ssl-store-id').value = data.sslcommerz.store_id || '';
+                            document.getElementById('ssl-store-password').value = data.sslcommerz.store_password || '';
+                            document.getElementById('ssl-sandbox-mode').value = data.sslcommerz.sandbox || 'true';
+                        }
+                        if (data.aamarpay) {
+                            document.getElementById('aamarpay-store-id').value = data.aamarpay.store_id || '';
+                            document.getElementById('aamarpay-signature-key').value = data.aamarpay.signature_key || '';
+                            document.getElementById('aamarpay-sandbox-mode').value = data.aamarpay.sandbox || 'true';
+                        }
+                        if (data.zinipay) {
+                             document.getElementById('zinipay-merchant-key').value = data.zinipay.merchant_key || '';
+                        }
+                        // Add loaders for other gateways here
+                        
+                        // Trigger change to show the correct fields
+                        gatewaySelector.dispatchEvent(new Event('change'));
+                    }
+                    // END: PAYMENT GATEWAY RENDER
+
+
                 } catch (error) {
                     console.error("Error fetching settings:", error);
                     showToast("সেটিংস লোড করতে সমস্যা হয়েছে।", "error");
@@ -2215,6 +2316,50 @@
                 }
             });
             // --- END: MODIFIED SOCIAL MEDIA SCRIPT ---
+
+            // START: PAYMENT GATEWAY SCRIPT
+            gatewaySelector.addEventListener('change', () => {
+                const selectedGateway = gatewaySelector.value;
+                gatewayFields.forEach(fieldDiv => {
+                    if (fieldDiv.id === `${selectedGateway}-fields`) {
+                        fieldDiv.classList.remove('hidden');
+                    } else {
+                        fieldDiv.classList.add('hidden');
+                    }
+                });
+            });
+
+            paymentGatewayForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const activeGateway = gatewaySelector.value;
+
+                const settings = {
+                    active_gateway: activeGateway,
+                    sslcommerz: {
+                        store_id: document.getElementById('ssl-store-id').value,
+                        store_password: document.getElementById('ssl-store-password').value,
+                        sandbox: document.getElementById('ssl-sandbox-mode').value
+                    },
+                    aamarpay: {
+                        store_id: document.getElementById('aamarpay-store-id').value,
+                        signature_key: document.getElementById('aamarpay-signature-key').value,
+                        sandbox: document.getElementById('aamarpay-sandbox-mode').value
+                    },
+                    zinipay: {
+                        merchant_key: document.getElementById('zinipay-merchant-key').value
+                    }
+                    // Add other gateways here
+                };
+
+                try {
+                    await db.collection('site_settings').doc('payment_gateway').set(settings, { merge: true });
+                    showToast("পেমেন্ট গেটওয়ে সেটিংস সফলভাবে সেভ করা হয়েছে!", "success");
+                } catch (error) {
+                    console.error("Error saving payment gateway settings:", error);
+                    showToast("সেটিংস সেভ করতে সমস্যা হয়েছে।", "error");
+                }
+            });
+            // END: PAYMENT GATEWAY SCRIPT
 
 
             // --- CRUD Operations ---
