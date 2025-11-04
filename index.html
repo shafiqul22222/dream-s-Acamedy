@@ -5,24 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dream's Academy</title>
 
-    <!-- START: Social Share Meta Tags (আপনার অনুরোধ অনুযায়ী যোগ করা হয়েছে) -->
-    <!-- এই ট্যাগগুলো লিঙ্ক শেয়ার করলে প্রিভিউতে লোগো ও তথ্য দেখাতে সাহায্য করে -->
+    <!-- START: Social Share Meta Tags -->
     <meta property="og:title" content="Dream's Academy - আপনার সফলতার পথে">
     <meta property="og:description" content="অনলাইন সার্ভে করে ইনকাম করতে যোগ দিন আমাদের ড্রিমস একাডেমির সাথে! প্রথম ক্লাস থেকেই ইনকাম শুরু করুন।">
     <meta property="og:image" content="https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png">
-    <meta property="og:url" content="https://dreamsedu.publicvm.com/"> <!-- এখানে আপনার ওয়েবসাইটের আসল লিঙ্ক দিন -->
+    <meta property="og:url" content="https://dreamsedu.publicvm.com/">
     <meta property="og:type" content="website">
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://dreamsedu.publicvm.com/"> <!-- এখানে আপনার ওয়েবসাইটের আসল লিঙ্ক দিন -->
+    <meta property="twitter:url" content="https://dreamsedu.publicvm.com/">
     <meta name="twitter:title" content="Dream's Academy - আপনার সফলতার পথে">
     <meta name="twitter:description" content="অনলাইন সার্ভে করে ইনকাম করতে যোগ দিন আমাদের ড্রিমস একাডেমির সাথে! প্রথম ক্লাস থেকেই ইনকাম শুরু করুন।">
     <meta name="twitter:image" content="https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png">
     <!-- END: Social Share Meta Tags -->
 
-    <!-- THIS IS THE CORRECT LINE FOR YOUR FAVICON -->
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png">
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/KzHvk0wq/Black-White-Modern_Initial_Logo-250-x-110-px.png">
     <!-- Google Fonts: Hind Siluri for Bengali -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,6 +42,13 @@
             --border-color: #dee2e6;
             --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             --card-radius: 12px;
+            /* START: DYNAMIC THEME COLORS */
+            --bkash-theme-bg: #E2136E;
+            --nagad-theme-bg: #F54D27;
+            --rocket-theme-bg: #8a2be2;
+            --upay-theme-bg: #00AEEF;
+            --default-theme-bg: var(--secondary-blue);
+            /* END: DYNAMIC THEME COLORS */
         }
 
         * {
@@ -841,6 +846,7 @@
             line-height: 1;
             padding: 0;
             transition: color 0.3s ease;
+            z-index: 10;
         }
         .close-modal-btn:hover {
             color: var(--text-dark);
@@ -1020,6 +1026,196 @@
         }
         /* --- END: UPDATED MODAL & INPUT STYLES --- */
         
+        /* --- START: UPDATED PAYMENT MODAL STYLES (DYNAMIC) --- */
+        #payment-modal .login-card {
+            max-width: 450px;
+            background: #F3F4F6;
+            padding: 0;
+            display: block;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        #payment-modal .modal-form-panel {
+            width: 100%;
+            padding: 0;
+        }
+        .payment-design-container {
+            padding: 20px;
+        }
+        .payment-design-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .payment-design-header .academy-logo img {
+            height: 35px;
+        }
+        .payment-design-header .invoice-details {
+            text-align: right;
+            font-size: 0.8em;
+            color: #6B7280;
+        }
+        .payment-design-header .invoice-details strong {
+            display: block;
+            color: var(--text-dark);
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        .payment-info-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #E5E7EB;
+        }
+        .payment-info-bar .payment-method-logo img {
+            height: 40px;
+        }
+        .payment-info-bar .amount-display {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--text-dark);
+            border: 2px solid #E5E7EB;
+            padding: 5px 20px;
+            border-radius: 8px;
+        }
+        .payment-note {
+            text-align: center;
+            font-size: 0.9em;
+            color: #4B5563;
+            margin-bottom: 15px;
+        }
+
+        .payment-instructions-panel {
+            padding: 25px;
+            border-radius: 12px;
+            color: #fff;
+            transition: background-color 0.4s ease;
+            background-color: var(--default-theme-bg); /* Default color */
+        }
+        /* Dynamic theme colors */
+        .payment-instructions-panel.bkash-theme { background-color: var(--bkash-theme-bg); }
+        .payment-instructions-panel.nagad-theme { background-color: var(--nagad-theme-bg); }
+        .payment-instructions-panel.rocket-theme { background-color: var(--rocket-theme-bg); }
+        .payment-instructions-panel.upay-theme { background-color: var(--upay-theme-bg); }
+
+        .payment-instructions-panel h3 {
+            font-size: 1.1em;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .trx-input-group {
+            margin-bottom: 20px;
+        }
+        .trx-input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1em;
+            text-align: center;
+        }
+        .trx-input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .payment-instructions-list {
+            list-style: none;
+            font-size: 0.95em;
+        }
+        .payment-instructions-list li {
+            margin-bottom: 12px;
+            line-height: 1.5;
+            padding-left: 10px;
+            position: relative;
+        }
+         .payment-instructions-list li::before {
+            content: '•';
+            position: absolute;
+            left: -5px;
+            top: 0;
+            font-size: 1.2em;
+         }
+
+        .payment-instructions-list .payment-number-li {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .payment-instructions-list .payment-number-li strong {
+            font-size: 1.2em;
+            letter-spacing: 1px;
+        }
+        .payment-number-li .copy-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-family: 'Hind Siliguri', sans-serif;
+            color: var(--default-theme-bg); /* Default text color */
+        }
+        
+        .bkash-theme .copy-btn { color: var(--bkash-theme-bg); }
+        .nagad-theme .copy-btn { color: var(--nagad-theme-bg); }
+        .rocket-theme .copy-btn { color: var(--rocket-theme-bg); }
+        .upay-theme .copy-btn { color: var(--upay-theme-bg); }
+
+        #payment-submit-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #333;
+            background-color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        #payment-submit-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .bkash-theme #payment-submit-btn { color: var(--bkash-theme-bg); }
+        .nagad-theme #payment-submit-btn { color: var(--nagad-theme-bg); }
+        .rocket-theme #payment-submit-btn { color: var(--rocket-theme-bg); }
+        .upay-theme #payment-submit-btn { color: var(--upay-theme-bg); }
+        .default-theme #payment-submit-btn { color: var(--default-theme-bg); }
+
+
+        .payment-method-selector {
+            margin-bottom: 15px;
+        }
+        .payment-method-selector label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .payment-method-selector select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1em;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+        /* --- END: UPDATED PAYMENT MODAL STYLES (DYNAMIC) --- */
+
         /* --- Dashboard Styles --- */
         .dashboard {
             padding: 40px 0;
@@ -1939,8 +2135,7 @@
                         </div>
                     </div>
                     <div class="hero-image-wrapper">
-                        <!-- === MODIFIED: Replaced broken link with a valid placeholder. Please replace this with your actual image URL. === -->
-                        <img id="hero-image" src="https://i.postimg.cc/Bv2C7y1A/learning-concept.png" alt="Online Education Platform">
+                        <img id="hero-image" src="https://i.ibb.co/6y15g7p/learning-concept-illustration-114360-6186-removebg-preview.png" alt="Online Education Platform">
                     </div>
                 </div>
             </section>
@@ -1950,8 +2145,7 @@
                     <h2 class="section-title">আমাদের সম্পর্কে জানুন</h2>
                     <div class="about-grid">
                         <div class="about-image">
-                            <!-- === MODIFIED: Replaced broken link with a valid placeholder. Please replace this with your actual image URL. === -->
-                            <img id="about-us-image" src="https://i.postimg.cc/tJ62w3s5/about-us-image.jpg" alt="আমাদের সম্পর্কে">
+                            <img id="about-us-image" src="https://i.ibb.co/hK4k1g2/about-us-image.jpg" alt="আমাদের সম্পর্কে">
                         </div>
                         <div class="about-content">
                             <h3>আমাদের লক্ষ্য আপনার সফলতায় সাহায্য করা</h3>
@@ -2147,8 +2341,7 @@
                                             <h3>ভিডিও প্লেয়ার</h3>
                                             <p>শুরু করার জন্য ডান পাশ থেকে একটি ক্লাস সিলেক্ট করুন।</p>
                                         </div>
-                                        <!-- === MODIFIED: Simplified the 'allow' attribute to remove console warnings === -->
-                                        <iframe id="youtube-player" src="" title="YouTube video player" frameborder="0" allow="picture-in-picture; fullscreen"></iframe>
+                                        <iframe id="youtube-player" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                     </div>
                                     <!-- === START: NEWLY ADDED CLASS NOTE CONTAINER === -->
                                     <div id="class-note-container" class="hidden">
@@ -2171,56 +2364,58 @@
 
     </main>
 
-    <!-- Payment Modal (Manual) -->
+    <!-- ======================= DYNAMIC PAYMENT MODAL (UPDATED) ======================= -->
     <div class="login-modal hidden" id="payment-modal">
-        <div class="login-card" style="max-width: 500px; display: block; text-align: left; padding: 0;">
-            <div class="modal-form-panel" style="width: 100%; position: relative;">
+        <div class="login-card">
+            <div class="modal-form-panel">
                 <button id="close-payment-modal" class="close-modal-btn">&times;</button>
-                <h2>পেমেন্ট তথ্য জমা দিন</h2>
-                <div style="background: var(--background-light); padding: 15px; border-radius: 8px; margin-bottom: 25px;">
-                     <p style="margin-bottom: 5px;">কোর্স: <strong id="payment-course-name-display"></strong></p>
-                     <p style="font-size: 1.5em; color: var(--primary-blue); margin-bottom: 0;">মূল্য: <strong id="payment-amount-display"></strong></p>
-                </div>
-
-                <div style="padding: 15px; border: 1px dashed var(--secondary-blue); border-radius: 8px; margin-bottom: 25px; text-align: center;">
-                    <p style="margin-bottom: 10px; font-weight: 500;">নিচের নাম্বারটি কপি করে সেন্ডমানি করুন (বিকাশ/নগদ)</p>
-                    <div style="display: flex; justify-content: center; align-items: center; gap: 10px; background: #eaf6f6; padding: 10px; border-radius: 8px;">
-                        <strong id="payment-number" style="font-size: 1.4em; color: var(--primary-blue); letter-spacing: 1px;">01703743441</strong>
-                        <button type="button" id="copy-payment-number-btn" title="নম্বরটি কপি করুন" style="background: var(--secondary-blue); color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;">
-                            <span class="material-symbols-outlined" style="font-size: 18px;">content_copy</span> কপি
-                        </button>
+                
+                <form id="payment-form" class="payment-design-container">
+                    <div class="payment-design-header">
+                        <div class="academy-logo">
+                            <img src="https://i.ibb.co/JqgWkCg/placeholder.png" alt="Dream's Academy Logo">
+                        </div>
+                        <div class="invoice-details">
+                            <span id="payment-course-name-display">কোর্সের নাম</span>
+                            <strong>DREAMS ACADEMY</strong>
+                        </div>
                     </div>
-                </div>
-
-                <form id="payment-form">
-                    <input type="hidden" id="payment-course-name">
-                    <div class="input-group">
-                        <span class="material-symbols-outlined">mail</span>
-                        <input type="email" id="payment-email" placeholder="আপনার ইমেইল" readonly style="background-color: #e9ecef; cursor: not-allowed;">
-                        <label for="payment-email">আপনার ইমেইল</label>
+    
+                    <div class="payment-info-bar">
+                        <div class="payment-method-logo">
+                            <img id="payment-method-logo-img" src="https://i.ibb.co/JqgWkCg/placeholder.png" alt="Payment Method">
+                        </div>
+                        <div class="amount-display" id="payment-amount-display">৳ 0</div>
                     </div>
-
-                    <div class="input-group">
-                         <span class="material-symbols-outlined">payments</span>
-                         <select id="payment-account-type" required style="padding: 15px 15px 15px 50px; -webkit-appearance: none; appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236c757d%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 15px center; background-size: 12px;">
-                            <option value="Bkash">বিকাশ</option>
-                            <option value="Nagad">নগদ</option>
+    
+                    <div class="payment-method-selector">
+                         <label for="payment-account-type">পেমেন্ট মাধ্যম সিলেক্ট করুন</label>
+                         <select id="payment-account-type" required>
+                             <option value="">লোড হচ্ছে...</option>
                          </select>
                     </div>
 
-                    <div class="input-group">
-                        <span class="material-symbols-outlined">attach_money</span>
-                        <input type="text" id="payment-amount" placeholder="টাকার পরিমাণ" readonly style="background-color: #e9ecef; cursor: not-allowed;">
-                        <label for="payment-amount">টাকার পরিমাণ</label>
+                    <p class="payment-note">নোটঃ টাকা পাঠানোর 5-10 সেকেন্ড পর ভেরিফাই করবেন।</p>
+                    
+                    <div id="dynamic-payment-design">
+                        <div class="payment-instructions-panel default-theme" id="payment-instructions-panel">
+                            <h3>ট্রানজেকশন আইডি দিন</h3>
+                            <div class="trx-input-group">
+                                <input type="text" id="payment-trx-id" placeholder="ট্রানজেকশন আইডি দিন" required>
+                            </div>
+                            <p style="text-align:center; font-weight: 500; margin-bottom: 15px;">Instructions:</p>
+                            <ul class="payment-instructions-list" id="payment-instructions-list">
+                                <!-- Instructions will be loaded here dynamically -->
+                            </ul>
+                        </div>
                     </div>
+                    
+                    <!-- Hidden fields to store data for submission -->
+                    <input type="hidden" id="payment-course-name">
+                    <input type="hidden" id="payment-email" readonly>
+                    <input type="hidden" id="payment-amount" readonly>
 
-                    <div class="input-group">
-                        <span class="material-symbols-outlined">pin</span>
-                        <input type="text" id="payment-trx-id" placeholder="আপনার সেন্ডমানির ট্রান্সজেকশন আইডি দিন" required>
-                        <label for="payment-trx-id">ট্রান্সজেকশন আইডি</label>
-                    </div>
-
-                    <button type="submit" class="btn btn-gradient" style="width: 100%; padding: 14px; border-radius: 8px;">সাবমিট করুন →</button>
+                    <button type="submit" id="payment-submit-btn">VERIFY</button>
                 </form>
             </div>
         </div>
@@ -2281,10 +2476,6 @@
     </a>
 
     <div id="toast-container"></div>
-    
-    <!-- START: NEWLY ADDED CONTAINER FOR DYNAMIC PAYMENT FORMS -->
-    <div id="online-payment-form-container" style="display: none;"></div>
-    <!-- END: NEWLY ADDED CONTAINER -->
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -2326,7 +2517,7 @@
         const db = firebase.firestore();
         
         let notificationListener = null;
-        let paymentGatewaySettings = null; // <<<< NEW: Global variable for payment settings
+        let availableGateways = []; // NEW: To store available payment gateways
 
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -2378,10 +2569,18 @@
             const mainContentSections = document.querySelectorAll('#main-content .page-section');
             const internalLinkButtons = document.querySelectorAll('.internal-link-btn');
 
+            // --- START: PAYMENT MODAL VARIABLE DECLARATIONS (UPDATED) ---
             const paymentModal = document.getElementById('payment-modal');
             const closePaymentModalBtn = document.getElementById('close-payment-modal');
             const paymentForm = document.getElementById('payment-form');
-            const copyPaymentNumberBtn = document.getElementById('copy-payment-number-btn');
+            const paymentAccountTypeSelect = document.getElementById('payment-account-type');
+            const paymentMethodLogo = document.getElementById('payment-method-logo-img');
+            const paymentTrxInput = document.getElementById('payment-trx-id');
+            const paymentSubmitBtn = document.getElementById('payment-submit-btn');
+            const instructionsPanel = document.getElementById('payment-instructions-panel');
+            const instructionsList = document.getElementById('payment-instructions-list');
+            // --- END: PAYMENT MODAL VARIABLE DECLARATIONS (UPDATED) ---
+
             const adminPanelLinkLi = document.getElementById('admin-panel-link-li');
             const ADMIN_EMAIL = "arafatislamshofiqul@gmail.com";
 
@@ -2399,29 +2598,13 @@
 
             // --- Functions ---
             
-            // <<<< NEW: Function to load payment gateway settings from Firestore >>>>
-            async function loadPaymentGatewaySettings() {
-                try {
-                    const doc = await db.collection('site_settings').doc('payment_gateway').get();
-                    if (doc.exists) {
-                        paymentGatewaySettings = doc.data();
-                        console.log("Payment gateway settings loaded:", paymentGatewaySettings);
-                    } else {
-                        console.log("No payment gateway settings found. Defaulting to manual.");
-                        paymentGatewaySettings = { active_gateway: 'none' };
-                    }
-                } catch (error) {
-                    console.error("Error fetching payment gateway settings:", error);
-                    paymentGatewaySettings = { active_gateway: 'none' }; // Fallback to manual on error
-                }
-            }
-            
             async function loadHeaderLogo() {
                 const logoElements = [
                     document.getElementById('header-logo-img'),
                     document.getElementById('header-logo-img-modal'),
                     document.getElementById('header-logo-img-modal2'),
-                    document.getElementById('footer-logo-img')
+                    document.getElementById('footer-logo-img'),
+                    document.querySelector('.payment-design-header .academy-logo img') // Added payment modal logo
                 ].filter(el => el);
 
                 if (logoElements.length === 0) return;
@@ -2450,11 +2633,11 @@
                     if (doc.exists && doc.data().imageUrl) {
                         heroImageElement.src = doc.data().imageUrl;
                     } else {
-                        heroImageElement.src = 'https://i.postimg.cc/Bv2C7y1A/learning-concept.png';
+                        heroImageElement.src = 'https://i.ibb.co/6y15g7p/learning-concept-illustration-114360-6186-removebg-preview.png';
                     }
                 } catch (error) {
                     console.error("Error fetching hero image:", error);
-                    heroImageElement.src = 'https://i.postimg.cc/Bv2C7y1A/learning-concept.png';
+                    heroImageElement.src = 'https://i.ibb.co/6y15g7p/learning-concept-illustration-114360-6186-removebg-preview.png';
                 }
             }
             
@@ -2482,7 +2665,7 @@
                     facebook: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.04c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm2.25 10.1h-1.61v4.86h-2.12v-4.86h-1.07v-1.91h1.07v-1.3c0-1.07.65-1.64 1.6-1.64h1.36v1.9h-.98c-.52 0-.62.25-.62.61v1.42h1.61l-.21 1.91z"/></svg>`,
                     youtube: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.04c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm5.71 10.59l-4.71 2.72c-.4.23-.9-.06-.9-.53v-5.44c0-.47.5-.76.9-.53l4.71 2.72c.4.23.4.87 0 1.1z"/></svg>`,
                     whatsapp: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.04c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm4.46 12.11c-.27.15-.99.49-1.14.54-.15.05-.26.08-.42-.04-.16-.12-.66-.24-1.25-.77-.47-.42-.78-.94-.88-1.1-.1-.16-.01-.25.07-.34.07-.07.16-.18.23-.25.07-.07.1-.11.16-.18.06-.07.03-.13-.01-.18-.04-.05-.42-1.01-.58-1.39-.15-.37-.31-.32-.42-.32h-.19c-.11 0-.28.04-.42.22-.14.18-.54.53-.54 1.29s.55 1.5 1.23 2.6c1.17 1.9 2.04 2.22 2.87 2.22.65 0 1.15-.38 1.34-.74.19-.36.19-.68.13-.74-.05-.06-.18-.1-.36-.21z"/></svg>`,
-                    instagram: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2c-2.72 0-3.06.01-4.12.06-1.06.05-1.79.22-2.42.47-.65.25-1.17.59-1.69 1.11s-.86 1.04-1.11 1.69c-.25.63-.42 1.36-.47 2.42-.05 1.06-.06 1.4-.06 4.12s.01 3.06.06 4.12c.05 1.06.22 1.79.47 2.42.25.65.59 1.17 1.11 1.69s1.04.86 1.69 1.11c.63.25 1.36.42 2.42.47 1.06.05 1.4.06 4.12.06s3.06-.01 4.12-.06c1.06-.05 1.79-.22 2.42-.47.65-.25 1.17-.59 1.69-1.11s.86-1.04-1.11-1.69c.25-.63.42-1.36.47-2.42.05-1.06.06-1.4.06-4.12s-.01-3.06-.06-4.12c-.05-1.06-.22-1.79-.47-2.42-.25-.65-.59-1.17-1.11-1.69s-1.04-.86-1.69-1.11c-.63-.25-1.36-.42-2.42-.47-1.06-.05-1.4-.06-4.12-.06zm0 1.8c2.67 0 2.98.01 4.04.06 1-.05 1.5.19 1.84.33.43.17.72.39.99.66.27.27.49.56.66.99.14.34.38.84.33 1.84.05 1.06.06 1.37.06 4.04s-.01 2.98-.06 4.04c.05 1-.19 1.5-.33 1.84-.17.43-.39.72-.66.99-.27.27-.56.49-.99.66-.34.14-.84.38-1.84.33-1.06.05-1.37.06-4.04.06s-2.98-.01-4.04-.06c-1 .05-1.5-.19-1.84-.33-.43-.17-.72-.39-.99-.66-.27-.27-.49-.56-.66-.99-.14-.34-.38-.84-.33-1.84-.05-1.06-.06-1.37-.06-4.04s.01-2.98.06-4.04c-.05-1 .19-1.5.33-1.84.17-.43.39-.72.66-.99.27-.27.56.49.99-.66.34-.14.84-.38 1.84-.33C9.02 3.81 9.33 3.8 12 3.8zm0 3.35c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zm0 7.2c-1.49 0-2.7-1.21-2.7-2.7s1.21-2.7 2.7-2.7 2.7 1.21 2.7 2.7-1.21 2.7-2.7 2.7zm5.25-8.1c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25z"/></svg>`,
+                    instagram: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2c-2.72 0-3.06.01-4.12.06-1.06.05-1.79.22-2.42.47-.65.25-1.17.59-1.69 1.11s-.86 1.04-1.11 1.69c-.25.63-.42 1.36-.47 2.42-.05 1.06-.06 1.4-.06 4.12s.01 3.06.06 4.12c.05 1.06.22 1.79.47 2.42.25.65.59 1.17 1.11 1.69s1.04.86 1.69 1.11c.63.25 1.36.42 2.42.47 1.06.05 1.4.06 4.12.06s3.06-.01 4.12-.06c1.06-.05 1.79-.22 2.42-.47.65-.25 1.17-.59 1.69-1.11s.86-1.04 1.11-1.69c.25-.63-.42-1.36-.47-2.42.05-1.06.06-1.4.06-4.12s-.01-3.06-.06-4.12c-.05-1.06-.22-1.79-.47-2.42-.25-.65-.59-1.17-1.11-1.69s-1.04-.86-1.69-1.11c-.63-.25-1.36-.42-2.42-.47-1.06-.05-1.4-.06-4.12-.06zm0 1.8c2.67 0 2.98.01 4.04.06 1-.05 1.5.19 1.84.33.43.17.72.39.99.66.27.27.49.56.66.99.14.34.38.84.33 1.84.05 1.06.06 1.37.06 4.04s-.01 2.98-.06 4.04c.05 1-.19 1.5-.33 1.84-.17.43-.39.72-.66.99-.27.27-.56.49-.99.66-.34.14-.84.38-1.84.33-1.06.05-1.37.06-4.04.06s-2.98-.01-4.04-.06c-1 .05-1.5-.19-1.84-.33-.43-.17-.72-.39-.99-.66-.27-.27-.49-.56-.66-.99-.14-.34-.38-.84-.33-1.84-.05-1.06-.06-1.37-.06-4.04s.01-2.98.06-4.04c-.05-1 .19-1.5.33-1.84.17-.43.39.72.66.99.27-.27.56.49.99-.66.34-.14.84-.38 1.84-.33C9.02 3.81 9.33 3.8 12 3.8zm0 3.35c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zm0 7.2c-1.49 0-2.7-1.21-2.7-2.7s1.21-2.7 2.7-2.7 2.7 1.21 2.7 2.7-1.21 2.7-2.7 2.7zm5.25-8.1c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25z"/></svg>`,
                     twitter: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm4.643 7.822-.013.006L13.88 12.5l3.2 4.678h-2.5l-2.076-3.018-1.63 3.018h-.832l3.414-5.322-3.03-4.346h2.5l1.83 2.62L16.29 7.5h.832l-3.32 5.013 3.19 4.65h.5l.001-.002.013-.006 2.8-4.062-2.8-4.062z"/></svg>`,
                     linkedin: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.04C6.48 2.04 2 6.52 2 12.04s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zM8.5 17.5H6v-7h2.5v7zM7.25 9.25c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm10.25 8.25h-2.5v-3.5c0-.83-.02-1.9-1.16-1.9s-1.34.9-1.34 1.84v3.56H10v-7h2.39v1.09h.03c.33-.63 1.15-1.29 2.26-1.29 2.42 0 2.87 1.59 2.87 3.66v4.54z"/></svg>`
                 };
@@ -3540,201 +3723,105 @@
                     }
                 }
             }
+            
+            // --- START: DYNAMIC PAYMENT MODAL FUNCTIONS (UPDATED & NEW) ---
 
-            // <<<< MODIFIED: This function now decides between manual and online payment >>>>
-            function handleBuyNowClick(event) {
-                event.preventDefault();
-                const user = auth.currentUser;
-                
-                if (!user) {
-                    showLoginModal();
-                    return;
-                }
+            async function loadPaymentGateways() {
+                try {
+                    const snapshot = await db.collection('payment_gateways').where('status', '==', true).get();
+                    availableGateways = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-                const button = event.currentTarget;
-                const itemName = button.dataset.name;
-                const itemPrice = button.dataset.price;
-
-                // Check which payment gateway is active
-                if (!paymentGatewaySettings || paymentGatewaySettings.active_gateway === 'none') {
-                    // --- Fallback to Manual Payment ---
-                    document.getElementById('payment-course-name-display').textContent = itemName;
-                    document.getElementById('payment-amount-display').textContent = `৳ ${itemPrice}`;
-                    document.getElementById('payment-course-name').value = itemName;
-                    document.getElementById('payment-amount').value = itemPrice;
-                    document.getElementById('payment-email').value = user.email;
-                    paymentModal.classList.remove('hidden');
-                } else {
-                    // --- Initiate Online Payment ---
-                    initiateOnlinePayment(itemName, itemPrice, user);
+                    let optionsHTML = '<option value="" disabled selected>একটি মাধ্যম নির্বাচন করুন</option>';
+                    if (availableGateways.length > 0) {
+                        availableGateways.forEach(gw => {
+                            optionsHTML += `<option value="${gw.id}">${gw.name}</option>`;
+                        });
+                    } else {
+                        optionsHTML = '<option value="">এই মুহূর্তে কোনো পেমেন্ট মাধ্যম উপলব্ধ নেই</option>';
+                    }
+                    paymentAccountTypeSelect.innerHTML = optionsHTML;
+                } catch (error) {
+                    console.error("Error fetching payment gateways:", error);
+                    paymentAccountTypeSelect.innerHTML = '<option value="">লোড করতে সমস্যা হয়েছে</option>';
                 }
             }
             
-            // <<<< MODIFIED: Function to handle online payment redirection, NOW INCLUDES ZINIPAY >>>>
-            async function initiateOnlinePayment(itemName, itemPrice, user) {
-                if (!paymentGatewaySettings) {
-                    showToast("পেমেন্ট গেটওয়ে লোড করা যায়নি। অনুগ্রহ করে পৃষ্ঠাটি রিফ্রেশ করুন।", "error");
-                    return;
-                }
+            function handleBuyNowClick(event) {
+                event.preventDefault();
+                if (auth.currentUser) {
+                    const button = event.currentTarget;
+                    const itemName = button.dataset.name;
+                    const itemPrice = button.dataset.price;
+                    const userEmail = auth.currentUser.email;
 
-                const gateway = paymentGatewaySettings.active_gateway;
-                const formContainer = document.getElementById('online-payment-form-container');
-                formContainer.innerHTML = ''; // Clear previous forms
-                
-                const tran_id = user.uid + '-' + Date.now();
-                const base_url = window.location.origin + window.location.pathname;
+                    document.getElementById('payment-course-name-display').textContent = itemName;
+                    document.getElementById('payment-amount-display').textContent = `৳ ${itemPrice}`;
+                    
+                    document.getElementById('payment-course-name').value = itemName;
+                    document.getElementById('payment-amount').value = itemPrice;
+                    document.getElementById('payment-email').value = userEmail;
 
-                let userData = { name: user.email.split('@')[0], mobile: '01700000000' };
-                try {
-                    const userDoc = await db.collection('users').doc(user.uid).get();
-                    if(userDoc.exists) {
-                        const dbData = userDoc.data();
-                        userData.name = dbData.name || userData.name;
-                        userData.mobile = dbData.mobile || userData.mobile;
+                    // Reset to default view
+                    if(paymentAccountTypeSelect.options.length > 0) {
+                        paymentAccountTypeSelect.selectedIndex = 0;
                     }
-                } catch(e) {
-                    console.warn("Could not fetch user details for payment, using defaults.", e);
-                }
-
-                let form;
-
-                switch (gateway) {
-                    case 'sslcommerz':
-                        const sslSettings = paymentGatewaySettings.sslcommerz;
-                        if (!sslSettings || !sslSettings.store_id || !sslSettings.store_password) {
-                            showToast("SSLCommerz সঠিকভাবে কনফিগার করা নেই।", "error");
-                            return;
-                        }
-                        const sslUrl = sslSettings.sandbox === 'true' 
-                            ? "https://sandbox.sslcommerz.com/gwprocess/v4/api.php" 
-                            : "https://securepay.sslcommerz.com/gwprocess/v4/api.php";
-                        
-                        form = document.createElement('form');
-                        form.method = 'POST';
-                        form.action = sslUrl;
-
-                        const sslData = {
-                            store_id: sslSettings.store_id,
-                            store_passwd: sslSettings.store_password,
-                            total_amount: itemPrice,
-                            currency: 'BDT',
-                            tran_id: tran_id,
-                            success_url: base_url + '?payment=success',
-                            fail_url: base_url + '?payment=fail',
-                            cancel_url: base_url + '?payment=cancel',
-                            product_name: itemName,
-                            product_category: 'Education',
-                            cus_name: userData.name,
-                            cus_email: user.email,
-                            cus_phone: userData.mobile,
-                            shipping_method: 'NO',
-                            product_profile: 'non-physical-goods'
-                        };
-
-                        for (const key in sslData) {
-                            const input = document.createElement('input');
-                            input.type = 'hidden';
-                            input.name = key;
-                            input.value = sslData[key];
-                            form.appendChild(input);
-                        }
-                        
-                        showToast("পেমেন্ট গেটওয়েতে নিয়ে যাওয়া হচ্ছে...", "info");
-                        formContainer.appendChild(form);
-                        form.submit();
-                        break;
-
-                    case 'aamarpay':
-                        const aamarpaySettings = paymentGatewaySettings.aamarpay;
-                        if (!aamarpaySettings || !aamarpaySettings.store_id || !aamarpaySettings.signature_key) {
-                            showToast("aamarPay সঠিকভাবে কনফিগার করা নেই।", "error");
-                            return;
-                        }
-                         const aamarpayUrl = aamarpaySettings.sandbox === 'true'
-                            ? "https://sandbox.aamarpay.com/request.php"
-                            : "https://secure.aamarpay.com/request.php";
-
-                        form = document.createElement('form');
-                        form.method = 'POST';
-                        form.action = aamarpayUrl;
-                        
-                        const aamarpayData = {
-                            store_id: aamarpaySettings.store_id,
-                            signature_key: aamarpaySettings.signature_key,
-                            amount: itemPrice,
-                            currency: 'BDT',
-                            tran_id: tran_id,
-                            cus_name: userData.name,
-                            cus_email: user.email,
-                            cus_phone: userData.mobile,
-                            desc: itemName,
-                            success_url: base_url + '?payment=success',
-                            fail_url: base_url + '?payment=fail',
-                            cancel_url: base_url + '?payment=cancel',
-                        };
-
-                        for (const key in aamarpayData) {
-                            const input = document.createElement('input');
-                            input.type = 'hidden';
-                            input.name = key;
-                            input.value = aamarpayData[key];
-                            form.appendChild(input);
-                        }
-                        
-                        showToast("পেমেন্ট গেটওয়েতে নিয়ে যাওয়া হচ্ছে...", "info");
-                        formContainer.appendChild(form);
-                        form.submit();
-                        break;
-
-                    // <<<< START: MODIFIED ZINIPAY INTEGRATION >>>>
-                    case 'zinipay':
-                        const ziniSettings = paymentGatewaySettings.zinipay;
-                        if (!ziniSettings || !ziniSettings.merchant_key) {
-                            showToast("ZiniPay সঠিকভাবে কনফিগার করা নেই।", "error");
-                            return;
-                        }
-                        
-                        const ziniUrl = "https://zinipay.com/payment/process"; 
-
-                        form = document.createElement('form');
-                        form.method = 'POST';
-                        form.action = ziniUrl;
-
-                        // CORRECTED PARAMETER NAMES FOR ZINIPAY
-                        const ziniData = {
-                            merchant_key: ziniSettings.merchant_key,
-                            amount: itemPrice,
-                            tran_id: tran_id,
-                            p_name: itemName,
-                            p_cat: 'Education', // Added product category
-                            c_name: userData.name,
-                            c_email: user.email,
-                            c_phone: userData.mobile,
-                            success_url: base_url + '?payment=success',
-                            fail_url: base_url + '?payment=fail',
-                            cancel_url: base_url + '?payment=cancel'
-                        };
-
-                        for (const key in ziniData) {
-                            const input = document.createElement('input');
-                            input.type = 'hidden';
-                            input.name = key;
-                            input.value = ziniData[key];
-                            form.appendChild(input);
-                        }
-
-                        showToast("ZiniPay পেমেন্ট গেটওয়েতে নিয়ে যাওয়া হচ্ছে...", "info");
-                        formContainer.appendChild(form);
-                        form.submit();
-                        break;
-                    // <<<< END: MODIFIED ZINIPAY INTEGRATION >>>>
-
-                    default:
-                        showToast(`পেমেন্ট গেটওয়ে "${gateway}" এখনো সমর্থিত নয়।`, "error");
-                        break;
+                    updatePaymentDesign(); 
+                    
+                    paymentModal.classList.remove('hidden');
+                } else {
+                    showLoginModal();
                 }
             }
 
+            function updatePaymentDesign() {
+                const selectedGatewayId = paymentAccountTypeSelect.value;
+                const gateway = availableGateways.find(gw => gw.id === selectedGatewayId);
+                
+                if (!gateway) {
+                    // Reset to a default or empty state if no gateway is selected
+                    paymentMethodLogo.src = 'https://i.ibb.co/JqgWkCg/placeholder.png';
+                    instructionsPanel.className = 'payment-instructions-panel default-theme';
+                    paymentSubmitBtn.className = 'default-theme';
+                    paymentSubmitBtn.textContent = 'VERIFY';
+                    instructionsList.innerHTML = '<li>অনুগ্রহ করে একটি পেমেন্ট মাধ্যম নির্বাচন করুন।</li>';
+                    return;
+                }
+                
+                paymentMethodLogo.src = gateway.logoUrl;
+                instructionsPanel.className = `payment-instructions-panel ${gateway.theme || 'default-theme'}`;
+                paymentSubmitBtn.className = gateway.theme || 'default-theme';
+                paymentSubmitBtn.textContent = 'VERIFY';
+                
+                const amount = document.getElementById('payment-amount').value;
+                const instructions = (gateway.instructions || '').split(',').map(line => line.trim());
+                
+                let instructionsHTML = '';
+                instructions.forEach(line => {
+                    let processedLine = line.replace('{amount}', `<strong>${amount}</strong>`);
+                    if(line.includes('{number}')) {
+                        processedLine = `
+                            <li class="payment-number-li">
+                                <span>প্রাপক নম্বরঃ <strong class="payment-number">${gateway.accountNumber}</strong></span>
+                                <button type="button" class="copy-btn" onclick="copyPaymentNumber(this)">
+                                    <span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span> Copy
+                                </button>
+                            </li>
+                        `;
+                    } else {
+                       processedLine = `<li>${processedLine}</li>`;
+                    }
+                    instructionsHTML += processedLine;
+                });
+                
+                instructionsList.innerHTML = instructionsHTML;
+            }
+
+            window.copyPaymentNumber = function(button) {
+                const number = button.previousElementSibling.querySelector('.payment-number').textContent;
+                navigator.clipboard.writeText(number)
+                    .then(() => showToast('নম্বরটি সফলভাবে কপি করা হয়েছে!', 'success'))
+                    .catch(err => showToast('কপি করতে সমস্যা হয়েছে।', 'error'));
+            }
 
             function handlePaymentSubmit(event) {
                 event.preventDefault();
@@ -3743,26 +3830,34 @@
                     showToast("এই কাজটি করার জন্য আপনাকে লগইন করতে হবে।", "error");
                     return;
                 }
+                
+                const selectedGatewayId = paymentAccountTypeSelect.value;
+                if (!selectedGatewayId) {
+                    showToast("অনুগ্রহ করে একটি পেমেন্ট মাধ্যম নির্বাচন করুন।", "error");
+                    return;
+                }
+                const gateway = availableGateways.find(gw => gw.id === selectedGatewayId);
 
-                const submitBtn = paymentForm.querySelector('button[type="submit"]');
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'সাবমিট হচ্ছে...';
+                paymentSubmitBtn.disabled = true;
+                paymentSubmitBtn.textContent = 'সাবমিট হচ্ছে...';
+                
+                const trxId = paymentTrxInput.value;
 
                 const paymentData = {
                     userId: user.uid,
                     userEmail: document.getElementById('payment-email').value,
                     itemName: document.getElementById('payment-course-name').value,
                     amount: parseFloat(document.getElementById('payment-amount').value),
-                    paymentMethod: document.getElementById('payment-account-type').value,
-                    transactionId: document.getElementById('payment-trx-id').value,
+                    paymentMethod: gateway.name,
+                    transactionId: trxId,
                     status: 'pending',
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 };
 
                 if (!paymentData.transactionId.trim()) {
-                    showToast("অনুগ্রহ করে TrxID দিন।", "error");
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = 'সাবমিট করুন →';
+                    showToast("অনুগ্রহ করে Transaction ID দিন।", "error");
+                    paymentSubmitBtn.disabled = false;
+                    paymentSubmitBtn.textContent = 'VERIFY';
                     return;
                 }
 
@@ -3776,7 +3871,7 @@
                             read: false
                         });
 
-                        showToast("আপনার পেমেন্ট তথ্য ভেরিফাই করা হচ্ছে দয়া করে অল্প সময় সময় অপেক্ষা করুন", "success");
+                        showToast("আপনার পেমেন্ট তথ্য ভেরিফাই করা হচ্ছে দয়া করে অল্প সময় অপেক্ষা করুন", "success");
                         paymentForm.reset();
                         paymentModal.classList.add('hidden');
                     })
@@ -3785,10 +3880,11 @@
                         showToast("তথ্য জমা দেওয়ার সময় একটি সমস্যা হয়েছে।", "error");
                     })
                     .finally(() => {
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = 'সাবমিট করুন →';
+                        paymentSubmitBtn.disabled = false;
+                        updatePaymentDesign(); // Reset button text and color
                     });
             }
+            // --- END: DYNAMIC PAYMENT MODAL FUNCTIONS ---
 
             function handleProfileImageUpload(event) {
                 const file = event.target.files[0];
@@ -3959,7 +4055,6 @@
                 });
             });
             
-            // START: ADDED CODE FOR FOOTER LINKS
             document.querySelectorAll('.footer-col a[href^="#"]').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -3967,7 +4062,6 @@
                     showPageSection(targetId);
                 });
             });
-            // END: ADDED CODE FOR FOOTER LINKS
 
             logoLink.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -3992,13 +4086,10 @@
             window.addEventListener('scroll', handleScroll);
             scrollTopBtn.addEventListener('click', scrollToTop);
 
+            // --- START: PAYMENT EVENT LISTENERS (UPDATED) ---
             paymentForm.addEventListener('submit', handlePaymentSubmit);
-
-            copyPaymentNumberBtn.addEventListener('click', () => {
-                navigator.clipboard.writeText(document.getElementById('payment-number').textContent)
-                    .then(() => showToast('নম্বরটি সফলভাবে কপি করা হয়েছে!', 'success'))
-                    .catch(err => showToast('কপি করতে সমস্যা হয়েছে।', 'error'));
-            });
+            paymentAccountTypeSelect.addEventListener('change', updatePaymentDesign);
+            // --- END: PAYMENT EVENT LISTENERS ---
 
             if (profileImageUpload) {
                 profileImageUpload.addEventListener('change', handleProfileImageUpload);
@@ -4009,7 +4100,7 @@
             switchDashboardPage('my-courses-page');
 
             // START: CALLING ALL DATA DISPLAY FUNCTIONS ON PAGE LOAD
-            loadPaymentGatewaySettings(); // <<<< NEW: Load payment settings on start
+            loadPaymentGateways(); // NEW
             displayServices();
             displayCourses();
             displayNotices();
@@ -4017,7 +4108,7 @@
             loadHeroImage();
             loadAboutUsImage();
             loadHeaderLogo();
-            loadSocialMediaLinks(); // MODIFIED
+            loadSocialMediaLinks();
             // END: CALLING ALL DATA DISPLAY FUNCTIONS ON PAGE LOAD
         });
     </script>
