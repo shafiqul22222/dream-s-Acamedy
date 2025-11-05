@@ -1197,6 +1197,35 @@
         .upay-theme #payment-submit-btn { color: var(--upay-theme-bg); }
         .default-theme #payment-submit-btn { color: var(--default-theme-bg); }
 
+        /* START: LOADER STYLES FOR PAYMENT BUTTON */
+        #payment-submit-btn.loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            pointer-events: none;
+            padding: 10px;
+            font-size: 1em; /* Smaller font for the text */
+        }
+
+        .payment-loader {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-block;
+            border-top: 3px solid #666; /* Spinner color */
+            border-right: 3px solid transparent;
+            box-sizing: border-box;
+            animation: spin 1s linear infinite;
+        }
+
+        .bkash-theme #payment-submit-btn.loading .payment-loader { border-top-color: var(--bkash-theme-bg); }
+        .nagad-theme #payment-submit-btn.loading .payment-loader { border-top-color: var(--nagad-theme-bg); }
+        .rocket-theme #payment-submit-btn.loading .payment-loader { border-top-color: var(--rocket-theme-bg); }
+        .upay-theme #payment-submit-btn.loading .payment-loader { border-top-color: var(--upay-theme-bg); }
+        .default-theme #payment-submit-btn.loading .payment-loader { border-top-color: var(--default-theme-bg); }
+        /* END: LOADER STYLES */
 
         .payment-method-selector {
             margin-bottom: 15px;
@@ -1215,6 +1244,106 @@
             font-family: 'Hind Siliguri', sans-serif;
         }
         /* --- END: UPDATED PAYMENT MODAL STYLES (DYNAMIC) --- */
+        
+        /* START: NEW PAYMENT VERIFICATION CARD STYLES */
+        .payment-verification-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(33, 37, 41, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2001; /* Higher than other modals */
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+        .payment-verification-modal:not(.hidden) {
+            opacity: 1;
+            visibility: visible;
+        }
+        .payment-verification-card {
+            width: 90%;
+            max-width: 380px;
+            border-radius: var(--card-radius);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            overflow: hidden;
+            animation: modalZoomIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+        .verification-card-header {
+            padding: 30px 20px;
+            color: white;
+        }
+        .verification-card-header .icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+         .verification-card-header .icon .material-symbols-outlined {
+            font-size: 40px;
+            font-weight: 600;
+        }
+        .verification-card-header h2 {
+            font-size: 2.2em;
+            margin: 0;
+        }
+
+        .verification-card-body {
+            background: #fff;
+            padding: 30px 25px;
+        }
+        .verification-card-body p {
+            font-size: 1.1em;
+            color: #4B5563;
+            margin-bottom: 25px;
+        }
+        .verification-card-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        .verification-card-buttons .btn {
+            flex: 1;
+            border-radius: 8px;
+            font-size: 1em;
+            padding: 12px;
+        }
+        
+        /* Success Card Styles */
+        #payment-success-modal .verification-card-header {
+            background-color: #10B981; /* Green */
+        }
+        #payment-success-modal .btn-primary {
+            background-color: #10B981;
+            color: white;
+        }
+         #payment-success-modal .btn-secondary {
+            background-color: #F3F4F6;
+            color: #4B5563;
+        }
+
+        /* Failure Card Styles */
+        #payment-failure-modal .verification-card-header {
+            background-color: #EF4444; /* Red */
+        }
+         #payment-failure-modal .btn-primary {
+            background-color: #EF4444;
+            color: white;
+        }
+         #payment-failure-modal .btn-secondary {
+            background-color: #F3F4F6;
+            color: #4B5563;
+        }
+        /* END: NEW PAYMENT VERIFICATION CARD STYLES */
 
         /* --- Dashboard Styles --- */
         .dashboard {
@@ -2395,7 +2524,7 @@
                          </select>
                     </div>
 
-                    <p class="payment-note">নোটঃ টাকা পাঠানোর 1 মিনিট পর ভেরিফাই করবেন।</p>
+                    <p class="payment-note">নোটঃ টাকা পাঠানোর 5-10 সেকেন্ড পর ভেরিফাই করবেন।</p>
                     
                     <div id="dynamic-payment-design">
                         <div class="payment-instructions-panel default-theme" id="payment-instructions-panel">
@@ -2421,6 +2550,43 @@
         </div>
     </div>
 
+    <!-- START: NEW PAYMENT VERIFICATION MODALS -->
+    <div class="payment-verification-modal hidden" id="payment-success-modal">
+        <div class="payment-verification-card">
+            <div class="verification-card-header">
+                <div class="icon">
+                    <span class="material-symbols-outlined">check</span>
+                </div>
+                <h2>Success!</h2>
+            </div>
+            <div class="verification-card-body">
+                <p>আপনার পেমেন্ট সফলভাবে ভেরিফাই হয়েছে। 🎉</p>
+                <div class="verification-card-buttons">
+                    <button class="btn btn-secondary" id="close-success-modal-btn">Close</button>
+                    <button class="btn btn-primary" id="continue-shopping-btn">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="payment-verification-modal hidden" id="payment-failure-modal">
+        <div class="payment-verification-card">
+            <div class="verification-card-header">
+                <div class="icon">
+                     <span class="material-symbols-outlined">priority_high</span>
+                </div>
+                <h2>Whoops!</h2>
+            </div>
+            <div class="verification-card-body">
+                <p>দুঃখিত, আমরা আপনার পেমেন্টটি খুঁজে পাইনি।</p>
+                <div class="verification-card-buttons">
+                    <button class="btn btn-secondary" id="close-failure-modal-btn">Close</button>
+                    <button class="btn btn-primary" id="try-again-btn">Try Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END: NEW PAYMENT VERIFICATION MODALS -->
 
     <!-- ======================= Footer ======================= -->
     <footer class="main-footer">
@@ -2518,8 +2684,7 @@
         
         let notificationListener = null;
         let availableGateways = []; // NEW: To store available payment gateways
-
-
+        
         document.addEventListener('DOMContentLoaded', function() {
             // --- Variable Declarations ---
             const loginSignupBtn = document.getElementById('login-signup-btn');
@@ -2580,6 +2745,15 @@
             const instructionsPanel = document.getElementById('payment-instructions-panel');
             const instructionsList = document.getElementById('payment-instructions-list');
             // --- END: PAYMENT MODAL VARIABLE DECLARATIONS (UPDATED) ---
+            
+            // --- START: NEW PAYMENT VERIFICATION MODAL VARIABLES ---
+            const successModal = document.getElementById('payment-success-modal');
+            const failureModal = document.getElementById('payment-failure-modal');
+            const closeSuccessBtn = document.getElementById('close-success-modal-btn');
+            const continueShoppingBtn = document.getElementById('continue-shopping-btn');
+            const closeFailureBtn = document.getElementById('close-failure-modal-btn');
+            const tryAgainBtn = document.getElementById('try-again-btn');
+            // --- END: NEW PAYMENT VERIFICATION MODAL VARIABLES ---
 
             const adminPanelLinkLi = document.getElementById('admin-panel-link-li');
             const ADMIN_EMAIL = "arafatislamshofiqul@gmail.com";
@@ -3724,7 +3898,7 @@
                 }
             }
             
-            // --- START: DYNAMIC PAYMENT MODAL FUNCTIONS (UPDATED & NEW) ---
+            // --- START: MODIFIED/NEW PAYMENT FUNCTIONS ---
 
             async function loadPaymentGateways() {
                 try {
@@ -3760,8 +3934,7 @@
                     document.getElementById('payment-course-name').value = itemName;
                     document.getElementById('payment-amount').value = itemPrice;
                     document.getElementById('payment-email').value = userEmail;
-
-                    // Reset to default view
+                    
                     if(paymentAccountTypeSelect.options.length > 0) {
                         paymentAccountTypeSelect.selectedIndex = 0;
                     }
@@ -3778,10 +3951,9 @@
                 const gateway = availableGateways.find(gw => gw.id === selectedGatewayId);
                 
                 if (!gateway) {
-                    // Reset to a default or empty state if no gateway is selected
                     paymentMethodLogo.src = 'https://i.ibb.co/JqgWkCg/placeholder.png';
                     instructionsPanel.className = 'payment-instructions-panel default-theme';
-                    paymentSubmitBtn.className = 'default-theme';
+                    paymentSubmitBtn.className = '';
                     paymentSubmitBtn.textContent = 'VERIFY';
                     instructionsList.innerHTML = '<li>অনুগ্রহ করে একটি পেমেন্ট মাধ্যম নির্বাচন করুন।</li>';
                     return;
@@ -3822,7 +3994,10 @@
                     .then(() => showToast('নম্বরটি সফলভাবে কপি করা হয়েছে!', 'success'))
                     .catch(err => showToast('কপি করতে সমস্যা হয়েছে।', 'error'));
             }
-
+            
+            // ===============================================================
+            // START: MODIFIED CODE BLOCK FOR PAYMENT SUBMISSION
+            // ===============================================================
             function handlePaymentSubmit(event) {
                 event.preventDefault();
                 const user = auth.currentUser;
@@ -3838,11 +4013,20 @@
                 }
                 const gateway = availableGateways.find(gw => gw.id === selectedGatewayId);
 
-                paymentSubmitBtn.disabled = true;
-                paymentSubmitBtn.textContent = 'সাবমিট হচ্ছে...';
-                
                 const trxId = paymentTrxInput.value;
+                if (!trxId.trim()) {
+                    showToast("অনুগ্রহ করে Transaction ID দিন।", "error");
+                    return;
+                }
 
+                // --- Step 1: Set the button to loading state ---
+                paymentSubmitBtn.disabled = true;
+                paymentSubmitBtn.classList.add('loading');
+                paymentSubmitBtn.innerHTML = `
+                    <div class="payment-loader"></div>
+                    <span>Payment checking...</span>
+                `;
+                
                 const paymentData = {
                     userId: user.uid,
                     userEmail: document.getElementById('payment-email').value,
@@ -3854,15 +4038,10 @@
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 };
 
-                if (!paymentData.transactionId.trim()) {
-                    showToast("অনুগ্রহ করে Transaction ID দিন।", "error");
-                    paymentSubmitBtn.disabled = false;
-                    paymentSubmitBtn.textContent = 'VERIFY';
-                    return;
-                }
-
+                // --- Step 2: Save the data to Firestore ---
                 db.collection('payments').add(paymentData)
-                    .then(() => {
+                    .then((docRef) => {
+                        // Notify admin (optional, but good to keep)
                         db.collection('notifications').add({
                             title: 'নতুন পেমেন্ট',
                             message: `${paymentData.userEmail} ${paymentData.amount} টাকার একটি পেমেন্ট (${paymentData.itemName}) জমা দিয়েছেন।`,
@@ -3871,20 +4050,41 @@
                             read: false
                         });
 
-                        showToast("আপনার পেমেন্ট তথ্য ভেরিফাই করা হচ্ছে দয়া করে অল্প সময় অপেক্ষা করুন", "success");
-                        paymentForm.reset();
-                        paymentModal.classList.add('hidden');
+                        // --- Step 3: Start a 1-minute (60,000 ms) timer ---
+                        setTimeout(() => {
+                            // This code will run after exactly 1 minute
+                            
+                            // Restore the button to its original state
+                            paymentSubmitBtn.disabled = false;
+                            paymentSubmitBtn.classList.remove('loading');
+                            updatePaymentDesign(); // This function also resets the button text
+
+                            paymentModal.classList.add('hidden'); // Hide the payment form modal
+
+                            // For demonstration, we will randomly show a success or failure card.
+                            // 80% chance of success
+                            const isSuccess = Math.random() < 0.8; 
+
+                            if (isSuccess) {
+                                successModal.classList.remove('hidden');
+                            } else {
+                                failureModal.classList.remove('hidden');
+                            }
+                        }, 60000); // 60,000 milliseconds = 1 minute
+
                     })
                     .catch(error => {
                         console.error("Error writing document: ", error);
                         showToast("তথ্য জমা দেওয়ার সময় একটি সমস্যা হয়েছে।", "error");
-                    })
-                    .finally(() => {
+                        // Restore the button in case of an error
                         paymentSubmitBtn.disabled = false;
-                        updatePaymentDesign(); // Reset button text and color
+                        paymentSubmitBtn.classList.remove('loading');
+                        updatePaymentDesign();
                     });
             }
-            // --- END: DYNAMIC PAYMENT MODAL FUNCTIONS ---
+            // ===============================================================
+            // END: MODIFIED CODE BLOCK
+            // ===============================================================
 
             function handleProfileImageUpload(event) {
                 const file = event.target.files[0];
@@ -3953,7 +4153,6 @@
             // --- Event Listeners ---
             loginSignupBtn.addEventListener('click', showLoginModal);
             
-            // Close modals with close button or by clicking outside
             document.querySelectorAll('.login-modal').forEach(modal => {
                 modal.addEventListener('click', (e) => { 
                     if (e.target === modal) {
@@ -4085,11 +4284,31 @@
 
             window.addEventListener('scroll', handleScroll);
             scrollTopBtn.addEventListener('click', scrollToTop);
+            
+            // --- START: NEW PAYMENT VERIFICATION MODAL EVENT LISTENERS ---
+            closeSuccessBtn.addEventListener('click', () => {
+                successModal.classList.add('hidden');
+                paymentForm.reset();
+            });
+            continueShoppingBtn.addEventListener('click', () => {
+                successModal.classList.add('hidden');
+                paymentForm.reset();
+                showPageSection('courses');
+            });
+            closeFailureBtn.addEventListener('click', () => {
+                failureModal.classList.add('hidden');
+                paymentForm.reset();
+            });
+            tryAgainBtn.addEventListener('click', () => {
+                // This button now simply re-opens the payment modal
+                failureModal.classList.add('hidden');
+                paymentModal.classList.remove('hidden');
+            });
+            // --- END: NEW PAYMENT VERIFICATION MODAL EVENT LISTENERS ---
 
-            // --- START: PAYMENT EVENT LISTENERS (UPDATED) ---
+
             paymentForm.addEventListener('submit', handlePaymentSubmit);
             paymentAccountTypeSelect.addEventListener('change', updatePaymentDesign);
-            // --- END: PAYMENT EVENT LISTENERS ---
 
             if (profileImageUpload) {
                 profileImageUpload.addEventListener('change', handleProfileImageUpload);
@@ -4099,8 +4318,7 @@
             startCountdown();
             switchDashboardPage('my-courses-page');
 
-            // START: CALLING ALL DATA DISPLAY FUNCTIONS ON PAGE LOAD
-            loadPaymentGateways(); // NEW
+            loadPaymentGateways();
             displayServices();
             displayCourses();
             displayNotices();
@@ -4109,7 +4327,6 @@
             loadAboutUsImage();
             loadHeaderLogo();
             loadSocialMediaLinks();
-            // END: CALLING ALL DATA DISPLAY FUNCTIONS ON PAGE LOAD
         });
     </script>
 </body>
