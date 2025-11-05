@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Payment Verifier</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/JqgWkCg/placeholder.png">
+    <!-- Google Fonts: Hind Siluri for Bengali -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Verifier">
+
+    <style>
+        :root {
+            --primary-blue: #0a4d68;
+            --secondary-blue: #088395;
+            --accent-green: #28a745;
+            --accent-red: #dc3545;
+            --background-light: #f0f4f8;
+            --text-dark: #212529;
+            --text-light: #ffffff;
+            --border-color: #dee2e6;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            --card-radius: 12px;
+        }
+
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .verifier-container {
+            width: 100%;
+            max-width: 400px;
+            background: var(--text-light);
+            padding: 30px;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        #trx-id-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1.2em;
+            text-align: center;
+            font-family: 'Hind Siliguri', sans-serif;
+            box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        #trx-id-input:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 0 3px rgba(8, 131, 149, 0.2);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.1em;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            background: linear-gradient(90deg, var(--secondary-blue), var(--primary-blue));
+            color: var(--text-light);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:hover {
+             transform: translateY(-2px);
+             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:disabled {
+            background: #9ab;
+            cursor: not-allowed;
+        }
+
+        #status-message {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: none; /* Initially hidden */
+        }
+        #status-message.success {
+            background-color: #eaf6e9;
+            color: var(--accent-green);
+            display: block;
+        }
+        #status-message.error {
+            background-color: #fcebeb;
+            color: var(--accent-red);
+            display: block;
+        }
+        #status-message.loading {
+            background-color: #eef2f5;
+            color: var(--primary-blue);
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="verifier-container">
+        <h1><span class="material-symbols-outlined">verified</span> Payment Verifier</h1>
+        <form id="verifier-form">
+            <div class="form-group">
+                <input type="text" id="trx-id-input" placeholder="Transaction ID (TrxID) দিন" required>
+            </div>
+            <button type="submit" id="verify-btn" class="btn">
+                <span class="material-symbols-outlined">task_alt</span> ভেরিফাই করুন
+            </button>
+        </form>
+        <div id="status-message"></div>
+    </div>
+
+    <!-- Firebase SDKs (আপনার আগের কোড থেকে কপি করা) -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // আপনার ওয়েবসাইটের Firebase কনফিগারেশন এখানে পেস্ট করুন
+        const firebaseConfig = {
+            apiKey: "AIzaSyAu6Lo33AH6GWFDHusaP14fmAHb0LEzWOQ",
+            authDomain: "go-pixel-f1c13.firebaseapp.com",
+            projectId: "go-pixel-f1c13",
+            storageBucket: "go-pixel-f1c13.appspot.com",
+            messagingSenderId: "390711689002",
+            appId: "1:390711689002:web:0ce672f38aeca40d2f6853"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const verifierForm = document.getElementById('verifier-form');
+            const trxIdInput = document.getElementById('trx-id-input');
+            const verifyBtn = document.getElementById('verify-btn');
+            const statusMessage = document.getElementById('status-message');
+
+            verifierForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const trxId = trxIdInput.value.trim();
+                if (!trxId) {
+                    showStatus('অনুগ্রহ করে একটি TrxID দিন।', 'error');
+                    return;
+                }
+                
+                // বাটন নিষ্ক্রিয় করুন এবং লোডিং স্টেট দেখান
+                verifyBtn.disabled = true;
+                verifyBtn.innerHTML = `<span class="material-symbols-outlined">sync</span> Checking...`;
+                showStatus('TrxID চেক করা হচ্ছে...', 'loading');
+
+                try {
+                    // Firestore থেকে 'payments' কালেকশনে TrxID দিয়ে পেন্ডিং পেমেন্ট খুঁজুন
+                    const paymentsRef = db.collection('payments');
+                    const snapshot = await paymentsRef.where('transactionId', '==', trxId)
+                                                      .where('status', '==', 'pending')
+                                                      .limit(1)
+                                                      .get();
+
+                    if (snapshot.empty) {
+                        // যদি কোনো পেন্ডিং পেমেন্ট না পাওয়া যায়
+                        showStatus(`'${trxId}' দিয়ে কোনো পেন্ডিং পেমেন্ট পাওয়া যায়নি।`, 'error');
+                    } else {
+                        // যদি পেমেন্ট পাওয়া যায়
+                        const paymentDoc = snapshot.docs[0];
+                        const paymentData = paymentDoc.data();
+                        
+                        // লাভ (Profit) ক্যালকুলেট করার জন্য সার্ভিস বা কোর্স খুঁজে বের করতে হবে
+                        // এই অংশটুকু আপনার মূল অ্যাডমিন প্যানেলের লজিকের সাথে মিল রাখা হয়েছে
+                        let profit = Number(paymentData.amount) || 0; // ডিফল্ট লাভ হলো সম্পূর্ণ পেমেন্টের পরিমাণ
+
+                        // সার্ভিস খোঁজা হচ্ছে
+                        const serviceQuery = await db.collection('services').where('name', '==', paymentData.itemName).limit(1).get();
+                        if (!serviceQuery.empty) {
+                            const serviceData = serviceQuery.docs[0].data();
+                            profit = (Number(paymentData.amount) || 0) - (Number(serviceData.purchasePrice) || 0);
+                        }
+                        
+                        // পেমেন্ট ডকুমেন্ট আপডেট করুন
+                        await paymentDoc.ref.update({
+                            status: 'approved',
+                            profit: profit
+                        });
+                        
+                        // সফল বার্তা দেখান
+                        showStatus(`পেমেন্ট সফলভাবে ভেরিফাই করা হয়েছে!<br><strong>${paymentData.itemName}</strong> - <strong>৳${paymentData.amount}</strong>`, 'success');
+                        trxIdInput.value = ''; // ইনপুট বক্স খালি করুন
+                    }
+                } catch (error) {
+                    console.error("Verification Error:", error);
+                    showStatus('ভেরিফাই করার সময় একটি সমস্যা হয়েছে।', 'error');
+                } finally {
+                    // বাটন আবার সক্রিয় করুন
+                    verifyBtn.disabled = false;
+                    verifyBtn.innerHTML = `<span class="material-symbols-outlined">task_alt</span> ভেরিফাই করুন`;
+                }
+            });
+
+            function showStatus(message, type) {
+                statusMessage.innerHTML = message;
+                statusMessage.className = ``; // ক্লাস রিসেট করুন
+                statusMessage.classList.add(type);
+            }
+        });
+    </script>
+
+</body>
+</html>
