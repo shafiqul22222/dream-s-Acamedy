@@ -476,6 +476,7 @@
 
         .stat-card.pending-card {
             border-left-color: var(--accent-yellow);
+            cursor: pointer;
         }
 
         .stat-card.pending-card .icon {
@@ -1062,6 +1063,12 @@
                     <h1>ড্যাশবোর্ড</h1>
                 </div>
                 <div class="stats-grid">
+                    <div id="pending-payments-card" class="stat-card pending-card"><span class="material-symbols-outlined icon">pending_actions</span>
+                        <div>
+                            <h3 id="pending-payments">0</h3>
+                            <p>পেন্ডিং পেমেন্ট</p>
+                        </div>
+                    </div>
                     <div class="stat-card sales-card"><span class="material-symbols-outlined icon">payments</span>
                         <div>
                             <h3 id="total-sales">৳0</h3>
@@ -1084,12 +1091,6 @@
                         <div>
                             <h3 id="current-month-profit">৳0</h3>
                             <p>বর্তমান মাসের লাভ</p>
-                        </div>
-                    </div>
-                    <div class="stat-card pending-card"><span class="material-symbols-outlined icon">pending_actions</span>
-                        <div>
-                            <h3 id="pending-payments">0</h3>
-                            <p>পেন্ডিং পেমেন্ট</p>
                         </div>
                     </div>
                     <div class="stat-card"><span class="material-symbols-outlined icon">group</span>
@@ -1549,6 +1550,17 @@
             const mobilePageTitle = document.getElementById('mobile-page-title');
             const overlay = document.getElementById('overlay');
 
+            // --- PENDING PAYMENTS CARD CLICK HANDLER ---
+            const pendingPaymentsCard = document.getElementById('pending-payments-card');
+            if (pendingPaymentsCard) {
+                pendingPaymentsCard.addEventListener('click', () => {
+                    navigateTo('payments-page', {
+                        filter: 'pending'
+                    });
+                });
+            }
+
+
             const userSearchInput = document.getElementById('user-search-input');
             if (userSearchInput) {
                 userSearchInput.addEventListener('keyup', () => {
@@ -1655,7 +1667,7 @@
             }
 
             // --- Navigation ---
-            function navigateTo(pageId) {
+            function navigateTo(pageId, options = {}) {
                 pages.forEach(p => p.classList.remove('active'));
                 document.getElementById(pageId).classList.add('active');
 
@@ -1681,7 +1693,7 @@
                         renderReportsPage();
                         break;
                     case 'payments-page':
-                        renderPayments();
+                        renderPayments(options.filter);
                         break;
                     case 'payment-gateways-page':
                         renderPaymentGateways();
@@ -2356,14 +2368,40 @@
                 }
             }
 
-            const renderPayments = () => renderGeneric('payments', 'payments-table-body', (payment) => {
-                const timestamp = payment.timestamp ? new Date(payment.timestamp.seconds * 1000).toLocaleString('bn-BD') : 'N/A';
-                const statusClass = (payment.status || 'pending').toLowerCase();
-                const profit = (payment.status === 'approved' && payment.profit != null) ? `৳ ${payment.profit}` : 'N/A';
-                const referrerInfo = payment.referrerId ? `<br><small style="color:green;">Ref: ${payment.referrerId.substring(0,6)}... (${payment.commissionAwarded}tk)</small>` : '';
-                const whatsappBtn = (payment.status === 'approved' && payment.userEmail !== 'admin@manual.sale') ? `<button class="btn-whatsapp" onclick="sendWhatsAppReceipt('${payment.id}')" title="Send WhatsApp Receipt"><span class="material-symbols-outlined">send</span></button>` : '';
-                return `<tr><td data-label="ইমেইল">${payment.userEmail}</td><td data-label="কোর্স/সার্ভিস">${payment.itemName} ${referrerInfo}</td><td data-label="পরিমাণ">৳ ${payment.amount}</td><td data-label="লাভ">${profit}</td><td data-label="TrxID">${payment.transactionId}</td><td data-label="সময়">${timestamp}</td><td data-label="স্ট্যাটাস"><span class="status-badge ${statusClass}">${payment.status}</span></td><td class="actions-cell"><input type="text" id="referrer-code-${payment.id}" class="referrer-input" placeholder="রেফার কোড" ${payment.status !== 'pending' ? 'disabled' : ''}><select class="status-select" id="status-select-${payment.id}"><option value="pending" ${payment.status === 'pending' ? 'selected' : ''}>Pending</option><option value="approved" ${payment.status === 'approved' ? 'selected' : ''}>Approved</option><option value="rejected" ${payment.status === 'rejected' ? 'selected' : ''}>Rejected</option></select><button class="btn btn-save-status" onclick="updatePaymentStatus('${payment.id}')">Save</button>${whatsappBtn}<button class="btn-delete" onclick="deleteItem('payments', '${payment.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
-            });
+            async function renderPayments(statusFilter = null) {
+                const tableBody = document.getElementById('payments-table-body');
+                tableBody.innerHTML = `<tr><td colspan="10" style="text-align: center;">তথ্য লোড হচ্ছে...</td></tr>`;
+                try {
+                    let query = db.collection('payments');
+                    if (statusFilter) {
+                        query = query.where('status', '==', statusFilter);
+                    }
+                    const snapshot = await query.get();
+
+                    if (snapshot.empty) {
+                        tableBody.innerHTML = `<tr><td colspan="10" style="text-align: center;">কোনো ${statusFilter || ''} পেমেন্ট পাওয়া যায়নি।</td></tr>`;
+                        return;
+                    }
+
+                    let tableHTML = '';
+                    snapshot.forEach(doc => {
+                        const payment = {
+                            id: doc.id,
+                            ...doc.data()
+                        };
+                        const timestamp = payment.timestamp ? new Date(payment.timestamp.seconds * 1000).toLocaleString('bn-BD') : 'N/A';
+                        const statusClass = (payment.status || 'pending').toLowerCase();
+                        const profit = (payment.status === 'approved' && payment.profit != null) ? `৳ ${payment.profit}` : 'N/A';
+                        const referrerInfo = payment.referrerId ? `<br><small style="color:green;">Ref: ${payment.referrerId.substring(0,6)}... (${payment.commissionAwarded}tk)</small>` : '';
+                        const whatsappBtn = (payment.status === 'approved' && payment.userEmail !== 'admin@manual.sale') ? `<button class="btn-whatsapp" onclick="sendWhatsAppReceipt('${payment.id}')" title="Send WhatsApp Receipt"><span class="material-symbols-outlined">send</span></button>` : '';
+                        tableHTML += `<tr><td data-label="ইমেইল">${payment.userEmail}</td><td data-label="কোর্স/সার্ভিস">${payment.itemName} ${referrerInfo}</td><td data-label="পরিমাণ">৳ ${payment.amount}</td><td data-label="লাভ">${profit}</td><td data-label="TrxID">${payment.transactionId}</td><td data-label="সময়">${timestamp}</td><td data-label="স্ট্যাটাস"><span class="status-badge ${statusClass}">${payment.status}</span></td><td class="actions-cell"><input type="text" id="referrer-code-${payment.id}" class="referrer-input" placeholder="রেফার কোড" ${payment.status !== 'pending' ? 'disabled' : ''}><select class="status-select" id="status-select-${payment.id}"><option value="pending" ${payment.status === 'pending' ? 'selected' : ''}>Pending</option><option value="approved" ${payment.status === 'approved' ? 'selected' : ''}>Approved</option><option value="rejected" ${payment.status === 'rejected' ? 'selected' : ''}>Rejected</option></select><button class="btn btn-save-status" onclick="updatePaymentStatus('${payment.id}')">Save</button>${whatsappBtn}<button class="btn-delete" onclick="deleteItem('payments', '${payment.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
+                    });
+                    tableBody.innerHTML = tableHTML;
+                } catch (error) {
+                    console.error(`Error rendering payments:`, error);
+                    tableBody.innerHTML = `<tr><td colspan="10" style="color: red; text-align: center;">An error occurred: ${error.message}</td></tr>`;
+                }
+            }
 
             const renderUsers = () => renderGeneric('users', 'users-table-body', (user) => `<tr><td data-label="নাম">${user.name || 'N/A'}</td><td data-label="ইমেইল">${user.email}</td><td data-label="মোবাইল"><span class="copyable-mobile" onclick="copyToClipboard('${user.mobile || ''}')" title="কপি করতে ক্লিক করুন">${user.mobile || 'N/A'}</span></td><td data-label="রেফারেল কোড">${user.referralCode || 'N/A'}</td><td data-label="ব্যালেন্স">৳ ${user.affiliateBalance || 0}</td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('users', '${user.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('users', '${user.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
 
