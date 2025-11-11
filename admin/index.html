@@ -273,6 +273,8 @@
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .page-header h1 {
@@ -302,7 +304,7 @@
             margin-bottom: 20px;
         }
 
-        #user-search-input {
+        .search-bar-container input {
             width: 100%;
             padding: 12px 15px;
             border: 1px solid var(--border-color);
@@ -311,7 +313,7 @@
             font-family: 'Hind Siliguri', sans-serif;
         }
 
-        #user-search-input:focus {
+        .search-bar-container input:focus {
             outline: none;
             border-color: var(--secondary-blue);
             box-shadow: 0 0 0 2px rgba(8, 131, 149, 0.2);
@@ -564,6 +566,32 @@
             background: #6c757d;
             color: white;
             margin-right: 10px;
+        }
+        
+        /* Button group for filtering */
+        .filter-btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            color: #495057;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .filter-btn:hover {
+            background-color: #e9ecef;
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
         }
 
         /* --- START: UPDATED Curriculum Modal Specific Styles --- */
@@ -848,7 +876,6 @@
                 padding-top: 15px;
             }
 
-            #payments-page .data-table .actions-cell .referrer-input,
             #payments-page .data-table .actions-cell .status-select,
             #payments-page .data-table .actions-cell .btn-save-status {
                 width: 90%;
@@ -1039,6 +1066,7 @@
                 <li data-page="dollar-exchange-page"><a href="#"><span class="material-symbols-outlined">currency_exchange</span> ডলার ক্রয়/বিক্রয়</a></li>
                 <li data-page="users-page"><a href="#"><span class="material-symbols-outlined">group</span> শিক্ষার্থী ম্যানেজমেন্ট</a></li>
                 <li data-page="services-page"><a href="#"><span class="material-symbols-outlined">construction</span> সার্ভিস ম্যানেজ</a></li>
+                <li data-page="service-stock-page"><a href="#"><span class="material-symbols-outlined">inventory</span> সার্ভিস স্টক</a></li>
                 <li data-page="send-service-page"><a href="#"><span class="material-symbols-outlined">send</span> সার্ভিস পাঠান</a></li>
                 <li data-page="courses-page"><a href="#"><span class="material-symbols-outlined">school</span> কোর্স ম্যানেজ</a></li>
                 <li data-page="enrollments-page"><a href="#"><span class="material-symbols-outlined">assignment_ind</span> কোর্স এনরোলমেন্ট</a></li>
@@ -1162,6 +1190,15 @@
             <div id="payments-page" class="page">
                 <div class="page-header">
                     <h1>পেমেন্ট ম্যানেজমেন্ট</h1>
+                    <div id="payment-filter-buttons" class="filter-btn-group">
+                        <button class="filter-btn active" data-filter="all">সব</button>
+                        <button class="filter-btn" data-filter="pending">পেন্ডিং</button>
+                        <button class="filter-btn" data-filter="approved">অ্যাপ্রুভড</button>
+                        <button class="filter-btn" data-filter="rejected">রিজেক্টেড</button>
+                    </div>
+                </div>
+                <div class="search-bar-container">
+                    <input type="text" id="payment-search-input" placeholder="ইমেইল, কোর্স/সার্ভিস, TrxID দিয়ে খুঁজুন...">
                 </div>
                 <div class="content-box">
                     <table class="data-table">
@@ -1282,6 +1319,50 @@
                             </tr>
                         </thead>
                         <tbody id="services-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Service Stock Page -->
+            <div id="service-stock-page" class="page">
+                <div class="page-header">
+                    <h1>সার্ভিস স্টক ম্যানেজমেন্ট</h1>
+                </div>
+                <div class="content-box" style="margin-bottom: 30px;">
+                    <form id="service-stock-form">
+                        <div class="form-group">
+                            <label for="stock-service-selection">সার্ভিস নির্বাচন করুন</label>
+                            <select id="stock-service-selection" required>
+                                <option value="">লোড হচ্ছে...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="stock-quantity">পরিমান</label>
+                            <input type="text" id="stock-quantity" placeholder="যেমন: 50 Pis বা Standard Pack" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="stock-topup-id">টপ আপ আইডি (প্রতিটি নতুন লাইনে লিখুন)</label>
+                            <textarea id="stock-topup-id" rows="6" placeholder="এখানে আইডি, কোড বা অন্য তথ্য লিখুন" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: auto;">
+                            <span class="material-symbols-outlined">inventory_2</span> স্টক যোগ করুন
+                        </button>
+                    </form>
+                </div>
+                <div class="content-box">
+                    <h3>বর্তমান স্টক</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>সার্ভিসের নাম</th>
+                                <th>পরিমান</th>
+                                <th>টপ আপ আইডি</th>
+                                <th>অ্যাকশন</th>
+                            </tr>
+                        </thead>
+                        <tbody id="service-stock-table-body">
+                            <!-- Stock items will be loaded here -->
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -1544,6 +1625,10 @@
             const sendServiceForm = document.getElementById('send-service-form');
             const serviceSelection = document.getElementById('service-selection');
             const serviceInfoTextarea = document.getElementById('service-info');
+            
+            // Payment Page Elements
+            const paymentSearchInput = document.getElementById('payment-search-input');
+            const paymentFilterButtons = document.getElementById('payment-filter-buttons');
 
             // --- Mobile Navigation Elements ---
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -1554,6 +1639,14 @@
             const pendingPaymentsCard = document.getElementById('pending-payments-card');
             if (pendingPaymentsCard) {
                 pendingPaymentsCard.addEventListener('click', () => {
+                    // Update filter buttons UI
+                    document.querySelectorAll('#payment-filter-buttons .filter-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                        if (btn.dataset.filter === 'pending') {
+                            btn.classList.add('active');
+                        }
+                    });
+                    // Navigate to payments page with filter
                     navigateTo('payments-page', {
                         filter: 'pending'
                     });
@@ -1578,6 +1671,41 @@
                             }
                         }
                     });
+                });
+            }
+            
+             // --- PAYMENT SEARCH AND FILTER ---
+            if (paymentSearchInput) {
+                paymentSearchInput.addEventListener('keyup', () => {
+                    const searchTerm = paymentSearchInput.value.toLowerCase().trim();
+                    const tableBody = document.getElementById('payments-table-body');
+                    const rows = tableBody.getElementsByTagName('tr');
+
+                    Array.from(rows).forEach(row => {
+                        if (row.getElementsByTagName('td').length > 0) {
+                            const rowText = row.textContent || row.innerText;
+                            if (rowText.toLowerCase().includes(searchTerm)) {
+                                row.style.display = "";
+                            } else {
+                                row.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            }
+            
+            if (paymentFilterButtons) {
+                paymentFilterButtons.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('filter-btn')) {
+                        const filterValue = e.target.dataset.filter;
+                        
+                        // Update active button
+                        paymentFilterButtons.querySelector('.filter-btn.active').classList.remove('active');
+                        e.target.classList.add('active');
+                        
+                        // Re-render payments with the selected filter
+                        renderPayments(filterValue === 'all' ? null : filterValue);
+                    }
                 });
             }
 
@@ -1693,7 +1821,7 @@
                         renderReportsPage();
                         break;
                     case 'payments-page':
-                        renderPayments(options.filter);
+                        renderPayments(options.filter || null);
                         break;
                     case 'payment-gateways-page':
                         renderPaymentGateways();
@@ -1709,6 +1837,9 @@
                         break;
                     case 'services-page':
                         renderServices();
+                        break;
+                    case 'service-stock-page':
+                        renderServiceStock();
                         break;
                     case 'send-service-page':
                         renderSendServicePage();
@@ -2051,6 +2182,81 @@
                 });
             }
 
+            // --- Service Stock Page ---
+            async function renderServiceStock() {
+                // Populate dropdown
+                const selectionDropdown = document.getElementById('stock-service-selection');
+                selectionDropdown.innerHTML = '<option value="">লোড হচ্ছে...</option>';
+                try {
+                    const servicesSnapshot = await db.collection('services').get();
+                    if (servicesSnapshot.empty) {
+                        selectionDropdown.innerHTML = '<option value="">কোনো সার্ভিস পাওয়া যায়নি</option>';
+                    } else {
+                        let optionsHTML = '<option value="" disabled selected>একটি সার্ভিস নির্বাচন করুন</option>';
+                        servicesSnapshot.forEach(doc => {
+                            optionsHTML += `<option value="${doc.data().name}">${doc.data().name}</option>`;
+                        });
+                        selectionDropdown.innerHTML = optionsHTML;
+                    }
+                } catch (error) {
+                    console.error("Error fetching services for stock:", error);
+                    selectionDropdown.innerHTML = '<option value="">লোড করতে সমস্যা হয়েছে</option>';
+                }
+
+                // Render table
+                await renderGeneric('service_stock', 'service-stock-table-body', (stockItem) => {
+                    // Use pre-wrap to respect newlines in the topupId
+                    return `<tr>
+                        <td data-label="সার্ভিসের নাম">${stockItem.serviceName}</td>
+                        <td data-label="পরিমান">${stockItem.quantity}</td>
+                        <td data-label="টপ আপ আইডি" style="white-space: pre-wrap; word-break: break-all;">${stockItem.topupId}</td>
+                        <td class="actions-cell" data-label="অ্যাকশন">
+                            <button class="btn-delete" onclick="deleteItem('service_stock', '${stockItem.id}')">
+                                <span class="material-symbols-outlined">delete</span>
+                            </button>
+                        </td>
+                    </tr>`;
+                });
+            }
+
+            const serviceStockForm = document.getElementById('service-stock-form');
+            if (serviceStockForm) {
+                serviceStockForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const btn = serviceStockForm.querySelector('button[type="submit"]');
+                    const serviceName = document.getElementById('stock-service-selection').value;
+                    const quantity = document.getElementById('stock-quantity').value;
+                    const topupId = document.getElementById('stock-topup-id').value;
+
+                    if (!serviceName || !quantity || !topupId) {
+                        showToast("অনুগ্রহ করে সকল তথ্য পূরণ করুন।", "error");
+                        return;
+                    }
+                    
+                    btn.disabled = true;
+                    btn.innerHTML = `<span class="material-symbols-outlined">sync</span> যোগ করা হচ্ছে...`;
+
+                    try {
+                        await db.collection('service_stock').add({
+                            serviceName,
+                            quantity,
+                            topupId,
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                        showToast('সার্ভিস স্টক সফলভাবে যোগ করা হয়েছে!');
+                        serviceStockForm.reset();
+                        renderServiceStock(); // Refresh the table
+                    } catch (error) {
+                        console.error("Error adding service stock:", error);
+                        showToast(`স্টক যোগ করতে সমস্যা হয়েছে: ${error.message}`, "error");
+                    } finally {
+                        btn.disabled = false;
+                        btn.innerHTML = `<span class="material-symbols-outlined">inventory_2</span> স্টক যোগ করুন`;
+                    }
+                });
+            }
+
+
             // --- Send Service Page ---
             async function renderSendServicePage() {
                 serviceSelection.innerHTML = '<option value="">তালিকা লোড হচ্ছে...</option>';
@@ -2251,55 +2457,47 @@
 
             // --- CRUD Operations ---
             window.updatePaymentStatus = async (docId) => {
-                const selectElement = document.getElementById(`status-select-${docId}`),
-                    referrerCodeInput = document.getElementById(`referrer-code-${docId}`),
-                    saveButton = selectElement.nextElementSibling,
-                    newStatus = selectElement.value,
-                    referrerCode = referrerCodeInput.value.trim();
+                const selectElement = document.getElementById(`status-select-${docId}`);
+                const saveButton = selectElement.nextElementSibling;
+                const newStatus = selectElement.value;
+
                 if (saveButton) {
                     saveButton.textContent = 'Saving...';
                     saveButton.disabled = true;
                 }
                 try {
-                    const paymentDocRef = db.collection('payments').doc(docId),
-                        paymentDoc = await paymentDocRef.get();
+                    const paymentDocRef = db.collection('payments').doc(docId);
+                    const paymentDoc = await paymentDocRef.get();
                     if (!paymentDoc.exists) throw new Error("Payment document not found.");
+
                     const paymentData = paymentDoc.data();
                     let updateData = {
                         status: newStatus
                     };
-                    if (newStatus === 'approved' && paymentData.status !== 'approved' && referrerCode) {
-                        const userQuery = await db.collection('users').where('referralCode', '==', referrerCode).limit(1).get();
-                        if (userQuery.empty) {
-                            showToast(`রেফারেল কোড "${referrerCode}" দিয়ে কোনো ব্যবহারকারীকে পাওয়া যায়নি।`, 'error');
-                        } else {
-                            const referrerUser = userQuery.docs[0];
-                            let commission = 0;
-                            const courseQuery = await db.collection('courses').where('name', '==', paymentData.itemName).limit(1).get();
-                            const serviceQuery = await db.collection('services').where('name', '==', paymentData.itemName).limit(1).get();
-                            if (!courseQuery.empty) commission = courseQuery.docs[0].data().commission || 0;
-                            else if (!serviceQuery.empty) commission = serviceQuery.docs[0].data().commission || 0;
-                            if (commission > 0) {
-                                await referrerUser.ref.update({
-                                    affiliateBalance: firebase.firestore.FieldValue.increment(commission)
-                                });
-                                updateData.referrerId = referrerUser.id;
-                                updateData.commissionAwarded = commission;
-                                showToast(`কমিশন ৳${commission} সফলভাবে ${referrerUser.data().name}-কে দেওয়া হয়েছে।`);
-                            } else showToast(`এই সার্ভিস/কোর্সের জন্য কোনো কমিশন সেট করা নেই।`, 'error');
-                        }
-                    }
+
                     if (newStatus === 'approved') {
+                        // Calculate profit only when approving
                         const serviceQuery = await db.collection('services').where('name', '==', paymentData.itemName).limit(1).get();
                         if (!serviceQuery.empty) {
                             const serviceData = serviceQuery.docs[0].data();
                             updateData.profit = (Number(paymentData.amount) || 0) - (Number(serviceData.purchasePrice) || 0);
-                        } else updateData.profit = Number(paymentData.amount) || 0;
-                    } else updateData.profit = firebase.firestore.FieldValue.delete();
+                        } else {
+                            // If it's a course or has no purchase price, profit is the full amount
+                            updateData.profit = Number(paymentData.amount) || 0;
+                        }
+                    } else {
+                        // If status is changed to pending or rejected, remove the profit field
+                        updateData.profit = firebase.firestore.FieldValue.delete();
+                    }
+
                     await paymentDocRef.update(updateData);
                     showToast('স্ট্যাটাস সফলভাবে আপডেট করা হয়েছে!');
-                    renderPayments();
+                    
+                    // Re-render with the current active filter
+                    const activeFilter = document.querySelector('#payment-filter-buttons .filter-btn.active').dataset.filter;
+                    renderPayments(activeFilter === 'all' ? null : activeFilter);
                     renderDashboard();
+
                 } catch (error) {
                     console.error("--- FIRESTORE UPDATE FAILED ---", error);
                     showToast(`স্ট্যাটাস আপডেট করার সময় একটি সমস্যা হয়েছে: ${error.message}`, 'error');
@@ -2310,6 +2508,7 @@
                     }
                 }
             };
+
 
             window.sendWhatsAppReceipt = async (paymentId) => {
                 try {
@@ -2376,7 +2575,7 @@
                     if (statusFilter) {
                         query = query.where('status', '==', statusFilter);
                     }
-                    const snapshot = await query.get();
+                    const snapshot = await query.orderBy('timestamp', 'desc').get();
 
                     if (snapshot.empty) {
                         tableBody.innerHTML = `<tr><td colspan="10" style="text-align: center;">কোনো ${statusFilter || ''} পেমেন্ট পাওয়া যায়নি।</td></tr>`;
@@ -2392,16 +2591,39 @@
                         const timestamp = payment.timestamp ? new Date(payment.timestamp.seconds * 1000).toLocaleString('bn-BD') : 'N/A';
                         const statusClass = (payment.status || 'pending').toLowerCase();
                         const profit = (payment.status === 'approved' && payment.profit != null) ? `৳ ${payment.profit}` : 'N/A';
-                        const referrerInfo = payment.referrerId ? `<br><small style="color:green;">Ref: ${payment.referrerId.substring(0,6)}... (${payment.commissionAwarded}tk)</small>` : '';
                         const whatsappBtn = (payment.status === 'approved' && payment.userEmail !== 'admin@manual.sale') ? `<button class="btn-whatsapp" onclick="sendWhatsAppReceipt('${payment.id}')" title="Send WhatsApp Receipt"><span class="material-symbols-outlined">send</span></button>` : '';
-                        tableHTML += `<tr><td data-label="ইমেইল">${payment.userEmail}</td><td data-label="কোর্স/সার্ভিস">${payment.itemName} ${referrerInfo}</td><td data-label="পরিমাণ">৳ ${payment.amount}</td><td data-label="লাভ">${profit}</td><td data-label="TrxID">${payment.transactionId}</td><td data-label="সময়">${timestamp}</td><td data-label="স্ট্যাটাস"><span class="status-badge ${statusClass}">${payment.status}</span></td><td class="actions-cell"><input type="text" id="referrer-code-${payment.id}" class="referrer-input" placeholder="রেফার কোড" ${payment.status !== 'pending' ? 'disabled' : ''}><select class="status-select" id="status-select-${payment.id}"><option value="pending" ${payment.status === 'pending' ? 'selected' : ''}>Pending</option><option value="approved" ${payment.status === 'approved' ? 'selected' : ''}>Approved</option><option value="rejected" ${payment.status === 'rejected' ? 'selected' : ''}>Rejected</option></select><button class="btn btn-save-status" onclick="updatePaymentStatus('${payment.id}')">Save</button>${whatsappBtn}<button class="btn-delete" onclick="deleteItem('payments', '${payment.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
+                        
+                        tableHTML += `<tr>
+                            <td data-label="ইমেইল">${payment.userEmail}</td>
+                            <td data-label="কোর্স/সার্ভিস">${payment.itemName}</td>
+                            <td data-label="পরিমাণ">৳ ${payment.amount}</td>
+                            <td data-label="লাভ">${profit}</td>
+                            <td data-label="TrxID">${payment.transactionId}</td>
+                            <td data-label="সময়">${timestamp}</td>
+                            <td data-label="স্ট্যাটাস"><span class="status-badge ${statusClass}">${payment.status}</span></td>
+                            <td class="actions-cell">
+                                <select class="status-select" id="status-select-${payment.id}">
+                                    <option value="pending" ${payment.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="approved" ${payment.status === 'approved' ? 'selected' : ''}>Approved</option>
+                                    <option value="rejected" ${payment.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+                                </select>
+                                <button class="btn btn-save-status" onclick="updatePaymentStatus('${payment.id}')">Save</button>
+                                ${whatsappBtn}
+                                <button class="btn-delete" onclick="deleteItem('payments', '${payment.id}')"><span class="material-symbols-outlined">delete</span></button>
+                            </td>
+                        </tr>`;
                     });
                     tableBody.innerHTML = tableHTML;
+                    // After rendering, ensure the search term is re-applied if it exists
+                    if (paymentSearchInput.value) {
+                         paymentSearchInput.dispatchEvent(new Event('keyup'));
+                    }
                 } catch (error) {
                     console.error(`Error rendering payments:`, error);
                     tableBody.innerHTML = `<tr><td colspan="10" style="color: red; text-align: center;">An error occurred: ${error.message}</td></tr>`;
                 }
             }
+
 
             const renderUsers = () => renderGeneric('users', 'users-table-body', (user) => `<tr><td data-label="নাম">${user.name || 'N/A'}</td><td data-label="ইমেইল">${user.email}</td><td data-label="মোবাইল"><span class="copyable-mobile" onclick="copyToClipboard('${user.mobile || ''}')" title="কপি করতে ক্লিক করুন">${user.mobile || 'N/A'}</span></td><td data-label="রেফারেল কোড">${user.referralCode || 'N/A'}</td><td data-label="ব্যালেন্স">৳ ${user.affiliateBalance || 0}</td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('users', '${user.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('users', '${user.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
 
@@ -2585,7 +2807,9 @@
                         await db.collection(collection).doc(id).delete();
                         showToast('সফলভাবে ডিলিট করা হয়েছে।');
                         navigateTo(document.querySelector('.page.active').id);
-                        renderDashboard();
+                        if (collection !== 'service_stock') {
+                           renderDashboard();
+                        }
                     } catch (error) {
                         console.error("Error deleting item:", error);
                         showToast('ডিলিট করার সময় একটি সমস্যা হয়েছে।', 'error');
