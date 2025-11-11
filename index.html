@@ -3996,8 +3996,14 @@
             }
             
             // ===============================================================
-            // START: MODIFIED CODE BLOCK FOR PAYMENT SUBMISSION
+            // START: UPDATED PAYMENT SUBMISSION LOGIC
             // ===============================================================
+            function resetPaymentButtonState() {
+                paymentSubmitBtn.disabled = false;
+                paymentSubmitBtn.classList.remove('loading');
+                updatePaymentDesign(); 
+            }
+
             function handlePaymentSubmit(event) {
                 event.preventDefault();
                 const user = auth.currentUser;
@@ -4019,7 +4025,6 @@
                     return;
                 }
 
-                // --- Step 1: Set the button to loading state ---
                 paymentSubmitBtn.disabled = true;
                 paymentSubmitBtn.classList.add('loading');
                 paymentSubmitBtn.innerHTML = `
@@ -4038,10 +4043,11 @@
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 };
 
-                // --- Step 2: Save the data to Firestore ---
                 db.collection('payments').add(paymentData)
                     .then((docRef) => {
-                        // Notify admin (optional, but good to keep)
+                        paymentModal.classList.add('hidden');
+                        showToast("আপনার পেমেন্ট জমা হয়েছে। অনুমোদনের জন্য অপেক্ষা করুন...", "info");
+
                         db.collection('notifications').add({
                             title: 'নতুন পেমেন্ট',
                             message: `${paymentData.userEmail} ${paymentData.amount} টাকার একটি পেমেন্ট (${paymentData.itemName}) জমা দিয়েছেন।`,
@@ -4050,40 +4056,41 @@
                             read: false
                         });
 
-                        // --- Step 3: Start a 1-minute (60,000 ms) timer ---
+                        // Set up a real-time listener
+                        const unsubscribe = db.collection('payments').doc(docRef.id)
+                            .onSnapshot((doc) => {
+                                const updatedPayment = doc.data();
+                                if (updatedPayment && updatedPayment.status === 'approved') {
+                                    successModal.classList.remove('hidden');
+                                    unsubscribe(); // Stop listening
+                                    resetPaymentButtonState();
+                                } else if (updatedPayment && updatedPayment.status === 'rejected') {
+                                    failureModal.classList.remove('hidden');
+                                    unsubscribe(); // Stop listening
+                                    resetPaymentButtonState();
+                                }
+                            }, (error) => {
+                                console.error("Error listening to payment status:", error);
+                                showToast("স্ট্যাটাস চেক করার সময় একটি সমস্যা হয়েছে।", "error");
+                                unsubscribe();
+                                resetPaymentButtonState();
+                            });
+
+                        // Add a timeout to stop listening after 3 minutes
                         setTimeout(() => {
-                            // This code will run after exactly 1 minute
-                            
-                            // Restore the button to its original state
-                            paymentSubmitBtn.disabled = false;
-                            paymentSubmitBtn.classList.remove('loading');
-                            updatePaymentDesign(); // This function also resets the button text
-
-                            paymentModal.classList.add('hidden'); // Hide the payment form modal
-
-                            // For demonstration, we will randomly show a success or failure card.
-                            // 80% chance of success
-                            const isSuccess = Math.random() < 0.8; 
-
-                            if (isSuccess) {
-                                successModal.classList.remove('hidden');
-                            } else {
-                                failureModal.classList.remove('hidden');
-                            }
-                        }, 60000); // 60,000 milliseconds = 1 minute
+                            unsubscribe();
+                            resetPaymentButtonState();
+                        }, 180000); 
 
                     })
                     .catch(error => {
                         console.error("Error writing document: ", error);
                         showToast("তথ্য জমা দেওয়ার সময় একটি সমস্যা হয়েছে।", "error");
-                        // Restore the button in case of an error
-                        paymentSubmitBtn.disabled = false;
-                        paymentSubmitBtn.classList.remove('loading');
-                        updatePaymentDesign();
+                        resetPaymentButtonState();
                     });
             }
             // ===============================================================
-            // END: MODIFIED CODE BLOCK
+            // END: UPDATED PAYMENT SUBMISSION LOGIC
             // ===============================================================
 
             function handleProfileImageUpload(event) {
@@ -4300,7 +4307,6 @@
                 paymentForm.reset();
             });
             tryAgainBtn.addEventListener('click', () => {
-                // This button now simply re-opens the payment modal
                 failureModal.classList.add('hidden');
                 paymentModal.classList.remove('hidden');
             });
