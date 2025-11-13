@@ -745,6 +745,17 @@
         }
 
         /* END: NEW Toggle Switch Style */
+
+        /* START: NEW Student Status Indicator Styles */
+        .student-active-indicator {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+        .student-inactive-indicator {
+            color: var(--accent-red);
+        }
+        /* END: NEW Student Status Indicator Styles */
+
         /* --- START: Mobile Responsive Styles --- */
         .mobile-header {
             display: none;
@@ -1121,7 +1132,7 @@
                             <p>বর্তমান মাসের লাভ</p>
                         </div>
                     </div>
-                    <div class="stat-card"><span class="material-symbols-outlined icon">group</span>
+                    <div id="total-students-card" class="stat-card" style="cursor: pointer;"><span class="material-symbols-outlined icon">group</span>
                         <div>
                             <h3 id="total-students">0</h3>
                             <p>মোট শিক্ষার্থী</p>
@@ -1653,6 +1664,14 @@
                 });
             }
 
+            // --- DASHBOARD TOTAL STUDENTS CARD CLICK HANDLER ---
+            const totalStudentsCard = document.getElementById('total-students-card');
+            if (totalStudentsCard) {
+                totalStudentsCard.addEventListener('click', () => {
+                    navigateTo('users-page');
+                });
+            }
+
 
             const userSearchInput = document.getElementById('user-search-input');
             if (userSearchInput) {
@@ -1958,15 +1977,24 @@
             }
 
             async function generateReport() {
-                const startDate = new Date(document.getElementById('start-date').value);
-                const endDate = new Date(document.getElementById('end-date').value);
+                const startDateValue = document.getElementById('start-date').value;
+                const endDateValue = document.getElementById('end-date').value;
                 const generateBtn = document.getElementById('generate-report-btn');
+
+                if (!startDateValue || !endDateValue) {
+                    showToast('অনুগ্রহ করে শুরুর এবং শেষের তারিখ নির্বাচন করুন।', 'error');
+                    return;
+                }
+                
+                // Parse date string in local timezone by appending time.
+                const startDate = new Date(startDateValue + 'T00:00:00');
+                const endDate = new Date(endDateValue + 'T23:59:59');
+
                 if (isNaN(startDate) || isNaN(endDate)) {
                     showToast('অনুগ্রহ করে সঠিক তারিখ নির্বাচন করুন।', 'error');
                     return;
                 }
-                startDate.setHours(0, 0, 0, 0);
-                endDate.setHours(23, 59, 59, 999);
+                
                 generateBtn.disabled = true;
                 generateBtn.textContent = 'লোড হচ্ছে...';
                 try {
@@ -2625,7 +2653,51 @@
             }
 
 
-            const renderUsers = () => renderGeneric('users', 'users-table-body', (user) => `<tr><td data-label="নাম">${user.name || 'N/A'}</td><td data-label="ইমেইল">${user.email}</td><td data-label="মোবাইল"><span class="copyable-mobile" onclick="copyToClipboard('${user.mobile || ''}')" title="কপি করতে ক্লিক করুন">${user.mobile || 'N/A'}</span></td><td data-label="রেফারেল কোড">${user.referralCode || 'N/A'}</td><td data-label="ব্যালেন্স">৳ ${user.affiliateBalance || 0}</td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('users', '${user.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('users', '${user.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            async function renderUsers() {
+                const tableBody = document.getElementById('users-table-body');
+                tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">শিক্ষার্থীদের তালিকা লোড হচ্ছে...</td></tr>`;
+
+                try {
+                    // 1. Get all emails of users who have made an approved purchase.
+                    const paymentsSnapshot = await db.collection('payments').where('status', '==', 'approved').get();
+                    const payingUserEmails = new Set(paymentsSnapshot.docs.map(doc => doc.data().userEmail));
+
+                    // 2. Get all users.
+                    const usersSnapshot = await db.collection('users').get();
+                    if (usersSnapshot.empty) {
+                        tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">কোনো শিক্ষার্থী পাওয়া যায়নি।</td></tr>`;
+                        return;
+                    }
+                    
+                    let tableHTML = '';
+                    usersSnapshot.forEach(doc => {
+                        const user = { id: doc.id, ...doc.data() };
+                        const hasPurchased = payingUserEmails.has(user.email);
+                        // 3. Determine the class and title based on purchase history.
+                        const statusClass = hasPurchased ? 'student-active-indicator' : 'student-inactive-indicator';
+                        const statusTitle = hasPurchased ? 'এই শিক্ষার্থী একটি সার্ভিস/কোর্স কিনেছেন।' : 'এই শিক্ষার্থী এখনো কোনো সার্ভিস/কোর্স কিনেননি।';
+
+                        tableHTML += `
+                            <tr>
+                                <td data-label="নাম" class="${statusClass}" title="${statusTitle}">${user.name || 'N/A'}</td>
+                                <td data-label="ইমেইল">${user.email}</td>
+                                <td data-label="মোবাইল"><span class="copyable-mobile" onclick="copyToClipboard('${user.mobile || ''}')" title="কপি করতে ক্লিক করুন">${user.mobile || 'N/A'}</span></td>
+                                <td data-label="রেফারেল কোড">${user.referralCode || 'N/A'}</td>
+                                <td data-label="ব্যালেন্স">৳ ${user.affiliateBalance || 0}</td>
+                                <td class="actions-cell" data-label="অ্যাকশন">
+                                    <button class="btn-edit" onclick="openModalForEdit('users', '${user.id}')"><span class="material-symbols-outlined">edit</span></button>
+                                    <button class="btn-delete" onclick="deleteItem('users', '${user.id}')"><span class="material-symbols-outlined">delete</span></button>
+                                </td>
+                            </tr>`;
+                    });
+                    
+                    tableBody.innerHTML = tableHTML;
+
+                } catch (error) {
+                    console.error("Error rendering users:", error);
+                    tableBody.innerHTML = `<tr><td colspan="6" style="color: red; text-align: center;">An error occurred: ${error.message}</td></tr>`;
+                }
+            }
 
             const renderServices = () => renderGeneric('services', 'services-table-body', (service) => `<tr><td data-label="সার্ভিসের নাম">${service.name}</td><td data-label="ক্রয়মূল্য">৳ ${service.purchasePrice || 0}</td><td data-label="বর্তমান মূল্য">৳ ${service.currentPrice}</td><td data-label="কমিশন">৳ ${service.commission || 0}</td><td class="actions-cell" data-label="অ্যাকশন"><button class="btn-edit" onclick="openModalForEdit('services', '${service.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('services', '${service.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
 
