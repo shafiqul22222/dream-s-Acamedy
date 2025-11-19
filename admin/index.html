@@ -1546,14 +1546,14 @@
 
             window.copyToClipboard = function(text) {
                 if (!text || text.trim() === 'N/A' || text.trim() === '') {
-                    showToast("কোনো মোবাইল নম্বর পাওয়া যায়নি।", "error");
+                    showToast("কোনো টেক্সট পাওয়া যায়নি।", "error");
                     return;
                 }
                 navigator.clipboard.writeText(text).then(function() {
-                    showToast(`নম্বরটি "${text}" ক্লিপবোর্ডে কপি করা হয়েছে।`);
+                    showToast(`"${text}" ক্লিপবোর্ডে কপি করা হয়েছে।`);
                 }, function(err) {
                     console.error('Async: Could not copy text: ', err);
-                    showToast('দুঃখিত, নম্বরটি কপি করা যায়নি।', "error");
+                    showToast('দুঃখিত, টেক্সট কপি করা যায়নি।', "error");
                 });
             }
 
@@ -1845,8 +1845,19 @@
                         const id = doc.id;
                         const statusClass = (data.status || 'pending').toLowerCase();
                         
-                        // Handling Card Link to be clickable or shortened
-                        const cardLinkDisplay = data.cardLink ? `<a href="${data.cardLink}" target="_blank" style="color:var(--secondary-blue);">View Link</a>` : 'N/A';
+                        // Modified Card Link Logic for Copy Feature
+                        let cardLinkDisplay = 'N/A';
+                        if (data.cardLink) {
+                            cardLinkDisplay = `
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <a href="${data.cardLink}" target="_blank" style="color:var(--secondary-blue); font-weight:600; text-decoration:underline;">View</a>
+                                    <span class="material-symbols-outlined" 
+                                          style="cursor:pointer; font-size:18px; color:#555;" 
+                                          onclick="copyToClipboard('${data.cardLink}')"
+                                          title="লিংক কপি করতে ক্লিক করুন">content_copy</span>
+                                </div>
+                            `;
+                        }
 
                         html += `
                         <tr>
@@ -1857,7 +1868,11 @@
                             <td data-label="কার্ড টাইপ">${data.cardType || 'N/A'}</td>
                             <td data-label="কার্ড লিংক">${cardLinkDisplay}</td>
                             <td data-label="পেমেন্ট মেথড">${data.paymentMethod || 'N/A'}</td>
-                            <td data-label="মোবাইল">${data.phoneNumber || 'N/A'}</td>
+                            <td data-label="মোবাইল">
+                                <span class="copyable-mobile" style="cursor:pointer;" onclick="copyToClipboard('${data.phoneNumber || ''}')" title="কপি করতে ক্লিক করুন">
+                                    ${data.phoneNumber || 'N/A'}
+                                </span>
+                            </td>
                             <td data-label="স্ট্যাটাস"><span class="status-badge ${statusClass}">${data.status || 'pending'}</span></td>
                             <td class="actions-cell" data-label="অ্যাকশন">
                                 <select class="status-select" onchange="updateDollarSellStatus('${id}', this.value)">
