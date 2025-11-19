@@ -952,6 +952,42 @@
             color: var(--secondary-blue);
         }
 
+        /* --- START: DOLLAR SELL MODAL FIXES --- */
+        /* এই অংশটি ডলার সেল ফর্মের জন্য নতুন করে যুক্ত করা হয়েছে */
+        
+        /* ড্রপডাউন (Select) এর লেবেল যাতে লেখার উপর না উঠে যায় সেজন্য লেবেলকে সবসময় উপরে রাখা হলো */
+        #dollar-sell-modal .input-group select + label {
+            top: -10px !important;
+            left: 45px !important;
+            font-size: 0.85em !important;
+            color: var(--secondary-blue) !important;
+            background-color: white !important;
+            padding: 0 5px !important;
+            z-index: 20;
+        }
+
+        /* ইনপুট এবং ড্রপডাউন এর ব্যাকগ্রাউন্ড এবং বর্ডার স্পষ্ট করা হলো */
+        #dollar-sell-modal .input-group input,
+        #dollar-sell-modal .input-group select {
+            background-color: #ffffff !important; /* সাদা ব্যাকগ্রাউন্ড */
+            border: 1px solid #b0b8c4 !important; /* একটু গাঢ় বর্ডার */
+            color: #000000 !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        #dollar-sell-modal .input-group input:focus,
+        #dollar-sell-modal .input-group select:focus {
+            border-color: var(--secondary-blue) !important;
+            box-shadow: 0 0 0 3px rgba(8, 131, 149, 0.2) !important;
+        }
+
+        /* আইকনের রঙ গাঢ় করা হলো */
+        #dollar-sell-modal .input-group .material-symbols-outlined {
+            color: #6c757d; 
+            z-index: 21;
+        }
+        /* --- END: DOLLAR SELL MODAL FIXES --- */
+
         .password-toggle {
             position: absolute;
             right: 15px;
@@ -2083,6 +2119,9 @@
                     <li><a href="#trust">সাফল্যের চিত্র</a></li>
                     <!-- END: NEW NAV LINK ADDED -->
                     <li><a href="#services">সার্ভিস সমূহ</a></li>
+                    <!-- START: DOLLAR SELL NAV BUTTON -->
+                    <li><a href="#" id="dollar-sell-nav-link" style="color: var(--primary-blue);">ডলার সেল</a></li>
+                    <!-- END: DOLLAR SELL NAV BUTTON -->
                     <li class="nav-dropdown">
                         <a href="#courses">কোর্স</a>
                         <div class="dropdown-menu">
@@ -2588,6 +2627,60 @@
     </div>
     <!-- END: NEW PAYMENT VERIFICATION MODALS -->
 
+    <!-- ======================= DOLLAR SELL MODAL ======================= -->
+    <div class="login-modal hidden" id="dollar-sell-modal">
+        <div class="login-card" style="max-width: 500px; display: block;">
+            <div class="modal-form-panel" style="width: 100%; padding: 40px;">
+                <button class="close-modal-btn" id="close-dollar-sell-modal">&times;</button>
+                
+                <h2 style="text-align: center; margin-bottom: 10px;">ডলার সেল রিকুয়েস্ট</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 30px;">আপনার তথ্যগুলো সঠিকভাবে পূরণ করুন</p>
+
+                <form id="dollar-sell-form">
+                    <!-- Card Type Dropdown -->
+                    <div class="input-group">
+                        <span class="material-symbols-outlined">credit_card</span>
+                        <select id="ds-card-type" required>
+                            <option value="" disabled selected>কার্ডের ধরন সিলেক্ট করুন</option>
+                            <option value="ACH">ACH</option>
+                            <option value="VISA">VISA</option>
+                            <option value="APPLE">APPLE</option>
+                        </select>
+                        <label for="ds-card-type">কার্ডের ধরন</label>
+                    </div>
+
+                    <!-- Card Link Input -->
+                    <div class="input-group">
+                        <span class="material-symbols-outlined">link</span>
+                        <input type="url" id="ds-card-link" placeholder="কার্ড লিংক দিন" required>
+                        <label for="ds-card-link">কার্ড লিংক</label>
+                    </div>
+
+                    <!-- Payment Method Dropdown -->
+                    <div class="input-group">
+                        <span class="material-symbols-outlined">payments</span>
+                        <select id="ds-payment-method" required>
+                            <option value="" disabled selected>পেমেন্ট মেথড সিলেক্ট করুন</option>
+                            <option value="Bkash">Bkash</option>
+                            <option value="Nagad">Nagad</option>
+                        </select>
+                        <label for="ds-payment-method">পেমেন্ট মেথড</label>
+                    </div>
+
+                    <!-- Dynamic Phone Number Input (Hidden by default) -->
+                    <div class="input-group hidden" id="ds-number-group">
+                        <span class="material-symbols-outlined">call</span>
+                        <input type="number" id="ds-phone-number" placeholder="নাম্বার দিন">
+                        <label for="ds-phone-number" id="ds-number-label">আপনার মোবাইল নাম্বার</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-gradient" style="width: 100%; border-radius: 8px;">সাবমিট করুন →</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- ======================= END DOLLAR SELL MODAL ======================= -->
+
     <!-- ======================= Footer ======================= -->
     <footer class="main-footer">
         <div class="container">
@@ -2649,6 +2742,10 @@
 
     <!-- ======================= Mobile Bottom Navigation ======================= -->
     <nav class="mobile-bottom-nav">
+        <a href="#" class="mobile-nav-link" id="mobile-dollar-sell-btn">
+            <span class="material-symbols-outlined" style="color: var(--primary-blue);">currency_exchange</span>
+            <span style="color: var(--primary-blue); font-weight: 700;">ডলার সেল</span>
+        </a>
         <a href="#noticeboard" class="mobile-nav-link">
             <span class="material-symbols-outlined">campaign</span>
             <span>নোটিশ</span>
@@ -4319,6 +4416,128 @@
             if (profileImageUpload) {
                 profileImageUpload.addEventListener('change', handleProfileImageUpload);
             }
+
+            // --- START: DOLLAR SELL MODAL LOGIC ---
+            
+            const dollarSellNavLink = document.getElementById('dollar-sell-nav-link');
+            const mobileDollarSellBtn = document.getElementById('mobile-dollar-sell-btn'); 
+
+            const dollarSellModal = document.getElementById('dollar-sell-modal');
+            const closeDollarSellModalBtn = document.getElementById('close-dollar-sell-modal');
+            const dsPaymentMethod = document.getElementById('ds-payment-method');
+            const dsNumberGroup = document.getElementById('ds-number-group');
+            const dsNumberLabel = document.getElementById('ds-number-label');
+            const dsPhoneNumber = document.getElementById('ds-phone-number');
+            const dollarSellForm = document.getElementById('dollar-sell-form');
+
+            // Open Modal
+            if(dollarSellNavLink){
+                dollarSellNavLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Check if user is logged in (Optional: Remove if public)
+                    if (!auth.currentUser) {
+                        showLoginModal();
+                        showToast("ডলার সেল করতে প্রথমে লগইন করুন।", "info");
+                        return;
+                    }
+                    dollarSellModal.classList.remove('hidden');
+                });
+            }
+
+            // Open Modal (Mobile)
+            if(mobileDollarSellBtn){
+                mobileDollarSellBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (!auth.currentUser) {
+                        showLoginModal();
+                        showToast("ডলার সেল করতে প্রথমে লগইন করুন।", "info");
+                        return;
+                    }
+                    dollarSellModal.classList.remove('hidden');
+                });
+            }
+
+            // Close Modal
+            if(closeDollarSellModalBtn){
+                closeDollarSellModalBtn.addEventListener('click', () => {
+                    dollarSellModal.classList.add('hidden');
+                });
+            }
+
+            // Handle Dropdown Change (Bkash/Nagad logic)
+            if(dsPaymentMethod){
+                dsPaymentMethod.addEventListener('change', function() {
+                    const method = this.value;
+                    if (method) {
+                        dsNumberGroup.classList.remove('hidden');
+                        dsPhoneNumber.setAttribute('required', 'true');
+                        
+                        if (method === 'Bkash') {
+                            dsNumberLabel.textContent = 'আপনার বিকাশ নাম্বার দিন';
+                            dsPhoneNumber.placeholder = 'আপনার বিকাশ নাম্বার দিন';
+                        } else if (method === 'Nagad') {
+                            dsNumberLabel.textContent = 'আপনার নগদ নাম্বার দিন';
+                            dsPhoneNumber.placeholder = 'আপনার নগদ নাম্বার দিন';
+                        }
+                    } else {
+                        dsNumberGroup.classList.add('hidden');
+                        dsPhoneNumber.removeAttribute('required');
+                    }
+                });
+            }
+
+            // Handle Form Submit
+            if(dollarSellForm){
+                dollarSellForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const user = auth.currentUser;
+                    
+                    if(!user) return;
+
+                    const submitBtn = dollarSellForm.querySelector('button[type="submit"]');
+                    submitBtn.disabled = true;
+                    submitBtn.innerText = "সাবমিট হচ্ছে...";
+
+                    const requestData = {
+                        userId: user.uid,
+                        userEmail: user.email,
+                        userName: user.displayName || 'No Name',
+                        cardType: document.getElementById('ds-card-type').value,
+                        cardLink: document.getElementById('ds-card-link').value,
+                        paymentMethod: dsPaymentMethod.value,
+                        phoneNumber: dsPhoneNumber.value,
+                        status: 'pending',
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+
+                    // Save to Firestore
+                    db.collection('dollar_sells').add(requestData)
+                        .then(() => {
+                            showToast("আপনার রিকুয়েস্ট সফলভাবে জমা হয়েছে!", "success");
+                            dollarSellModal.classList.add('hidden');
+                            dollarSellForm.reset();
+                            dsNumberGroup.classList.add('hidden');
+                            
+                            // Admin Notification
+                            db.collection('notifications').add({
+                                title: 'নতুন ডলার সেল রিকুয়েস্ট',
+                                message: `${user.email} একটি ${requestData.cardType} কার্ড সেল রিকুয়েস্ট পাঠিয়েছেন।`,
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                type: 'dollar_sell',
+                                read: false
+                            });
+                        })
+                        .catch((error) => {
+                            console.error("Error:", error);
+                            showToast("সমস্যা হয়েছে, আবার চেষ্টা করুন।", "error");
+                        })
+                        .finally(() => {
+                            submitBtn.disabled = false;
+                            submitBtn.innerText = "সাবমিট করুন →";
+                        });
+                });
+            }
+            // --- END: DOLLAR SELL MODAL LOGIC ---
 
             // --- Initializations ---
             startCountdown();
