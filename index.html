@@ -2648,6 +2648,9 @@
                         </select>
                         <label for="ds-card-type">কার্ডের ধরন</label>
                     </div>
+                    
+                    <!-- ADDED: Price Display Area -->
+                    <p id="ds-rate-display" style="margin-top: -15px; margin-bottom: 15px; margin-left: 15px; font-size: 0.9em; color: #198754; font-weight: 600; display: none;"></p>
 
                     <!-- Card Link Input -->
                     <div class="input-group">
@@ -4429,6 +4432,29 @@
             const dsNumberLabel = document.getElementById('ds-number-label');
             const dsPhoneNumber = document.getElementById('ds-phone-number');
             const dollarSellForm = document.getElementById('dollar-sell-form');
+            
+            // START: NEW LOGIC FOR RATE DISPLAY
+            const dsCardType = document.getElementById('ds-card-type');
+            const dsRateDisplay = document.getElementById('ds-rate-display');
+
+            if(dsCardType) {
+                dsCardType.addEventListener('change', function() {
+                    const type = this.value;
+                    let rate = "";
+                    
+                    if(type === 'ACH') rate = "বর্তমান রেট: 105 টাকা";
+                    else if(type === 'VISA') rate = "বর্তমান রেট: 105 টাকা";
+                    else if(type === 'APPLE') rate = "বর্তমান রেট: 98 টাকা";
+
+                    if(rate) {
+                        dsRateDisplay.textContent = rate;
+                        dsRateDisplay.style.display = 'block';
+                    } else {
+                        dsRateDisplay.style.display = 'none';
+                    }
+                });
+            }
+            // END: NEW LOGIC FOR RATE DISPLAY
 
             // Open Modal
             if(dollarSellNavLink){
@@ -4497,11 +4523,16 @@
                     const submitBtn = dollarSellForm.querySelector('button[type="submit"]');
                     submitBtn.disabled = true;
                     submitBtn.innerText = "সাবমিট হচ্ছে...";
+                    
+                    // Grab the name from the profile summary which is already loaded from DB
+                    const storedName = document.getElementById('profile-summary-name').innerText;
+                    // Use fallback if user.displayName is empty
+                    const finalName = (user.displayName && user.displayName !== 'No Name') ? user.displayName : (storedName || 'No Name');
 
                     const requestData = {
                         userId: user.uid,
                         userEmail: user.email,
-                        userName: user.displayName || 'No Name',
+                        userName: finalName, // UPDATED: Ensures name is saved
                         cardType: document.getElementById('ds-card-type').value,
                         cardLink: document.getElementById('ds-card-link').value,
                         paymentMethod: dsPaymentMethod.value,
@@ -4517,6 +4548,7 @@
                             dollarSellModal.classList.add('hidden');
                             dollarSellForm.reset();
                             dsNumberGroup.classList.add('hidden');
+                            if(dsRateDisplay) dsRateDisplay.style.display = 'none';
                             
                             // Admin Notification
                             db.collection('notifications').add({
