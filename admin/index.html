@@ -1025,6 +1025,29 @@
                 <div class="page-header">
                     <h1>ডলার ক্রয়/বিক্রয় এবং রিকুয়েস্ট</h1>
                 </div>
+
+                <!-- START: NEW DOLLAR RATE SETTINGS SECTION -->
+                <div class="content-box" style="margin-bottom: 30px; border-left: 5px solid var(--accent-yellow);">
+                    <h3 style="margin-bottom: 20px; color: var(--primary-blue);">বর্তমান ডলার রেট সেট করুন</h3>
+                    <form id="dollar-rate-settings-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; align-items: end;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="rate-ach">ACH রেট (টাকা)</label>
+                            <input type="number" id="rate-ach" placeholder="যেমন: 105" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="rate-visa">VISA রেট (টাকা)</label>
+                            <input type="number" id="rate-visa" placeholder="যেমন: 105" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="rate-apple">APPLE রেট (টাকা)</label>
+                            <input type="number" id="rate-apple" placeholder="যেমন: 98" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="height: 48px;">
+                            <span class="material-symbols-outlined">update</span> রেট আপডেট করুন
+                        </button>
+                    </form>
+                </div>
+                <!-- END: NEW DOLLAR RATE SETTINGS SECTION -->
                 
                 <!-- Manual Entry Section -->
                 <div class="content-box">
@@ -1593,6 +1616,7 @@
                         renderManualSalePage();
                         break;
                     case 'dollar-exchange-page':
+                        renderDollarRatesSettings(); // NEW: Render Rate Settings
                         // renderDollarExchangePage(); // Manual Entry Logic if needed separately
                         renderDollarSellRequests(); // NEW Function for User Requests
                         break;
@@ -1819,6 +1843,50 @@
                 });
                 tableHTML += `<tr style="font-weight: bold; background-color: var(--background-light);"><td data-label="সর্বমোট">সর্বমোট</td><td data-label="মোট সেলস">৳ ${totalSales.toLocaleString('bn-BD')}</td><td data-label="মোট লাভ">৳ ${totalProfit.toLocaleString('bn-BD')}</td></tr>`;
                 tableBody.innerHTML = tableHTML;
+            }
+
+            // --- NEW: Dollar Rate Settings Logic ---
+            async function renderDollarRatesSettings() {
+                try {
+                    const doc = await db.collection('site_settings').doc('dollar_rates').get();
+                    if (doc.exists) {
+                        const data = doc.data();
+                        document.getElementById('rate-ach').value = data.ACH || 105;
+                        document.getElementById('rate-visa').value = data.VISA || 105;
+                        document.getElementById('rate-apple').value = data.APPLE || 98;
+                    }
+                } catch (error) {
+                    console.error("Error loading dollar rates:", error);
+                    showToast("রেট লোড করতে সমস্যা হয়েছে।", "error");
+                }
+            }
+
+            const dollarRateSettingsForm = document.getElementById('dollar-rate-settings-form');
+            if (dollarRateSettingsForm) {
+                dollarRateSettingsForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const btn = dollarRateSettingsForm.querySelector('button[type="submit"]');
+                    const oldText = btn.innerHTML;
+                    btn.disabled = true;
+                    btn.innerHTML = `<span class="material-symbols-outlined">sync</span> আপডেট হচ্ছে...`;
+
+                    const rates = {
+                        ACH: Number(document.getElementById('rate-ach').value),
+                        VISA: Number(document.getElementById('rate-visa').value),
+                        APPLE: Number(document.getElementById('rate-apple').value)
+                    };
+
+                    try {
+                        await db.collection('site_settings').doc('dollar_rates').set(rates, { merge: true });
+                        showToast("ডলার রেট সফলভাবে আপডেট করা হয়েছে!", "success");
+                    } catch (error) {
+                        console.error("Error saving rates:", error);
+                        showToast("রেট সেভ করতে সমস্যা হয়েছে।", "error");
+                    } finally {
+                        btn.disabled = false;
+                        btn.innerHTML = oldText;
+                    }
+                });
             }
 
             // --- NEW: Render User Dollar Sell Requests ---
