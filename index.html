@@ -2785,6 +2785,10 @@
         let notificationListener = null;
         let availableGateways = []; // NEW: To store available payment gateways
         
+        // --- START: VARIABLE TO STORE LIVE DOLLAR RATES ---
+        let liveDollarRates = { ACH: 105, VISA: 105, APPLE: 98 }; // Default fallback values
+        // --- END: VARIABLE TO STORE LIVE DOLLAR RATES ---
+        
         document.addEventListener('DOMContentLoaded', function() {
             // --- Variable Declarations ---
             const loginSignupBtn = document.getElementById('login-signup-btn');
@@ -3336,6 +3340,19 @@
                         showToast("প্রোফাইল আপডেট করার সময় একটি অপ্রত্যাশিত সমস্যা হয়েছে।", "error");
                     });
             }
+
+            // --- START: NEW FETCH FUNCTION FOR DOLLAR RATES ---
+            async function fetchLiveDollarRates() {
+                try {
+                    const doc = await db.collection('site_settings').doc('dollar_rates').get();
+                    if (doc.exists) {
+                        liveDollarRates = doc.data();
+                    }
+                } catch (error) {
+                    console.error("Error fetching dollar rates:", error);
+                }
+            }
+            // --- END: NEW FETCH FUNCTION FOR DOLLAR RATES ---
 
             auth.onAuthStateChanged(user => {
                 if (user && user.email === ADMIN_EMAIL) {
@@ -4433,28 +4450,32 @@
             const dsPhoneNumber = document.getElementById('ds-phone-number');
             const dollarSellForm = document.getElementById('dollar-sell-form');
             
-            // START: NEW LOGIC FOR RATE DISPLAY
+            // START: NEW LOGIC FOR RATE DISPLAY (UPDATED)
             const dsCardType = document.getElementById('ds-card-type');
             const dsRateDisplay = document.getElementById('ds-rate-display');
 
             if(dsCardType) {
                 dsCardType.addEventListener('change', function() {
                     const type = this.value;
-                    let rate = "";
+                    let rateAmount = 0;
                     
-                    if(type === 'ACH') rate = "বর্তমান রেট: 105 টাকা";
-                    else if(type === 'VISA') rate = "বর্তমান রেট: 105 টাকা";
-                    else if(type === 'APPLE') rate = "বর্তমান রেট: 98 টাকা";
+                    if (liveDollarRates[type]) {
+                        rateAmount = liveDollarRates[type];
+                    } else {
+                        if(type === 'ACH') rateAmount = 105;
+                        else if(type === 'VISA') rateAmount = 105;
+                        else if(type === 'APPLE') rateAmount = 98;
+                    }
 
-                    if(rate) {
-                        dsRateDisplay.textContent = rate;
+                    if(rateAmount > 0) {
+                        dsRateDisplay.textContent = `বর্তমান রেট: ${rateAmount} টাকা`;
                         dsRateDisplay.style.display = 'block';
                     } else {
                         dsRateDisplay.style.display = 'none';
                     }
                 });
             }
-            // END: NEW LOGIC FOR RATE DISPLAY
+            // END: NEW LOGIC FOR RATE DISPLAY (UPDATED)
 
             // Open Modal
             if(dollarSellNavLink){
@@ -4573,6 +4594,7 @@
 
             // --- Initializations ---
             startCountdown();
+            fetchLiveDollarRates(); // NEW: Fetch Rates on Load
             switchDashboardPage('my-courses-page');
 
             loadPaymentGateways();
