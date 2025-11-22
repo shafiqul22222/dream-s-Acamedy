@@ -1829,13 +1829,13 @@
             color: var(--text-light);
             transform: translateY(-2px);
         }
-        /* START: MODIFIED STYLE FOR SVG ICONS */
-        .social-icon svg {
-            width: 22px;
-            height: 22px;
-            fill: currentColor;
+        /* START: MODIFIED STYLE FOR IMAGE ICONS IN FOOTER */
+        .social-icon img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
         }
-        /* END: MODIFIED STYLE FOR SVG ICONS */
+        /* END: MODIFIED STYLE FOR IMAGE ICONS IN FOOTER */
         .copyright {
             text-align: center;
             padding-top: 20px;
@@ -2101,6 +2101,186 @@
                 justify-content: center;
             }
         }
+
+        /* --- START: NEW CONTACT SECTION STYLES --- */
+        .contact-cta-section {
+            padding: 60px 0;
+        }
+        
+        .contact-cta-box {
+            background-color: #FFFBF0; /* Light cream background */
+            border-radius: 20px;
+            padding: 0; /* Padding handled by grid */
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            align-items: center;
+        }
+
+        .contact-text {
+            padding: 50px 50px 50px 60px;
+        }
+
+        .contact-text h2 {
+            font-size: 2.5em;
+            line-height: 1.3;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .highlight-text {
+            color: #2D9CDB; /* Blue highlight */
+        }
+
+        .contact-text p {
+            color: #555;
+            font-size: 1.1em;
+            margin-bottom: 35px;
+            max-width: 90%;
+            line-height: 1.7;
+        }
+
+        .contact-info-row {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn-contact {
+            background-color: #2D9CDB;
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-contact:hover {
+            background-color: #1b8abf;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(45, 156, 219, 0.3);
+        }
+
+        .phone-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .phone-icon {
+            width: 50px;
+            height: 50px;
+            background-color: #FFEAEA; /* Pinkish background */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FF3B3B; /* Red icon */
+        }
+
+        .phone-icon .material-symbols-outlined {
+            font-size: 28px;
+        }
+
+        .numbers {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .numbers a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+            line-height: 1.4;
+            transition: color 0.2s;
+        }
+        
+        .numbers a:hover {
+            color: #2D9CDB;
+        }
+
+        .contact-img-wrapper {
+            position: relative;
+            height: 100%;
+            min-height: 400px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+        
+        /* Circle background effect behind image */
+        .circle-bg {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background-color: #ddd; /* Grayish circle */
+            border-radius: 50%;
+            bottom: -50px;
+            z-index: 0;
+            opacity: 0.5;
+        }
+
+        .contact-img-wrapper img {
+            position: relative;
+            z-index: 1;
+            max-width: 90%;
+            height: auto;
+            object-fit: contain;
+            margin-bottom: -5px; /* Align to bottom */
+        }
+
+        /* Mobile Responsive for Contact Section */
+        @media (max-width: 992px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .contact-text {
+                padding: 40px 20px;
+            }
+            
+            .contact-text p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .contact-info-row {
+                justify-content: center;
+            }
+
+            .contact-img-wrapper {
+                min-height: 300px;
+            }
+            
+            .contact-img-wrapper img {
+                max-width: 60%;
+            }
+        }
+        @media (max-width: 576px) {
+             .contact-text h2 {
+                font-size: 1.8em;
+            }
+            .contact-img-wrapper img {
+                max-width: 80%;
+            }
+            .contact-info-row {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+        /* --- END: NEW CONTACT SECTION STYLES --- */
     </style>
 </head>
 <body>
@@ -2400,6 +2580,38 @@
                     </div>
                 </div>
             </section>
+
+            <!-- ======================= NEW CONTACT SECTION START ======================= -->
+            <section class="section contact-cta-section page-section" id="contact-us">
+                <div class="container">
+                    <div class="contact-cta-box">
+                        <div class="contact-grid">
+                            <div class="contact-text">
+                                <h2>যেকোনো প্রয়োজনে আমাদের সাথে <br> <span class="highlight-text">যোগাযোগ করুন ।</span></h2>
+                                <p>আমরা সর্বদাই আপনাদের সাহায্য করতে প্রস্তুত। তাই আপনি কোনো সমস্যার সম্মুখীন হোন বা কোনো তথ্য অথবা সাপোর্টের প্রয়োজনবোধ করছেন, আমরা আপনার জন্য সাথে আছি।</p>
+                                <div class="contact-info-row">
+                                    <a href="tel:01703743441" class="btn btn-contact">যোগাযোগ করুন <span class="material-symbols-outlined">arrow_forward</span></a>
+                                    <div class="phone-info">
+                                        <div class="phone-icon">
+                                            <span class="material-symbols-outlined">call</span>
+                                        </div>
+                                        <div class="numbers">
+                                            <a href="tel:01703743441">01703743441</a>
+                                            <a href="tel:01703743441">01703743441</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="contact-img-wrapper">
+                                <div class="circle-bg"></div>
+                                <!-- Added ID to image to target via JS -->
+                                <img id="contact-us-image" src="https://i.ibb.co/mcxJLzJ/portrait-happy-male-student-with-backpack-holding-mobile-phone.png" alt="Support Team">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- ======================= NEW CONTACT SECTION END ======================= -->
 
         </div>
 
@@ -2932,20 +3144,35 @@
                     console.error("Error fetching 'About Us' image:", error);
                 }
             }
+            
+            // === NEW: Load Contact Us Image ===
+            async function loadContactUsImage() {
+                const contactImageElement = document.getElementById('contact-us-image');
+                if (!contactImageElement) return;
 
-            // START: MODIFIED FUNCTION TO LOAD SOCIAL MEDIA LINKS WITH LOGOS
+                try {
+                    const doc = await db.collection('site_settings').doc('contact_section').get();
+                    if (doc.exists && doc.data().imageUrl) {
+                        contactImageElement.src = doc.data().imageUrl;
+                    }
+                } catch (error) {
+                    console.error("Error fetching 'Contact Us' image:", error);
+                }
+            }
+
+            // START: MODIFIED FUNCTION TO LOAD SOCIAL MEDIA LINKS WITH LOGO IMAGES
             async function loadSocialMediaLinks() {
                 const container = document.getElementById('social-icons-container');
                 if (!container) return;
                 
-                // SVG logos for different platforms
+                // UPDATED: Using Image tags from Wikimedia Commons instead of SVGs
                 const iconMap = {
-                    facebook: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.04c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm2.25 10.1h-1.61v4.86h-2.12v-4.86h-1.07v-1.91h1.07v-1.3c0-1.07.65-1.64 1.6-1.64h1.36v1.9h-.98c-.52 0-.62.25-.62.61v1.42h1.61l-.21 1.91z"/></svg>`,
-                    youtube: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.04c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm5.71 10.59l-4.71 2.72c-.4.23-.9-.06-.9-.53v-5.44c0-.47.5-.76.9-.53l4.71 2.72c.4.23.4.87 0 1.1z"/></svg>`,
-                    whatsapp: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.04c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm4.46 12.11c-.27.15-.99.49-1.14.54-.15.05-.26.08-.42-.04-.16-.12-.66-.24-1.25-.77-.47-.42-.78-.94-.88-1.1-.1-.16-.01-.25.07-.34.07-.07.16-.18.23-.25.07-.07.1-.11.16-.18.06-.07.03-.13-.01-.18-.04-.05-.42-1.01-.58-1.39-.15-.37-.31-.32-.42-.32h-.19c-.11 0-.28.04-.42.22-.14.18-.54.53-.54 1.29s.55 1.5 1.23 2.6c1.17 1.9 2.04 2.22 2.87 2.22.65 0 1.15-.38 1.34-.74.19-.36.19-.68.13-.74-.05-.06-.18-.1-.36-.21z"/></svg>`,
-                    instagram: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2c-2.72 0-3.06.01-4.12.06-1.06.05-1.79.22-2.42.47-.65.25-1.17.59-1.69 1.11s-.86 1.04-1.11 1.69c-.25.63-.42 1.36-.47 2.42-.05 1.06-.06 1.4-.06 4.12s.01 3.06.06 4.12c.05 1.06.22 1.79.47 2.42.25.65.59 1.17 1.11 1.69s1.04.86 1.69 1.11c.63.25 1.36.42 2.42.47 1.06.05 1.4.06 4.12.06s3.06-.01 4.12-.06c1.06-.05 1.79-.22 2.42-.47.65-.25 1.17-.59 1.69-1.11s.86-1.04 1.11-1.69c.25-.63-.42-1.36-.47-2.42.05-1.06.06-1.4.06-4.12s-.01-3.06-.06-4.12c-.05-1.06-.22-1.79-.47-2.42-.25-.65-.59-1.17-1.11-1.69s-1.04-.86-1.69-1.11c-.63-.25-1.36-.42-2.42-.47-1.06-.05-1.4-.06-4.12-.06zm0 1.8c2.67 0 2.98.01 4.04.06 1-.05 1.5.19 1.84.33.43.17.72.39.99.66.27.27.49.56.66.99.14.34.38.84.33 1.84.05 1.06.06 1.37.06 4.04s-.01 2.98-.06 4.04c.05 1-.19 1.5-.33 1.84-.17.43-.39.72-.66.99-.27.27-.56.49-.99.66-.34.14-.84.38-1.84.33-1.06.05-1.37.06-4.04.06s-2.98-.01-4.04-.06c-1 .05-1.5-.19-1.84-.33-.43-.17-.72-.39-.99-.66-.27-.27-.49-.56-.66-.99-.14-.34-.38-.84-.33-1.84-.05-1.06-.06-1.37-.06-4.04s.01-2.98.06-4.04c-.05-1 .19-1.5.33-1.84.17-.43.39.72.66.99.27-.27.56.49.99-.66.34-.14.84-.38 1.84-.33C9.02 3.81 9.33 3.8 12 3.8zm0 3.35c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zm0 7.2c-1.49 0-2.7-1.21-2.7-2.7s1.21-2.7 2.7-2.7 2.7 1.21 2.7 2.7-1.21 2.7-2.7 2.7zm5.25-8.1c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25z"/></svg>`,
-                    twitter: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm4.643 7.822-.013.006L13.88 12.5l3.2 4.678h-2.5l-2.076-3.018-1.63 3.018h-.832l3.414-5.322-3.03-4.346h2.5l1.83 2.62L16.29 7.5h.832l-3.32 5.013 3.19 4.65h.5l.001-.002.013-.006 2.8-4.062-2.8-4.062z"/></svg>`,
-                    linkedin: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.04C6.48 2.04 2 6.52 2 12.04s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zM8.5 17.5H6v-7h2.5v7zM7.25 9.25c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm10.25 8.25h-2.5v-3.5c0-.83-.02-1.9-1.16-1.9s-1.34.9-1.34 1.84v3.56H10v-7h2.39v1.09h.03c.33-.63 1.15-1.29 2.26-1.29 2.42 0 2.87 1.59 2.87 3.66v4.54z"/></svg>`
+                    facebook: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/2048px-2021_Facebook_icon.svg.png" alt="Facebook">`,
+                    youtube: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/2560px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube">`,
+                    whatsapp: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/2044px-WhatsApp.svg.png" alt="WhatsApp">`,
+                    instagram: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/2048px-Instagram_icon.png" alt="Instagram">`,
+                    twitter: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Logo_of_Twitter.svg/2491px-Logo_of_Twitter.svg.png" alt="Twitter">`,
+                    linkedin: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/LinkedIn_logo_initials.png/800px-LinkedIn_logo_initials.png" alt="LinkedIn">`
                 };
 
                 try {
@@ -2955,11 +3182,11 @@
                     if (doc.exists && doc.data().links) {
                         const links = doc.data().links;
                         links.forEach(link => {
-                            if (link.platform && link.link && iconMap[link.platform]) {
+                            if (link.platform && link.link && iconMap[link.platform.toLowerCase()]) {
                                 const linkElement = document.createElement('a');
                                 linkElement.href = link.link;
                                 linkElement.className = 'social-icon';
-                                linkElement.innerHTML = iconMap[link.platform];
+                                linkElement.innerHTML = iconMap[link.platform.toLowerCase()];
                                 linkElement.target = '_blank';
                                 linkElement.rel = 'noopener noreferrer';
                                 linkElement.setAttribute('aria-label', link.platform);
@@ -4606,6 +4833,7 @@
             loadAboutUsImage();
             loadHeaderLogo();
             loadSocialMediaLinks();
+            loadContactUsImage(); // NEW: Load Contact Image
         });
     </script>
 </body>
