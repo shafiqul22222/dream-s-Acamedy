@@ -858,6 +858,14 @@
                             <p>পেন্ডিং পেমেন্ট</p>
                         </div>
                     </div>
+                    <!-- NEW: Pending Dollar Requests Card -->
+                    <div id="pending-dollar-requests-card" class="stat-card pending-card"><span class="material-symbols-outlined icon">currency_exchange</span>
+                        <div>
+                            <h3 id="pending-dollar-requests">0</h3>
+                            <p>পেন্ডিং ডলার রিকুয়েস্ট</p>
+                        </div>
+                    </div>
+                    
                     <div class="stat-card sales-card"><span class="material-symbols-outlined icon">payments</span>
                         <div>
                             <h3 id="total-sales">৳0</h3>
@@ -1360,6 +1368,17 @@
                         <div class="form-group"><label>বর্তমান ছবি প্রিভিউ</label><img id="about-us-image-preview" src="https://i.ibb.co/JqgWkCg/placeholder.png" alt="About Us Image Preview" style="max-width: 100%; max-height: 250px; border: 1px solid var(--border-color); border-radius: 8px; object-fit: cover;"></div>
                         <button type="submit" class="btn btn-primary" style="width: auto; justify-content: flex-start;">সেটিংস সেভ করুন</button>
                     </form>
+                    
+                    <!-- START: NEW CONTACT SECTION SETTINGS -->
+                    <hr style="margin: 30px 0;">
+                    <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">যোগাযোগ সেকশন ইমেজ</h3>
+                    <form id="contact-us-settings-form">
+                        <div class="form-group"><label for="contact-us-image-url">যোগাযোগ সেকশন ইমেজ URL</label><input type="text" id="contact-us-image-url" placeholder="আপনার ছবির লিংক এখানে দিন"></div>
+                        <div class="form-group"><label>বর্তমান ছবি প্রিভিউ</label><img id="contact-us-image-preview" src="https://i.ibb.co/mcxJLzJ/portrait-happy-male-student-with-backpack-holding-mobile-phone.png" alt="Contact Image Preview" style="max-width: 100%; max-height: 250px; border: 1px solid var(--border-color); border-radius: 8px; object-fit: cover;"></div>
+                        <button type="submit" class="btn btn-primary" style="width: auto; justify-content: flex-start;">ইমেজ সেভ করুন</button>
+                    </form>
+                    <!-- END: NEW CONTACT SECTION SETTINGS -->
+
                     <hr style="margin: 30px 0;">
                     <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Social Media Setup</h3>
                     <form id="social-media-form">
@@ -1422,6 +1441,7 @@
             const heroSettingsForm = document.getElementById('hero-settings-form');
             const logoSettingsForm = document.getElementById('logo-settings-form');
             const aboutUsSettingsForm = document.getElementById('about-us-settings-form');
+            const contactUsSettingsForm = document.getElementById('contact-us-settings-form'); // NEW
 
             const socialMediaForm = document.getElementById('social-media-form');
             const addSocialLinkBtn = document.getElementById('add-social-link-btn');
@@ -1452,6 +1472,14 @@
                     navigateTo('payments-page', {
                         filter: 'pending'
                     });
+                });
+            }
+            
+             // --- PENDING DOLLAR REQUESTS CARD CLICK HANDLER ---
+            const pendingDollarRequestsCard = document.getElementById('pending-dollar-requests-card');
+            if (pendingDollarRequestsCard) {
+                pendingDollarRequestsCard.addEventListener('click', () => {
+                    navigateTo('dollar-exchange-page');
                 });
             }
 
@@ -1678,6 +1706,9 @@
 
                     const paymentsSnapshot = await db.collection('payments').get();
                     const dollarExchangeSnapshot = await db.collection('dollar_exchange').get();
+                    
+                    // NEW: Fetch pending dollar requests
+                    const dollarRequestsSnapshot = await db.collection('dollar_sells').where('status', '==', 'pending').get();
 
                     let totalSales = 0, currentMonthSales = 0, totalProfit = 0, currentMonthProfit = 0, pendingPaymentsCount = 0;
                     const now = new Date(), currentMonth = now.getMonth(), currentYear = now.getFullYear();
@@ -1715,6 +1746,10 @@
                     document.getElementById('total-profit').textContent = `৳${totalProfit.toLocaleString('bn-BD')}`;
                     document.getElementById('current-month-profit').textContent = `৳${currentMonthProfit.toLocaleString('bn-BD')}`;
                     document.getElementById('pending-payments').textContent = pendingPaymentsCount;
+                    
+                    // NEW: Update Pending Dollar Request Count
+                    document.getElementById('pending-dollar-requests').textContent = dollarRequestsSnapshot.size;
+                    
                     document.getElementById('total-students').textContent = usersSnapshot.size;
                     document.getElementById('total-services').textContent = servicesSnapshot.size;
                     document.getElementById('total-courses').textContent = coursesSnapshot.size;
@@ -2241,6 +2276,14 @@
                         document.getElementById('about-us-image-url').value = aboutUsDoc.data().imageUrl;
                         document.getElementById('about-us-image-preview').src = aboutUsDoc.data().imageUrl;
                     }
+                    
+                    // NEW: Load Contact Us Image
+                    const contactUsDoc = await db.collection('site_settings').doc('contact_section').get();
+                    if (contactUsDoc.exists && contactUsDoc.data().imageUrl) {
+                        document.getElementById('contact-us-image-url').value = contactUsDoc.data().imageUrl;
+                        document.getElementById('contact-us-image-preview').src = contactUsDoc.data().imageUrl;
+                    }
+
                     const socialDoc = await db.collection('site_settings').doc('social_media').get();
                     socialLinksContainer.innerHTML = '';
                     if (socialDoc.exists && socialDoc.data().links) socialDoc.data().links.forEach(createSocialLinkInput);
@@ -2309,6 +2352,28 @@
                     showToast("সেটিংস সেভ করতে সমস্যা হয়েছে।", "error");
                 }
             });
+            
+            // NEW: Handle Contact Us Settings Submit
+            contactUsSettingsForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const newUrl = document.getElementById('contact-us-image-url').value;
+                if (!newUrl) {
+                    showToast("অনুগ্রহ করে একটি ইমেজ URL দিন।", "error");
+                    return;
+                }
+                try {
+                    await db.collection('site_settings').doc('contact_section').set({
+                        imageUrl: newUrl
+                    }, {
+                        merge: true
+                    });
+                    showToast("যোগাযোগ সেকশন ইমেজ সফলভাবে আপডেট করা হয়েছে!");
+                    renderSettings();
+                } catch (error) {
+                    console.error("Error saving 'Contact Us' image settings:", error);
+                    showToast("সেটিংস সেভ করতে সমস্যা হয়েছে।", "error");
+                }
+            });
 
             function createSocialLinkInput(link = { platform: 'facebook', link: '' }) {
                 const entryDiv = document.createElement('div');
@@ -2349,15 +2414,10 @@
             });
 
             // --- CRUD Operations ---
-            window.updatePaymentStatus = async (docId) => {
-                const selectElement = document.getElementById(`status-select-${docId}`);
-                const saveButton = selectElement.nextElementSibling;
-                const newStatus = selectElement.value;
-
-                if (saveButton) {
-                    saveButton.textContent = 'Saving...';
-                    saveButton.disabled = true;
-                }
+            
+            // UPDATED: updatePaymentStatus function accepts newStatus directly and handles autosave
+            window.updatePaymentStatus = async (docId, newStatus) => {
+                // No button to toggle loading state anymore, direct update
                 try {
                     const paymentDocRef = db.collection('payments').doc(docId);
                     const paymentDoc = await paymentDocRef.get();
@@ -2388,11 +2448,6 @@
                 } catch (error) {
                     console.error("--- FIRESTORE UPDATE FAILED ---", error);
                     showToast(`স্ট্যাটাস আপডেট করার সময় একটি সমস্যা হয়েছে: ${error.message}`, 'error');
-                } finally {
-                    if (saveButton) {
-                        saveButton.textContent = 'Save';
-                        saveButton.disabled = false;
-                    }
                 }
             };
 
@@ -2476,6 +2531,7 @@
                         const profit = (payment.status === 'approved' && payment.profit != null) ? `৳ ${payment.profit}` : 'N/A';
                         const whatsappBtn = (payment.status === 'approved' && payment.userEmail !== 'admin@manual.sale') ? `<button class="btn-whatsapp" onclick="sendWhatsAppReceipt('${payment.id}')" title="Send WhatsApp Receipt"><span class="material-symbols-outlined">send</span></button>` : '';
                         
+                        // UPDATED: Changed Select to trigger updatePaymentStatus onchange, removed Save button
                         tableHTML += `<tr>
                             <td data-label="ইমেইল">${payment.userEmail}</td>
                             <td data-label="কোর্স/সার্ভিস">${payment.itemName}</td>
@@ -2485,12 +2541,11 @@
                             <td data-label="সময়">${timestamp}</td>
                             <td data-label="স্ট্যাটাস"><span class="status-badge ${statusClass}">${payment.status}</span></td>
                             <td class="actions-cell">
-                                <select class="status-select" id="status-select-${payment.id}">
+                                <select class="status-select" onchange="updatePaymentStatus('${payment.id}', this.value)">
                                     <option value="pending" ${payment.status === 'pending' ? 'selected' : ''}>Pending</option>
                                     <option value="approved" ${payment.status === 'approved' ? 'selected' : ''}>Approved</option>
                                     <option value="rejected" ${payment.status === 'rejected' ? 'selected' : ''}>Rejected</option>
                                 </select>
-                                <button class="btn btn-save-status" onclick="updatePaymentStatus('${payment.id}')">Save</button>
                                 ${whatsappBtn}
                                 <button class="btn-delete" onclick="deleteItem('payments', '${payment.id}')"><span class="material-symbols-outlined">delete</span></button>
                             </td>
