@@ -110,19 +110,6 @@
             color: var(--text-light);
         }
 
-        .btn-solid-blue {
-            background-color: var(--accent-purple);
-            color: var(--text-light);
-            width: 100%;
-            padding: 15px;
-            font-size: 1.1em;
-            border-radius: 8px;
-        }
-        .btn-solid-blue:hover {
-            background-color: #4338ca;
-            transform: translateY(-2px);
-        }
-
         /* --- Header & Navigation --- */
         .main-header {
             background-color: var(--text-light);
@@ -600,96 +587,222 @@
         }
         /* END: SLIDER STYLES FOR TRUST SCREENSHOT SECTION */
 
-        /* --- Services Section --- */
+        /* --- Services Section (Updated Design) --- */
         .services-section {
-            background-color: var(--background-light); /* Changed for visual separation */
+            background-color: #f4f7f9; /* Soft background */
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
         }
+        
+        /* Decorative background elements */
+        .services-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(#e1e8ed 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
         .service-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 40px;
             justify-items: center;
+            position: relative;
+            z-index: 2;
         }
+
         .service-card {
-            background-color: var(--text-light);
-            border: 2px solid var(--border-color);
-            border-radius: var(--card-radius);
-            padding: 30px;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 0;
             width: 100%;
             max-width: 380px;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            border-top: 5px solid var(--accent-purple);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* Soft shadow */
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
         }
+
         .service-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent-purple);
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(10, 77, 104, 0.15);
+            border-color: rgba(10, 77, 104, 0.1);
         }
-        .service-card h3 {
-            font-size: 1.8em;
-            color: var(--text-dark);
-            font-weight: 700;
+
+        /* Top Color Bar */
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--light-blue), var(--secondary-blue));
+            z-index: 1;
         }
-        .service-card .plan-description {
-            color: #6c757d;
-            margin: 10px 0 25px;
-            min-height: 50px;
+
+        .service-header {
+            padding: 40px 30px 20px;
+            text-align: center;
+            background: linear-gradient(to bottom, #ffffff, #fcfcfc);
         }
-        .pricing-info {
+
+        .service-icon-box {
+            width: 70px;
+            height: 70px;
+            background: #eaf6f6;
+            border-radius: 50%;
+            margin: 0 auto 20px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            justify-content: center;
+            color: var(--secondary-blue);
+            font-size: 32px;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 0 15px rgba(8, 131, 149, 0.1);
+        }
+
+        .service-card:hover .service-icon-box {
+            background: var(--secondary-blue);
+            color: #ffffff;
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .service-card h3 {
+            font-size: 1.6em;
+            color: var(--primary-blue);
+            font-weight: 700;
             margin-bottom: 10px;
         }
+
+        .service-card .plan-description {
+            color: #6c757d;
+            font-size: 0.95em;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .pricing-area {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            margin: 0 20px;
+            border-radius: 15px;
+            border: 1px dashed #dee2e6;
+        }
+
+        .pricing-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
         .pricing-info .old-price {
             text-decoration: line-through;
             color: #adb5bd;
-            font-size: 1.2em;
-        }
-        .pricing-info .save-badge {
-            background-color: #d1fae5;
-            color: #065f46;
-            padding: 5px 12px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.9em;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .save-badge .material-symbols-outlined {
             font-size: 1em;
         }
-        .current-price {
-            margin-bottom: 25px;
-        }
-        .current-price .price-amount {
-            font-size: 3em;
+
+        .save-badge {
+            background-color: #d1fae5;
+            color: #065f46;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75em;
             font-weight: 700;
-            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
+
+        .current-price {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            gap: 5px;
+        }
+
+        .current-price .price-amount {
+            font-size: 2.2em;
+            font-weight: 800;
+            color: var(--text-dark);
+            background: -webkit-linear-gradient(0deg, var(--primary-blue), var(--secondary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
         .current-price .price-duration {
-            font-size: 1.2em;
+            font-size: 1em;
             color: #6c757d;
             font-weight: 500;
         }
+
+        .service-body {
+            padding: 20px 30px 40px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
         .service-features {
             list-style: none;
-            margin: 30px 0;
-            padding-top: 30px;
-            border-top: 1px solid var(--border-color);
+            margin: 0 0 30px 0;
+            padding: 0;
+            border-top: none;
+            flex-grow: 1;
         }
+
         .service-features li {
             display: flex;
-            align-items: center;
-            gap: 15px;
+            align-items: flex-start;
+            gap: 12px;
             margin-bottom: 15px;
             font-weight: 500;
-            color: #344054;
+            color: #4b5563;
+            font-size: 0.95em;
         }
+
         .service-features .material-symbols-outlined {
-            color: var(--accent-purple);
+            color: #10B981; /* Green check */
+            font-size: 20px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .btn-service-action {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, var(--secondary-blue), var(--light-blue));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
             font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(8, 131, 149, 0.3);
+        }
+
+        .btn-service-action:hover {
+            background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(8, 131, 149, 0.4);
         }
 
         /* --- Courses Section --- */
@@ -783,22 +896,22 @@
             color: var(--primary-blue);
         }
 
-        /* --- START: UPDATED MODAL & INPUT STYLES --- */
+        /* --- START: NEW DYNAMIC LOGIN & SIGNUP MODAL STYLES --- */
         .login-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(33, 37, 41, 0.6);
+            background: rgba(10, 77, 104, 0.2);
+            backdrop-filter: blur(8px); /* Background Blur Effect */
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 2000;
-            backdrop-filter: blur(5px);
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
+            transition: all 0.4s ease;
         }
 
         .login-modal:not(.hidden) {
@@ -806,193 +919,226 @@
             visibility: visible;
         }
 
-        .login-modal:not(.hidden) .login-card {
-            animation: modalZoomIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
-        }
-
-        @keyframes modalZoomIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-        
+        /* Card Design */
         .login-card {
-            background: var(--text-light);
-            border-radius: var(--card-radius);
+            background: #ffffff;
+            border-radius: 20px;
             width: 90%;
-            max-width: 850px;
+            max-width: 900px;
             display: flex;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            padding: 0;
-            text-align: left;
-            transform: scale(0.95); /* Initial state for animation */
-        }
-        
-        .close-modal-btn {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            background: transparent;
-            border: none;
-            font-size: 2.5em;
-            color: #aaa;
-            cursor: pointer;
-            line-height: 1;
-            padding: 0;
-            transition: color 0.3s ease;
-            z-index: 10;
-        }
-        .close-modal-btn:hover {
-            color: var(--text-dark);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            position: relative;
+            transform: translateY(30px);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
+        .login-modal:not(.hidden) .login-card {
+            transform: translateY(0);
+        }
+
+        /* Close Button */
+        .close-modal-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            background: #f1f5f9;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 1.5em;
+            color: #64748b;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        .close-modal-btn:hover {
+            background: #ffe4e6;
+            color: #e11d48;
+            transform: rotate(90deg);
+        }
+
+        /* Left Panel (Image/Info) with Animation */
         .modal-info-panel {
             width: 45%;
-            padding: 50px 40px;
+            padding: 60px 40px;
             background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
             color: var(--text-light);
             display: flex;
             flex-direction: column;
             justify-content: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        .modal-info-panel .logo {
-            color: var(--text-light);
-            margin-bottom: 25px;
+        /* Dynamic Circles in Background */
+        .modal-info-panel::before, .modal-info-panel::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .modal-info-panel::before {
+            width: 200px;
+            height: 200px;
+            top: -50px;
+            left: -50px;
+            animation: float 6s infinite ease-in-out;
+        }
+        .modal-info-panel::after {
+            width: 150px;
+            height: 150px;
+            bottom: -30px;
+            right: -30px;
+            animation: float 8s infinite ease-in-out reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(10px, 20px); }
+        }
+
+        .modal-info-panel .logo img {
+            max-height: 50px;
+            margin-bottom: 30px;
+            filter: brightness(0) invert(1);
+            animation: fadeInDown 0.8s ease;
         }
 
         .modal-info-panel h2 {
-            font-size: 2.2em;
-            margin-bottom: 15px;
-            line-height: 1.3;
-        }
-        .modal-info-panel p {
-            font-size: 1.1em;
-            line-height: 1.7;
-            opacity: 0.9;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            animation: fadeInUp 0.8s ease 0.2s both;
         }
 
+        .modal-info-panel p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        /* Right Panel (Form) */
         .modal-form-panel {
             width: 55%;
-            padding: 50px 40px;
-            position: relative;
+            padding: 60px 50px;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .modal-form-panel h2 {
-            color: var(--primary-blue);
+            color: var(--text-dark);
             font-size: 2em;
             margin-bottom: 30px;
             font-weight: 700;
+            position: relative;
+            display: inline-block;
         }
 
+        .modal-form-panel h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 4px;
+            background: var(--secondary-blue);
+            border-radius: 2px;
+        }
+
+        /* Input Fields Animation */
         .input-group {
             position: relative;
             margin-bottom: 25px;
+            animation: fadeInUp 0.5s ease backwards;
         }
-        
-        /* New Floating Label Styles */
+
+        /* Staggered animation for inputs */
+        .input-group:nth-child(1) { animation-delay: 0.1s; }
+        .input-group:nth-child(2) { animation-delay: 0.2s; }
+        .input-group:nth-child(3) { animation-delay: 0.3s; }
+        .input-group:nth-child(4) { animation-delay: 0.4s; }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .input-group input:focus {
+            border-color: var(--secondary-blue);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(8, 131, 149, 0.1);
+            outline: none;
+        }
+
         .input-group .material-symbols-outlined {
             position: absolute;
             left: 15px;
-            top: 15px;
-            color: #adb5bd;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
             transition: color 0.3s ease;
-        }
-        
-        .input-group input, .input-group select {
-            width: 100%;
-            padding: 15px 15px 15px 50px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-family: 'Hind Siliguri', sans-serif;
-            font-size: 1em;
-            transition: all 0.3s ease;
-            background-color: var(--background-light);
-            color: var(--text-dark);
+            font-size: 20px;
         }
 
-        .input-group input::placeholder {
-          color: transparent; /* Hide placeholder by default */
+        .input-group input:focus ~ .material-symbols-outlined {
+            color: var(--secondary-blue);
         }
 
         .input-group label {
             position: absolute;
-            left: 50px;
-            top: 16px;
-            color: #8a94a1;
+            left: 45px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
             pointer-events: none;
             transition: all 0.3s ease;
-        }
-
-        .input-group input:focus,
-        .input-group input:not(:placeholder-shown) {
-            outline: none;
-            border-color: var(--secondary-blue);
-            background-color: var(--text-light);
-            box-shadow: 0 0 0 3px rgba(8, 131, 149, 0.15);
+            background: transparent;
+            padding: 0 5px;
         }
 
         .input-group input:focus + label,
         .input-group input:not(:placeholder-shown) + label {
             top: -10px;
-            left: 45px;
+            left: 15px;
             font-size: 0.85em;
             color: var(--secondary-blue);
-            background-color: var(--text-light);
-            padding: 0 5px;
-        }
-        
-        .input-group input:focus ~ .material-symbols-outlined {
-            color: var(--secondary-blue);
+            background: #fff;
+            font-weight: 600;
         }
 
-        /* --- START: DOLLAR SELL MODAL FIXES --- */
-        /* এই অংশটি ডলার সেল ফর্মের জন্য নতুন করে যুক্ত করা হয়েছে */
-        
-        /* ড্রপডাউন (Select) এর লেবেল যাতে লেখার উপর না উঠে যায় সেজন্য লেবেলকে সবসময় উপরে রাখা হলো */
-        #dollar-sell-modal .input-group select + label {
-            top: -10px !important;
-            left: 45px !important;
-            font-size: 0.85em !important;
-            color: var(--secondary-blue) !important;
-            background-color: white !important;
-            padding: 0 5px !important;
-            z-index: 20;
+        /* Button Styling */
+        .modal-form-panel .btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1em;
+            border-radius: 12px;
+            margin-top: 10px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue));
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* ইনপুট এবং ড্রপডাউন এর ব্যাকগ্রাউন্ড এবং বর্ডার স্পষ্ট করা হলো */
-        #dollar-sell-modal .input-group input,
-        #dollar-sell-modal .input-group select {
-            background-color: #ffffff !important; /* সাদা ব্যাকগ্রাউন্ড */
-            border: 1px solid #b0b8c4 !important; /* একটু গাঢ় বর্ডার */
-            color: #000000 !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        #dollar-sell-modal .input-group input:focus,
-        #dollar-sell-modal .input-group select:focus {
-            border-color: var(--secondary-blue) !important;
-            box-shadow: 0 0 0 3px rgba(8, 131, 149, 0.2) !important;
-        }
-
-        /* আইকনের রঙ গাঢ় করা হলো */
-        #dollar-sell-modal .input-group .material-symbols-outlined {
-            color: #6c757d; 
-            z-index: 21;
-        }
-        /* --- END: DOLLAR SELL MODAL FIXES --- */
-
-        .password-toggle {
-            position: absolute;
-            right: 15px;
-            top: 16px;
-            cursor: pointer;
+        .modal-form-panel .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(8, 131, 149, 0.4);
         }
 
         .login-links {
@@ -1000,67 +1146,73 @@
             margin-top: -15px;
             margin-bottom: 25px;
         }
-
         .login-links a {
             color: var(--secondary-blue);
-            text-decoration: none;
             font-size: 0.9em;
-            font-weight: 500;
-        }
-        .login-links a:hover {
-            text-decoration: underline;
-        }
-        
-        /* Updated Button Styles */
-        .modal-form-panel .btn {
-            width: 100%;
-            padding: 15px;
-            font-size: 1.1em;
-            margin-bottom: 25px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-        
-        .modal-form-panel .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(8, 131, 149, 0.3);
-        }
-        .modal-form-panel .btn:active {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 10px rgba(8, 131, 149, 0.3);
+            font-weight: 600;
+            text-decoration: none;
         }
 
         .signup-link {
             text-align: center;
-            margin-top: 15px;
             font-weight: 500;
+            color: #64748b;
         }
-
         .signup-link a {
-            color: var(--secondary-blue);
+            color: var(--primary-blue);
             font-weight: 700;
             text-decoration: none;
+            position: relative;
         }
-        .signup-link a:hover {
-            text-decoration: underline;
+        .signup-link a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background: var(--primary-blue);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        .signup-link a:hover::after {
+            transform: scaleX(1);
         }
 
+        /* Keyframes for animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Responsiveness for Modals */
         @media (max-width: 768px) {
             .login-card {
                 flex-direction: column;
-                max-width: 450px;
+                width: 95%;
                 max-height: 90vh;
                 overflow-y: auto;
             }
             .modal-info-panel {
-                display: none;
+                padding: 30px;
+                width: 100%;
+                min-height: 150px;
+                text-align: center;
             }
+            .modal-info-panel h2 { font-size: 1.8em; }
+            .modal-info-panel p, .modal-info-panel .logo { display: none; }
+            .modal-info-panel::after { content: 'Dream\'s Academy'; font-size: 1.2em; color: white; opacity: 0.8; }
+            
             .modal-form-panel {
                 width: 100%;
                 padding: 40px 25px;
             }
         }
-        /* --- END: UPDATED MODAL & INPUT STYLES --- */
+        /* --- END: NEW DYNAMIC LOGIN & SIGNUP MODAL STYLES --- */
         
         /* --- START: UPDATED PAYMENT MODAL STYLES (DYNAMIC) --- */
         #payment-modal .login-card {
@@ -2281,6 +2433,129 @@
             }
         }
         /* --- END: NEW CONTACT SECTION STYLES --- */
+
+        /* --- START: UPDATED DOLLAR SELL MODAL STYLES --- */
+        #dollar-sell-modal .login-card {
+            max-width: 550px;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #ffffff;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            display: block; /* Ensure it displays correctly */
+        }
+
+        .dollar-modal-header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            padding: 30px 20px;
+            text-align: center;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated Background Circles in Header */
+        .dollar-modal-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 10%, transparent 10%);
+            background-size: 20px 20px;
+            opacity: 0.6;
+            animation: moveBackground 20s linear infinite;
+        }
+
+        @keyframes moveBackground {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .dollar-header-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .dollar-header-icon .material-symbols-outlined {
+            font-size: 32px;
+            color: #fff;
+        }
+
+        .dollar-modal-header h2 {
+            font-size: 1.8em;
+            margin: 0;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dollar-modal-header p {
+            margin: 5px 0 0;
+            opacity: 0.9;
+            font-size: 0.95em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dollar-modal-body {
+            padding: 30px;
+        }
+
+        /* Rate Display Animation */
+        #ds-rate-display {
+            background: linear-gradient(to right, #dcfce7, #f0fdf4);
+            color: #166534;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px dashed #16a34a;
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: none; /* Controlled by JS */
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.8) translateY(-10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Form Inputs Styling Override for this Modal */
+        #dollar-sell-form .input-group input,
+        #dollar-sell-form .input-group select {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s;
+        }
+
+        #dollar-sell-form .input-group input:focus,
+        #dollar-sell-form .input-group select:focus {
+            background: #fff;
+            border-color: var(--light-blue);
+            box-shadow: 0 4px 15px rgba(5, 191, 219, 0.15);
+        }
+
+        /* Dynamic Phone Field Animation */
+        #ds-number-group {
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        #ds-number-group.hidden {
+            display: none; /* Or utilize opacity/height for smoother animation if preferred */
+        }
+        /* --- END: UPDATED DOLLAR SELL MODAL STYLES --- */
+
     </style>
 </head>
 <body>
@@ -2360,38 +2635,38 @@
     </header>
 
     <main>
-        <!-- START: UPDATED LOGIN/SIGNUP MODALS -->
+        <!-- START: UPDATED DYNAMIC LOGIN/SIGNUP MODALS -->
         <div class="login-modal hidden" id="login-modal">
             <div class="login-card">
+                <button class="close-modal-btn" aria-label="Close">&times;</button>
                 <div class="modal-info-panel">
                     <a href="#" class="logo">
-                         <img id="header-logo-img-modal" src="https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png" alt="Dream's Academy" style="filter: brightness(0) invert(1); max-height: 45px;">
+                         <img id="header-logo-img-modal" src="https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png" alt="Dream's Academy">
                     </a>
-                    <h2>দক্ষতার জগতে স্বাগতম!</h2>
-                    <p>আপনার অ্যাকাউন্টে লগইন করে নতুন কিছু শেখার अद्भुत যাত্রা শুরু করুন।</p>
+                    <h2>স্বাগতম!</h2>
+                    <p>আবারো আপনাকে দেখে ভালো লাগলো। আপনার শেখার যাত্রা অব্যাহত রাখতে এখনই লগ ইন করুন।</p>
                 </div>
                 <div class="modal-form-panel">
-                    <button class="close-modal-btn" aria-label="Close">&times;</button>
-                    <h2>লগ ইন করুন</h2>
+                    <h2>লগ ইন</h2>
                     <form id="login-form">
                         <div class="input-group">
+                            <input type="email" id="login-email" placeholder=" " required>
+                            <label for="login-email">আপনার ইমেইল</label>
                             <span class="material-symbols-outlined">mail</span>
-                            <input type="email" id="login-email" placeholder="আপনার ইমেইল দিন" required>
-                            <label for="login-email">ইমেইল</label>
                         </div>
                         <div class="input-group">
-                            <span class="material-symbols-outlined">lock</span>
-                            <input type="password" id="login-password" placeholder="পাসওয়ার্ড দিন" required>
+                            <input type="password" id="login-password" placeholder=" " required>
                             <label for="login-password">পাসওয়ার্ড</label>
-                            <span class="material-symbols-outlined password-toggle" id="password-toggle">visibility_off</span>
+                            <span class="material-symbols-outlined">lock</span>
+                            <span class="material-symbols-outlined password-toggle" id="password-toggle" style="left: auto; right: 15px; cursor: pointer;">visibility_off</span>
                         </div>
                         <div class="login-links">
                             <a href="#" id="forgot-password-link">পাসওয়ার্ড ভুলে গেছেন?</a>
                         </div>
-                        <button type="submit" class="btn btn-gradient">সাবমিট করুন →</button>
+                        <button type="submit" class="btn btn-gradient">লগ ইন করুন <span class="material-symbols-outlined" style="vertical-align: middle; font-size: 18px;">arrow_forward</span></button>
                     </form>
                     <div class="signup-link">
-                        আপনার পূর্বে একাউন্ট নেই? <a href="#" id="show-signup-modal-btn">সাইন আপ করুন</a>
+                        এখনো একাউন্ট নেই? <a href="#" id="show-signup-modal-btn">নতুন একাউন্ট খুলুন</a>
                     </div>
                 </div>
             </div>
@@ -2399,53 +2674,51 @@
 
         <div class="login-modal hidden" id="signup-modal">
             <div class="login-card">
+                <button class="close-modal-btn" aria-label="Close">&times;</button>
                  <div class="modal-info-panel">
                      <a href="#" class="logo">
-                         <img id="header-logo-img-modal2" src="https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png" alt="Dream's Academy" style="filter: brightness(0) invert(1); max-height: 45px;">
+                         <img id="header-logo-img-modal2" src="https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png" alt="Dream's Academy">
                      </a>
-                    <h2>আমাদের সাথে যোগ দিন</h2>
-                    <p>একটি নতুন অ্যাকাউন্ট তৈরি করে আপনার দক্ষতা বিকাশের পথে প্রথম পদক্ষেপ নিন।</p>
+                    <h2>আমাদের পরিবারে স্বাগতম</h2>
+                    <p>দক্ষতা উন্নয়নের নতুন ধাপে পা রাখতে এখনই রেজিস্ট্রেশন করুন এবং ড্রিমস একাডেমির সাথে যুক্ত হোন।</p>
                 </div>
                 <div class="modal-form-panel">
-                    <button class="close-modal-btn" aria-label="Close">&times;</button>
-                    <h2>নতুন একাউন্ট তৈরি করুন</h2>
+                    <h2>সাইন আপ</h2>
                     <form id="signup-form">
                         <div class="input-group">
-                            <span class="material-symbols-outlined">person</span>
-                            <input type="text" id="signup-name" placeholder="আপনার পুরো নাম দিন" required>
+                            <input type="text" id="signup-name" placeholder=" " required>
                             <label for="signup-name">পুরো নাম</label>
+                            <span class="material-symbols-outlined">person</span>
                         </div>
                         <div class="input-group">
-                            <span class="material-symbols-outlined">mail</span>
-                            <input type="email" id="signup-email" placeholder="আপনার ইমেইল দিন" required>
+                            <input type="email" id="signup-email" placeholder=" " required>
                             <label for="signup-email">ইমেইল</label>
+                            <span class="material-symbols-outlined">mail</span>
                         </div>
-                        <!-- === START: WHATSAPP FIELD ADDED === -->
                         <div class="input-group">
-                            <span class="material-symbols-outlined">call</span>
-                            <input type="tel" id="signup-whatsapp" placeholder="আপনার হোয়াটসঅ্যাপ নাম্বার দিন" required>
+                            <input type="tel" id="signup-whatsapp" placeholder=" " required>
                             <label for="signup-whatsapp">হোয়াটসঅ্যাপ নাম্বার</label>
+                            <span class="material-symbols-outlined">call</span>
                         </div>
-                        <!-- === END: WHATSAPP FIELD ADDED === -->
                         <div class="input-group">
+                            <input type="password" id="signup-password" placeholder=" " required>
+                            <label for="signup-password">পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)</label>
                             <span class="material-symbols-outlined">lock</span>
-                            <input type="password" id="signup-password" placeholder="পাসওয়ার্ড দিন (কমপক্ষে ৬ অক্ষর)" required>
-                            <label for="signup-password">পাসওয়ার্ড</label>
                         </div>
                          <div class="input-group">
-                            <span class="material-symbols-outlined">lock</span>
-                            <input type="password" id="signup-confirm-password" placeholder="পাসওয়ার্ডটি পুনরায় দিন" required>
+                            <input type="password" id="signup-confirm-password" placeholder=" " required>
                             <label for="signup-confirm-password">পাসওয়ার্ডটি পুনরায় দিন</label>
+                            <span class="material-symbols-outlined">lock_reset</span>
                         </div>
-                        <button type="submit" class="btn btn-gradient">সাইন আপ করুন →</button>
+                        <button type="submit" class="btn btn-gradient">রেজিস্ট্রেশন করুন <span class="material-symbols-outlined" style="vertical-align: middle; font-size: 18px;">how_to_reg</span></button>
                     </form>
                     <div class="signup-link">
-                        আপনার একাউন্ট আছে? <a href="#" id="show-login-modal-btn">লগ ইন করুন</a>
+                        ইতোমধ্যেই একাউন্ট আছে? <a href="#" id="show-login-modal-btn">লগ ইন করুন</a>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- END: UPDATED LOGIN/SIGNUP MODALS -->
+        <!-- END: UPDATED DYNAMIC LOGIN/SIGNUP MODALS -->
 
 
         <div class="login-modal hidden" id="forgot-password-modal">
@@ -2554,7 +2827,7 @@
             </section>
             <!-- END: MODIFIED TRUST SCREENSHOT SECTION -->
 
-            <section class="section services-section page-section hidden" id="services">
+            <section class="services-section page-section hidden" id="services">
                 <div class="container">
                     <h2 class="section-title">আমাদের সার্ভিস সমূহ</h2>
                     <div class="service-grid" id="services-container">
@@ -2597,7 +2870,7 @@
                                         </div>
                                         <div class="numbers">
                                             <a href="tel:01703743441">01703743441</a>
-                                            <a href="tel:01703743441">01703743441</a>
+                                            <a href="mailto:dreams.edus@gmail.com">dreams.edus@gmail.com</a>
                                         </div>
                                     </div>
                                 </div>
@@ -2839,62 +3112,71 @@
     </div>
     <!-- END: NEW PAYMENT VERIFICATION MODALS -->
 
-    <!-- ======================= DOLLAR SELL MODAL ======================= -->
+    <!-- ======================= UPDATED DOLLAR SELL MODAL ======================= -->
     <div class="login-modal hidden" id="dollar-sell-modal">
-        <div class="login-card" style="max-width: 500px; display: block;">
-            <div class="modal-form-panel" style="width: 100%; padding: 40px;">
-                <button class="close-modal-btn" id="close-dollar-sell-modal">&times;</button>
-                
-                <h2 style="text-align: center; margin-bottom: 10px;">ডলার সেল রিকুয়েস্ট</h2>
-                <p style="text-align: center; color: #666; margin-bottom: 30px;">আপনার তথ্যগুলো সঠিকভাবে পূরণ করুন</p>
-
+        <div class="login-card">
+            <div class="dollar-modal-header">
+                <button class="close-modal-btn" id="close-dollar-sell-modal" style="background: rgba(255,255,255,0.2); color: #fff;">&times;</button>
+                <div class="dollar-header-icon">
+                    <span class="material-symbols-outlined">currency_exchange</span>
+                </div>
+                <h2>ডলার সেল রিকুয়েস্ট</h2>
+                <p>নিরাপদ ও দ্রুত ডলার এক্সচেঞ্জ করুন</p>
+            </div>
+            
+            <div class="dollar-modal-body">
                 <form id="dollar-sell-form">
+                    <!-- Rate Display Area (Animated) -->
+                    <div id="ds-rate-display">
+                        <span class="material-symbols-outlined" style="vertical-align: bottom; font-size: 20px;">trending_up</span> 
+                        <span id="rate-text">লোড হচ্ছে...</span>
+                    </div>
+
                     <!-- Card Type Dropdown -->
                     <div class="input-group">
                         <span class="material-symbols-outlined">credit_card</span>
                         <select id="ds-card-type" required>
                             <option value="" disabled selected>কার্ডের ধরন সিলেক্ট করুন</option>
-                            <option value="ACH">ACH</option>
-                            <option value="VISA">VISA</option>
-                            <option value="APPLE">APPLE</option>
+                            <option value="ACH">ACH Transfer</option>
+                            <option value="VISA">VISA Card</option>
+                            <option value="APPLE">Apple Pay</option>
                         </select>
                         <label for="ds-card-type">কার্ডের ধরন</label>
                     </div>
-                    
-                    <!-- ADDED: Price Display Area -->
-                    <p id="ds-rate-display" style="margin-top: -15px; margin-bottom: 15px; margin-left: 15px; font-size: 0.9em; color: #198754; font-weight: 600; display: none;"></p>
 
                     <!-- Card Link Input -->
                     <div class="input-group">
                         <span class="material-symbols-outlined">link</span>
-                        <input type="url" id="ds-card-link" placeholder="কার্ড লিংক দিন" required>
-                        <label for="ds-card-link">কার্ড লিংক</label>
+                        <input type="url" id="ds-card-link" placeholder=" " required>
+                        <label for="ds-card-link">কার্ড/পেমেন্ট লিংক</label>
                     </div>
 
                     <!-- Payment Method Dropdown -->
                     <div class="input-group">
                         <span class="material-symbols-outlined">payments</span>
                         <select id="ds-payment-method" required>
-                            <option value="" disabled selected>পেমেন্ট মেথড সিলেক্ট করুন</option>
-                            <option value="Bkash">Bkash</option>
-                            <option value="Nagad">Nagad</option>
+                            <option value="" disabled selected>টাকা গ্রহণের মাধ্যম</option>
+                            <option value="Bkash">Bkash (বিকাশ)</option>
+                            <option value="Nagad">Nagad (নগদ)</option>
                         </select>
                         <label for="ds-payment-method">পেমেন্ট মেথড</label>
                     </div>
 
-                    <!-- Dynamic Phone Number Input (Hidden by default) -->
+                    <!-- Dynamic Phone Number Input -->
                     <div class="input-group hidden" id="ds-number-group">
                         <span class="material-symbols-outlined">call</span>
-                        <input type="number" id="ds-phone-number" placeholder="নাম্বার দিন">
-                        <label for="ds-phone-number" id="ds-number-label">আপনার মোবাইল নাম্বার</label>
+                        <input type="number" id="ds-phone-number" placeholder=" ">
+                        <label for="ds-phone-number" id="ds-number-label">মোবাইল নাম্বার</label>
                     </div>
 
-                    <button type="submit" class="btn btn-gradient" style="width: 100%; border-radius: 8px;">সাবমিট করুন →</button>
+                    <button type="submit" class="btn btn-gradient" style="width: 100%; border-radius: 12px; padding: 15px; font-size: 1.1em;">
+                        রিকুয়েস্ট সাবমিট করুন <span class="material-symbols-outlined" style="vertical-align: middle; margin-left: 5px;">send</span>
+                    </button>
                 </form>
             </div>
         </div>
     </div>
-    <!-- ======================= END DOLLAR SELL MODAL ======================= -->
+    <!-- ======================= END UPDATED DOLLAR SELL MODAL ======================= -->
 
     <!-- ======================= Footer ======================= -->
     <footer class="main-footer">
@@ -2927,8 +3209,8 @@
                 </div>
                 <div class="footer-col">
                     <h4>আমাদের যোগাযোগ মাধ্যম</h4>
-                    <p><strong>কল করুন:</strong> 01703743441</p>
-                    <p><strong>ইমেইল:</strong> dreams.edus@gmail.com</p>
+                    <p><strong>কল করুন:</strong> <a href="tel:01703743441" style="color: inherit; text-decoration: none;">01703743441</a></p>
+                    <p><strong>ইমেইল:</strong> <a href="mailto:dreams.edus@gmail.com" style="color: inherit; text-decoration: none;">dreams.edus@gmail.com</a></p>
                     <br>
                     <!-- START: MODIFIED SOCIAL ICONS CONTAINER -->
                     <div class="social-icons" id="social-icons-container">
@@ -3274,13 +3556,18 @@
                 forgotPasswordModal.classList.add('hidden');
             }
 
+            // Fixed Password Toggle Function
             function togglePassword() {
-                const allPasswordFields = document.querySelectorAll('input[type="password"], input[type="text"]');
-                const targetField = document.getElementById(passwordToggle.previousElementSibling.id);
-                const isPassword = targetField.type === 'password';
-
-                targetField.type = isPassword ? 'text' : 'password';
-                passwordToggle.textContent = isPassword ? 'visibility' : 'visibility_off';
+                const passwordInput = document.getElementById('login-password');
+                const icon = document.getElementById('password-toggle');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.textContent = 'visibility';
+                } else {
+                    passwordInput.type = 'password';
+                    icon.textContent = 'visibility_off';
+                }
             }
 
             function populateUI(userData) {
@@ -3733,26 +4020,55 @@
                     const snapshot = await db.collection('services').get();
                     let allServicesHTML = '';
 
+                    // Icon mapping based on service name keywords to make it dynamic
+                    const getServiceIcon = (name) => {
+                        const n = name.toLowerCase();
+                        if (n.includes('ip') || n.includes('proxy')) return 'dns';
+                        if (n.includes('number') || n.includes('otp')) return 'sms';
+                        if (n.includes('server') || n.includes('vps')) return 'router';
+                        if (n.includes('bank') || n.includes('card')) return 'credit_card';
+                        if (n.includes('id') || n.includes('verify')) return 'verified_user';
+                        return 'workspace_premium'; // Default icon
+                    };
+
                     snapshot.forEach(doc => {
                         const service = doc.data();
                         const savedPercentage = Math.round(((service.oldPrice - service.currentPrice) / service.oldPrice) * 100);
+                        const iconName = getServiceIcon(service.name);
 
                         const serviceHTML = `
                             <div class="service-card">
-                                <h3>${service.name}</h3>
-                                <p class="plan-description">${service.description}</p>
-                                <div class="pricing-info">
-                                    <span class="old-price">৳ ${service.oldPrice}</span>
-                                    ${savedPercentage > 0 ? `<span class="save-badge"><span class="material-symbols-outlined">sell</span> Save ${savedPercentage}%</span>` : ''}
+                                <div class="service-header">
+                                    <div class="service-icon-box">
+                                        <span class="material-symbols-outlined">${iconName}</span>
+                                    </div>
+                                    <h3>${service.name}</h3>
+                                    <p class="plan-description">${service.description}</p>
                                 </div>
-                                <div class="current-price">
-                                    <span class="price-amount">৳ ${service.currentPrice}</span>
-                                    <span class="price-duration">/mo</span>
+
+                                <div class="pricing-area">
+                                    <div class="pricing-info">
+                                        <span class="old-price">৳ ${service.oldPrice}</span>
+                                        ${savedPercentage > 0 ? `<span class="save-badge">Save ${savedPercentage}%</span>` : ''}
+                                    </div>
+                                    <div class="current-price">
+                                        <span class="price-amount">৳ ${service.currentPrice}</span>
+                                    </div>
                                 </div>
-                                <a href="#" class="btn btn-solid-blue buy-now-btn" data-name="${service.name}" data-price="${service.currentPrice}">Buy Now</a>
-                                <ul class="service-features">
-                                    ${(service.features || []).map(feature => `<li><span class="material-symbols-outlined">check_circle</span>${feature}</li>`).join('')}
-                                </ul>
+
+                                <div class="service-body">
+                                    <ul class="service-features">
+                                        ${(service.features || []).map(feature => `
+                                            <li>
+                                                <span class="material-symbols-outlined">check_circle</span>
+                                                <span>${feature}</span>
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                    <a href="#" class="btn-service-action buy-now-btn" data-name="${service.name}" data-price="${service.currentPrice}">
+                                        অর্ডার করুন <span class="material-symbols-outlined">shopping_cart_checkout</span>
+                                    </a>
+                                </div>
                             </div>
                         `;
                         allServicesHTML += serviceHTML;
@@ -3762,6 +4078,7 @@
                         container.innerHTML = '<p>এই মুহূর্তে কোনো সার্ভিস পাওয়া যায়নি।</p>';
                     } else {
                         container.innerHTML = allServicesHTML;
+                        // Re-attach event listeners to the new buttons
                          document.querySelectorAll('#services-container .buy-now-btn').forEach(button => {
                             button.addEventListener('click', handleBuyNowClick);
                         });
@@ -4613,12 +4930,36 @@
                 });
             });
 
-            logoLink.addEventListener('click', (e) => {
+            // LOGO & HOME BUTTON FUNCTIONALITY
+            const homeLink = document.querySelector('a[href="#home"]');
+            const logoLinkRef = document.querySelector('.logo'); 
+
+            function goToHome(e) {
                 e.preventDefault();
-                showPageSection('home');
+                // Hide dashboard, show main content
+                dashboardContent.classList.add('hidden');
+                mainContent.classList.remove('hidden');
+                
+                // Show specifically the home section
+                document.querySelectorAll('#main-content .page-section').forEach(section => {
+                    section.classList.add('hidden');
+                });
+                document.getElementById('home').classList.remove('hidden');
+                
+                // Reset scroll
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // Reset active nav state
+                navLiElements.forEach(li => li.classList.remove('active'));
+                if(homeLink) homeLink.closest('li').classList.add('active');
+                
+                // Reset search
                 searchInput.value = '';
                 filterCourses();
-            });
+            }
+
+            if(homeLink) homeLink.addEventListener('click', goToHome);
+            if(logoLinkRef) logoLinkRef.addEventListener('click', goToHome);
 
             internalLinkButtons.forEach(button => {
                 button.addEventListener('click', function(e) {
@@ -4679,14 +5020,15 @@
             
             // START: NEW LOGIC FOR RATE DISPLAY (UPDATED)
             const dsCardType = document.getElementById('ds-card-type');
-            const dsRateDisplay = document.getElementById('ds-rate-display');
 
+            // --- UPDATED DOLLAR SELL RATE DISPLAY LOGIC ---
             if(dsCardType) {
                 dsCardType.addEventListener('change', function() {
                     const type = this.value;
                     let rateAmount = 0;
                     
-                    if (liveDollarRates[type]) {
+                    // Check live rates or fallback
+                    if (liveDollarRates && liveDollarRates[type]) {
                         rateAmount = liveDollarRates[type];
                     } else {
                         if(type === 'ACH') rateAmount = 105;
@@ -4694,11 +5036,14 @@
                         else if(type === 'APPLE') rateAmount = 98;
                     }
 
+                    const rateDisplayBox = document.getElementById('ds-rate-display');
+                    const rateText = document.getElementById('rate-text');
+
                     if(rateAmount > 0) {
-                        dsRateDisplay.textContent = `বর্তমান রেট: ${rateAmount} টাকা`;
-                        dsRateDisplay.style.display = 'block';
+                        rateText.textContent = `বর্তমান রেট: ১ ডলার = ${rateAmount} টাকা`;
+                        rateDisplayBox.style.display = 'block';
                     } else {
-                        dsRateDisplay.style.display = 'none';
+                        rateDisplayBox.style.display = 'none';
                     }
                 });
             }
@@ -4796,7 +5141,8 @@
                             dollarSellModal.classList.add('hidden');
                             dollarSellForm.reset();
                             dsNumberGroup.classList.add('hidden');
-                            if(dsRateDisplay) dsRateDisplay.style.display = 'none';
+                            const rateDisplayBox = document.getElementById('ds-rate-display');
+                            if(rateDisplayBox) rateDisplayBox.style.display = 'none';
                             
                             // Admin Notification
                             db.collection('notifications').add({
