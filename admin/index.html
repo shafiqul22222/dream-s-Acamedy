@@ -1369,7 +1369,7 @@
                         <button type="submit" class="btn btn-primary" style="width: auto; justify-content: flex-start;">সেটিংস সেভ করুন</button>
                     </form>
                     
-                    <!-- START: NEW CONTACT SECTION SETTINGS -->
+                    <!-- NEW CONTACT SECTION SETTINGS -->
                     <hr style="margin: 30px 0;">
                     <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">যোগাযোগ সেকশন ইমেজ</h3>
                     <form id="contact-us-settings-form">
@@ -1377,7 +1377,22 @@
                         <div class="form-group"><label>বর্তমান ছবি প্রিভিউ</label><img id="contact-us-image-preview" src="https://i.ibb.co/mcxJLzJ/portrait-happy-male-student-with-backpack-holding-mobile-phone.png" alt="Contact Image Preview" style="max-width: 100%; max-height: 250px; border: 1px solid var(--border-color); border-radius: 8px; object-fit: cover;"></div>
                         <button type="submit" class="btn btn-primary" style="width: auto; justify-content: flex-start;">ইমেজ সেভ করুন</button>
                     </form>
-                    <!-- END: NEW CONTACT SECTION SETTINGS -->
+                    
+                    <!-- === START: NEW FLOATING CHAT BUTTON SETTINGS === -->
+                    <hr style="margin: 30px 0;">
+                    <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">ফ্লোটিং চ্যাট বাটন ইমেজ</h3>
+                    <form id="chat-icon-settings-form">
+                        <div class="form-group">
+                            <label for="chat-icon-image-url">চ্যাট বাটনের ইমেজ URL</label>
+                            <input type="text" id="chat-icon-image-url" placeholder="আপনার আইকনের লিংক এখানে দিন">
+                        </div>
+                        <div class="form-group">
+                            <label>বর্তমান আইকন প্রিভিউ</label>
+                            <img id="chat-icon-image-preview" src="https://i.ibb.co/hC68Fj8/man-in-suit.png" alt="Chat Icon Preview" style="width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--border-color); object-fit: cover; background: #fff;">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: auto; justify-content: flex-start;">আইকন সেভ করুন</button>
+                    </form>
+                    <!-- === END: NEW FLOATING CHAT BUTTON SETTINGS === -->
 
                     <hr style="margin: 30px 0;">
                     <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Social Media Setup</h3>
@@ -1441,7 +1456,8 @@
             const heroSettingsForm = document.getElementById('hero-settings-form');
             const logoSettingsForm = document.getElementById('logo-settings-form');
             const aboutUsSettingsForm = document.getElementById('about-us-settings-form');
-            const contactUsSettingsForm = document.getElementById('contact-us-settings-form'); // NEW
+            const contactUsSettingsForm = document.getElementById('contact-us-settings-form');
+            const chatIconSettingsForm = document.getElementById('chat-icon-settings-form'); // NEW
 
             const socialMediaForm = document.getElementById('social-media-form');
             const addSocialLinkBtn = document.getElementById('add-social-link-btn');
@@ -2315,6 +2331,13 @@
                         document.getElementById('contact-us-image-url').value = contactUsDoc.data().imageUrl;
                         document.getElementById('contact-us-image-preview').src = contactUsDoc.data().imageUrl;
                     }
+                    
+                    // === NEW: Load Floating Chat Icon ===
+                    const chatDoc = await db.collection('site_settings').doc('floating_chat').get();
+                    if (chatDoc.exists && chatDoc.data().imageUrl) {
+                        document.getElementById('chat-icon-image-url').value = chatDoc.data().imageUrl;
+                        document.getElementById('chat-icon-image-preview').src = chatDoc.data().imageUrl;
+                    }
 
                     const socialDoc = await db.collection('site_settings').doc('social_media').get();
                     socialLinksContainer.innerHTML = '';
@@ -2404,6 +2427,28 @@
                 } catch (error) {
                     console.error("Error saving 'Contact Us' image settings:", error);
                     showToast("সেটিংস সেভ করতে সমস্যা হয়েছে।", "error");
+                }
+            });
+            
+            // === NEW: Handle Chat Icon Settings Submit ===
+            chatIconSettingsForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const newUrl = document.getElementById('chat-icon-image-url').value;
+                if (!newUrl) {
+                    showToast("অনুগ্রহ করে একটি ইমেজ URL দিন।", "error");
+                    return;
+                }
+                try {
+                    await db.collection('site_settings').doc('floating_chat').set({
+                        imageUrl: newUrl
+                    }, {
+                        merge: true
+                    });
+                    showToast("চ্যাট আইকন সফলভাবে আপডেট করা হয়েছে!");
+                    renderSettings();
+                } catch (error) {
+                    console.error("Error saving chat icon:", error);
+                    showToast("আইকন সেভ করতে সমস্যা হয়েছে।", "error");
                 }
             });
 
