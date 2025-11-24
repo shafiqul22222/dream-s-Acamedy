@@ -54,7 +54,7 @@
             display: none !important;
         }
 
-        /* --- START: GORGEOUS LOGIN PAGE STYLES (MODIFIED) --- */
+        /* --- START: GORGEOUS LOGIN PAGE STYLES --- */
         #login-page {
             display: flex;
             align-items: center;
@@ -1998,14 +1998,46 @@
                 }
             }
 
-            // --- NEW: Update Status Function for Dollar Sells ---
+            // === আপডেটেড ডলার সেল স্ট্যাটাস (নোটিফিকেশন সহ) ===
             window.updateDollarSellStatus = async (id, newStatus) => {
                 try {
-                    await db.collection('dollar_sells').doc(id).update({
+                    // প্রথমে ডকুমেন্টটি রিড করতে হবে userId পাওয়ার জন্য
+                    const docRef = db.collection('dollar_sells').doc(id);
+                    const docSnap = await docRef.get();
+                    
+                    if(!docSnap.exists) throw new Error("Document not found");
+                    const data = docSnap.data();
+
+                    await docRef.update({
                         status: newStatus
                     });
+
+                    // নোটিফিকেশন পাঠানো
+                    if(data.userId) {
+                        let title = 'ডলার সেল আপডেট';
+                        let msg = '';
+                        
+                        if(newStatus === 'approved') {
+                            title = 'ডলার সেল সফল';
+                            msg = `আপনার ${data.cardType} ডলার সেলের রিকুয়েস্ট অনুমোদিত হয়েছে। শীঘ্রই পেমেন্ট পাবেন।`;
+                        } else if (newStatus === 'rejected') {
+                            title = 'ডলার সেল বাতিল';
+                            msg = `আপনার ডলার সেলের রিকুয়েস্টটি বাতিল করা হয়েছে।`;
+                        }
+
+                        if(newStatus !== 'pending') {
+                            await db.collection('notifications').add({
+                                targetUid: data.userId,
+                                title: title,
+                                message: msg,
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                type: 'dollar_sell_update',
+                                read: false
+                            });
+                        }
+                    }
+
                     showToast("স্ট্যাটাস আপডেট করা হয়েছে!", "success");
-                    // Refresh table to show updated status badge color
                     renderDollarSellRequests();
                 } catch (error) {
                     console.error("Error updating status:", error);
@@ -2415,9 +2447,8 @@
 
             // --- CRUD Operations ---
             
-            // UPDATED: updatePaymentStatus function accepts newStatus directly and handles autosave
+            // === আপডেটেড পেমেন্ট স্ট্যাটাস ফাংশন (নোটিফিকেশন সহ) ===
             window.updatePaymentStatus = async (docId, newStatus) => {
-                // No button to toggle loading state anymore, direct update
                 try {
                     const paymentDocRef = db.collection('payments').doc(docId);
                     const paymentDoc = await paymentDocRef.get();
@@ -2426,6 +2457,7 @@
                     const paymentData = paymentDoc.data();
                     let updateData = { status: newStatus };
 
+                    // লাভের হিসাব (অপরিবর্তিত)
                     if (newStatus === 'approved') {
                         const serviceQuery = await db.collection('services').where('name', '==', paymentData.itemName).limit(1).get();
                         if (!serviceQuery.empty) {
@@ -2434,8 +2466,32 @@
                         } else {
                             updateData.profit = Number(paymentData.amount) || 0;
                         }
-                    } else {
-                        updateData.profit = firebase.firestore.FieldValue.delete();
+
+                        // === নতুন: নির্দিষ্ট স্টুডেন্টকে নোটিফিকেশন পাঠানো ===
+                        if (paymentData.userId) {
+                            await db.collection('notifications').add({
+                                targetUid: paymentData.userId, // শুধুমাত্র এই ইউজার দেখবে
+                                title: 'পেমেন্ট অনুমোদিত',
+                                message: `আপনার ${paymentData.itemName}-এর জন্য ${paymentData.amount} টাকার পেমেন্ট সফলভাবে ভেরিফাই করা হয়েছে।`,
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                type: 'payment_success', // আইকনের জন্য টাইপ
+                                read: false
+                            });
+                        }
+                    } else if (newStatus === 'rejected') {
+                         updateData.profit = firebase.firestore.FieldValue.delete();
+                         
+                         // রিজেক্ট হলে নোটিফিকেশন
+                         if (paymentData.userId) {
+                            await db.collection('notifications').add({
+                                targetUid: paymentData.userId,
+                                title: 'পেমেন্ট বাতিল',
+                                message: `আপনার ${paymentData.itemName}-এর পেমেন্টটি বাতিল করা হয়েছে। বিস্তারিত জানতে সাপোর্টে যোগাযোগ করুন।`,
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                type: 'payment_failed',
+                                read: false
+                            });
+                        }
                     }
 
                     await paymentDocRef.update(updateData);
@@ -2762,10 +2818,22 @@
                             const courseName = formData.get('courseName');
                             const batch = formData.get('batch');
                             if (!studentUid || !courseName || !batch) throw new Error("অনুগ্রহ করে সকল তথ্য পূরণ করুন।");
+                            
                             const courseDoc = await db.collection('courses').where('name', '==', courseName).limit(1).get();
                             if (courseDoc.empty) throw new Error("নির্বাচিত কোর্সটি খুঁজে পাওয়া যায়নি।");
+                            
                             const courseDetails = courseDoc.docs[0].data();
                             newItem = { studentUid, studentEmail, courseName, batch, enrollmentDate: new Date(), courseImage: courseDetails.image || '', courseCategory: courseDetails.category || '' };
+                            
+                            // === নতুন: এনরোলমেন্টের পর নির্দিষ্ট স্টুডেন্টকে নোটিফিকেশন ===
+                            await db.collection('notifications').add({
+                                targetUid: studentUid, // শুধুমাত্র এই ইউজার দেখবে
+                                title: 'কোর্স এনরোলমেন্ট',
+                                message: `অভিনন্দন! আপনাকে '${courseName}' (ব্যাচ: ${batch}) কোর্সে যুক্ত করা হয়েছে। এখনই ক্লাস শুরু করুন।`,
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                type: 'new_course',
+                                read: false
+                            });
                             break;
                         case 'joinClass':
                             newItem = { courseName: formData.get('courseName'), batch: formData.get('batch'), topic: formData.get('topic'), classNumber: Number(formData.get('classNumber')), link: formData.get('link'), dateTime: new Date(formData.get('dateTime')) };
