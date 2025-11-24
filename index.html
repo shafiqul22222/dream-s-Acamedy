@@ -2434,14 +2434,14 @@
         }
         /* --- END: NEW CONTACT SECTION STYLES --- */
 
-        /* --- START: UPDATED DOLLAR SELL MODAL STYLES --- */
+        /* --- START: UPDATED DOLLAR SELL MODAL STYLES (REFINED) --- */
         #dollar-sell-modal .login-card {
-            max-width: 550px;
+            max-width: 500px; /* Slightly narrower for better focus */
             overflow: hidden;
             border-radius: 20px;
             background: #ffffff;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            display: block; /* Ensure it displays correctly */
+            display: block; 
         }
 
         .dollar-modal-header {
@@ -2453,7 +2453,6 @@
             overflow: hidden;
         }
 
-        /* Animated Background Circles in Header */
         .dollar-modal-header::before {
             content: '';
             position: absolute;
@@ -2508,7 +2507,7 @@
         }
 
         .dollar-modal-body {
-            padding: 30px;
+            padding: 30px 40px; /* Increased padding */
         }
 
         /* Rate Display Animation */
@@ -2520,8 +2519,8 @@
             border: 1px dashed #16a34a;
             text-align: center;
             font-weight: 600;
-            margin-bottom: 20px;
-            display: none; /* Controlled by JS */
+            margin-bottom: 25px;
+            display: none; 
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -2530,29 +2529,102 @@
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        /* Form Inputs Styling Override for this Modal */
+        /* --- UPDATED FORM FIELD STYLES (FIXED) --- */
+        #dollar-sell-form .input-group {
+            position: relative;
+            margin-bottom: 25px; 
+        }
+
         #dollar-sell-form .input-group input,
         #dollar-sell-form .input-group select {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            transition: all 0.3s;
+            width: 100%;
+            height: 55px; 
+            padding: 0 20px 0 45px; 
+            border: 2px solid #e0e0e0;
+            background: #fff; /* Background white to avoid transparency issues */
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            color: #333;
+            transition: all 0.3s ease;
+            appearance: none; 
+            -webkit-appearance: none;
+            position: relative;
+            z-index: 1; /* Input stays below label */
+        }
+
+        /* Custom Arrow for Select */
+        #dollar-sell-form .input-group select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23777'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+        }
+
+        /* Icon Position */
+        #dollar-sell-form .input-group .material-symbols-outlined {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-blue);
+            font-size: 22px;
+            z-index: 2; /* Icon above input */
+            pointer-events: none; /* Prevent icon from blocking clicks */
+            transition: color 0.3s ease;
+        }
+
+        /* Label Styling (FIXED) */
+        #dollar-sell-form .input-group label {
+            position: absolute;
+            left: 45px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: transparent;
+            padding: 0 5px;
+            color: #666;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            pointer-events: none;
+            z-index: 3; /* Label stays on top */
+        }
+
+        /* Floating Label Logic (FIXED) */
+        /* Focus state OR when input has value OR when select has valid option */
+        #dollar-sell-form .input-group input:focus + label,
+        #dollar-sell-form .input-group input:not(:placeholder-shown) + label,
+        #dollar-sell-form .input-group select:focus + label,
+        #dollar-sell-form .input-group select:not([value=""]):valid + label {
+            top: -10px; 
+            left: 15px;
+            font-size: 0.85rem;
+            color: var(--secondary-blue);
+            background-color: #fff; /* Masks the border line */
+            padding: 0 8px;
+            font-weight: 600;
+            border-radius: 5px;
         }
 
         #dollar-sell-form .input-group input:focus,
         #dollar-sell-form .input-group select:focus {
-            background: #fff;
-            border-color: var(--light-blue);
-            box-shadow: 0 4px 15px rgba(5, 191, 219, 0.15);
+            border-color: var(--secondary-blue);
+            box-shadow: 0 4px 12px rgba(8, 131, 149, 0.1);
+            outline: none;
+        }
+        
+        #dollar-sell-form .input-group input:focus ~ .material-symbols-outlined,
+        #dollar-sell-form .input-group select:focus ~ .material-symbols-outlined {
+            color: var(--secondary-blue);
         }
 
-        /* Dynamic Phone Field Animation */
         #ds-number-group {
             overflow: hidden;
             transition: all 0.4s ease;
         }
 
         #ds-number-group.hidden {
-            display: none; /* Or utilize opacity/height for smoother animation if preferred */
+            display: none; 
         }
         /* --- END: UPDATED DOLLAR SELL MODAL STYLES --- */
 
@@ -3136,7 +3208,8 @@
                     <div class="input-group">
                         <span class="material-symbols-outlined">credit_card</span>
                         <select id="ds-card-type" required>
-                            <option value="" disabled selected>কার্ডের ধরন সিলেক্ট করুন</option>
+                            <!-- খালি অপশন রাখা হয়েছে যাতে লেবেলটি প্লেসহোল্ডার হিসেবে কাজ করে -->
+                            <option value="" disabled selected></option>
                             <option value="ACH">ACH Transfer</option>
                             <option value="VISA">VISA Card</option>
                             <option value="APPLE">Apple Pay</option>
@@ -3155,7 +3228,8 @@
                     <div class="input-group">
                         <span class="material-symbols-outlined">payments</span>
                         <select id="ds-payment-method" required>
-                            <option value="" disabled selected>টাকা গ্রহণের মাধ্যম</option>
+                            <!-- খালি অপশন রাখা হয়েছে যাতে লেবেলটি প্লেসহোল্ডার হিসেবে কাজ করে -->
+                            <option value="" disabled selected></option>
                             <option value="Bkash">Bkash (বিকাশ)</option>
                             <option value="Nagad">Nagad (নগদ)</option>
                         </select>
@@ -3704,23 +3778,38 @@
                 });
             }
             
+            // --- UPDATED NOTIFICATION FORMATTER ---
             function formatNotificationTime(timestamp) {
-                if (!timestamp) return '';
-                const date = timestamp.toDate();
+                if (!timestamp) return ''; // পেন্ডিং অবস্থায় ফাঁকা দেখাবে
+                
+                const date = timestamp.toDate(); 
                 const now = new Date();
-                const diffSeconds = Math.floor((now - date) / 1000);
+                const diffMs = now - date; // মিলিসেকেন্ড পার্থক্য
+                const diffSeconds = Math.floor(diffMs / 1000);
                 const diffMinutes = Math.floor(diffSeconds / 60);
                 const diffHours = Math.floor(diffMinutes / 60);
                 const diffDays = Math.floor(diffHours / 24);
 
-                if (diffSeconds < 60) return 'এখনই';
-                if (diffMinutes < 60) return `${diffMinutes} মিনিট আগে`;
-                if (diffHours < 24) return `${diffHours} ঘণ্টা আগে`;
-                if (diffDays === 1) return 'গতকাল';
-                
-                return new Intl.DateTimeFormat('bn-BD', {
-                    month: 'long', day: 'numeric', year: 'numeric'
-                }).format(date);
+                // নেগেটিভ ভ্যালু হ্যান্ডলিং (যদি ডিভাইসের সময় সার্ভারের চেয়ে পিছিয়ে থাকে)
+                if (diffSeconds < 0) return 'এখনই'; 
+
+                if (diffSeconds < 60) {
+                    return 'এখনই';
+                } else if (diffMinutes < 60) {
+                    return `${diffMinutes} মিনিট আগে`;
+                } else if (diffHours < 24) {
+                    return `${diffHours} ঘণ্টা আগে`;
+                } else if (diffDays === 1) {
+                    return 'গতকাল';
+                } else if (diffDays < 7) {
+                    return `${diffDays} দিন আগে`;
+                } else {
+                    // ৭ দিনের পুরনো হলে তারিখ ও সময় দেখাবে (যেমন: ২৪ নভেম্বর, ২০২৫, ৪:৩০ PM)
+                    return new Intl.DateTimeFormat('bn-BD', {
+                        day: 'numeric', month: 'long', year: 'numeric',
+                        hour: 'numeric', minute: 'numeric', hour12: true
+                    }).format(date);
+                }
             }
 
             function updateNotificationUI(notifications) {
@@ -3742,6 +3831,13 @@
                         iconClass = 'notice-icon';
                     } else if (data.type === 'new_course' || data.type === 'content_update') {
                         icon = 'school';
+                    } else if (data.type === 'payment_success') {
+                        icon = 'check_circle';
+                    } else if (data.type === 'payment_failed') {
+                        icon = 'cancel';
+                        iconClass = 'notice-icon';
+                    } else if (data.type === 'dollar_sell_update') {
+                        icon = 'currency_exchange';
                     }
                     
                     const listItem = document.createElement('li');
@@ -3768,14 +3864,22 @@
                 }
             }
 
-            function initializeNotifications() {
+            // === আপডেট করা নোটিফিকেশন ফাংশন (শুধুমাত্র নিজের নোটিফিকেশন দেখাবে) ===
+            function initializeNotifications(user) {
+                if (!user) return; // ইউজার না থাকলে নোটিফিকেশন লোড হবে না
+
                 if (Notification.permission === 'default') {
                     Notification.requestPermission();
                 }
+                
+                // আগের লিসেনার বন্ধ করা
                 if (notificationListener) {
                     notificationListener();
                 }
+
+                // শুধুমাত্র লগইন করা ইউজারের (targetUid == user.uid) নোটিফিকেশন আসবে
                 notificationListener = db.collection('notifications')
+                    .where('targetUid', '==', user.uid) 
                     .orderBy('timestamp', 'desc')
                     .limit(20)
                     .onSnapshot(snapshot => {
@@ -3783,12 +3887,21 @@
                         
                         snapshot.docChanges().forEach(change => {
                             if (change.type === 'added') {
-                                showBrowserNotification(change.doc.data());
+                                // পেজ লোড হওয়ার পর নতুন নোটিফিকেশন আসলে ব্রাউজার নোটিফিকেশন দেখাবে
+                                if (!change.doc.metadata.fromCache) {
+                                    showBrowserNotification(change.doc.data());
+                                    // নতুন নোটিফিকেশন আসলে টোস্ট মেসেজও দেখাবে
+                                    showToast('নতুন নোটিফিকেশন এসেছে!', 'info');
+                                }
                             }
                         });
 
                     }, error => {
                         console.error("Error fetching notifications: ", error);
+                        // ফায়ারস্টোর ইনডেক্স এরর হ্যান্ডলিং
+                        if (error.code === 'failed-precondition') {
+                            console.log("অনুগ্রহ করে ফায়ারবেস কনসোল থেকে ইনডেক্স তৈরি করুন: targetUid ASC, timestamp DESC");
+                        }
                         notificationListContainer.innerHTML = '<li class="no-notification-message">নোটিফিকেশন লোড করা যায়নি।</li>';
                     });
             }
@@ -3896,7 +4009,8 @@
                         }
                     });
                     displayMyCourses();
-                    initializeNotifications();
+                    // আপডেট: ইউজার অবজেক্ট পাঠানো হচ্ছে
+                    initializeNotifications(user);
                 } else {
                     loggedInView.classList.add('hidden');
                     loggedOutView.classList.remove('hidden');
@@ -5090,13 +5204,12 @@
                     if (method) {
                         dsNumberGroup.classList.remove('hidden');
                         dsPhoneNumber.setAttribute('required', 'true');
+                        dsPhoneNumber.placeholder = ' '; // Force empty placeholder to fix CSS overlap
                         
                         if (method === 'Bkash') {
                             dsNumberLabel.textContent = 'আপনার বিকাশ নাম্বার দিন';
-                            dsPhoneNumber.placeholder = 'আপনার বিকাশ নাম্বার দিন';
                         } else if (method === 'Nagad') {
                             dsNumberLabel.textContent = 'আপনার নগদ নাম্বার দিন';
-                            dsPhoneNumber.placeholder = 'আপনার নগদ নাম্বার দিন';
                         }
                     } else {
                         dsNumberGroup.classList.add('hidden');
