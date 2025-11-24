@@ -2018,32 +2018,59 @@
             visibility: visible;
         }
 
-        /* --- Floating WhatsApp Button --- */
+        /* --- Modified Floating WhatsApp Button (Gorgeous & Dynamic) --- */
         #floating-whatsapp-btn {
             position: fixed;
             left: 30px;
-            bottom: 30px;
-            width: 60px;
-            height: 60px;
-            background-color: #25D366;
-            color: var(--text-light);
+            bottom: 30px; /* ডেস্কটপ পজিশন */
+            width: 70px; /* সাইজ একটু বড় করা হয়েছে */
+            height: 70px;
+            background-color: #ffffff;
+            border: 2px solid #25D366; /* হোয়াটসঅ্যাপ গ্রিন বর্ডার */
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: var(--shadow);
-            z-index: 1002; /* Higher than header and mobile nav */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* সুন্দর শ্যাডো */
+            z-index: 1002;
             text-decoration: none;
-            transition: transform 0.3s ease, background-color 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* স্মুথ এনিমেশন */
+            padding: 3px; /* বর্ডার এবং ছবির মাঝখানে ফাঁকা */
         }
 
-        #floating-whatsapp-btn .material-symbols-outlined {
-            font-size: 30px;
+        /* বাটনের ভিতরের ছবি */
+        #floating-whatsapp-btn img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover; /* ছবি যাতে গোল হয়ে ফিট হয় */
         }
 
+        /* অনলাইন স্ট্যাটাস বাতি (Green Dot) */
+        .online-indicator {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 16px;
+            height: 16px;
+            background-color: #25D366; /* সবুজ রং */
+            border: 3px solid #ffffff; /* সাদা বর্ডার */
+            border-radius: 50%;
+            z-index: 1003;
+            animation: onlinePulse 2s infinite; /* জ্বলবে আর নিভবে */
+        }
+
+        /* বাতির এনিমেশন */
+        @keyframes onlinePulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 12px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+
+        /* হোভার এফেক্ট */
         #floating-whatsapp-btn:hover {
-            transform: scale(1.1);
-            background-color: #128C7E;
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 15px 35px rgba(37, 211, 102, 0.5);
         }
 
         /* --- Toast Notifications --- */
@@ -2251,6 +2278,21 @@
 
             .social-icons {
                 justify-content: center;
+            }
+            
+            /* --- মোবাইল এর জন্য পজিশন ঠিক করা (যাতে ডলার সেল বাটন দেখা যায়) --- */
+            #floating-whatsapp-btn {
+                left: 20px;
+                bottom: 90px; /* নিচে থেকে ৯০ পিক্সেল উপরে তোলা হয়েছে */
+                width: 60px;
+                height: 60px;
+            }
+            
+            .online-indicator {
+                width: 14px;
+                height: 14px;
+                bottom: 3px;
+                right: 3px;
             }
         }
 
@@ -3300,9 +3342,10 @@
         <button id="scrollTopBtn"><span class="material-symbols-outlined">arrow_upward</span></button>
     </footer>
 
-    <!-- Floating WhatsApp Icon -->
+    <!-- Modified Gorgeous Floating WhatsApp Icon with ID for dynamic image -->
     <a href="https://wa.me/8801701126965" target="_blank" id="floating-whatsapp-btn" aria-label="Chat on WhatsApp">
-        <span class="material-symbols-outlined">message</span>
+        <img id="floating-chat-icon-img" src="https://i.ibb.co/hC68Fj8/man-in-suit.png" alt="Support Agent">
+        <span class="online-indicator"></span>
     </a>
 
     <div id="toast-container"></div>
@@ -3513,6 +3556,21 @@
                     }
                 } catch (error) {
                     console.error("Error fetching 'Contact Us' image:", error);
+                }
+            }
+            
+            // === NEW: Load Floating Chat Icon ===
+            async function loadFloatingChatIcon() {
+                const imgElement = document.getElementById('floating-chat-icon-img');
+                if (!imgElement) return;
+
+                try {
+                    const doc = await db.collection('site_settings').doc('floating_chat').get();
+                    if (doc.exists && doc.data().imageUrl) {
+                        imgElement.src = doc.data().imageUrl;
+                    }
+                } catch (error) {
+                    console.error("Error loading chat icon:", error);
                 }
             }
 
@@ -5154,7 +5212,7 @@
                     const rateText = document.getElementById('rate-text');
 
                     if(rateAmount > 0) {
-                        rateText.textContent = `বর্তমান রেট: ১ ডলার = ${rateAmount} টাকা`;
+                        rateText.textContent = `বর্তমান রেট: 1 ডলার = ${rateAmount} টাকা`;
                         rateDisplayBox.style.display = 'block';
                     } else {
                         rateDisplayBox.style.display = 'none';
@@ -5293,6 +5351,7 @@
             loadHeaderLogo();
             loadSocialMediaLinks();
             loadContactUsImage(); // NEW: Load Contact Image
+            loadFloatingChatIcon(); // NEW: Load Chat Icon
         });
     </script>
 </body>
