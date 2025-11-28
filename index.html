@@ -220,8 +220,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden; /* Added to clip the image */
         }
         .profile-icon .material-symbols-outlined { font-size: 28px; }
+        
+        /* NEW: Style for header profile image */
+        .profile-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
         .profile-dropdown {
             display: none;
@@ -2724,6 +2732,7 @@
                     </div>
 
                     <div class="profile-icon-wrapper">
+                        <!-- Updated Profile Icon Container -->
                         <div class="profile-icon" id="profile-icon">
                             <span class="material-symbols-outlined">person</span>
                         </div>
@@ -3090,6 +3099,26 @@
                                     </div>
                                     <button type="submit" class="btn btn-gradient">আপডেট করুন →</button>
                                 </form>
+
+                                <!-- NEW: CHANGE PASSWORD FORM -->
+                                <form class="profile-form" id="change-password-form" style="margin-top: 30px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+                                    <h4>পাসওয়ার্ড পরিবর্তন করুন</h4>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label for="old-password">পুরাতন পাসওয়ার্ড</label>
+                                            <input type="password" id="old-password" placeholder="পুরাতন পাসওয়ার্ড দিন" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="new-password">নতুন পাসওয়ার্ড</label>
+                                            <input type="password" id="new-password" placeholder="নতুন পাসওয়ার্ড দিন" required>
+                                        </div>
+                                         <div class="form-group">
+                                            <label for="confirm-new-password">নতুন পাসওয়ার্ড নিশ্চিত করুন</label>
+                                            <input type="password" id="confirm-new-password" placeholder="পাসওয়ার্ডটি আবার দিন" required>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-gradient">পাসওয়ার্ড পরিবর্তন করুন →</button>
+                                </form>
                              </div>
                         </div>
                         
@@ -3445,6 +3474,7 @@
             const logoLink = document.querySelector('header .logo');
 
             const profileUpdateForm = document.getElementById('profile-update-form');
+            const changePasswordForm = document.getElementById('change-password-form'); // New Password Form
 
             const mainContentSections = document.querySelectorAll('#main-content .page-section');
             const internalLinkButtons = document.querySelectorAll('.internal-link-btn');
@@ -3718,6 +3748,13 @@
 
                 document.getElementById('profile-summary-name').textContent = displayName;
                 if (profilePageAvatar) profilePageAvatar.src = photoUrl;
+
+                // ** NEW CODE: Update Header Profile Icon with Image **
+                const profileIconDiv = document.getElementById('profile-icon');
+                if(profileIconDiv) {
+                    // Replace the inner HTML with an img tag
+                    profileIconDiv.innerHTML = `<img src="${photoUrl}" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+                }
             }
 
             function handleLogin(event) {
@@ -3831,6 +3868,11 @@
             function handleLogout() {
                 auth.signOut().then(() => {
                     showToast("আপনি সফলভাবে লগ আউট হয়েছেন।", "info");
+                    // Reset Profile Icon to Default
+                    const profileIconDiv = document.getElementById('profile-icon');
+                    if(profileIconDiv) {
+                        profileIconDiv.innerHTML = '<span class="material-symbols-outlined">person</span>';
+                    }
                 }).catch((error) => {
                     showToast("লগ আউট করার সময় একটি সমস্যা হয়েছে।", "error");
                 });
@@ -4026,6 +4068,62 @@
                     });
             }
 
+            // ** NEW CODE: Handle Password Change **
+            function handleChangePassword(event) {
+                event.preventDefault();
+                const oldPass = document.getElementById('old-password').value;
+                const newPass = document.getElementById('new-password').value;
+                const confirmPass = document.getElementById('confirm-new-password').value;
+                const user = auth.currentUser;
+
+                if (!user) {
+                    showToast("অনুগ্রহ করে লগইন করুন।", "error");
+                    return;
+                }
+
+                if (newPass !== confirmPass) {
+                    showToast("নতুন পাসওয়ার্ড দুটি মিলছে না।", "error");
+                    return;
+                }
+
+                if (newPass.length < 6) {
+                     showToast("পাসওয়ার্ড অন্তত ৬ অক্ষরের হতে হবে।", "error");
+                     return;
+                }
+                
+                const submitBtn = changePasswordForm.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'প্রসেসিং...';
+
+                // Re-authenticate user
+                const credential = firebase.auth.EmailAuthProvider.credential(user.email, oldPass);
+
+                user.reauthenticateWithCredential(credential)
+                    .then(() => {
+                        // Update Password
+                        return user.updatePassword(newPass);
+                    })
+                    .then(() => {
+                        showToast("পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে।", "success");
+                        changePasswordForm.reset();
+                    })
+                    .catch((error) => {
+                        console.error("Password Change Error:", error);
+                        if (error.code === 'auth/wrong-password') {
+                            showToast("পুরাতন পাসওয়ার্ডটি ভুল।", "error");
+                        } else if (error.code === 'auth/weak-password') {
+                            showToast("পাসওয়ার্ডটি খুব দুর্বল। আরও কঠিন পাসওয়ার্ড দিন।", "error");
+                        } else {
+                            showToast("পাসওয়ার্ড পরিবর্তন করা যায়নি। আবার চেষ্টা করুন।", "error");
+                        }
+                    })
+                    .finally(() => {
+                         submitBtn.disabled = false;
+                         submitBtn.textContent = 'পাসওয়ার্ড পরিবর্তন করুন →';
+                    });
+            }
+
+
             // --- START: NEW FETCH FUNCTION FOR DOLLAR RATES ---
             async function fetchLiveDollarRates() {
                 try {
@@ -4075,6 +4173,12 @@
                     adminPanelLinkLi.classList.add('hidden');
                     showPageSection('home');
                     cleanupNotifications();
+                    
+                    // Reset Profile Icon on Logout
+                    const profileIconDiv = document.getElementById('profile-icon');
+                    if(profileIconDiv) {
+                        profileIconDiv.innerHTML = '<span class="material-symbols-outlined">person</span>';
+                    }
                 }
             });
 
@@ -4973,6 +5077,11 @@
                     profilePageAvatar.src = newImageUrl;
                     headerAvatar.src = newImageUrl;
                     sidebarAvatar.src = newImageUrl;
+                    // Also update Header Icon
+                    const profileIconDiv = document.getElementById('profile-icon');
+                    if(profileIconDiv) {
+                        profileIconDiv.innerHTML = `<img src="${newImageUrl}" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+                    }
                     showToast("প্রোফাইল ছবি সফলভাবে আপডেট করা হয়েছে!", "success");
                 })
                 .catch(error => {
@@ -5020,7 +5129,8 @@
             signupForm.addEventListener('submit', handleSignup);
 
             profileUpdateForm.addEventListener('submit', handleProfileUpdate);
-            
+            changePasswordForm.addEventListener('submit', handleChangePassword); // Password Form Listener
+
             notificationIcon.addEventListener('click', () => {
                 notificationDropdown.classList.toggle('hidden');
                 profileDropdown.style.display = 'none';
