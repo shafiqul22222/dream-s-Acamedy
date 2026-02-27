@@ -1130,6 +1130,7 @@
                                 <th>ক্রয়মূল্য</th>
                                 <th>বর্তমান মূল্য</th>
                                 <th>কমিশন</th>
+                                <th>স্ট্যাটাস</th> <!-- এই লাইনটি নতুন যোগ করুন -->
                                 <th>অ্যাকশন</th>
                             </tr>
                         </thead>
@@ -1457,7 +1458,7 @@
             const logoSettingsForm = document.getElementById('logo-settings-form');
             const aboutUsSettingsForm = document.getElementById('about-us-settings-form');
             const contactUsSettingsForm = document.getElementById('contact-us-settings-form');
-            const chatIconSettingsForm = document.getElementById('chat-icon-settings-form'); 
+            const chatIconSettingsForm = document.getElementById('chat-icon-settings-form'); // NEW
 
             const socialMediaForm = document.getElementById('social-media-form');
             const addSocialLinkBtn = document.getElementById('add-social-link-btn');
@@ -1586,9 +1587,8 @@
             loginForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const email = document.getElementById('email').value;
-                const password = document.getElementById('email').value; // Original code used email input for pass? Fix: use 'password'
-                const actualPasswordInput = document.getElementById('password').value;
-                auth.signInWithEmailAndPassword(email, actualPasswordInput)
+                const password = document.getElementById('password').value;
+                auth.signInWithEmailAndPassword(email, password)
                     .catch(error => {
                         console.error("Login Error:", error);
                         showToast('ভুল ইমেল অথবা পাসওয়ার্ড!', 'error');
@@ -1661,8 +1661,9 @@
                         renderManualSalePage();
                         break;
                     case 'dollar-exchange-page':
-                        renderDollarRatesSettings(); 
-                        renderDollarSellRequests(); 
+                        renderDollarRatesSettings(); // NEW: Render Rate Settings
+                        // renderDollarExchangePage(); // Manual Entry Logic if needed separately
+                        renderDollarSellRequests(); // NEW Function for User Requests
                         break;
                     case 'users-page':
                         renderUsers();
@@ -1723,6 +1724,7 @@
                     const paymentsSnapshot = await db.collection('payments').get();
                     const dollarExchangeSnapshot = await db.collection('dollar_exchange').get();
                     
+                    // NEW: Fetch pending dollar requests
                     const dollarRequestsSnapshot = await db.collection('dollar_sells').where('status', '==', 'pending').get();
 
                     let totalSales = 0, currentMonthSales = 0, totalProfit = 0, currentMonthProfit = 0, pendingPaymentsCount = 0;
@@ -1762,6 +1764,7 @@
                     document.getElementById('current-month-profit').textContent = `৳${currentMonthProfit.toLocaleString('bn-BD')}`;
                     document.getElementById('pending-payments').textContent = pendingPaymentsCount;
                     
+                    // NEW: Update Pending Dollar Request Count
                     document.getElementById('pending-dollar-requests').textContent = dollarRequestsSnapshot.size;
                     
                     document.getElementById('total-students').textContent = usersSnapshot.size;
@@ -1894,6 +1897,7 @@
                 tableBody.innerHTML = tableHTML;
             }
 
+            // --- NEW: Dollar Rate Settings Logic ---
             async function renderDollarRatesSettings() {
                 try {
                     const doc = await db.collection('site_settings').doc('dollar_rates').get();
@@ -1937,6 +1941,7 @@
                 });
             }
 
+            // --- NEW: Render User Dollar Sell Requests ---
             async function renderDollarSellRequests() {
                 const tableBody = document.getElementById('dollar-sell-requests-body');
                 if (!tableBody) return;
@@ -1944,6 +1949,7 @@
                 tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">লোডিং...</td></tr>';
 
                 try {
+                    // Fetch from 'dollar_sells' collection, ordered by timestamp descending (serial)
                     const snapshot = await db.collection('dollar_sells')
                                              .orderBy('timestamp', 'desc')
                                              .get();
@@ -1959,6 +1965,7 @@
                         const id = doc.id;
                         const statusClass = (data.status || 'pending').toLowerCase();
                         
+                        // Modified Card Link Logic for Copy Feature
                         let cardLinkDisplay = 'N/A';
                         if (data.cardLink) {
                             cardLinkDisplay = `
@@ -2008,8 +2015,10 @@
                 }
             }
 
+            // === আপডেটেড ডলার সেল স্ট্যাটাস (নোটিফিকেশন সহ) ===
             window.updateDollarSellStatus = async (id, newStatus) => {
                 try {
+                    // প্রথমে ডকুমেন্টটি রিড করতে হবে userId পাওয়ার জন্য
                     const docRef = db.collection('dollar_sells').doc(id);
                     const docSnap = await docRef.get();
                     
@@ -2020,6 +2029,7 @@
                         status: newStatus
                     });
 
+                    // নোটিফিকেশন পাঠানো
                     if(data.userId) {
                         let title = 'ডলার সেল আপডেট';
                         let msg = '';
@@ -2052,62 +2062,158 @@
                 }
             };
 
+
+// --- Manual Sale Page Logic (Calculation + Saving) ---
+            
+            // ১. পেজ রেন্ডার এবং হিসাবের লজিক
             async function renderManualSalePage() {
-                const itemSelection = document.getElementById('manual-item-selection');
-                itemSelection.innerHTML = '<option value="">তালিকা লোড হচ্ছে...</option>';
+                const itemSelect = document.getElementById('manual-item-selection');
+                const quantityInput = document.getElementById('manual-quantity');
+                const saleInput = document.getElementById('manual-sale-amount');
+                const profitInput = document.getElementById('manual-profit-amount');
+                
+                // ডিবাগ ইনফো বক্স (হিসাব দেখার জন্য)
+                let debugInfo = document.getElementById('calc-debug-info');
+                if (!debugInfo) {
+                    debugInfo = document.createElement('div');
+                    debugInfo.id = 'calc-debug-info';
+                    debugInfo.style.marginTop = '15px';
+                    debugInfo.style.padding = '10px';
+                    debugInfo.style.backgroundColor = '#fff3cd';
+                    debugInfo.style.border = '1px solid #ffeeba';
+                    debugInfo.style.borderRadius = '5px';
+                    debugInfo.style.fontSize = '0.9em';
+                    debugInfo.style.color = '#856404';
+                    debugInfo.style.display = 'none'; // প্রথমে লুকানো থাকবে
+                    document.getElementById('manual-sale-form').appendChild(debugInfo);
+                }
+
+                // ইনপুট রিসেট
+                itemSelect.innerHTML = '<option value="">লোড হচ্ছে...</option>';
+                quantityInput.value = 1;
+                saleInput.value = '';
+                profitInput.value = '';
+
                 try {
                     const servicesSnapshot = await db.collection('services').get();
                     const coursesSnapshot = await db.collection('courses').get();
-                    if (servicesSnapshot.empty && coursesSnapshot.empty) {
-                        itemSelection.innerHTML = '<option value="">কোনো সার্ভিস বা কোর্স পাওয়া যায়নি</option>';
-                        return;
-                    }
-                    let optionsHTML = '<option value="" disabled selected>একটি আইটেম নির্বাচন করুন</option><optgroup label="সার্ভিস সমূহ">';
-                    servicesSnapshot.forEach(doc => optionsHTML += `<option value="${doc.data().name}">${doc.data().name}</option>`);
-                    optionsHTML += '</optgroup><optgroup label="কোর্স সমূহ">';
-                    coursesSnapshot.forEach(doc => optionsHTML += `<option value="${doc.data().name}">${doc.data().name}</option>`);
+
+                    let optionsHTML = '<option value="" disabled selected>একটি আইটেম নির্বাচন করুন</option>';
+
+                    optionsHTML += '<optgroup label="সার্ভিস সমূহ">';
+                    servicesSnapshot.forEach(doc => {
+                        const data = doc.data();
+                        const price = data.purchasePrice ? parseFloat(data.purchasePrice) : 0;
+                        optionsHTML += `<option value="${data.name}" data-price="${price}">${data.name}</option>`;
+                    });
                     optionsHTML += '</optgroup>';
-                    itemSelection.innerHTML = optionsHTML;
+
+                    optionsHTML += '<optgroup label="কোর্স সমূহ">';
+                    coursesSnapshot.forEach(doc => {
+                        const data = doc.data();
+                        optionsHTML += `<option value="${data.name}" data-price="0">${data.name}</option>`;
+                    });
+                    optionsHTML += '</optgroup>';
+
+                    itemSelect.innerHTML = optionsHTML;
+
+                    // হিসাব করার ফাংশন
+                    function calculateProfit() {
+                        const selectedOption = itemSelect.options[itemSelect.selectedIndex];
+                        if (!selectedOption || selectedOption.disabled) return;
+
+                        const unitBuyPrice = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+                        const quantity = parseFloat(quantityInput.value) || 0;
+                        const totalSales = parseFloat(saleInput.value) || 0;
+
+                        // মোট খরচ
+                        const totalCost = unitBuyPrice * quantity;
+                        
+                        // লাভ বসানো
+                        if (saleInput.value.trim() !== "") {
+                            profitInput.value = totalSales - totalCost;
+                        } else {
+                            profitInput.value = '';
+                        }
+
+                        // ডিবাগ ইনফো দেখানো
+                        debugInfo.style.display = 'block';
+                        debugInfo.innerHTML = `
+                            <strong>হিসাব বিবরণ:</strong><br>
+                            ১টি কেনা দাম: ৳ ${unitBuyPrice} | পরিমাণ: ${quantity}<br>
+                            মোট খরচ: ৳ ${totalCost} | মোট বিক্রয়: ৳ ${totalSales}<br>
+                        `;
+                    }
+
+                    // ইভেন্ট লিসেনার
+                    itemSelect.onchange = calculateProfit;
+                    quantityInput.oninput = calculateProfit;
+                    saleInput.oninput = calculateProfit;
+
                 } catch (error) {
-                    console.error("Error fetching items for manual sale:", error);
-                    itemSelection.innerHTML = '<option value="">লোড করতে সমস্যা হয়েছে</option>';
+                    console.error("Error loading items:", error);
+                    itemSelect.innerHTML = '<option value="">লোড করতে সমস্যা হয়েছে</option>';
                 }
             }
+
+            // ২. ডাটাবেসে সেভ করার লজিক (Submission Logic)
             const manualSaleForm = document.getElementById('manual-sale-form');
-            if (manualSaleForm) manualSaleForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const btn = manualSaleForm.querySelector('button[type="submit"]');
-                const itemName = document.getElementById('manual-item-selection').value,
-                    quantity = Number(document.getElementById('manual-quantity').value),
-                    saleAmount = Number(document.getElementById('manual-sale-amount').value),
-                    profitAmount = Number(document.getElementById('manual-profit-amount').value);
-                if (!itemName || quantity <= 0 || saleAmount < 0 || profitAmount < 0) {
-                    showToast("অনুগ্রহ করে সকল তথ্য সঠিকভাবে পূরণ করুন।", "error");
-                    return;
-                }
-                btn.disabled = true;
-                btn.innerHTML = `<span class="material-symbols-outlined">sync</span> যোগ করা হচ্ছে...`;
-                try {
-                    await db.collection('payments').add({
-                        itemName: `${itemName} (x${quantity})`,
-                        amount: saleAmount,
-                        profit: profitAmount,
-                        status: 'approved',
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                        transactionId: 'manual_entry',
-                        userEmail: 'admin@manual.sale'
-                    });
-                    showToast('ম্যানুয়াল সেলস সফলভাবে যোগ করা হয়েছে!');
-                    manualSaleForm.reset();
-                    renderDashboard();
-                } catch (error) {
-                    console.error("Error adding manual sale:", error);
-                    showToast(`সেলস যোগ করতে সমস্যা হয়েছে: ${error.message}`, "error");
-                } finally {
-                    btn.disabled = false;
-                    btn.innerHTML = `<span class="material-symbols-outlined">save</span> সেলস যোগ করুন`;
-                }
-            });
+            if (manualSaleForm) {
+                // আগের লিসেনার মুছে ফেলা সম্ভব না, তাই আমরা নতুন করে হ্যান্ডল করছি
+                // এটি নিশ্চিত করবে যে সাবমিট বাটন কাজ করছে
+                manualSaleForm.onsubmit = async (e) => {
+                    e.preventDefault(); // পেজ রিলোড বন্ধ করা
+
+                    const btn = manualSaleForm.querySelector('button[type="submit"]');
+                    const itemSelect = document.getElementById('manual-item-selection');
+                    const itemName = itemSelect.value;
+                    const quantity = Number(document.getElementById('manual-quantity').value);
+                    const saleAmount = Number(document.getElementById('manual-sale-amount').value);
+                    const profitAmount = Number(document.getElementById('manual-profit-amount').value);
+                    
+                    // ভ্যালিডেশন চেক
+                    if (!itemName || quantity <= 0 || document.getElementById('manual-sale-amount').value.trim() === '') {
+                        showToast("অনুগ্রহ করে আইটেম, পরিমাণ এবং সেলস এর পরিমাণ সঠিক ভাবে দিন।", "error");
+                        return;
+                    }
+                    
+                    // বাটন ডিজেবল করা (যাতে ডাবল ক্লিক না হয়)
+                    const originalBtnText = btn.innerHTML;
+                    btn.disabled = true;
+                    btn.innerHTML = `<span class="material-symbols-outlined">sync</span> সেভ হচ্ছে...`;
+                    
+                    try {
+                        // ডাটাবেসে পাঠানো
+                        await db.collection('payments').add({
+                            itemName: `${itemName} (x${quantity})`, // নামের সাথে পরিমাণ
+                            amount: saleAmount,
+                            profit: profitAmount,
+                            status: 'approved',
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                            transactionId: 'manual_entry',
+                            userEmail: 'admin@manual.sale' // ম্যানুয়াল সেলের জন্য ডামি ইমেইল
+                        });
+
+                        showToast('সেলস সফলভাবে যোগ করা হয়েছে!', 'success');
+                        
+                        // ফর্ম রিসেট
+                        manualSaleForm.reset();
+                        document.getElementById('manual-item-selection').value = "";
+                        document.getElementById('calc-debug-info').style.display = 'none';
+                        
+                        // ড্যাশবোর্ড আপডেট করা
+                        renderDashboard();
+
+                    } catch (error) {
+                        console.error("Error adding manual sale:", error);
+                        showToast(`সমস্যা হয়েছে: ${error.message}`, "error");
+                    } finally {
+                        // বাটন আবার সচল করা
+                        btn.disabled = false;
+                        btn.innerHTML = originalBtnText;
+                    }
+                };
+            }
 
             const dollarExchangeForm = document.getElementById('dollar-exchange-form');
             if (dollarExchangeForm) {
@@ -2153,6 +2259,7 @@
                 });
             }
 
+            // --- Service Stock Page ---
             async function renderServiceStock() {
                 const selectionDropdown = document.getElementById('stock-service-selection');
                 selectionDropdown.innerHTML = '<option value="">লোড হচ্ছে...</option>';
@@ -2223,6 +2330,8 @@
                 });
             }
 
+
+            // --- Send Service Page ---
             async function renderSendServicePage() {
                 serviceSelection.innerHTML = '<option value="">তালিকা লোড হচ্ছে...</option>';
                 try {
@@ -2292,6 +2401,7 @@
                 window.open(whatsappUrl, '_blank');
             });
 
+            // --- Settings ---
             async function renderSettings() {
                 try {
                     const heroDoc = await db.collection('site_settings').doc('hero_section').get();
@@ -2310,12 +2420,14 @@
                         document.getElementById('about-us-image-preview').src = aboutUsDoc.data().imageUrl;
                     }
                     
+                    // NEW: Load Contact Us Image
                     const contactUsDoc = await db.collection('site_settings').doc('contact_section').get();
                     if (contactUsDoc.exists && contactUsDoc.data().imageUrl) {
                         document.getElementById('contact-us-image-url').value = contactUsDoc.data().imageUrl;
                         document.getElementById('contact-us-image-preview').src = contactUsDoc.data().imageUrl;
                     }
                     
+                    // === NEW: Load Floating Chat Icon ===
                     const chatDoc = await db.collection('site_settings').doc('floating_chat').get();
                     if (chatDoc.exists && chatDoc.data().imageUrl) {
                         document.getElementById('chat-icon-image-url').value = chatDoc.data().imageUrl;
@@ -2391,6 +2503,7 @@
                 }
             });
             
+            // NEW: Handle Contact Us Settings Submit
             contactUsSettingsForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const newUrl = document.getElementById('contact-us-image-url').value;
@@ -2412,6 +2525,7 @@
                 }
             });
             
+            // === NEW: Handle Chat Icon Settings Submit ===
             chatIconSettingsForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const newUrl = document.getElementById('chat-icon-image-url').value;
@@ -2471,6 +2585,9 @@
                 }
             });
 
+            // --- CRUD Operations ---
+            
+            // === আপডেটেড পেমেন্ট স্ট্যাটাস ফাংশন (নোটিফিকেশন সহ) ===
             window.updatePaymentStatus = async (docId, newStatus) => {
                 try {
                     const paymentDocRef = db.collection('payments').doc(docId);
@@ -2480,6 +2597,7 @@
                     const paymentData = paymentDoc.data();
                     let updateData = { status: newStatus };
 
+                    // লাভের হিসাব (অপরিবর্তিত)
                     if (newStatus === 'approved') {
                         const serviceQuery = await db.collection('services').where('name', '==', paymentData.itemName).limit(1).get();
                         if (!serviceQuery.empty) {
@@ -2489,19 +2607,21 @@
                             updateData.profit = Number(paymentData.amount) || 0;
                         }
 
+                        // === নতুন: নির্দিষ্ট স্টুডেন্টকে নোটিফিকেশন পাঠানো ===
                         if (paymentData.userId) {
                             await db.collection('notifications').add({
-                                targetUid: paymentData.userId, 
+                                targetUid: paymentData.userId, // শুধুমাত্র এই ইউজার দেখবে
                                 title: 'পেমেন্ট অনুমোদিত',
                                 message: `আপনার ${paymentData.itemName}-এর জন্য ${paymentData.amount} টাকার পেমেন্ট সফলভাবে ভেরিফাই করা হয়েছে।`,
                                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                                type: 'payment_success', 
+                                type: 'payment_success', // আইকনের জন্য টাইপ
                                 read: false
                             });
                         }
                     } else if (newStatus === 'rejected') {
                          updateData.profit = firebase.firestore.FieldValue.delete();
                          
+                         // রিজেক্ট হলে নোটিফিকেশন
                          if (paymentData.userId) {
                             await db.collection('notifications').add({
                                 targetUid: paymentData.userId,
@@ -2607,6 +2727,7 @@
                         const profit = (payment.status === 'approved' && payment.profit != null) ? `৳ ${payment.profit}` : 'N/A';
                         const whatsappBtn = (payment.status === 'approved' && payment.userEmail !== 'admin@manual.sale') ? `<button class="btn-whatsapp" onclick="sendWhatsAppReceipt('${payment.id}')" title="Send WhatsApp Receipt"><span class="material-symbols-outlined">send</span></button>` : '';
                         
+                        // UPDATED: Changed Select to trigger updatePaymentStatus onchange, removed Save button
                         tableHTML += `<tr>
                             <td data-label="ইমেইল">${payment.userEmail}</td>
                             <td data-label="কোর্স/সার্ভিস">${payment.itemName}</td>
@@ -2636,7 +2757,6 @@
                 }
             }
 
-            // === UPDATED RENDER USERS LOGIC ===
             async function renderUsers() {
                 const tableBody = document.getElementById('users-table-body');
                 tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">শিক্ষার্থীদের তালিকা লোড হচ্ছে...</td></tr>`;
@@ -2653,12 +2773,9 @@
                     let tableHTML = '';
                     usersSnapshot.forEach(doc => {
                         const user = { id: doc.id, ...doc.data() };
-                        
-                        // Modified logic: Checks if paid online OR manually activated
-                        const hasPurchased = payingUserEmails.has(user.email) || user.isManualActive === true;
-                        
+                        const hasPurchased = payingUserEmails.has(user.email);
                         const statusClass = hasPurchased ? 'student-active-indicator' : 'student-inactive-indicator';
-                        const statusTitle = hasPurchased ? 'সক্রিয় শিক্ষার্থী (সার্ভিস কিনেছেন বা ম্যানুয়ালি একটিভ)।' : 'এই শিক্ষার্থী এখনো কোনো সার্ভিস/কোর্স কিনেননি।';
+                        const statusTitle = hasPurchased ? 'এই শিক্ষার্থী একটি সার্ভিস/কোর্স কিনেছেন।' : 'এই শিক্ষার্থী এখনো কোনো সার্ভিস/কোর্স কিনেননি।';
 
                         tableHTML += `<tr><td data-label="নাম" class="${statusClass}" title="${statusTitle}">${user.name || 'N/A'}</td><td data-label="ইমেইল">${user.email}</td><td data-label="মোবাইল"><span class="copyable-mobile" onclick="copyToClipboard('${user.mobile || ''}')" title="কপি করতে ক্লিক করুন">${user.mobile || 'N/A'}</span></td><td data-label="রেফারেল কোড">${user.referralCode || 'N/A'}</td><td data-label="ব্যালেন্স">৳ ${user.affiliateBalance || 0}</td><td class="actions-cell" data-label="অ্যাকশন"><button class="btn-edit" onclick="openModalForEdit('users', '${user.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('users', '${user.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
                     });
@@ -2669,7 +2786,51 @@
                 }
             }
 
-            const renderServices = () => renderGeneric('services', 'services-table-body', (service) => `<tr><td data-label="সার্ভিসের নাম">${service.name}</td><td data-label="ক্রয়মূল্য">৳ ${service.purchasePrice || 0}</td><td data-label="বর্তমান মূল্য">৳ ${service.currentPrice}</td><td data-label="কমিশন">৳ ${service.commission || 0}</td><td class="actions-cell" data-label="অ্যাকশন"><button class="btn-edit" onclick="openModalForEdit('services', '${service.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('services', '${service.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            // --- Service Status Update Function ---
+            window.updateServiceStatus = async (docId, isChecked) => {
+                try {
+                    // ডাটাবেসে স্ট্যাটাস আপডেট করা
+                    await db.collection('services').doc(docId).update({ status: isChecked });
+                    
+                    if (isChecked) {
+                        showToast('সার্ভিসটি সফলভাবে চালু (Active) করা হয়েছে।', 'success');
+                    } else {
+                        showToast('সার্ভিসটি বন্ধ (Inactive) করা হয়েছে।', 'success'); // বা warning কালার দিতে পারেন
+                    }
+                } catch (error) {
+                    console.error("Error updating service status:", error);
+                    showToast('স্ট্যাটাস আপডেট করতে সমস্যা হয়েছে।', 'error');
+                    // এরর হলে পেজ রিলোড করে আগের অবস্থায় ফিরিয়ে আনা
+                    renderServices();
+                }
+            };
+
+            // --- Updated Render Services Function with Toggle Switch ---
+            const renderServices = () => renderGeneric('services', 'services-table-body', (service) => {
+                // যদি ডাটাবেসে status ফিল্ড না থাকে, তবে ডিফল্টভাবে 'চালু' (true) ধরবে
+                const isActive = service.status !== false; 
+                
+                return `
+                <tr>
+                    <td data-label="সার্ভিসের নাম">${service.name}</td>
+                    <td data-label="ক্রয়মূল্য">৳ ${service.purchasePrice || 0}</td>
+                    <td data-label="বর্তমান মূল্য">৳ ${service.currentPrice}</td>
+                    <td data-label="কমিশন">৳ ${service.commission || 0}</td>
+                    
+                    <!-- স্ট্যাটাস টগল সুইচ -->
+                    <td data-label="স্ট্যাটাস">
+                        <label class="switch">
+                            <input type="checkbox" onchange="updateServiceStatus('${service.id}', this.checked)" ${isActive ? 'checked' : ''}>
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+
+                    <td class="actions-cell" data-label="অ্যাকশন">
+                        <button class="btn-edit" onclick="openModalForEdit('services', '${service.id}')"><span class="material-symbols-outlined">edit</span></button>
+                        <button class="btn-delete" onclick="deleteItem('services', '${service.id}')"><span class="material-symbols-outlined">delete</span></button>
+                    </td>
+                </tr>`;
+            });
             const renderCourses = () => renderGeneric('courses', 'courses-table-body', (course) => `<tr><td data-label="কোর্সের নাম">${course.name}</td><td data-label="প্রশিক্ষক">${course.instructor}</td><td data-label="মূল্য">৳ ${course.price}</td><td data-label="কমিশন">৳ ${course.commission || 0}</td><td class="actions-cell" data-label="অ্যাকশন"><button class="btn-edit" onclick="openModalForEdit('courses', '${course.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('courses', '${course.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderEnrollments = () => renderGeneric('enrollments', 'enrollments-table-body', (enroll) => `<tr><td data-label="শিক্ষার্থীর ইমেইল">${enroll.studentEmail}</td><td data-label="কোর্সের নাম">${enroll.courseName}</td><td data-label="ব্যাচ নং">${enroll.batch}</td><td class="actions-cell" data-label="অ্যাকশন"><button class="btn-delete" onclick="deleteItem('enrollments', '${enroll.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderCurriculum = () => renderGeneric('curriculum', 'curriculum-table-body', (curr) => `<tr><td data-label="কোর্সের নাম">${curr.courseName}</td><td data-label="ব্যাচ নং">${curr.batch}</td><td data-label="মডিউল সংখ্যা">${curr.modules ? curr.modules.length : 0}</td><td class="actions-cell" data-label="অ্যাকশন"><button class="btn-edit" onclick="openModalForEdit('curriculum', '${curr.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('curriculum', '${curr.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
@@ -2813,7 +2974,7 @@
                         await db.collection(collection).doc(id).delete();
                         showToast('সফলভাবে ডিলিট করা হয়েছে।');
                         const activePage = document.querySelector('.page.active').id;
-                        navigateTo(activePage); 
+                        navigateTo(activePage); // Refresh current page
                         if (collection !== 'service_stock') renderDashboard();
                     } catch (error) {
                         console.error("Error deleting item:", error);
@@ -2848,8 +3009,9 @@
                             const courseDetails = courseDoc.docs[0].data();
                             newItem = { studentUid, studentEmail, courseName, batch, enrollmentDate: new Date(), courseImage: courseDetails.image || '', courseCategory: courseDetails.category || '' };
                             
+                            // === নতুন: এনরোলমেন্টের পর নির্দিষ্ট স্টুডেন্টকে নোটিফিকেশন ===
                             await db.collection('notifications').add({
-                                targetUid: studentUid, 
+                                targetUid: studentUid, // শুধুমাত্র এই ইউজার দেখবে
                                 title: 'কোর্স এনরোলমেন্ট',
                                 message: `অভিনন্দন! আপনাকে '${courseName}' (ব্যাচ: ${batch}) কোর্সে যুক্ত করা হয়েছে। এখনই ক্লাস শুরু করুন।`,
                                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -2873,15 +3035,7 @@
                             newItem = { amount: Number(formData.get('amount')), method: formData.get('method'), accountNumber: formData.get('accountNumber') };
                             break;
                         case 'users':
-                            // UPDATED: Capturing isManualActive status
-                            newItem = { 
-                                name: formData.get('name'), 
-                                mobile: formData.get('mobile'), 
-                                title: formData.get('title'), 
-                                referralCode: formData.get('referralCode'), 
-                                affiliateBalance: Number(formData.get('affiliateBalance')),
-                                isManualActive: formData.get('isManualActive') === 'true' // Logical Boolean
-                            };
+                            newItem = { name: formData.get('name'), mobile: formData.get('mobile'), title: formData.get('title'), referralCode: formData.get('referralCode'), affiliateBalance: Number(formData.get('affiliateBalance')) };
                             if (formData.get('password')) newItem.password = formData.get('password');
                             break;
                         case 'trust_screenshots':
@@ -2942,23 +3096,7 @@
                     case 'joinClass': const dt = data.dateTime ? new Date(data.dateTime.seconds * 1000).toISOString().slice(0, 16) : ''; return `<div class="form-group"><label>কোর্স নির্বাচন করুন</label><select name="courseName" required>${extra.courseOptions || ''}</select></div><div class="form-group"><label>ব্যাচ নং</label><input type="text" name="batch" value="${data.batch || ''}" required></div><div class="form-group"><label>ক্লাসের টপিক</label><input type="text" name="topic" value="${data.topic || ''}" required></div><div class="form-group"><label>ক্লাস নং</label><input type="number" name="classNumber" value="${data.classNumber || ''}" required></div><div class="form-group"><label>ক্লাসের লিঙ্ক</label><input type="text" name="link" value="${data.link || ''}" required></div><div class="form-group"><label>ক্লাসের তারিখ ও সময়</label><input type="datetime-local" name="dateTime" value="${dt}" required></div>`;
                     case 'curriculum': return `<div class="form-group"><label>কোর্স নির্বাচন করুন</label><select name="courseName" required>${extra.courseOptions || ''}</select></div><div class="form-group"><label>ব্যাচ নং</label><input type="text" name="batch" value="${data.batch || ''}" required></div><hr style="margin: 20px 0;"><div id="curriculum-modules-container">${(data.modules && data.modules.length > 0) ? data.modules.map(getModuleHTML).join('') : getModuleHTML()}</div><button type="button" id="add-module-btn" class="btn btn-add-small"><span class="material-symbols-outlined">add</span> নতুন মডিউল যোগ করুন</button>`;
                     case 'withdrawals': return `<div class="form-group"><label>শিক্ষার্থীর ইমেইল (readonly)</label><input type="email" name="userEmail" value="${data.userEmail || ''}" readonly></div><div class="form-group"><label>পরিমাণ</label><input type="number" name="amount" value="${data.amount || 0}" required></div><div class="form-group"><label>মাধ্যম</label><input type="text" name="method" value="${data.method || ''}" required></div><div class="form-group"><label>অ্যাকাউন্ট নম্বর</label><input type="text" name="accountNumber" value="${data.accountNumber || ''}" required></div>`;
-                    case 'users': 
-                        // UPDATED: Added Manual Activation Select Field
-                        return `
-                        <div class="form-group"><label>নাম</label><input type="text" name="name" value="${data.name || ''}" ></div>
-                        <div class="form-group"><label>ইমেইল (readonly)</label><input type="email" name="email" value="${data.email || ''}" readonly></div>
-                        <div class="form-group"><label>মোবাইল</label><input type="text" name="mobile" value="${data.mobile || ''}" ></div>
-                        <div class="form-group"><label>টাইটেল</label><input type="text" name="title" value="${data.title || ''}" ></div>
-                        <div class="form-group"><label>রেফারেল কোড</label><input type="text" name="referralCode" value="${data.referralCode || ''}" ></div>
-                        <div class="form-group"><label>অ্যাফিলিয়েট ব্যালেন্স</label><input type="number" name="affiliateBalance" value="${data.affiliateBalance || 0}" ></div>
-                        <div class="form-group">
-                            <label>অ্যাক্টিভ স্ট্যাটাস (সবুজ নাম করার জন্য)</label>
-                            <select name="isManualActive">
-                                <option value="false" ${data.isManualActive === false ? 'selected' : ''}>নিষ্ক্রিয় (Inactive)</option>
-                                <option value="true" ${data.isManualActive === true ? 'selected' : ''}>সক্রিয় (Active)</option>
-                            </select>
-                        </div>
-                        <div class="form-group"><label>নতুন পাসওয়ার্ড</label><input type="text" name="password" placeholder="খালি রাখলে পাসওয়ার্ড পরিবর্তন হবে না"></div>`;
+                    case 'users': return `<div class="form-group"><label>নাম</label><input type="text" name="name" value="${data.name || ''}" ></div><div class="form-group"><label>ইমেইল (readonly)</label><input type="email" name="email" value="${data.email || ''}" readonly></div><div class="form-group"><label>মোবাইল</label><input type="text" name="mobile" value="${data.mobile || ''}" ></div><div class="form-group"><label>টাইটেল</label><input type="text" name="title" value="${data.title || ''}" ></div><div class="form-group"><label>রেফারেল কোড</label><input type="text" name="referralCode" value="${data.referralCode || ''}" ></div><div class="form-group"><label>অ্যাফিলিয়েট ব্যালেন্স</label><input type="number" name="affiliateBalance" value="${data.affiliateBalance || 0}" ></div><div class="form-group"><label>নতুন পাসওয়ার্ড</label><input type="text" name="password" placeholder="খালি রাখলে পাসওয়ার্ড পরিবর্তন হবে না"></div>`;
                     case 'trust_screenshots': return `<div class="form-group"><label>শিরোনাম</label><input type="text" name="title" value="${data.title || ''}" required></div><div class="form-group"><label>ছবির URL</label><input type="text" name="imageUrl" value="${data.imageUrl || ''}" required></div>`;
                     default: return `<div class="form-group"><label>শিরোনাম</label><input type="text" name="title" value="${data.title || ''}" required></div><div class="form-group"><label>বর্ণনা</label><textarea name="description" rows="4" required>${data.description || ''}</textarea></div>`;
                 }
@@ -2969,5 +3107,8 @@
             }
         });
     </script>
+
+
 </body>
+
 </html>
