@@ -4309,6 +4309,14 @@
 
                     snapshot.forEach(doc => {
                         const service = doc.data();
+
+                        // --- নতুন কোড শুরু: স্ট্যাটাস চেক ---
+                        // যদি স্ট্যাটাস false (বন্ধ) হয়, তবে এই সার্ভিসটি দেখাবে না
+                        if (service.status === false) {
+                            return; 
+                        }
+                        // --- নতুন কোড শেষ ---
+
                         const savedPercentage = Math.round(((service.oldPrice - service.currentPrice) / service.oldPrice) * 100);
                         const iconName = getServiceIcon(service.name);
 
