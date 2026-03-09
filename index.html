@@ -3779,7 +3779,7 @@
             }
             
             // === START: JAVASCRIPT MODIFIED FOR WHATSAPP FIELD ===
-            function handleSignup(event) {
+           function handleSignup(event) {
                 event.preventDefault();
                 const name = document.getElementById('signup-name').value;
                 const email = document.getElementById('signup-email').value;
@@ -3798,10 +3798,11 @@
                         return db.collection('users').doc(user.uid).set({
                             name: name,
                             email: email,
-                            mobile: whatsapp, // Saving whatsapp number to 'mobile' field
+                            mobile: whatsapp, 
                             dob: '',
                             title: '',
-                            photoURL: ''
+                            photoURL: '',
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp() // <-- এই লাইনটি নতুন যুক্ত করা হয়েছে
                         });
                     })
                     .then(() => {
