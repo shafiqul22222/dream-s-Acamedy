@@ -2757,22 +2757,39 @@
                 }
             }
 
-            async function renderUsers() {
+      async function renderUsers() {
                 const tableBody = document.getElementById('users-table-body');
                 tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">শিক্ষার্থীদের তালিকা লোড হচ্ছে...</td></tr>`;
 
                 try {
                     const paymentsSnapshot = await db.collection('payments').where('status', '==', 'approved').get();
                     const payingUserEmails = new Set(paymentsSnapshot.docs.map(doc => doc.data().userEmail));
+                    
+                    // ফায়ারবেস থেকে সব ডাটা আনছি (কোনো সর্টিং ছাড়া)
                     const usersSnapshot = await db.collection('users').get();
+                    
                     if (usersSnapshot.empty) {
                         tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">কোনো শিক্ষার্থী পাওয়া যায়নি।</td></tr>`;
                         return;
                     }
+
+                    // ডাটাগুলো একটি অ্যারেতে সংরক্ষণ করছি
+                    let usersArray = [];
+                    usersSnapshot.forEach(doc => {
+                        usersArray.push({ id: doc.id, ...doc.data() });
+                    });
+
+                    // জাভাস্ক্রিপ্ট দিয়ে অ্যারেটি সর্ট করছি (নতুন ইউজার আগে আসবে)
+                    usersArray.sort((a, b) => {
+                        // যদি টাইমস্ট্যাম্প থাকে তবে তার মান নিবে, না থাকলে 0 ধরবে
+                        const timeA = a.timestamp ? (a.timestamp.seconds || 0) : 0;
+                        const timeB = b.timestamp ? (b.timestamp.seconds || 0) : 0;
+                        return timeB - timeA; // Descending order (বড় থেকে ছোট)
+                    });
                     
                     let tableHTML = '';
-                    usersSnapshot.forEach(doc => {
-                        const user = { id: doc.id, ...doc.data() };
+                    // সর্ট করা অ্যারে থেকে টেবিল তৈরি করছি
+                    usersArray.forEach(user => {
                         const hasPurchased = payingUserEmails.has(user.email);
                         const statusClass = hasPurchased ? 'student-active-indicator' : 'student-inactive-indicator';
                         const statusTitle = hasPurchased ? 'এই শিক্ষার্থী একটি সার্ভিস/কোর্স কিনেছেন।' : 'এই শিক্ষার্থী এখনো কোনো সার্ভিস/কোর্স কিনেননি।';
