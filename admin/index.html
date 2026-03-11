@@ -2637,6 +2637,15 @@
                     await paymentDocRef.update(updateData);
                     showToast('স্ট্যাটাস সফলভাবে আপডেট করা হয়েছে!');
                     
+                    // --- নতুন যুক্ত করা অংশ: Approved হলে অটো হোয়াটসঅ্যাপ রিসিট উইন্ডো ওপেন হবে ---
+                    if (newStatus === 'approved') {
+                        // পপ-আপ ব্লকার এড়াতে এবং ডাটাবেস ঠিকমত রিফ্রেশ হওয়ার জন্য সামান্য সময় (৫০০ms) নেওয়া হলো
+                        setTimeout(() => {
+                            window.sendWhatsAppReceipt(docId);
+                        }, 500); 
+                    }
+                    // --- নতুন যুক্ত করা অংশ শেষ ---
+
                     const activeFilter = document.querySelector('#payment-filter-buttons .filter-btn.active').dataset.filter;
                     renderPayments(activeFilter === 'all' ? null : activeFilter);
                     renderDashboard();
