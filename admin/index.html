@@ -6,13 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dream's Academy - অ্যাডমিন প্যানেল (Updated)</title>
     <link rel="icon" type="image/png" href="https://i.ibb.co/JqgWkCg/placeholder.png">
-    <!-- Google Fonts: Hind Siluri for Bengali -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Google Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    <!-- Chart.js for Reports -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
@@ -789,7 +786,6 @@
 
     <div id="toast-container"></div>
 
-    <!-- ======================= Login Page ======================= -->
     <div id="login-page">
         <div class="login-box">
             <h2>অ্যাডমিন লগইন</h2>
@@ -807,15 +803,12 @@
         </div>
     </div>
 
-    <!-- ======================= Admin Panel ======================= -->
     <div id="admin-panel" class="hidden">
-        <!-- Mobile Header -->
         <header class="mobile-header">
             <button id="mobile-menu-btn" class="material-symbols-outlined">menu</button>
             <span id="mobile-page-title">ড্যাশবোর্ড</span>
         </header>
 
-        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">Dream's Academy</div>
             <ul class="sidebar-nav">
@@ -835,18 +828,18 @@
                 <li data-page="notices-page"><a href="#"><span class="material-symbols-outlined">campaign</span> নোটিশবোর্ড ম্যানেজ</a></li>
                 <li data-page="trust-screenshots-page"><a href="#"><span class="material-symbols-outlined">verified</span> ট্রাস্ট স্ক্রিনশট</a></li>
                 <li data-page="join-class-page"><a href="#"><span class="material-symbols-outlined">video_call</span> ক্লাস জয়েনিং</a></li>
+                
+                <li data-page="online-classes-page"><a href="#"><span class="material-symbols-outlined">video_camera_front</span> অনলাইন ক্লাস</a></li>
+
                 <li data-page="withdrawals-page"><a href="#"><span class="material-symbols-outlined">paid</span> উত্তোলন</a></li>
                 <li data-page="settings-page"><a href="#"><span class="material-symbols-outlined">settings</span> ওয়েবসাইট সেটিংস</a></li>
             </ul>
             <button class="logout-btn" id="logout-btn"><span class="material-symbols-outlined">logout</span> লগ আউট</button>
         </aside>
 
-        <!-- Overlay for mobile menu -->
         <div id="overlay" class="hidden"></div>
 
-        <!-- Main Content -->
         <main class="main-content">
-            <!-- Dashboard Page -->
             <div id="dashboard-page" class="page active">
                 <div class="page-header">
                     <h1>ড্যাশবোর্ড</h1>
@@ -858,7 +851,6 @@
                             <p>পেন্ডিং পেমেন্ট</p>
                         </div>
                     </div>
-                    <!-- NEW: Pending Dollar Requests Card -->
                     <div id="pending-dollar-requests-card" class="stat-card pending-card"><span class="material-symbols-outlined icon">currency_exchange</span>
                         <div>
                             <h3 id="pending-dollar-requests">0</h3>
@@ -923,7 +915,6 @@
                 </div>
             </div>
 
-            <!-- Reports Page -->
             <div id="reports-page" class="page">
                 <div class="page-header">
                     <h1>বিক্রয় এবং লাভের রিপোর্ট</h1>
@@ -955,7 +946,6 @@
                 </div>
             </div>
 
-            <!-- Payments Page -->
             <div id="payments-page" class="page">
                 <div class="page-header">
                     <h1>পেমেন্ট ম্যানেজমেন্ট</h1>
@@ -988,7 +978,6 @@
                 </div>
             </div>
 
-            <!-- Payment Gateways Page -->
             <div id="payment-gateways-page" class="page">
                 <div class="page-header">
                     <h1>পেমেন্ট গেটওয়ে ম্যানেজমেন্ট</h1><button class="btn btn-add" onclick="openModalForAdd('payment_gateways')"><span class="material-symbols-outlined">add</span> নতুন গেটওয়ে</button>
@@ -1009,7 +998,6 @@
                 </div>
             </div>
 
-            <!-- Manual Sale Page -->
             <div id="manual-sale-page" class="page">
                 <div class="page-header">
                     <h1>ম্যানুয়াল সেলস যোগ করুন</h1>
@@ -1028,13 +1016,11 @@
                 </div>
             </div>
 
-            <!-- Dollar Exchange Page (Modified) -->
             <div id="dollar-exchange-page" class="page">
                 <div class="page-header">
                     <h1>ডলার ক্রয়/বিক্রয় এবং রিকুয়েস্ট</h1>
                 </div>
 
-                <!-- START: NEW DOLLAR RATE SETTINGS SECTION -->
                 <div class="content-box" style="margin-bottom: 30px; border-left: 5px solid var(--accent-yellow);">
                     <h3 style="margin-bottom: 20px; color: var(--primary-blue);">বর্তমান ডলার রেট সেট করুন</h3>
                     <form id="dollar-rate-settings-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; align-items: end;">
@@ -1055,9 +1041,6 @@
                         </button>
                     </form>
                 </div>
-                <!-- END: NEW DOLLAR RATE SETTINGS SECTION -->
-                
-                <!-- Manual Entry Section -->
                 <div class="content-box">
                     <p style="margin-bottom: 20px; font-size: 0.9em; color: #6c757d;">এখানে ডলার ক্রয় বা বিক্রয় সংক্রান্ত লেনদেন *ম্যানুয়ালি* যোগ করুন।</p>
                     <form id="dollar-exchange-form">
@@ -1072,7 +1055,6 @@
                     </form>
                 </div>
 
-                <!-- NEW: User Request Section -->
                 <div class="content-box" style="margin-top: 30px;">
                     <h3 style="margin-bottom: 20px; color: var(--primary-blue);">ইউজার ডলার সেল রিকুয়েস্ট</h3>
                     <table class="data-table">
@@ -1094,7 +1076,6 @@
                 </div>
             </div>
 
-            <!-- User Management Page -->
             <div id="users-page" class="page">
                 <div class="page-header">
                     <h1>শিক্ষার্থী ম্যানেজমেন্ট</h1>
@@ -1117,7 +1098,6 @@
                 </div>
             </div>
 
-            <!-- Services Page -->
             <div id="services-page" class="page">
                 <div class="page-header">
                     <h1>সার্ভিস ম্যানেজমেন্ট</h1><button class="btn btn-add" onclick="openModalForAdd('services')"><span class="material-symbols-outlined">add</span> নতুন সার্ভিস</button>
@@ -1130,7 +1110,7 @@
                                 <th>ক্রয়মূল্য</th>
                                 <th>বর্তমান মূল্য</th>
                                 <th>কমিশন</th>
-                                <th>স্ট্যাটাস</th> <!-- এই লাইনটি নতুন যোগ করুন -->
+                                <th>স্ট্যাটাস</th>
                                 <th>অ্যাকশন</th>
                             </tr>
                         </thead>
@@ -1139,7 +1119,6 @@
                 </div>
             </div>
 
-            <!-- Service Stock Page -->
             <div id="service-stock-page" class="page">
                 <div class="page-header">
                     <h1>সার্ভিস স্টক ম্যানেজমেন্ট</h1>
@@ -1181,7 +1160,6 @@
                 </div>
             </div>
 
-            <!-- Send Service Page -->
             <div id="send-service-page" class="page">
                 <div class="page-header">
                     <h1>হোয়াটসঅ্যাপে সার্ভিস পাঠান</h1>
@@ -1199,7 +1177,6 @@
                 </div>
             </div>
 
-            <!-- Courses Page -->
             <div id="courses-page" class="page">
                 <div class="page-header">
                     <h1>কোর্স ম্যানেজমেন্ট</h1><button class="btn btn-add" onclick="openModalForAdd('courses')"><span class="material-symbols-outlined">add</span> নতুন কোর্স</button>
@@ -1220,7 +1197,6 @@
                 </div>
             </div>
 
-            <!-- Enrollments Page -->
             <div id="enrollments-page" class="page">
                 <div class="page-header">
                     <h1>কোর্স এনরোলমেন্ট</h1><button class="btn btn-add" onclick="openModalForAdd('enrollments')"><span class="material-symbols-outlined">add</span> নতুন এনরোলমেন্ট</button>
@@ -1240,7 +1216,6 @@
                 </div>
             </div>
 
-            <!-- Curriculum Page -->
             <div id="curriculum-page" class="page">
                 <div class="page-header">
                     <h1>কারিকুলাম ম্যানেজমেন্ট</h1><button class="btn btn-add" onclick="openModalForAdd('curriculum')"><span class="material-symbols-outlined">add</span> নতুন কারিকুলাম</button>
@@ -1260,7 +1235,6 @@
                 </div>
             </div>
 
-            <!-- Notices Page -->
             <div id="notices-page" class="page">
                 <div class="page-header">
                     <h1>নোটিশবোর্ড ম্যানেজমেন্ট</h1><button class="btn btn-add" onclick="openModalForAdd('notices')"><span class="material-symbols-outlined">add</span> নতুন নোটিশ</button>
@@ -1279,7 +1253,6 @@
                 </div>
             </div>
 
-            <!-- Trust Screenshots Page -->
             <div id="trust-screenshots-page" class="page">
                 <div class="page-header">
                     <h1>ট্রাস্ট স্ক্রিনশট ম্যানেজমেন্ট</h1><button class="btn btn-add" onclick="openModalForAdd('trust_screenshots')"><span class="material-symbols-outlined">add</span> নতুন স্ক্রিনশট</button>
@@ -1298,7 +1271,6 @@
                 </div>
             </div>
 
-            <!-- Join Class Page -->
             <div id="join-class-page" class="page">
                 <div class="page-header">
                     <h1>ক্লাস জয়েনিং ম্যানেজমেন্ট</h1><button class="btn btn-add" onclick="openModalForAdd('joinClass')"><span class="material-symbols-outlined">add</span> নতুন ক্লাস লিঙ্ক</button>
@@ -1320,7 +1292,30 @@
                 </div>
             </div>
 
-            <!-- Withdrawal Requests Page -->
+            <div id="online-classes-page" class="page">
+                <div class="page-header">
+                    <h1>অনলাইন ক্লাস ম্যানেজমেন্ট</h1>
+                    <button class="btn btn-add" onclick="openModalForAdd('online_classes')">
+                        <span class="material-symbols-outlined">add</span> নতুন ব্যাচ
+                    </button>
+                </div>
+                <div class="content-box">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ব্যাচ নং</th>
+                                <th>শিক্ষার্থী সংখ্যা</th>
+                                <th>মোট বিল</th>
+                                <th>পেইড বিল</th>
+                                <th>বাকি বিল</th>
+                                <th>ক্লাস শিডিউল (৪টি)</th>
+                                <th>অ্যাকশন</th>
+                            </tr>
+                        </thead>
+                        <tbody id="online-classes-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
             <div id="withdrawals-page" class="page">
                 <div class="page-header">
                     <h1>উত্তোলনের অনুরোধ সমূহ</h1>
@@ -1343,7 +1338,6 @@
                 </div>
             </div>
 
-            <!-- Settings Page -->
             <div id="settings-page" class="page">
                 <div class="page-header">
                     <h1>ওয়েবসাইট সেটিংস</h1>
@@ -1370,7 +1364,6 @@
                         <button type="submit" class="btn btn-primary" style="width: auto; justify-content: flex-start;">সেটিংস সেভ করুন</button>
                     </form>
                     
-                    <!-- NEW CONTACT SECTION SETTINGS -->
                     <hr style="margin: 30px 0;">
                     <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">যোগাযোগ সেকশন ইমেজ</h3>
                     <form id="contact-us-settings-form">
@@ -1379,7 +1372,6 @@
                         <button type="submit" class="btn btn-primary" style="width: auto; justify-content: flex-start;">ইমেজ সেভ করুন</button>
                     </form>
                     
-                    <!-- === START: NEW FLOATING CHAT BUTTON SETTINGS === -->
                     <hr style="margin: 30px 0;">
                     <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">ফ্লোটিং চ্যাট বাটন ইমেজ</h3>
                     <form id="chat-icon-settings-form">
@@ -1393,8 +1385,6 @@
                         </div>
                         <button type="submit" class="btn btn-primary" style="width: auto; justify-content: flex-start;">আইকন সেভ করুন</button>
                     </form>
-                    <!-- === END: NEW FLOATING CHAT BUTTON SETTINGS === -->
-
                     <hr style="margin: 30px 0;">
                     <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Social Media Setup</h3>
                     <form id="social-media-form">
@@ -1408,7 +1398,6 @@
         </main>
     </div>
 
-    <!-- ======================= Modal for Add/Edit ======================= -->
     <div id="admin-modal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
@@ -1419,7 +1408,6 @@
         </div>
     </div>
 
-    <!-- Firebase SDKs (Compatibility Version) -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
@@ -1632,11 +1620,12 @@
 
                 sidebarLinks.forEach(l => l.classList.remove('active'));
                 const activeLink = document.querySelector(`.sidebar-nav li[data-page="${pageId}"]`);
-                activeLink.classList.add('active');
-
-                if (mobilePageTitle && activeLink) {
-                    const linkAnchor = activeLink.querySelector('a');
-                    mobilePageTitle.textContent = linkAnchor.childNodes[linkAnchor.childNodes.length - 1].textContent.trim();
+                if(activeLink) {
+                    activeLink.classList.add('active');
+                    if (mobilePageTitle) {
+                        const linkAnchor = activeLink.querySelector('a');
+                        mobilePageTitle.textContent = linkAnchor.childNodes[linkAnchor.childNodes.length - 1].textContent.trim();
+                    }
                 }
 
                 if (window.innerWidth <= 768) {
@@ -1661,9 +1650,8 @@
                         renderManualSalePage();
                         break;
                     case 'dollar-exchange-page':
-                        renderDollarRatesSettings(); // NEW: Render Rate Settings
-                        // renderDollarExchangePage(); // Manual Entry Logic if needed separately
-                        renderDollarSellRequests(); // NEW Function for User Requests
+                        renderDollarRatesSettings(); 
+                        renderDollarSellRequests(); 
                         break;
                     case 'users-page':
                         renderUsers();
@@ -1695,6 +1683,9 @@
                     case 'join-class-page':
                         renderJoinClass();
                         break;
+                    case 'online-classes-page': // NEW ADDITION
+                        renderOnlineClasses();
+                        break;
                     case 'withdrawals-page':
                         renderWithdrawals();
                         break;
@@ -1724,7 +1715,6 @@
                     const paymentsSnapshot = await db.collection('payments').get();
                     const dollarExchangeSnapshot = await db.collection('dollar_exchange').get();
                     
-                    // NEW: Fetch pending dollar requests
                     const dollarRequestsSnapshot = await db.collection('dollar_sells').where('status', '==', 'pending').get();
 
                     let totalSales = 0, currentMonthSales = 0, totalProfit = 0, currentMonthProfit = 0, pendingPaymentsCount = 0;
@@ -1764,7 +1754,6 @@
                     document.getElementById('current-month-profit').textContent = `৳${currentMonthProfit.toLocaleString('bn-BD')}`;
                     document.getElementById('pending-payments').textContent = pendingPaymentsCount;
                     
-                    // NEW: Update Pending Dollar Request Count
                     document.getElementById('pending-dollar-requests').textContent = dollarRequestsSnapshot.size;
                     
                     document.getElementById('total-students').textContent = usersSnapshot.size;
@@ -1897,7 +1886,6 @@
                 tableBody.innerHTML = tableHTML;
             }
 
-            // --- NEW: Dollar Rate Settings Logic ---
             async function renderDollarRatesSettings() {
                 try {
                     const doc = await db.collection('site_settings').doc('dollar_rates').get();
@@ -1941,7 +1929,6 @@
                 });
             }
 
-            // --- NEW: Render User Dollar Sell Requests ---
             async function renderDollarSellRequests() {
                 const tableBody = document.getElementById('dollar-sell-requests-body');
                 if (!tableBody) return;
@@ -1949,7 +1936,6 @@
                 tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">লোডিং...</td></tr>';
 
                 try {
-                    // Fetch from 'dollar_sells' collection, ordered by timestamp descending (serial)
                     const snapshot = await db.collection('dollar_sells')
                                              .orderBy('timestamp', 'desc')
                                              .get();
@@ -1965,7 +1951,6 @@
                         const id = doc.id;
                         const statusClass = (data.status || 'pending').toLowerCase();
                         
-                        // Modified Card Link Logic for Copy Feature
                         let cardLinkDisplay = 'N/A';
                         if (data.cardLink) {
                             cardLinkDisplay = `
@@ -2015,10 +2000,8 @@
                 }
             }
 
-            // === আপডেটেড ডলার সেল স্ট্যাটাস (নোটিফিকেশন সহ) ===
             window.updateDollarSellStatus = async (id, newStatus) => {
                 try {
-                    // প্রথমে ডকুমেন্টটি রিড করতে হবে userId পাওয়ার জন্য
                     const docRef = db.collection('dollar_sells').doc(id);
                     const docSnap = await docRef.get();
                     
@@ -2029,7 +2012,6 @@
                         status: newStatus
                     });
 
-                    // নোটিফিকেশন পাঠানো
                     if(data.userId) {
                         let title = 'ডলার সেল আপডেট';
                         let msg = '';
@@ -2063,16 +2045,12 @@
             };
 
 
-// --- Manual Sale Page Logic (Calculation + Saving) ---
-            
-            // ১. পেজ রেন্ডার এবং হিসাবের লজিক
             async function renderManualSalePage() {
                 const itemSelect = document.getElementById('manual-item-selection');
                 const quantityInput = document.getElementById('manual-quantity');
                 const saleInput = document.getElementById('manual-sale-amount');
                 const profitInput = document.getElementById('manual-profit-amount');
                 
-                // ডিবাগ ইনফো বক্স (হিসাব দেখার জন্য)
                 let debugInfo = document.getElementById('calc-debug-info');
                 if (!debugInfo) {
                     debugInfo = document.createElement('div');
@@ -2084,11 +2062,10 @@
                     debugInfo.style.borderRadius = '5px';
                     debugInfo.style.fontSize = '0.9em';
                     debugInfo.style.color = '#856404';
-                    debugInfo.style.display = 'none'; // প্রথমে লুকানো থাকবে
+                    debugInfo.style.display = 'none'; 
                     document.getElementById('manual-sale-form').appendChild(debugInfo);
                 }
 
-                // ইনপুট রিসেট
                 itemSelect.innerHTML = '<option value="">লোড হচ্ছে...</option>';
                 quantityInput.value = 1;
                 saleInput.value = '';
@@ -2117,7 +2094,6 @@
 
                     itemSelect.innerHTML = optionsHTML;
 
-                    // হিসাব করার ফাংশন
                     function calculateProfit() {
                         const selectedOption = itemSelect.options[itemSelect.selectedIndex];
                         if (!selectedOption || selectedOption.disabled) return;
@@ -2126,17 +2102,14 @@
                         const quantity = parseFloat(quantityInput.value) || 0;
                         const totalSales = parseFloat(saleInput.value) || 0;
 
-                        // মোট খরচ
                         const totalCost = unitBuyPrice * quantity;
                         
-                        // লাভ বসানো
                         if (saleInput.value.trim() !== "") {
                             profitInput.value = totalSales - totalCost;
                         } else {
                             profitInput.value = '';
                         }
 
-                        // ডিবাগ ইনফো দেখানো
                         debugInfo.style.display = 'block';
                         debugInfo.innerHTML = `
                             <strong>হিসাব বিবরণ:</strong><br>
@@ -2145,7 +2118,6 @@
                         `;
                     }
 
-                    // ইভেন্ট লিসেনার
                     itemSelect.onchange = calculateProfit;
                     quantityInput.oninput = calculateProfit;
                     saleInput.oninput = calculateProfit;
@@ -2156,13 +2128,10 @@
                 }
             }
 
-            // ২. ডাটাবেসে সেভ করার লজিক (Submission Logic)
             const manualSaleForm = document.getElementById('manual-sale-form');
             if (manualSaleForm) {
-                // আগের লিসেনার মুছে ফেলা সম্ভব না, তাই আমরা নতুন করে হ্যান্ডল করছি
-                // এটি নিশ্চিত করবে যে সাবমিট বাটন কাজ করছে
                 manualSaleForm.onsubmit = async (e) => {
-                    e.preventDefault(); // পেজ রিলোড বন্ধ করা
+                    e.preventDefault(); 
 
                     const btn = manualSaleForm.querySelector('button[type="submit"]');
                     const itemSelect = document.getElementById('manual-item-selection');
@@ -2171,44 +2140,38 @@
                     const saleAmount = Number(document.getElementById('manual-sale-amount').value);
                     const profitAmount = Number(document.getElementById('manual-profit-amount').value);
                     
-                    // ভ্যালিডেশন চেক
                     if (!itemName || quantity <= 0 || document.getElementById('manual-sale-amount').value.trim() === '') {
                         showToast("অনুগ্রহ করে আইটেম, পরিমাণ এবং সেলস এর পরিমাণ সঠিক ভাবে দিন।", "error");
                         return;
                     }
                     
-                    // বাটন ডিজেবল করা (যাতে ডাবল ক্লিক না হয়)
                     const originalBtnText = btn.innerHTML;
                     btn.disabled = true;
                     btn.innerHTML = `<span class="material-symbols-outlined">sync</span> সেভ হচ্ছে...`;
                     
                     try {
-                        // ডাটাবেসে পাঠানো
                         await db.collection('payments').add({
-                            itemName: `${itemName} (x${quantity})`, // নামের সাথে পরিমাণ
+                            itemName: `${itemName} (x${quantity})`,
                             amount: saleAmount,
                             profit: profitAmount,
                             status: 'approved',
                             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                             transactionId: 'manual_entry',
-                            userEmail: 'admin@manual.sale' // ম্যানুয়াল সেলের জন্য ডামি ইমেইল
+                            userEmail: 'admin@manual.sale'
                         });
 
                         showToast('সেলস সফলভাবে যোগ করা হয়েছে!', 'success');
                         
-                        // ফর্ম রিসেট
                         manualSaleForm.reset();
                         document.getElementById('manual-item-selection').value = "";
                         document.getElementById('calc-debug-info').style.display = 'none';
                         
-                        // ড্যাশবোর্ড আপডেট করা
                         renderDashboard();
 
                     } catch (error) {
                         console.error("Error adding manual sale:", error);
                         showToast(`সমস্যা হয়েছে: ${error.message}`, "error");
                     } finally {
-                        // বাটন আবার সচল করা
                         btn.disabled = false;
                         btn.innerHTML = originalBtnText;
                     }
@@ -2259,7 +2222,6 @@
                 });
             }
 
-            // --- Service Stock Page ---
             async function renderServiceStock() {
                 const selectionDropdown = document.getElementById('stock-service-selection');
                 selectionDropdown.innerHTML = '<option value="">লোড হচ্ছে...</option>';
@@ -2330,8 +2292,6 @@
                 });
             }
 
-
-            // --- Send Service Page ---
             async function renderSendServicePage() {
                 serviceSelection.innerHTML = '<option value="">তালিকা লোড হচ্ছে...</option>';
                 try {
@@ -2401,7 +2361,6 @@
                 window.open(whatsappUrl, '_blank');
             });
 
-            // --- Settings ---
             async function renderSettings() {
                 try {
                     const heroDoc = await db.collection('site_settings').doc('hero_section').get();
@@ -2420,14 +2379,12 @@
                         document.getElementById('about-us-image-preview').src = aboutUsDoc.data().imageUrl;
                     }
                     
-                    // NEW: Load Contact Us Image
                     const contactUsDoc = await db.collection('site_settings').doc('contact_section').get();
                     if (contactUsDoc.exists && contactUsDoc.data().imageUrl) {
                         document.getElementById('contact-us-image-url').value = contactUsDoc.data().imageUrl;
                         document.getElementById('contact-us-image-preview').src = contactUsDoc.data().imageUrl;
                     }
                     
-                    // === NEW: Load Floating Chat Icon ===
                     const chatDoc = await db.collection('site_settings').doc('floating_chat').get();
                     if (chatDoc.exists && chatDoc.data().imageUrl) {
                         document.getElementById('chat-icon-image-url').value = chatDoc.data().imageUrl;
@@ -2503,7 +2460,6 @@
                 }
             });
             
-            // NEW: Handle Contact Us Settings Submit
             contactUsSettingsForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const newUrl = document.getElementById('contact-us-image-url').value;
@@ -2525,7 +2481,6 @@
                 }
             });
             
-            // === NEW: Handle Chat Icon Settings Submit ===
             chatIconSettingsForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const newUrl = document.getElementById('chat-icon-image-url').value;
@@ -2585,9 +2540,6 @@
                 }
             });
 
-            // --- CRUD Operations ---
-            
-            // === আপডেটেড পেমেন্ট স্ট্যাটাস ফাংশন (নোটিফিকেশন সহ) ===
             window.updatePaymentStatus = async (docId, newStatus) => {
                 try {
                     const paymentDocRef = db.collection('payments').doc(docId);
@@ -2597,7 +2549,6 @@
                     const paymentData = paymentDoc.data();
                     let updateData = { status: newStatus };
 
-                    // লাভের হিসাব (অপরিবর্তিত)
                     if (newStatus === 'approved') {
                         const serviceQuery = await db.collection('services').where('name', '==', paymentData.itemName).limit(1).get();
                         if (!serviceQuery.empty) {
@@ -2607,21 +2558,19 @@
                             updateData.profit = Number(paymentData.amount) || 0;
                         }
 
-                        // === নতুন: নির্দিষ্ট স্টুডেন্টকে নোটিফিকেশন পাঠানো ===
                         if (paymentData.userId) {
                             await db.collection('notifications').add({
-                                targetUid: paymentData.userId, // শুধুমাত্র এই ইউজার দেখবে
+                                targetUid: paymentData.userId, 
                                 title: 'পেমেন্ট অনুমোদিত',
                                 message: `আপনার ${paymentData.itemName}-এর জন্য ${paymentData.amount} টাকার পেমেন্ট সফলভাবে ভেরিফাই করা হয়েছে।`,
                                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                                type: 'payment_success', // আইকনের জন্য টাইপ
+                                type: 'payment_success', 
                                 read: false
                             });
                         }
                     } else if (newStatus === 'rejected') {
                          updateData.profit = firebase.firestore.FieldValue.delete();
                          
-                         // রিজেক্ট হলে নোটিফিকেশন
                          if (paymentData.userId) {
                             await db.collection('notifications').add({
                                 targetUid: paymentData.userId,
@@ -2637,14 +2586,11 @@
                     await paymentDocRef.update(updateData);
                     showToast('স্ট্যাটাস সফলভাবে আপডেট করা হয়েছে!');
                     
-                    // --- নতুন যুক্ত করা অংশ: Approved হলে অটো হোয়াটসঅ্যাপ রিসিট উইন্ডো ওপেন হবে ---
                     if (newStatus === 'approved') {
-                        // পপ-আপ ব্লকার এড়াতে এবং ডাটাবেস ঠিকমত রিফ্রেশ হওয়ার জন্য সামান্য সময় (৫০০ms) নেওয়া হলো
                         setTimeout(() => {
                             window.sendWhatsAppReceipt(docId);
                         }, 500); 
                     }
-                    // --- নতুন যুক্ত করা অংশ শেষ ---
 
                     const activeFilter = document.querySelector('#payment-filter-buttons .filter-btn.active').dataset.filter;
                     renderPayments(activeFilter === 'all' ? null : activeFilter);
@@ -2736,7 +2682,6 @@
                         const profit = (payment.status === 'approved' && payment.profit != null) ? `৳ ${payment.profit}` : 'N/A';
                         const whatsappBtn = (payment.status === 'approved' && payment.userEmail !== 'admin@manual.sale') ? `<button class="btn-whatsapp" onclick="sendWhatsAppReceipt('${payment.id}')" title="Send WhatsApp Receipt"><span class="material-symbols-outlined">send</span></button>` : '';
                         
-                        // UPDATED: Changed Select to trigger updatePaymentStatus onchange, removed Save button
                         tableHTML += `<tr>
                             <td data-label="ইমেইল">${payment.userEmail}</td>
                             <td data-label="কোর্স/সার্ভিস">${payment.itemName}</td>
@@ -2766,7 +2711,7 @@
                 }
             }
 
-      async function renderUsers() {
+            async function renderUsers() {
                 const tableBody = document.getElementById('users-table-body');
                 tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">শিক্ষার্থীদের তালিকা লোড হচ্ছে...</td></tr>`;
 
@@ -2774,7 +2719,6 @@
                     const paymentsSnapshot = await db.collection('payments').where('status', '==', 'approved').get();
                     const payingUserEmails = new Set(paymentsSnapshot.docs.map(doc => doc.data().userEmail));
                     
-                    // ফায়ারবেস থেকে সব ডাটা আনছি (কোনো সর্টিং ছাড়া)
                     const usersSnapshot = await db.collection('users').get();
                     
                     if (usersSnapshot.empty) {
@@ -2782,22 +2726,18 @@
                         return;
                     }
 
-                    // ডাটাগুলো একটি অ্যারেতে সংরক্ষণ করছি
                     let usersArray = [];
                     usersSnapshot.forEach(doc => {
                         usersArray.push({ id: doc.id, ...doc.data() });
                     });
 
-                    // জাভাস্ক্রিপ্ট দিয়ে অ্যারেটি সর্ট করছি (নতুন ইউজার আগে আসবে)
                     usersArray.sort((a, b) => {
-                        // যদি টাইমস্ট্যাম্প থাকে তবে তার মান নিবে, না থাকলে 0 ধরবে
                         const timeA = a.timestamp ? (a.timestamp.seconds || 0) : 0;
                         const timeB = b.timestamp ? (b.timestamp.seconds || 0) : 0;
-                        return timeB - timeA; // Descending order (বড় থেকে ছোট)
+                        return timeB - timeA; 
                     });
                     
                     let tableHTML = '';
-                    // সর্ট করা অ্যারে থেকে টেবিল তৈরি করছি
                     usersArray.forEach(user => {
                         const hasPurchased = payingUserEmails.has(user.email);
                         const statusClass = hasPurchased ? 'student-active-indicator' : 'student-inactive-indicator';
@@ -2812,28 +2752,23 @@
                 }
             }
 
-            // --- Service Status Update Function ---
             window.updateServiceStatus = async (docId, isChecked) => {
                 try {
-                    // ডাটাবেসে স্ট্যাটাস আপডেট করা
                     await db.collection('services').doc(docId).update({ status: isChecked });
                     
                     if (isChecked) {
                         showToast('সার্ভিসটি সফলভাবে চালু (Active) করা হয়েছে।', 'success');
                     } else {
-                        showToast('সার্ভিসটি বন্ধ (Inactive) করা হয়েছে।', 'success'); // বা warning কালার দিতে পারেন
+                        showToast('সার্ভিসটি বন্ধ (Inactive) করা হয়েছে।', 'success'); 
                     }
                 } catch (error) {
                     console.error("Error updating service status:", error);
                     showToast('স্ট্যাটাস আপডেট করতে সমস্যা হয়েছে।', 'error');
-                    // এরর হলে পেজ রিলোড করে আগের অবস্থায় ফিরিয়ে আনা
                     renderServices();
                 }
             };
 
-            // --- Updated Render Services Function with Toggle Switch ---
             const renderServices = () => renderGeneric('services', 'services-table-body', (service) => {
-                // যদি ডাটাবেসে status ফিল্ড না থাকে, তবে ডিফল্টভাবে 'চালু' (true) ধরবে
                 const isActive = service.status !== false; 
                 
                 return `
@@ -2843,7 +2778,6 @@
                     <td data-label="বর্তমান মূল্য">৳ ${service.currentPrice}</td>
                     <td data-label="কমিশন">৳ ${service.commission || 0}</td>
                     
-                    <!-- স্ট্যাটাস টগল সুইচ -->
                     <td data-label="স্ট্যাটাস">
                         <label class="switch">
                             <input type="checkbox" onchange="updateServiceStatus('${service.id}', this.checked)" ${isActive ? 'checked' : ''}>
@@ -2863,6 +2797,32 @@
             const renderNotices = () => renderGeneric('notices', 'notices-table-body', (notice) => `<tr><td data-label="শিরোনাম">${notice.title}</td><td data-label="বর্ণনা">${(notice.description || '').substring(0, 50)}...</td><td class="actions-cell" data-label="অ্যাকশন"><button class="btn-edit" onclick="openModalForEdit('notices', '${notice.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('notices', '${notice.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderTrustScreenshots = () => renderGeneric('trust_screenshots', 'trust-screenshots-table-body', (item) => `<tr><td data-label="শিরোনাম">${item.title}</td><td data-label="ছবি"><img src="${item.imageUrl}" alt="${item.title}" class="table-image-preview"></td><td class="actions-cell" data-label="অ্যাকশন"><button class="btn-edit" onclick="openModalForEdit('trust_screenshots', '${item.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('trust_screenshots', '${item.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderJoinClass = () => renderGeneric('joinClass', 'join-class-table-body', (item) => `<tr><td data-label="কোর্সের নাম">${item.courseName}</td><td data-label="ব্যাচ নং">${item.batch || 'N/A'}</td><td data-label="টপিক">${item.topic || 'N/A'}</td><td data-label="লিঙ্ক"><a href="${item.link}" target="_blank">ক্লাস লিঙ্ক</a></td><td data-label="সময়">${item.dateTime ? new Date(item.dateTime.seconds * 1000).toLocaleString('bn-BD') : 'N/A'}</td><td class="actions-cell" data-label="অ্যাকশন"><button class="btn-edit" onclick="openModalForEdit('joinClass', '${item.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('joinClass', '${item.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            
+            // --- NEW: Render Online Classes ---
+            const renderOnlineClasses = () => renderGeneric('online_classes', 'online-classes-table-body', (item) => {
+                const dueBill = (Number(item.totalBill) || 0) - (Number(item.paidBill) || 0);
+                const scheduleHTML = `
+                    <div style="font-size: 0.85em; color: #555; text-align: left;">
+                        <div style="margin-bottom: 3px;"><strong>১:</strong> ${item.class1 || 'N/A'}</div>
+                        <div style="margin-bottom: 3px;"><strong>২:</strong> ${item.class2 || 'N/A'}</div>
+                        <div style="margin-bottom: 3px;"><strong>৩:</strong> ${item.class3 || 'N/A'}</div>
+                        <div><strong>৪:</strong> ${item.class4 || 'N/A'}</div>
+                    </div>
+                `;
+                return `<tr>
+                    <td data-label="ব্যাচ নং">${item.batchNumber}</td>
+                    <td data-label="শিক্ষার্থী সংখ্যা">${item.studentCount} জন</td>
+                    <td data-label="মোট বিল">৳ ${item.totalBill}</td>
+                    <td data-label="পেইড বিল">৳ ${item.paidBill}</td>
+                    <td data-label="বাকি বিল" style="color: ${dueBill > 0 ? 'var(--accent-red)' : 'var(--accent-green)'}; font-weight: bold;">৳ ${dueBill}</td>
+                    <td data-label="ক্লাস শিডিউল">${scheduleHTML}</td>
+                    <td class="actions-cell" data-label="অ্যাকশন">
+                        <button class="btn-edit" onclick="openModalForEdit('online_classes', '${item.id}')"><span class="material-symbols-outlined">edit</span></button>
+                        <button class="btn-delete" onclick="deleteItem('online_classes', '${item.id}')"><span class="material-symbols-outlined">delete</span></button>
+                    </td>
+                </tr>`;
+            });
+
             const renderWithdrawals = () => renderGeneric('withdrawals', 'withdrawals-table-body', (req) => {
                 const statusClass = (req.status || 'pending').toLowerCase();
                 return `<tr><td data-label="ইমেইল">${req.userEmail}</td><td data-label="পরিমাণ">৳ ${req.amount.toLocaleString('bn-BD')}</td><td data-label="মাধ্যম">${req.method}</td><td data-label="অ্যাকাউন্ট নম্বর">${req.accountNumber}</td><td data-label="অনুরোধের তারিখ">${req.requestDate ? new Date(req.requestDate.seconds * 1000).toLocaleString('bn-BD') : 'N/A'}</td><td data-label="স্ট্যাটাস"><span class="status-badge ${statusClass}">${req.status}</span></td><td class="actions-cell" data-label="অ্যাকশন"><select class="status-select" id="withdraw-status-${req.id}"><option value="pending" ${req.status === 'pending' ? 'selected' : ''}>Pending</option><option value="paid" ${req.status === 'paid' ? 'selected' : ''}>Paid</option></select><button class="btn btn-save-status" onclick="updateWithdrawalStatus('${req.id}', '${req.userId}', ${req.amount})">Save</button><button class="btn-edit" onclick="openModalForEdit('withdrawals', '${req.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('withdrawals', '${req.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
@@ -3000,7 +2960,7 @@
                         await db.collection(collection).doc(id).delete();
                         showToast('সফলভাবে ডিলিট করা হয়েছে।');
                         const activePage = document.querySelector('.page.active').id;
-                        navigateTo(activePage); // Refresh current page
+                        navigateTo(activePage); 
                         if (collection !== 'service_stock') renderDashboard();
                     } catch (error) {
                         console.error("Error deleting item:", error);
@@ -3035,9 +2995,8 @@
                             const courseDetails = courseDoc.docs[0].data();
                             newItem = { studentUid, studentEmail, courseName, batch, enrollmentDate: new Date(), courseImage: courseDetails.image || '', courseCategory: courseDetails.category || '' };
                             
-                            // === নতুন: এনরোলমেন্টের পর নির্দিষ্ট স্টুডেন্টকে নোটিফিকেশন ===
                             await db.collection('notifications').add({
-                                targetUid: studentUid, // শুধুমাত্র এই ইউজার দেখবে
+                                targetUid: studentUid,
                                 title: 'কোর্স এনরোলমেন্ট',
                                 message: `অভিনন্দন! আপনাকে '${courseName}' (ব্যাচ: ${batch}) কোর্সে যুক্ত করা হয়েছে। এখনই ক্লাস শুরু করুন।`,
                                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -3048,6 +3007,22 @@
                         case 'joinClass':
                             newItem = { courseName: formData.get('courseName'), batch: formData.get('batch'), topic: formData.get('topic'), classNumber: Number(formData.get('classNumber')), link: formData.get('link'), dateTime: new Date(formData.get('dateTime')) };
                             break;
+                        
+                        // NEW: Save Online Classes Logic
+                        case 'online_classes':
+                            newItem = {
+                                batchNumber: formData.get('batchNumber'),
+                                studentCount: Number(formData.get('studentCount')),
+                                totalBill: Number(formData.get('totalBill')),
+                                paidBill: Number(formData.get('paidBill')),
+                                class1: formData.get('class1'),
+                                class2: formData.get('class2'),
+                                class3: formData.get('class3'),
+                                class4: formData.get('class4'),
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                            };
+                            break;
+
                         case 'curriculum':
                             const modules = [];
                             document.querySelectorAll('.module-container').forEach(moduleEl => {
@@ -3091,7 +3066,7 @@
             closeModalBtn.addEventListener('click', () => adminModal.classList.add('hidden'));
 
             function getBengaliTypeName(collection) {
-                const names = { services: 'সার্ভিস', courses: 'কোর্স', enrollments: 'এনরোলমেন্ট', joinClass: 'ক্লাস লিঙ্ক', curriculum: 'কারিকুলাম', users: 'শিক্ষার্থী', withdrawals: 'উত্তোলনের অনুরোধ', trust_screenshots: 'ট্রাস্ট স্ক্রিনশট', payment_gateways: 'পেমেন্ট গেটওয়ে' };
+                const names = { services: 'সার্ভিস', courses: 'কোর্স', enrollments: 'এনরোলমেন্ট', joinClass: 'ক্লাস লিঙ্ক', online_classes: 'অনলাইন ক্লাস ব্যাচ', curriculum: 'কারিকুলাম', users: 'শিক্ষার্থী', withdrawals: 'উত্তোলনের অনুরোধ', trust_screenshots: 'ট্রাস্ট স্ক্রিনশট', payment_gateways: 'পেমেন্ট গেটওয়ে' };
                 return names[collection] || 'নোটিশ';
             }
 
@@ -3120,6 +3095,22 @@
                     case 'courses': return `<div class="form-group"><label>কোর্সের নাম</label><input type="text" name="name" value="${data.name || ''}" required></div><div class="form-group"><label>প্রশিক্ষকের নাম</label><input type="text" name="instructor" value="${data.instructor || ''}" required></div><div class="form-group"><label>মূল্য</label><input type="number" name="price" value="${data.price || 0}" required></div><div class="form-group"><label>কমিশন (টাকা)</label><input type="number" name="commission" value="${data.commission || 0}"></div><div class="form-group"><label>ক্যাটাগরি</label><input type="text" name="category" value="${data.category || ''}" placeholder="e.g., FREELANCING"></div><div class="form-group"><label>সময়কাল</label><input type="text" name="duration" value="${data.duration || ''}" placeholder="e.g., 24:00 ঘণ্টা"></div><div class="form-group"><label>লেকচার সংখ্যা</label><input type="number" name="lectures" value="${data.lectures || 0}" placeholder="e.g., 40"></div><div class="form-group"><label>ছবি URL</label><input type="text" name="image" value="${data.image || ''}" placeholder="https://i.ibb.co/JqgWkCg/placeholder.png"></div>`;
                     case 'enrollments': return `<div class="form-group"><label>শিক্ষার্থী নির্বাচন করুন</label><select name="student" required>${extra.userOptions || ''}</select></div><div class="form-group"><label>কোর্স নির্বাচন করুন</label><select name="courseName" required>${extra.courseOptions || ''}</select></div><div class="form-group"><label>ব্যাচ নং</label><input type="text" name="batch" value="${data.batch || ''}" placeholder="যেমন: 122" required></div>`;
                     case 'joinClass': const dt = data.dateTime ? new Date(data.dateTime.seconds * 1000).toISOString().slice(0, 16) : ''; return `<div class="form-group"><label>কোর্স নির্বাচন করুন</label><select name="courseName" required>${extra.courseOptions || ''}</select></div><div class="form-group"><label>ব্যাচ নং</label><input type="text" name="batch" value="${data.batch || ''}" required></div><div class="form-group"><label>ক্লাসের টপিক</label><input type="text" name="topic" value="${data.topic || ''}" required></div><div class="form-group"><label>ক্লাস নং</label><input type="number" name="classNumber" value="${data.classNumber || ''}" required></div><div class="form-group"><label>ক্লাসের লিঙ্ক</label><input type="text" name="link" value="${data.link || ''}" required></div><div class="form-group"><label>ক্লাসের তারিখ ও সময়</label><input type="datetime-local" name="dateTime" value="${dt}" required></div>`;
+                    
+                    // NEW: Online Classes Form
+                    case 'online_classes': return `
+                        <div class="form-group"><label>ব্যাচ নাম্বার</label><input type="text" name="batchNumber" value="${data.batchNumber || ''}" required></div>
+                        <div class="form-group"><label>ব্যাচ শিক্ষার্থী সংখ্যা</label><input type="number" name="studentCount" value="${data.studentCount || 0}" required></div>
+                        <div class="form-group"><label>মোট বিল (টাকা)</label><input type="number" name="totalBill" value="${data.totalBill || 0}" required></div>
+                        <div class="form-group"><label>পেইড বিল (টাকা)</label><input type="number" name="paidBill" value="${data.paidBill || 0}" required></div>
+                        
+                        <h4 style="margin-top: 20px; margin-bottom: 15px; color: var(--primary-blue); border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">ক্লাস শিডিউল (৪টি ক্লাস)</h4>
+                        
+                        <div class="form-group"><label>ক্লাস ১ এর সময়</label><input type="text" name="class1" value="${data.class1 || ''}" placeholder="যেমন: 12 Oct 2024, 08:00 PM"></div>
+                        <div class="form-group"><label>ক্লাস ২ এর সময়</label><input type="text" name="class2" value="${data.class2 || ''}" placeholder="যেমন: 14 Oct 2024, 08:00 PM"></div>
+                        <div class="form-group"><label>ক্লাস ৩ এর সময়</label><input type="text" name="class3" value="${data.class3 || ''}" placeholder="যেমন: 16 Oct 2024, 08:00 PM"></div>
+                        <div class="form-group"><label>ক্লাস ৪ এর সময়</label><input type="text" name="class4" value="${data.class4 || ''}" placeholder="যেমন: 18 Oct 2024, 08:00 PM"></div>
+                    `;
+
                     case 'curriculum': return `<div class="form-group"><label>কোর্স নির্বাচন করুন</label><select name="courseName" required>${extra.courseOptions || ''}</select></div><div class="form-group"><label>ব্যাচ নং</label><input type="text" name="batch" value="${data.batch || ''}" required></div><hr style="margin: 20px 0;"><div id="curriculum-modules-container">${(data.modules && data.modules.length > 0) ? data.modules.map(getModuleHTML).join('') : getModuleHTML()}</div><button type="button" id="add-module-btn" class="btn btn-add-small"><span class="material-symbols-outlined">add</span> নতুন মডিউল যোগ করুন</button>`;
                     case 'withdrawals': return `<div class="form-group"><label>শিক্ষার্থীর ইমেইল (readonly)</label><input type="email" name="userEmail" value="${data.userEmail || ''}" readonly></div><div class="form-group"><label>পরিমাণ</label><input type="number" name="amount" value="${data.amount || 0}" required></div><div class="form-group"><label>মাধ্যম</label><input type="text" name="method" value="${data.method || ''}" required></div><div class="form-group"><label>অ্যাকাউন্ট নম্বর</label><input type="text" name="accountNumber" value="${data.accountNumber || ''}" required></div>`;
                     case 'users': return `<div class="form-group"><label>নাম</label><input type="text" name="name" value="${data.name || ''}" ></div><div class="form-group"><label>ইমেইল (readonly)</label><input type="email" name="email" value="${data.email || ''}" readonly></div><div class="form-group"><label>মোবাইল</label><input type="text" name="mobile" value="${data.mobile || ''}" ></div><div class="form-group"><label>টাইটেল</label><input type="text" name="title" value="${data.title || ''}" ></div><div class="form-group"><label>রেফারেল কোড</label><input type="text" name="referralCode" value="${data.referralCode || ''}" ></div><div class="form-group"><label>অ্যাফিলিয়েট ব্যালেন্স</label><input type="number" name="affiliateBalance" value="${data.affiliateBalance || 0}" ></div><div class="form-group"><label>নতুন পাসওয়ার্ড</label><input type="text" name="password" placeholder="খালি রাখলে পাসওয়ার্ড পরিবর্তন হবে না"></div>`;
@@ -3133,8 +3124,5 @@
             }
         });
     </script>
-
-
 </body>
-
 </html>
