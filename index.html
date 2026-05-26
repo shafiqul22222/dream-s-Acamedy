@@ -558,7 +558,7 @@
         #dollar-sell-form .input-group select { cursor: pointer; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23777'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 15px center; background-size: 20px; }
         #dollar-sell-form .input-group .material-symbols-outlined { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary-blue); font-size: 22px; z-index: 2; pointer-events: none; transition: color 0.3s ease; }
         #dollar-sell-form .input-group label { position: absolute; left: 45px; top: 50%; transform: translateY(-50%); background-color: transparent; padding: 0 5px; color: #666; font-size: 1rem; transition: all 0.2s ease; pointer-events: none; z-index: 3; }
-        #dollar-sell-form .input-group input:focus + label, #dollar-sell-form .input-group input:not(:placeholder-shown) + label, #dollar-sell-form .input-group select:focus + label, #dollar-sell-form .input-group select:not([value=""]):valid + label { top: -10px; left: 15px; font-size: 0.85rem; color: var(--secondary-blue); background-color: #fff; padding: 0 8px; font-weight: 600; border-radius: 5px; }
+        #dollar-sell-form .input-group input:focus + label, #dollar-sell-form .input-group input:not(:placeholder-shown) + label, #dollar-sell-form .input-group select:focus + label, #dollar-sell-form .input-group select:not([value=""]):valid + label { top: -10px; left: 15px; font-size: 0.85rem; color: var(--secondary-blue); background: #fff; padding: 0 8px; font-weight: 600; border-radius: 5px; }
         #dollar-sell-form .input-group input:focus, #dollar-sell-form .input-group select:focus { border-color: var(--secondary-blue); box-shadow: 0 4px 12px rgba(8, 131, 149, 0.1); outline: none; }
         #dollar-sell-form .input-group input:focus ~ .material-symbols-outlined, #dollar-sell-form .input-group select:focus ~ .material-symbols-outlined { color: var(--secondary-blue); }
         #ds-number-group { overflow: hidden; transition: all 0.4s ease; }
@@ -1083,6 +1083,7 @@
         </div>
     </div>
 
+    <!-- Payment Verification MODALS (CARDS) -->
     <div class="payment-verification-modal hidden" id="payment-success-modal">
         <div class="payment-verification-card">
             <div class="verification-card-header">
@@ -1106,7 +1107,8 @@
                 <h2>Whoops!</h2>
             </div>
             <div class="verification-card-body">
-                <p>TrxID ভুল অথবা এমাউন্ট মিলেনি!</p>
+                <!-- এই প্যারাগ্রাফের টেক্সট ডাইনামিক ভাবে পরিবর্তন হবে -->
+                <p id="failure-message-text" style="color: #EF4444; font-weight: bold; font-size: 1.2em;">TrxID ভুল!</p>
                 <div class="verification-card-buttons">
                     <button class="btn btn-secondary" id="close-failure-modal-btn">Close</button>
                     <button class="btn btn-primary" id="try-again-btn">Try Again</button>
@@ -1141,7 +1143,7 @@
                     </div>
                     <div class="input-group">
                         <span class="material-symbols-outlined">payments</span>
-                        <select id="ds-payment-method" required><option value="" disabled selected></option><option value="Bkash">Bkash (বিকাশ)</option><option value="Nagad">Nagad (নগদ)</option></select>
+                        <select id="ds-payment-method" required><option value="" disabled selected></option><option value="Bkash">Bkash (বিকাশ)</option><option value="Nagad">Nagad (ন নগদ)</option></select>
                         <label for="ds-payment-method">পেমেন্ট মেথড</label>
                     </div>
                     <div class="input-group hidden" id="ds-number-group">
@@ -1311,6 +1313,7 @@
             
             const successModal = document.getElementById('payment-success-modal');
             const failureModal = document.getElementById('payment-failure-modal');
+            const failureMessageText = document.getElementById('failure-message-text'); // ডাইনামিক এরর মেসেজের জন্য
             const closeSuccessBtn = document.getElementById('close-success-modal-btn');
             const continueShoppingBtn = document.getElementById('continue-shopping-btn');
             const closeFailureBtn = document.getElementById('close-failure-modal-btn');
@@ -1346,8 +1349,7 @@
                         try {
                             window.history.pushState({ section: targetId }, '', path);
                         } catch(e) {
-                            // Prevent script from crashing when testing without a server (file:/// protocol)
-                            console.warn("History pushState blocked by browser (Likely local file test). Navigation will still work.");
+                            console.warn("History pushState blocked by browser.");
                         }
                     }
                 }
@@ -1581,7 +1583,7 @@
                 link.addEventListener('click', function(e) {
                     if (!this.closest('.dropdown-menu')) { 
                         const href = this.getAttribute('href');
-                        if(href && href.length > 1) { // Prevents empty '#' clicks from crashing SPA
+                        if(href && href.length > 1) { 
                             e.preventDefault(); 
                             navigateTo(href.substring(1)); 
                         }
@@ -1764,7 +1766,7 @@
             }
             function initializeNotifications(user) {
                 if(!user) return; if(notificationListener) notificationListener();
-                notificationListener = db.collection('notifications').where('targetUid','==',user.uid).orderBy('timestamp','desc').limit(20).onSnapshot(s=>updateNotificationUI(s.docs));
+                notificationListener = db.collection('notifications').where('targetUid','==user.uid).orderBy('timestamp','desc').limit(20).onSnapshot(s=>updateNotificationUI(s.docs));
             }
             function cleanupNotifications() { if(notificationListener) notificationListener(); notificationListContainer.innerHTML='<li>নোটিফিকেশন নেই।</li>'; notificationBadge.classList.add('hidden'); }
 
@@ -1828,13 +1830,13 @@
 
             bkashCloseBtn.addEventListener('click', () => paymentModal.classList.add('hidden'));
 
-            // ================= AUTO BKASH VERIFICATION LOGIC (FIREBASE ONLY) =================
+            // ================= AUTO BKASH VERIFICATION LOGIC (FIXED) =================
             paymentForm.addEventListener('submit', async e => {
                 e.preventDefault(); 
                 const user = auth.currentUser; 
                 const trx = paymentTrxInput.value.trim(); 
                 const senderNum = document.getElementById('payment-user-phone').value.trim();
-                const amount = parseFloat(document.getElementById('payment-amount').value);
+                const requiredAmount = parseFloat(document.getElementById('payment-amount').value);
                 const itemName = document.getElementById('payment-course-name').value;
 
                 if(!user || !trx || !senderNum) return;
@@ -1844,29 +1846,36 @@
                 showToast('পেমেন্ট ভেরিফাই করা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...', 'info');
                 
                 try {
-                    // Firebase-এর 'bkash_transactions' কালেকশন থেকে ডাটা ম্যাচ করানো হচ্ছে
+                    // শুধুমাত্র TrxID দিয়ে খুঁজছি (যাতে Firestore Index Error না আসে)
                     const trxQuery = await db.collection('bkash_transactions')
                                              .where('trxId', '==', trx)
-                                             .where('status', '==', 'Unused')
                                              .get();
 
-                    if (!trxQuery.empty) {
-                        let matchedDoc = null;
-                        
-                        // এমাউন্ট মিলছে কিনা চেক করা (MacroDroid থেকে আসা String এমাউন্ট নাম্বার বানিয়ে চেক)
-                        trxQuery.forEach(doc => {
-                            const dbAmountStr = doc.data().amount || "0";
-                            const dbAmount = parseFloat(dbAmountStr.toString().replace(/,/g, ''));
-                            if (dbAmount === amount) {
-                                matchedDoc = doc;
-                            }
-                        });
+                    let isSuccess = false;
+                    let errorMessage = "TrxID ভুল! সঠিক ট্রানজেকশন আইডি দিন।";
 
-                        if (matchedDoc) {
+                    if (!trxQuery.empty) {
+                        const docSnap = trxQuery.docs[0];
+                        const data = docSnap.data();
+                        
+                        const dbAmountStr = data.amount || "0";
+                        const dbAmount = parseFloat(dbAmountStr.toString().replace(/,/g, ''));
+                        const status = data.status;
+
+                        // কন্ডিশন চেক করা হচ্ছে ডাইনামিক মেসেজের জন্য
+                        if (status !== 'Unused') {
+                            errorMessage = "এই TrxID টি ইতোমধ্যে ব্যবহৃত হয়েছে!";
+                        } else if (dbAmount < requiredAmount) {
+                            errorMessage = `এমাউন্ট মিলেনি! আপনি পাঠিয়েছেন ৳${dbAmount}, কিন্তু কোর্সের মূল্য ৳${requiredAmount}`;
+                        } else {
+                            // সবকিছু ঠিক থাকলে
+                            isSuccess = true;
+                            
                             // TrxID ব্যবহৃত (Used) হিসেবে মার্ক করা
-                            await db.collection('bkash_transactions').doc(matchedDoc.id).update({
+                            await db.collection('bkash_transactions').doc(docSnap.id).update({
                                 status: 'Used',
-                                usedBy: user.email
+                                usedBy: user.email,
+                                usedAt: firebase.firestore.FieldValue.serverTimestamp()
                             });
 
                             // পেমেন্ট সফল! ফায়ারবেসে approved হিসেবে সেভ করুন
@@ -1874,38 +1883,37 @@
                                 userId: user.uid, 
                                 userEmail: user.email, 
                                 itemName: itemName, 
-                                amount: amount, 
+                                amount: requiredAmount, 
                                 paymentMethod: 'bKash', 
                                 senderNumber: senderNum, 
                                 transactionId: trx, 
                                 status: 'approved', 
                                 timestamp: firebase.firestore.FieldValue.serverTimestamp() 
                             });
-
-                            paymentModal.classList.add('hidden');
-                            successModal.classList.remove('hidden');
-                            paymentForm.reset();
-                        } else {
-                            // TrxID ঠিক আছে কিন্তু এমাউন্ট মিলেনি
-                            document.querySelector('#payment-failure-modal .verification-card-body p').innerText = "TrxID সঠিক কিন্তু এমাউন্ট মিলেনি!";
-                            paymentModal.classList.add('hidden');
-                            failureModal.classList.remove('hidden');
                         }
+                    }
+
+                    // পেমেন্ট মডাল হাইড করা
+                    paymentModal.classList.add('hidden');
+
+                    if (isSuccess) {
+                        successModal.classList.remove('hidden');
+                        paymentForm.reset();
                     } else {
-                        // TrxID ভুল বা ব্যবহৃত হয়ে গেছে
-                        document.querySelector('#payment-failure-modal .verification-card-body p').innerText = "TrxID ভুল অথবা ইতোমধ্যে ব্যবহৃত হয়েছে!";
-                        paymentModal.classList.add('hidden');
+                        // এরর মেসেজটি ডাইনামিকভাবে ফেইলর কার্ডে বসানো হচ্ছে
+                        failureMessageText.innerText = errorMessage;
                         failureModal.classList.remove('hidden');
                     }
+
                 } catch(error) {
                     console.error("Verification Error:", error);
-                    showToast('সার্ভার এরর! ইন্টারনেট কানেকশন চেক করুন।', 'error');
+                    showToast('সার্ভার এরর! দয়া করে আপনার ইন্টারনেট কানেকশন চেক করুন।', 'error');
                 } finally {
                     paymentSubmitBtn.disabled = false; 
                     paymentSubmitBtn.innerText = 'VERIFY PAYMENT';
                 }
             });
-            // ================= END AUTO BKASH VERIFICATION LOGIC (FIREBASE ONLY) =================
+            // ================= END AUTO BKASH VERIFICATION LOGIC =================
 
             closeSuccessBtn.addEventListener('click', () => successModal.classList.add('hidden'));
             continueShoppingBtn.addEventListener('click', () => { successModal.classList.add('hidden'); navigateTo('courses'); });
