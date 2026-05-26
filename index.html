@@ -17,27 +17,16 @@
     </script>
     <!-- END: SPA Redirect Script -->
 
-    <!-- START: Social Share Meta Tags -->
     <meta property="og:title" content="Dream's Academy - আপনার সফলতার পথে">
     <meta property="og:description" content="অনলাইন সার্ভে করে ইনকাম করতে যোগ দিন আমাদের ড্রিমস একাডেমির সাথে! প্রথম ক্লাস থেকেই ইনকাম শুরু করুন।">
     <meta property="og:image" content="https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png">
     <meta property="og:url" content="https://dreamsedu.publicvm.com/">
     <meta property="og:type" content="website">
 
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://dreamsedu.publicvm.com/">
-    <meta name="twitter:title" content="Dream's Academy - আপনার সফলতার পথে">
-    <meta name="twitter:description" content="অনলাইন সার্ভে করে ইনকাম করতে যোগ দিন আমাদের ড্রিমস একাডেমির সাথে! প্রথম ক্লাস থেকেই ইনকাম শুরু করুন।">
-    <meta name="twitter:image" content="https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png">
-    <!-- END: Social Share Meta Tags -->
-
     <link rel="icon" type="image/png" href="https://i.postimg.cc/KzHvk0wq/Black-White-Modern_Initial_Logo-250-x-110-px.png">
-    <!-- Google Fonts: Hind Siluri for Bengali -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Google Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
     <style>
@@ -304,7 +293,6 @@
         .bkash-bottom-text { text-align: center; padding: 15px; font-size: 11px; color: #999; background: #fff; line-height: 1.5; }
         .bkash-bottom-text .material-symbols-outlined { vertical-align: middle; }
 
-        /* Step 2 specific */
         .bkash-merchant-box { border: 1px solid rgba(255,255,255,0.4); border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: left;}
         .bkash-merchant-box p { font-size: 11px !important; margin-bottom: 5px !important; color: #ffd1e3; letter-spacing: 1px;}
         .number-copy-row { display: flex; justify-content: space-between; align-items: center; }
@@ -319,7 +307,6 @@
         .bkash-trx-input { width: 100%; padding: 15px; border: none; border-radius: 4px; font-size: 14px; text-align: center; outline: none; margin-bottom: 15px; font-weight: bold; color: #333;}
         .bkash-verify-btn { width: 100%; padding: 15px; background: #fff; color: var(--bkash-pink); border: none; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer; transition: opacity 0.2s; }
         .bkash-verify-btn:hover { opacity: 0.9; }
-        /* ================= END BKASH STYLES ================= */
 
         .payment-verification-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(33, 37, 41, 0.6); display: flex; justify-content: center; align-items: center; z-index: 2001; backdrop-filter: blur(5px); opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease; }
         .payment-verification-modal:not(.hidden) { opacity: 1; visibility: visible; }
@@ -336,57 +323,6 @@
         #payment-success-modal .verification-card-header { background-color: #10B981; }
         #payment-success-modal .btn-primary { background-color: #10B981; color: white; }
         #payment-success-modal .btn-secondary { background-color: #F3F4F6; color: #4B5563; }
-
-        /* ====== CUSTOM ERROR MODAL STYLES (AS PER SCREENSHOT) ====== */
-        #custom-error-modal .payment-verification-card {
-            padding: 40px 20px;
-            border-radius: 15px;
-            background: #fff;
-        }
-        .error-icon-circle {
-            width: 70px;
-            height: 70px;
-            background: #FFF1EE;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 auto 20px;
-        }
-        .error-icon-circle .material-symbols-outlined {
-            color: #FF5A36;
-            font-size: 35px;
-            font-weight: bold;
-        }
-        .custom-error-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 15px;
-        }
-        .custom-error-text {
-            color: #666;
-            font-size: 15px;
-            margin-bottom: 30px;
-            line-height: 1.6;
-            padding: 0 10px;
-        }
-        .btn-orange-close {
-            background: #FF5A36;
-            color: white;
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .btn-orange-close:hover {
-            background: #E84D2A;
-        }
-        /* ========================================================== */
 
         /* --- Dashboard Styles ... (unchanged) --- */
         .dashboard { padding: 40px 0; }
@@ -606,7 +542,7 @@
         #dollar-sell-form .input-group select { cursor: pointer; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23777'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 15px center; background-size: 20px; }
         #dollar-sell-form .input-group .material-symbols-outlined { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary-blue); font-size: 22px; z-index: 2; pointer-events: none; transition: color 0.3s ease; }
         #dollar-sell-form .input-group label { position: absolute; left: 45px; top: 50%; transform: translateY(-50%); background-color: transparent; padding: 0 5px; color: #666; font-size: 1rem; transition: all 0.2s ease; pointer-events: none; z-index: 3; }
-        #dollar-sell-form .input-group input:focus + label, #dollar-sell-form .input-group input:not(:placeholder-shown) + label, #dollar-sell-form .input-group select:focus + label, #dollar-sell-form .input-group select:not([value=""]):valid + label { top: -10px; left: 15px; font-size: 0.85rem; color: var(--secondary-blue); background-color: #fff; padding: 0 8px; font-weight: 600; border-radius: 5px; }
+        #dollar-sell-form .input-group input:focus + label, #dollar-sell-form .input-group input:not(:placeholder-shown) + label, #dollar-sell-form .input-group select:focus + label, #dollar-sell-form .input-group select:not([value=""]):valid + label { top: -10px; left: 15px; font-size: 0.85rem; color: var(--secondary-blue); background: #fff; padding: 0 8px; font-weight: 600; border-radius: 5px; }
         #dollar-sell-form .input-group input:focus, #dollar-sell-form .input-group select:focus { border-color: var(--secondary-blue); box-shadow: 0 4px 12px rgba(8, 131, 149, 0.1); outline: none; }
         #dollar-sell-form .input-group input:focus ~ .material-symbols-outlined, #dollar-sell-form .input-group select:focus ~ .material-symbols-outlined { color: var(--secondary-blue); }
         #ds-number-group { overflow: hidden; transition: all 0.4s ease; }
@@ -1148,15 +1084,17 @@
         </div>
     </div>
 
-    <!-- NEW CUSTOM ERROR MODAL (FROM SCREENSHOT) -->
+    <!-- NEW CUSTOM ERROR MODAL (FROM YOUR SCREENSHOT) -->
     <div class="payment-verification-modal hidden" id="custom-error-modal">
-        <div class="payment-verification-card">
-            <div class="error-icon-circle">
-                <span class="material-symbols-outlined">close</span>
+        <div class="payment-verification-card" style="padding: 40px 30px; border-radius: 20px; background: #fff; max-width: 360px; text-align: center;">
+            <div style="width: 90px; height: 90px; background: #FFF1EE; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px;">
+                <div style="width: 55px; height: 55px; background: #FF5A36; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(255, 90, 54, 0.3);">
+                    <span class="material-symbols-outlined" style="color: white; font-size: 35px; font-weight: 800;">close</span>
+                </div>
             </div>
-            <h2 class="custom-error-title">Error!</h2>
-            <p class="custom-error-text">আপনার TrxID টি ডাটাবেজে পাওয়া যায়নি! দয়া করে একটু অপেক্ষা করে আবার চেষ্টা করুন।</p>
-            <button class="btn-orange-close" id="close-custom-error-btn">বন্ধ করুন</button>
+            <h2 style="font-size: 24px; font-weight: 800; color: #222; margin-bottom: 12px; font-family: sans-serif;">Error!</h2>
+            <p style="color: #666; font-size: 15px; margin-bottom: 30px; line-height: 1.5;">আপনার TrxID টি ডাটাবেজে পাওয়া যায়নি! দয়া করে একটু অপেক্ষা করে আবার চেষ্টা করুন।</p>
+            <button id="close-custom-error-btn" style="background: #FF5A36; color: white; width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.3s; box-shadow: 0 4px 15px rgba(255, 90, 54, 0.2);">বন্ধ করুন</button>
         </div>
     </div>
 
@@ -1773,7 +1711,7 @@
             async function displayLiveClasses() {
                 const container = document.getElementById('live-class-schedule-container'); const user = auth.currentUser; if(!user || !container) return;
                 try {
-                    const enSnap = await db.collection('enrollments').where('studentUid','==user.uid).get();
+                    const enSnap = await db.collection('enrollments').where('studentUid','==',user.uid).get();
                     if(enSnap.empty) { container.innerHTML='<p>শিডিউল নেই।</p>'; return; }
                     let finalHTML='', classFound=false;
                     for (const edoc of enSnap.docs) {
@@ -1895,7 +1833,9 @@
                         // যদি ডাটাবেজে না পাওয়া যায় -> Custom Error Modal দেখাবে (স্ক্রিনশটের মত)
                         paymentSubmitBtn.disabled = false;
                         paymentSubmitBtn.innerText = 'VERIFY PAYMENT';
-                        customErrorModal.classList.remove('hidden');
+                        
+                        paymentModal.classList.add('hidden'); // পেমেন্ট বক্স লুকাবে
+                        customErrorModal.classList.remove('hidden'); // এরর বক্স দেখাবে
                         return;
                     }
 
@@ -1926,7 +1866,7 @@
                         usedAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
 
-                    // ৫. payments কালেকশনে approved হিসেবে সেভ করা
+                    // ৫. payments কালেকশনে সরাসরি approved হিসেবে সেভ করা
                     await db.collection('payments').add({
                         userId: user.uid,
                         userEmail: user.email,
@@ -1935,7 +1875,7 @@
                         paymentMethod: 'bKash',
                         senderNumber: senderNum,
                         transactionId: trx,
-                        status: 'approved', // সরাসরি Approved
+                        status: 'approved', 
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
 
@@ -1948,17 +1888,28 @@
 
                 } catch (error) {
                     console.error(error);
-                    showToast('সার্ভার এরর! দয়া করে একটু পর আবার চেষ্টা করুন।', 'error');
+                    
+                    // ফায়ারবেস রুলসের কারণে ডাটা পড়তে না পারলে এখানে এরর আসবে
+                    if(error.message.includes("permission") || error.message.includes("Missing or insufficient")) {
+                        showToast("ডাটাবেজ পারমিশন এরর! ফায়ারবেসের Rules চেক করুন।", "error");
+                    } else {
+                        showToast('সার্ভার এরর! দয়া করে একটু পর আবার চেষ্টা করুন।', 'error');
+                    }
+                    
                     paymentSubmitBtn.disabled = false;
                     paymentSubmitBtn.innerText = 'VERIFY PAYMENT';
                 }
             });
 
+            // মডালগুলো বন্ধ করার বাটন লজিক
             closeSuccessBtn.addEventListener('click', () => successModal.classList.add('hidden'));
             continueShoppingBtn.addEventListener('click', () => { successModal.classList.add('hidden'); navigateTo('courses'); });
             
-            // Custom Error Modal Close Button
-            closeCustomErrorBtn.addEventListener('click', () => customErrorModal.classList.add('hidden'));
+            // এরর মডাল বন্ধ করার লজিক
+            closeCustomErrorBtn.addEventListener('click', () => {
+                customErrorModal.classList.add('hidden'); // এরর মডাল লুকাবে
+                paymentModal.classList.remove('hidden');  // পুনরায় TrxID দেওয়ার জন্য পেমেন্ট মডাল খুলবে
+            });
 
             // ================= END AUTO BKASH PAYMENT LOGIC =================
 
