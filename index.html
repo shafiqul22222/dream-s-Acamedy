@@ -336,9 +336,57 @@
         #payment-success-modal .verification-card-header { background-color: #10B981; }
         #payment-success-modal .btn-primary { background-color: #10B981; color: white; }
         #payment-success-modal .btn-secondary { background-color: #F3F4F6; color: #4B5563; }
-        #payment-failure-modal .verification-card-header { background-color: #EF4444; }
-        #payment-failure-modal .btn-primary { background-color: #EF4444; color: white; }
-        #payment-failure-modal .btn-secondary { background-color: #F3F4F6; color: #4B5563; }
+
+        /* ====== CUSTOM ERROR MODAL STYLES (AS PER SCREENSHOT) ====== */
+        #custom-error-modal .payment-verification-card {
+            padding: 40px 20px;
+            border-radius: 15px;
+            background: #fff;
+        }
+        .error-icon-circle {
+            width: 70px;
+            height: 70px;
+            background: #FFF1EE;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+        }
+        .error-icon-circle .material-symbols-outlined {
+            color: #FF5A36;
+            font-size: 35px;
+            font-weight: bold;
+        }
+        .custom-error-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .custom-error-text {
+            color: #666;
+            font-size: 15px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            padding: 0 10px;
+        }
+        .btn-orange-close {
+            background: #FF5A36;
+            color: white;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-orange-close:hover {
+            background: #E84D2A;
+        }
+        /* ========================================================== */
 
         /* --- Dashboard Styles ... (unchanged) --- */
         .dashboard { padding: 40px 0; }
@@ -986,7 +1034,7 @@
                                         <div id="video-placeholder">
                                             <span class="material-symbols-outlined">play_circle</span>
                                             <h3>ভিডিও প্লেয়ার</h3>
-                                            <p>শুরু করার জন্য ডান পাশ থেকে একটি ক্লাস সিলেক্ট করুন।</p>
+                                            <p>শুরু করার জন্য ডান পাশ থেকে একটি ক্লাস সিলেক্ট করুন.</p>
                                         </div>
                                         <iframe id="youtube-player" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                     </div>
@@ -1083,6 +1131,7 @@
         </div>
     </div>
 
+    <!-- SUCCESS MODAL -->
     <div class="payment-verification-modal hidden" id="payment-success-modal">
         <div class="payment-verification-card">
             <div class="verification-card-header">
@@ -1099,19 +1148,15 @@
         </div>
     </div>
 
-    <div class="payment-verification-modal hidden" id="payment-failure-modal">
+    <!-- NEW CUSTOM ERROR MODAL (FROM SCREENSHOT) -->
+    <div class="payment-verification-modal hidden" id="custom-error-modal">
         <div class="payment-verification-card">
-            <div class="verification-card-header">
-                <div class="icon"><span class="material-symbols-outlined">priority_high</span></div>
-                <h2>Whoops!</h2>
+            <div class="error-icon-circle">
+                <span class="material-symbols-outlined">close</span>
             </div>
-            <div class="verification-card-body">
-                <p>দুঃখিত, আমরা আপনার পেমেন্টটি খুঁজে পাইনি।</p>
-                <div class="verification-card-buttons">
-                    <button class="btn btn-secondary" id="close-failure-modal-btn">Close</button>
-                    <button class="btn btn-primary" id="try-again-btn">Try Again</button>
-                </div>
-            </div>
+            <h2 class="custom-error-title">Error!</h2>
+            <p class="custom-error-text">আপনার TrxID টি ডাটাবেজে পাওয়া যায়নি! দয়া করে একটু অপেক্ষা করে আবার চেষ্টা করুন।</p>
+            <button class="btn-orange-close" id="close-custom-error-btn">বন্ধ করুন</button>
         </div>
     </div>
 
@@ -1310,11 +1355,11 @@
             const paymentSubmitBtn = document.getElementById('payment-submit-btn');
             
             const successModal = document.getElementById('payment-success-modal');
-            const failureModal = document.getElementById('payment-failure-modal');
+            const customErrorModal = document.getElementById('custom-error-modal');
+            
             const closeSuccessBtn = document.getElementById('close-success-modal-btn');
             const continueShoppingBtn = document.getElementById('continue-shopping-btn');
-            const closeFailureBtn = document.getElementById('close-failure-modal-btn');
-            const tryAgainBtn = document.getElementById('try-again-btn');
+            const closeCustomErrorBtn = document.getElementById('close-custom-error-btn');
 
             const adminPanelLinkLi = document.getElementById('admin-panel-link-li');
             const ADMIN_EMAIL = "arafatislamshofiqul@gmail.com";
@@ -1346,8 +1391,7 @@
                         try {
                             window.history.pushState({ section: targetId }, '', path);
                         } catch(e) {
-                            // Prevent script from crashing when testing without a server (file:/// protocol)
-                            console.warn("History pushState blocked by browser (Likely local file test). Navigation will still work.");
+                            console.warn("History pushState blocked by browser.");
                         }
                     }
                 }
@@ -1581,7 +1625,7 @@
                 link.addEventListener('click', function(e) {
                     if (!this.closest('.dropdown-menu')) { 
                         const href = this.getAttribute('href');
-                        if(href && href.length > 1) { // Prevents empty '#' clicks from crashing SPA
+                        if(href && href.length > 1) { 
                             e.preventDefault(); 
                             navigateTo(href.substring(1)); 
                         }
@@ -1729,7 +1773,7 @@
             async function displayLiveClasses() {
                 const container = document.getElementById('live-class-schedule-container'); const user = auth.currentUser; if(!user || !container) return;
                 try {
-                    const enSnap = await db.collection('enrollments').where('studentUid','==',user.uid).get();
+                    const enSnap = await db.collection('enrollments').where('studentUid','==user.uid).get();
                     if(enSnap.empty) { container.innerHTML='<p>শিডিউল নেই।</p>'; return; }
                     let finalHTML='', classFound=false;
                     for (const edoc of enSnap.docs) {
@@ -1768,7 +1812,7 @@
             }
             function cleanupNotifications() { if(notificationListener) notificationListener(); notificationListContainer.innerHTML='<li>নোটিফিকেশন নেই।</li>'; notificationBadge.classList.add('hidden'); }
 
-            // ================= NEW BKASH PAYMENT LOGIC =================
+            // ================= NEW AUTO BKASH PAYMENT LOGIC =================
             async function loadPaymentGateways() {
                 try { 
                     const snap = await db.collection('payment_gateways').where('status','==',true).get(); 
@@ -1828,51 +1872,95 @@
 
             bkashCloseBtn.addEventListener('click', () => paymentModal.classList.add('hidden'));
 
-            paymentForm.addEventListener('submit', e => {
+            paymentForm.addEventListener('submit', async e => {
                 e.preventDefault(); 
                 const user = auth.currentUser; 
-                const trx = paymentTrxInput.value; 
+                const trx = paymentTrxInput.value.trim(); 
                 const senderNum = document.getElementById('payment-user-phone').value;
+                const requiredAmount = parseFloat(document.getElementById('payment-amount').value);
+                const courseName = document.getElementById('payment-course-name').value;
+
                 if(!user || !trx || !senderNum) return;
                 
                 paymentSubmitBtn.disabled = true; 
-                paymentSubmitBtn.innerText = 'PROCESSING...';
+                paymentSubmitBtn.innerText = 'VERIFYING...';
                 
-                db.collection('payments').add({ 
-                    userId: user.uid, 
-                    userEmail: user.email, 
-                    itemName: document.getElementById('payment-course-name').value, 
-                    amount: parseFloat(document.getElementById('payment-amount').value), 
-                    paymentMethod: 'bKash', 
-                    senderNumber: senderNum, 
-                    transactionId: trx, 
-                    status: 'pending', 
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp() 
-                }).then(ref => {
-                    paymentModal.classList.add('hidden'); 
-                    showToast('পেমেন্ট ভেরিফাই করা হচ্ছে', 'info');
-                    
-                    paymentSubmitBtn.disabled = false; 
-                    paymentSubmitBtn.innerText = 'VERIFY PAYMENT';
-                    
-                    const un = db.collection('payments').doc(ref.id).onSnapshot(d => { 
-                        const s = d.data().status; 
-                        if(s === 'approved'){
-                            successModal.classList.remove('hidden'); 
-                            un();
-                        } else if(s === 'rejected'){
-                            failureModal.classList.remove('hidden'); 
-                            un();
-                        } 
+                try {
+                    // ১. automated_bkash_trx কালেকশনে TrxID চেক করা
+                    const trxSnapshot = await db.collection('automated_bkash_trx')
+                                                .where('trxId', '==', trx)
+                                                .get();
+
+                    if (trxSnapshot.empty) {
+                        // যদি ডাটাবেজে না পাওয়া যায় -> Custom Error Modal দেখাবে (স্ক্রিনশটের মত)
+                        paymentSubmitBtn.disabled = false;
+                        paymentSubmitBtn.innerText = 'VERIFY PAYMENT';
+                        customErrorModal.classList.remove('hidden');
+                        return;
+                    }
+
+                    const trxDoc = trxSnapshot.docs[0];
+                    const trxData = trxDoc.data();
+
+                    // ২. ব্যবহার করা হয়েছে কিনা চেক করা
+                    if (trxData.isUsed) {
+                        showToast('এই TrxID টি ইতিমধ্যে ব্যবহার করা হয়েছে!', 'error');
+                        paymentSubmitBtn.disabled = false;
+                        paymentSubmitBtn.innerText = 'VERIFY PAYMENT';
+                        return;
+                    }
+
+                    // ৩. এমাউন্ট চেক করা
+                    if (parseFloat(trxData.amount) < requiredAmount) {
+                        showToast(`অপর্যাপ্ত ব্যালেন্স। প্রয়োজন: ৳${requiredAmount}, পাওয়া গেছে: ৳${trxData.amount}`, 'error');
+                        paymentSubmitBtn.disabled = false;
+                        paymentSubmitBtn.innerText = 'VERIFY PAYMENT';
+                        return;
+                    }
+
+                    // ৪. সবকিছু ঠিক থাকলে automated_bkash_trx এ isUsed: true করে দেওয়া
+                    await db.collection('automated_bkash_trx').doc(trxDoc.id).update({
+                        isUsed: true,
+                        usedBy: user.uid,
+                        usedFor: courseName,
+                        usedAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
-                });
+
+                    // ৫. payments কালেকশনে approved হিসেবে সেভ করা
+                    await db.collection('payments').add({
+                        userId: user.uid,
+                        userEmail: user.email,
+                        itemName: courseName,
+                        amount: requiredAmount,
+                        paymentMethod: 'bKash',
+                        senderNumber: senderNum,
+                        transactionId: trx,
+                        status: 'approved', // সরাসরি Approved
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    // ৬. সাকসেস মেসেজ দেখানো
+                    paymentModal.classList.add('hidden');
+                    successModal.classList.remove('hidden');
+
+                    paymentSubmitBtn.disabled = false;
+                    paymentSubmitBtn.innerText = 'VERIFY PAYMENT';
+
+                } catch (error) {
+                    console.error(error);
+                    showToast('সার্ভার এরর! দয়া করে একটু পর আবার চেষ্টা করুন।', 'error');
+                    paymentSubmitBtn.disabled = false;
+                    paymentSubmitBtn.innerText = 'VERIFY PAYMENT';
+                }
             });
 
             closeSuccessBtn.addEventListener('click', () => successModal.classList.add('hidden'));
             continueShoppingBtn.addEventListener('click', () => { successModal.classList.add('hidden'); navigateTo('courses'); });
-            closeFailureBtn.addEventListener('click', () => failureModal.classList.add('hidden'));
-            tryAgainBtn.addEventListener('click', () => { failureModal.classList.add('hidden'); paymentModal.classList.remove('hidden'); });
-            // ================= END BKASH PAYMENT LOGIC =================
+            
+            // Custom Error Modal Close Button
+            closeCustomErrorBtn.addEventListener('click', () => customErrorModal.classList.add('hidden'));
+
+            // ================= END AUTO BKASH PAYMENT LOGIC =================
 
             document.getElementById('dollar-sell-nav-link').addEventListener('click', e=>{e.preventDefault(); if(auth.currentUser) document.getElementById('dollar-sell-modal').classList.remove('hidden'); else showLoginModal();});
             document.getElementById('mobile-dollar-sell-btn').addEventListener('click', e=>{e.preventDefault(); if(auth.currentUser) document.getElementById('dollar-sell-modal').classList.remove('hidden'); else showLoginModal();});
