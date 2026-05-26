@@ -1106,7 +1106,7 @@
                 <h2>Whoops!</h2>
             </div>
             <div class="verification-card-body">
-                <p>দুঃখিত, আমরা আপনার পেমেন্টটি খুঁজে পাইনি।</p>
+                <p>TrxID ভুল অথবা এমাউন্ট মিলেনি!</p>
                 <div class="verification-card-buttons">
                     <button class="btn btn-secondary" id="close-failure-modal-btn">Close</button>
                     <button class="btn btn-primary" id="try-again-btn">Try Again</button>
@@ -1828,45 +1828,84 @@
 
             bkashCloseBtn.addEventListener('click', () => paymentModal.classList.add('hidden'));
 
-            paymentForm.addEventListener('submit', e => {
+            // ================= AUTO BKASH VERIFICATION LOGIC (FIREBASE ONLY) =================
+            paymentForm.addEventListener('submit', async e => {
                 e.preventDefault(); 
                 const user = auth.currentUser; 
-                const trx = paymentTrxInput.value; 
-                const senderNum = document.getElementById('payment-user-phone').value;
+                const trx = paymentTrxInput.value.trim(); 
+                const senderNum = document.getElementById('payment-user-phone').value.trim();
+                const amount = parseFloat(document.getElementById('payment-amount').value);
+                const itemName = document.getElementById('payment-course-name').value;
+
                 if(!user || !trx || !senderNum) return;
                 
                 paymentSubmitBtn.disabled = true; 
-                paymentSubmitBtn.innerText = 'PROCESSING...';
+                paymentSubmitBtn.innerText = 'VERIFYING...';
+                showToast('পেমেন্ট ভেরিফাই করা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...', 'info');
                 
-                db.collection('payments').add({ 
-                    userId: user.uid, 
-                    userEmail: user.email, 
-                    itemName: document.getElementById('payment-course-name').value, 
-                    amount: parseFloat(document.getElementById('payment-amount').value), 
-                    paymentMethod: 'bKash', 
-                    senderNumber: senderNum, 
-                    transactionId: trx, 
-                    status: 'pending', 
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp() 
-                }).then(ref => {
-                    paymentModal.classList.add('hidden'); 
-                    showToast('পেমেন্ট ভেরিফাই করা হচ্ছে', 'info');
-                    
+                try {
+                    // Firebase-এর 'bkash_transactions' কালেকশন থেকে ডাটা ম্যাচ করানো হচ্ছে
+                    const trxQuery = await db.collection('bkash_transactions')
+                                             .where('trxId', '==', trx)
+                                             .where('status', '==', 'Unused')
+                                             .get();
+
+                    if (!trxQuery.empty) {
+                        let matchedDoc = null;
+                        
+                        // এমাউন্ট মিলছে কিনা চেক করা (MacroDroid থেকে আসা String এমাউন্ট নাম্বার বানিয়ে চেক)
+                        trxQuery.forEach(doc => {
+                            const dbAmountStr = doc.data().amount || "0";
+                            const dbAmount = parseFloat(dbAmountStr.toString().replace(/,/g, ''));
+                            if (dbAmount === amount) {
+                                matchedDoc = doc;
+                            }
+                        });
+
+                        if (matchedDoc) {
+                            // TrxID ব্যবহৃত (Used) হিসেবে মার্ক করা
+                            await db.collection('bkash_transactions').doc(matchedDoc.id).update({
+                                status: 'Used',
+                                usedBy: user.email
+                            });
+
+                            // পেমেন্ট সফল! ফায়ারবেসে approved হিসেবে সেভ করুন
+                            await db.collection('payments').add({ 
+                                userId: user.uid, 
+                                userEmail: user.email, 
+                                itemName: itemName, 
+                                amount: amount, 
+                                paymentMethod: 'bKash', 
+                                senderNumber: senderNum, 
+                                transactionId: trx, 
+                                status: 'approved', 
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp() 
+                            });
+
+                            paymentModal.classList.add('hidden');
+                            successModal.classList.remove('hidden');
+                            paymentForm.reset();
+                        } else {
+                            // TrxID ঠিক আছে কিন্তু এমাউন্ট মিলেনি
+                            document.querySelector('#payment-failure-modal .verification-card-body p').innerText = "TrxID সঠিক কিন্তু এমাউন্ট মিলেনি!";
+                            paymentModal.classList.add('hidden');
+                            failureModal.classList.remove('hidden');
+                        }
+                    } else {
+                        // TrxID ভুল বা ব্যবহৃত হয়ে গেছে
+                        document.querySelector('#payment-failure-modal .verification-card-body p').innerText = "TrxID ভুল অথবা ইতোমধ্যে ব্যবহৃত হয়েছে!";
+                        paymentModal.classList.add('hidden');
+                        failureModal.classList.remove('hidden');
+                    }
+                } catch(error) {
+                    console.error("Verification Error:", error);
+                    showToast('সার্ভার এরর! ইন্টারনেট কানেকশন চেক করুন।', 'error');
+                } finally {
                     paymentSubmitBtn.disabled = false; 
                     paymentSubmitBtn.innerText = 'VERIFY PAYMENT';
-                    
-                    const un = db.collection('payments').doc(ref.id).onSnapshot(d => { 
-                        const s = d.data().status; 
-                        if(s === 'approved'){
-                            successModal.classList.remove('hidden'); 
-                            un();
-                        } else if(s === 'rejected'){
-                            failureModal.classList.remove('hidden'); 
-                            un();
-                        } 
-                    });
-                });
+                }
             });
+            // ================= END AUTO BKASH VERIFICATION LOGIC (FIREBASE ONLY) =================
 
             closeSuccessBtn.addEventListener('click', () => successModal.classList.add('hidden'));
             continueShoppingBtn.addEventListener('click', () => { successModal.classList.add('hidden'); navigateTo('courses'); });
