@@ -1428,6 +1428,9 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
+        // অ্যাডমিন ইমেইল সেট করুন (এখানে আপনার আসল অ্যাডমিন ইমেইলটি দিন)
+        const ADMIN_EMAIL = "arafatislamshofiqul@gmail.com".toLowerCase();
+
         document.addEventListener('DOMContentLoaded', function() {
             // --- DOM Elements ---
             const loginPage = document.getElementById('login-page');
@@ -1563,9 +1566,16 @@
             // --- Authentication ---
             auth.onAuthStateChanged(user => {
                 if (user) {
-                    loginPage.classList.add('hidden');
-                    adminPanel.classList.remove('hidden');
-                    navigateTo('dashboard-page');
+                    if (user.email && user.email.toLowerCase() === ADMIN_EMAIL) {
+                        loginPage.classList.add('hidden');
+                        adminPanel.classList.remove('hidden');
+                        navigateTo('dashboard-page');
+                    } else {
+                        // User is logged in but NOT the admin
+                        auth.signOut().then(() => {
+                            showToast('দুঃখিত, শুধুমাত্র অ্যাডমিন এখানে লগইন করতে পারবেন!', 'error');
+                        });
+                    }
                 } else {
                     loginPage.classList.remove('hidden');
                     adminPanel.classList.add('hidden');
@@ -1576,6 +1586,13 @@
                 e.preventDefault();
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
+                
+                // লগিন করার আগেই অ্যাডমিন ইমেইল কিনা চেক করা হচ্ছে
+                if (email.toLowerCase() !== ADMIN_EMAIL) {
+                    showToast('দুঃখিত, শুধুমাত্র অ্যাডমিন এখানে লগইন করতে পারবেন!', 'error');
+                    return;
+                }
+
                 auth.signInWithEmailAndPassword(email, password)
                     .catch(error => {
                         console.error("Login Error:", error);
