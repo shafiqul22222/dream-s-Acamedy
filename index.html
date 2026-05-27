@@ -1736,7 +1736,7 @@
             if (profileImageUpload) profileImageUpload.addEventListener('change', e => {
                 const file = e.target.files[0]; const user = auth.currentUser; if(!file || !user) return; showToast("ছবি আপলোড হচ্ছে...", "info");
                 const fd = new FormData(); fd.append('key', IMGBB_API_KEY); fd.append('image', file);
-                fetch("https://api.imgbb.com/1/upload", {method: 'POST', body: fd}).then(r=>r.json()).then(res=>{ if(res.success) return db.collection('users').doc(user.uid).update({photoURL: res.data.url}).then(()=>res.data.url); }).then(url=>{ profilePageAvatar.src=url; headerAvatar.src=url; showToast("সফলভাবে আপডেট করা হয়েছে!", "success");});
+                fetch("https://api.imgbb.com/1/upload", {method: 'POST', body: fd}).then(r=>r.json()).then(res=>{ if(res.success) return db.collection('users').doc(user.uid).update({photoURL: res.data.url}).then(()=>res.data.url); }).then(url=>{ profilePageAvatar.src=url; headerAvatar.src=url; showToast("সফলভাবে আপডেট করা পিকচার!", "success");});
             });
 
             function formatNotificationTime(timestamp) { if(!timestamp) return 'এখনই'; const s = Math.floor((new Date()-timestamp.toDate())/1000); if(s<60) return 'এখনই'; if(s<3600) return `${Math.floor(s/60)} মি. আগে`; if(s<86400) return `${Math.floor(s/3600)} ঘ. আগে`; return 'আগে'; }
@@ -1750,7 +1750,7 @@
             }
             function cleanupNotifications() { if(notificationListener) notificationListener(); notificationListContainer.innerHTML='<li>নোটিফিকেশন নেই।</li>'; notificationBadge.classList.add('hidden'); }
 
-            // ================= NEW AUTO BKASH PAYMENT LOGIC =================
+            // ================= UPDATED AUTO BKASH PAYMENT LOGIC =================
             async function loadPaymentGateways() {
                 try { 
                     const snap = await db.collection('payment_gateways').where('status','==',true).get(); 
@@ -1813,8 +1813,10 @@
             paymentForm.addEventListener('submit', async e => {
                 e.preventDefault(); 
                 const user = auth.currentUser; 
-                const trx = paymentTrxInput.value.trim(); 
-                const senderNum = document.getElementById('payment-user-phone').value;
+                
+                // TrxID ঠিকঠাক ম্যাচ করার জন্য .trim() এবং .toUpperCase() করা হলো
+                const trx = paymentTrxInput.value.trim().toUpperCase(); 
+                const senderNum = document.getElementById('payment-user-phone').value.trim();
                 const requiredAmount = parseFloat(document.getElementById('payment-amount').value);
                 const courseName = document.getElementById('payment-course-name').value;
 
@@ -1830,12 +1832,12 @@
                                                 .get();
 
                     if (trxSnapshot.empty) {
-                        // যদি ডাটাবেজে না পাওয়া যায় -> Custom Error Modal দেখাবে (স্ক্রিনশটের মত)
+                        // যদি ডাটাবেজে না পাওয়া যায় -> Custom Error Modal দেখাবে
                         paymentSubmitBtn.disabled = false;
                         paymentSubmitBtn.innerText = 'VERIFY PAYMENT';
                         
-                        paymentModal.classList.add('hidden'); // পেমেন্ট বক্স লুকাবে
-                        customErrorModal.classList.remove('hidden'); // এরর বক্স দেখাবে
+                        paymentModal.classList.add('hidden');
+                        customErrorModal.classList.remove('hidden'); 
                         return;
                     }
 
@@ -1843,16 +1845,17 @@
                     const trxData = trxDoc.data();
 
                     // ২. ব্যবহার করা হয়েছে কিনা চেক করা
-                    if (trxData.isUsed) {
+                    if (trxData.isUsed === true) {
                         showToast('এই TrxID টি ইতিমধ্যে ব্যবহার করা হয়েছে!', 'error');
                         paymentSubmitBtn.disabled = false;
                         paymentSubmitBtn.innerText = 'VERIFY PAYMENT';
                         return;
                     }
 
-                    // ৩. এমাউন্ট চেক করা
-                    if (parseFloat(trxData.amount) < requiredAmount) {
-                        showToast(`অপর্যাপ্ত ব্যালেন্স। প্রয়োজন: ৳${requiredAmount}, পাওয়া গেছে: ৳${trxData.amount}`, 'error');
+                    // ৩. এমাউন্ট চেক করা (MacroDroid থেকে আসা ডাটা ঠিক করার জন্য)
+                    const dbAmount = parseFloat(String(trxData.amount).replace(/,/g, ''));
+                    if (dbAmount < requiredAmount) {
+                        showToast(`অপর্যাপ্ত ব্যালেন্স। প্রয়োজন: ৳${requiredAmount}, পাওয়া গেছে: ৳${dbAmount}`, 'error');
                         paymentSubmitBtn.disabled = false;
                         paymentSubmitBtn.innerText = 'VERIFY PAYMENT';
                         return;
@@ -1879,17 +1882,39 @@
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
 
-                    // ৬. সাকসেস মেসেজ দেখানো
+                    // ৬. [নতুন যুক্ত করা হয়েছে] ইউজারকে সরাসরি কোর্সে এনরোল করানো (যাতে ম্যানুয়াল ভেরিফাই না লাগে)
+                    // প্রথমে কোর্সের ছবি ও ক্যাটাগরি নিয়ে আসা
+                    const courseSnap = await db.collection('courses').where('name', '==', courseName).get();
+                    let courseImg = '', courseCat = '', batchName = '1';
+                    if(!courseSnap.empty){
+                        courseImg = courseSnap.docs[0].data().image;
+                        courseCat = courseSnap.docs[0].data().category;
+                        batchName = courseSnap.docs[0].data().batch || '1';
+                    }
+
+                    await db.collection('enrollments').add({
+                        studentUid: user.uid,
+                        studentEmail: user.email,
+                        courseName: courseName,
+                        courseImage: courseImg,
+                        courseCategory: courseCat,
+                        batch: batchName,
+                        enrollmentDate: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    // ৭. সাকসেস মেসেজ দেখানো
                     paymentModal.classList.add('hidden');
                     successModal.classList.remove('hidden');
 
                     paymentSubmitBtn.disabled = false;
                     paymentSubmitBtn.innerText = 'VERIFY PAYMENT';
 
+                    // ড্যাশবোর্ডের কোর্স লিস্ট রিফ্রেশ করা
+                    displayMyCourses();
+
                 } catch (error) {
                     console.error(error);
                     
-                    // ফায়ারবেস রুলসের কারণে ডাটা পড়তে না পারলে এখানে এরর আসবে
                     if(error.message.includes("permission") || error.message.includes("Missing or insufficient")) {
                         showToast("ডাটাবেজ পারমিশন এরর! ফায়ারবেসের Rules চেক করুন।", "error");
                     } else {
@@ -1902,16 +1927,22 @@
             });
 
             // মডালগুলো বন্ধ করার বাটন লজিক
-            closeSuccessBtn.addEventListener('click', () => successModal.classList.add('hidden'));
-            continueShoppingBtn.addEventListener('click', () => { successModal.classList.add('hidden'); navigateTo('courses'); });
+            closeSuccessBtn.addEventListener('click', () => {
+                successModal.classList.add('hidden');
+                navigateTo('my-courses-page'); // সাকসেস হলে সরাসরি ড্যাশবোর্ডে নিয়ে যাবে
+            });
+            continueShoppingBtn.addEventListener('click', () => { 
+                successModal.classList.add('hidden'); 
+                navigateTo('my-courses-page'); 
+            });
             
             // এরর মডাল বন্ধ করার লজিক
             closeCustomErrorBtn.addEventListener('click', () => {
-                customErrorModal.classList.add('hidden'); // এরর মডাল লুকাবে
-                paymentModal.classList.remove('hidden');  // পুনরায় TrxID দেওয়ার জন্য পেমেন্ট মডাল খুলবে
+                customErrorModal.classList.add('hidden'); 
+                paymentModal.classList.remove('hidden');  
             });
 
-            // ================= END AUTO BKASH PAYMENT LOGIC =================
+            // ================= END UPDATED AUTO BKASH PAYMENT LOGIC =================
 
             document.getElementById('dollar-sell-nav-link').addEventListener('click', e=>{e.preventDefault(); if(auth.currentUser) document.getElementById('dollar-sell-modal').classList.remove('hidden'); else showLoginModal();});
             document.getElementById('mobile-dollar-sell-btn').addEventListener('click', e=>{e.preventDefault(); if(auth.currentUser) document.getElementById('dollar-sell-modal').classList.remove('hidden'); else showLoginModal();});
