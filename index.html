@@ -755,18 +755,105 @@
             .contact-img-wrapper { min-height: 280px; border-top: 1px solid var(--border-color); }
         }
 
-        /* --- Dollar Sell Modal --- */
-        #dollar-sell-modal .login-card { max-width: 480px; overflow: hidden; border-radius: 20px; background: var(--background-card); }
-        .dollar-modal-header { background: var(--brand-primary); padding: 32px 24px; text-align: center; color: #fff; position: relative;}
-        .dollar-header-icon { width: 56px; height: 56px; background: rgba(255, 255, 255, 0.1); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; border: 1px solid rgba(255, 255, 255, 0.2); }
-        .dollar-header-icon .material-symbols-outlined { font-size: 28px; color: #fff; }
-        .dollar-modal-header h2 { font-size: 1.5rem; margin: 0; font-weight: 700; color: white;}
-        .dollar-modal-header p { margin: 4px 0 0; opacity: 0.8; font-size: 0.9rem; }
-        .dollar-modal-body { padding: 32px 24px; }
-        #ds-rate-display { background: var(--background-body); color: var(--text-dark); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); text-align: center; font-weight: 600; margin-bottom: 24px; font-size: 0.95rem; display: none; }
+        /* --- Dollar Sell Modal (Fixed & Premium) --- */
+        #dollar-sell-modal .login-card { 
+            max-width: 440px; 
+            display: block; /* FIXES THE SQUISHED SIDE-BY-SIDE LAYOUT */
+            overflow: hidden; 
+            border-radius: 24px; 
+            background: var(--background-card); 
+        }
+        .dollar-modal-header { 
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary)); 
+            padding: 40px 24px; 
+            text-align: center; 
+            color: #fff; 
+            position: relative;
+        }
+        .dollar-header-icon { 
+            width: 64px; height: 64px; 
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(10px);
+            border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            margin: 0 auto 16px; 
+            border: 2px solid rgba(255, 255, 255, 0.2); 
+        }
+        .dollar-header-icon .material-symbols-outlined { font-size: 32px; color: #fff; }
+        .dollar-modal-header h2 { font-size: 1.6rem; margin: 0; font-weight: 700; color: white;}
+        .dollar-modal-header p { margin: 6px 0 0; opacity: 0.9; font-size: 0.95rem; }
         
-        #dollar-sell-form .input-group input, #dollar-sell-form .input-group select { height: 52px; appearance: none; -webkit-appearance: none; }
-        #dollar-sell-form .input-group select { cursor: pointer; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2364748b'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 16px center; background-size: 20px; }
+        .dollar-modal-body { padding: 32px; }
+        
+        #ds-rate-display { 
+            background: #f0fdf4; 
+            color: #166534; 
+            padding: 14px; 
+            border-radius: 12px; 
+            border: 1px solid #bbf7d0; 
+            text-align: center; 
+            font-weight: 600; 
+            margin-bottom: 24px; 
+            font-size: 0.95rem; 
+            display: none; 
+        }
+        
+        #dollar-sell-form .input-group { position: relative; margin-bottom: 20px; }
+        #dollar-sell-form .input-group input, 
+        #dollar-sell-form .input-group select { 
+            width: 100%; 
+            height: 54px; 
+            padding: 0 16px 0 48px; 
+            border: 1px solid var(--border-color); 
+            background: var(--background-body); 
+            border-radius: 12px; 
+            font-size: 0.95rem; 
+            color: var(--text-dark); 
+            font-family: inherit;
+            appearance: none; -webkit-appearance: none;
+            transition: var(--transition-smooth);
+        }
+        #dollar-sell-form .input-group select { 
+            cursor: pointer; 
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2364748b'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e"); 
+            background-repeat: no-repeat; 
+            background-position: right 16px center; 
+            background-size: 20px; 
+        }
+        #dollar-sell-form .input-group input:focus,
+        #dollar-sell-form .input-group select:focus {
+            border-color: var(--brand-secondary); 
+            background: var(--background-card); 
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); 
+            outline: none; 
+        }
+        #dollar-sell-form .input-group .material-symbols-outlined { 
+            position: absolute; 
+            left: 16px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            color: var(--text-muted); 
+            font-size: 22px; 
+            pointer-events: none;
+            transition: var(--transition-smooth);
+        }
+        #dollar-sell-form .input-group input:focus ~ .material-symbols-outlined,
+        #dollar-sell-form .input-group select:focus ~ .material-symbols-outlined {
+            color: var(--brand-secondary);
+        }
+        #dollar-sell-form .input-group label {
+            position: absolute; left: 48px; top: 50%; transform: translateY(-50%); 
+            color: var(--text-muted); pointer-events: none; transition: var(--transition-smooth); 
+            background: transparent; padding: 0 4px; font-size: 0.95rem;
+        }
+        #dollar-sell-form .input-group input:focus + label, 
+        #dollar-sell-form .input-group input:not(:placeholder-shown) + label,
+        #dollar-sell-form .input-group select:focus + label, 
+        #dollar-sell-form .input-group select:valid + label { 
+            top: 0; left: 12px; font-size: 0.75rem; color: var(--brand-secondary); 
+            background: var(--background-card); font-weight: 600; border-radius: 4px;
+        }
+        
         #ds-number-group { overflow: hidden; transition: var(--transition-smooth); }
         #ds-number-group.hidden { display: none; }
     </style>
@@ -1335,7 +1422,12 @@
                     </div>
                     <div class="input-group">
                         <span class="material-symbols-outlined">credit_card</span>
-                        <select id="ds-card-type" required><option value="" disabled selected></option><option value="ACH">ACH Transfer</option><option value="VISA">VISA Card</option><option value="APPLE">Apple Pay</option></select>
+                        <select id="ds-card-type" required>
+                            <option value="" disabled selected></option>
+                            <option value="ACH">ACH Transfer</option>
+                            <option value="VISA">VISA Card</option>
+                            <option value="APPLE">Apple Pay</option>
+                        </select>
                         <label for="ds-card-type">Card Type</label>
                     </div>
                     <div class="input-group">
@@ -1345,7 +1437,11 @@
                     </div>
                     <div class="input-group">
                         <span class="material-symbols-outlined">payments</span>
-                        <select id="ds-payment-method" required><option value="" disabled selected></option><option value="Bkash">Bkash</option><option value="Nagad">Nagad</option></select>
+                        <select id="ds-payment-method" required>
+                            <option value="" disabled selected></option>
+                            <option value="Bkash">Bkash</option>
+                            <option value="Nagad">Nagad</option>
+                        </select>
                         <label for="ds-payment-method">Payment Method</label>
                     </div>
                     <div class="input-group hidden" id="ds-number-group">
