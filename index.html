@@ -348,10 +348,11 @@
         .service-grid, .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px; justify-items: center; }
         
         .service-card, .course-card { 
-            background: var(--background-card); border-radius: 20px; padding: 0; width: 100%; 
+            background: var(--background-card); border-radius: 20px; padding: 0; width: 100%; max-width: 420px;
             box-shadow: var(--shadow-sm); 
             transition: var(--transition-smooth); position: relative; overflow: hidden; 
             border: 1px solid var(--border-color); display: flex; flex-direction: column; 
+            margin: 0 auto;
         }
         .service-card:hover, .course-card:hover { 
             transform: translateY(-6px); box-shadow: var(--shadow-lg); 
@@ -396,7 +397,7 @@
         /* Course specifics */
         .courses-section { background-color: var(--background-body); padding: 100px 0; }
         .card-thumbnail { position: relative; overflow: hidden; border-bottom: 1px solid var(--border-color); }
-        .card-thumbnail img { width: 100%; height: 200px; object-fit: cover; display: block; transition: transform 0.5s ease; }
+        .card-thumbnail img { width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; display: block; transition: transform 0.5s ease; }
         .course-card:hover .card-thumbnail img { transform: scale(1.05); }
         .top-course-tag { position: absolute; top: 16px; left: 16px; background: rgba(255,255,255,0.95); backdrop-filter: blur(4px); color: var(--text-dark); padding: 4px 12px; border-radius: 99px; font-size: 0.75rem; font-weight: 600; box-shadow: var(--shadow-sm); }
         
