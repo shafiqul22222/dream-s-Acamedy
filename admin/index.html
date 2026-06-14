@@ -426,7 +426,7 @@
             background: none;
             border: none;
             cursor: pointer;
-            margin-right: 8px;
+            margin: 2px;
             padding: 6px;
             border-radius: 6px;
             transition: all 0.2s;
@@ -826,6 +826,29 @@
             padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--surface); color: var(--text-dark); outline: none;
         }
         #reports-page .chart-container { margin-bottom: 32px; padding: 16px; background: var(--surface); border: 1px solid var(--border-color); border-radius: 16px; box-shadow: var(--shadow-sm); }
+        
+        /* --- PRINT STYLES FOR VOUCHER --- */
+        .hidden-print { display: none; }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #print-section, #print-section * {
+                visibility: visible;
+            }
+            #print-section {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 300px; /* Standard Thermal Size ~80mm */
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 12px;
+                color: #000;
+                padding: 10px;
+            }
+            @page { margin: 0; }
+            .hidden-print { display: block !important; }
+        }
     </style>
 </head>
 
@@ -1046,9 +1069,10 @@
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Email</th>
+                                <th>Customer Info</th>
                                 <th>Course/Service</th>
                                 <th>Amount</th>
+                                <th>Discount</th>
                                 <th>Profit</th>
                                 <th>TrxID</th>
                                 <th>Time</th>
@@ -1109,12 +1133,18 @@
                 <div class="content-box">
                     <p style="margin-bottom: 24px; font-size: 0.9em; color: var(--text-muted);">Record direct or cash payments here. Added sales and profits will reflect directly on your dashboard.</p>
                     <form id="manual-sale-form">
+                        <div class="form-group"><label for="manual-user-name">Customer Name (Optional)</label><input type="text" id="manual-user-name" class="form-group" placeholder="e.g., Shafiqul Islam"></div>
+                        <div class="form-group"><label for="manual-user-mobile">Customer Mobile (Optional)</label><input type="text" id="manual-user-mobile" class="form-group" placeholder="e.g., 017XXXXXXXX"></div>
+                        
                         <div class="form-group"><label for="manual-item-selection">Select Service or Course</label><select id="manual-item-selection" class="form-group" required>
                                 <option value="">Loading...</option>
                             </select></div>
                         <div class="form-group"><label for="manual-quantity">Quantity</label><input type="number" id="manual-quantity" class="form-group" value="1" min="1" required></div>
-                        <div class="form-group"><label for="manual-sale-amount">Total Sales (BDT)</label><input type="number" id="manual-sale-amount" class="form-group" placeholder="e.g., 500" required></div>
+                        
+                        <div class="form-group"><label for="manual-sale-amount">Net Total Sales (BDT)</label><input type="number" id="manual-sale-amount" class="form-group" placeholder="e.g., 500" required></div>
+                        <div class="form-group"><label for="manual-discount-amount">Discount Amount (BDT)</label><input type="number" id="manual-discount-amount" class="form-group" placeholder="e.g., 50" value="0"></div>
                         <div class="form-group"><label for="manual-profit-amount">Total Profit (BDT)</label><input type="number" id="manual-profit-amount" class="form-group" placeholder="e.g., 150" required></div>
+                        
                         <button type="submit" class="btn btn-primary" style="width: auto;"><span class="material-symbols-outlined">save</span> Add Sale</button>
                     </form>
                 </div>
@@ -1510,6 +1540,55 @@
                 <button id="close-modal"><span class="material-symbols-outlined">close</span></button>
             </div>
             <form id="modal-form"></form>
+        </div>
+    </div>
+    
+    <!-- PRINT VOUCHER SECTION -->
+    <div id="print-section" class="hidden-print">
+        <div style="text-align: center; margin-bottom: 10px;">
+            <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <img id="receipt-logo" src="https://i.ibb.co/JqgWkCg/placeholder.png" alt="Logo" style="width: 35px; height: 35px; border-radius: 50%; margin-right: 8px; filter: grayscale(100%);">
+                <h2 style="margin:0; font-size: 18px; font-weight:bold;">Dream's Academy</h2>
+            </div>
+            <p style="margin:2px 0; font-size: 11px;">Your Success, Our Priority</p>
+            <p style="margin:2px 0; font-size: 11px;">Mob : 01701126965</p>
+        </div>
+        
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size: 11px;">
+            <span>Sold To : <span id="receipt-customer"></span></span>
+            <span>Sold By : Admin</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size: 11px;">
+            <span>Voucher : <span id="receipt-voucher"></span></span>
+            <span>Date: <span id="receipt-date"></span></span>
+        </div>
+        
+        <table style="width:100%; border-top:1px dashed #000; border-bottom:1px dashed #000; margin-bottom:10px; font-size: 11px; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="text-align:left; border-bottom:1px dashed #000; padding:4px 0;">No</th>
+                    <th style="text-align:left; border-bottom:1px dashed #000; padding:4px 0;">Item Description</th>
+                    <th style="text-align:center; border-bottom:1px dashed #000; padding:4px 0;">Qty</th>
+                    <th style="text-align:right; border-bottom:1px dashed #000; padding:4px 0;">Rate</th>
+                    <th style="text-align:right; border-bottom:1px dashed #000; padding:4px 0;">Taka</th>
+                    <th style="text-align:right; border-bottom:1px dashed #000; padding:4px 0;">Dis</th>
+                </tr>
+            </thead>
+            <tbody id="receipt-items">
+            </tbody>
+        </table>
+        
+        <div style="margin-left: auto; width: 65%; margin-bottom: 15px; font-size: 11px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:3px;"><span>Amount</span><span>=</span><span id="receipt-amount"></span></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:3px;"><span>Discount</span><span>=</span><span id="receipt-discount"></span></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:3px; font-weight:bold; border-top:1px dashed #000; border-bottom:1px dashed #000; padding:4px 0;"><span>Net Taka</span><span>=</span><span id="receipt-net"></span></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:3px;"><span>Cash in Counter</span><span>=</span><span id="receipt-cash"></span></div>
+        </div>
+        
+        <div style="text-align:center;">
+            <p style="margin:5px 0;">***************************************</p>
+            <p style="margin:5px 0; font-size:11px;">Software Developed by Shafiqul Islam</p>
+            <div style="font-size:24px; letter-spacing:2px; margin-top:5px;">|| | ||| || ||| | ||| |||</div>
         </div>
     </div>
 
@@ -2103,6 +2182,7 @@
                 const itemSelect = document.getElementById('manual-item-selection');
                 const quantityInput = document.getElementById('manual-quantity');
                 const saleInput = document.getElementById('manual-sale-amount');
+                const discountInput = document.getElementById('manual-discount-amount');
                 const profitInput = document.getElementById('manual-profit-amount');
                 
                 let debugInfo = document.getElementById('calc-debug-info');
@@ -2121,7 +2201,7 @@
                 }
 
                 itemSelect.innerHTML = '<option value="">Loading...</option>';
-                quantityInput.value = 1; saleInput.value = ''; profitInput.value = '';
+                quantityInput.value = 1; saleInput.value = ''; profitInput.value = ''; discountInput.value = '0';
 
                 try {
                     const servicesSnapshot = await db.collection('services').get();
@@ -2147,20 +2227,22 @@
                         if (!selectedOption || selectedOption.disabled) return;
                         const unitBuyPrice = parseFloat(selectedOption.getAttribute('data-price')) || 0;
                         const quantity = parseFloat(quantityInput.value) || 0;
-                        const totalSales = parseFloat(saleInput.value) || 0;
+                        const netSales = parseFloat(saleInput.value) || 0;
+                        const discount = parseFloat(discountInput.value) || 0;
                         const totalCost = unitBuyPrice * quantity;
                         
                         if (saleInput.value.trim() !== "") {
-                            profitInput.value = totalSales - totalCost;
+                            profitInput.value = netSales - totalCost;
                         } else {
                             profitInput.value = '';
                         }
                         debugInfo.style.display = 'block';
-                        debugInfo.innerHTML = `<strong>Calculation:</strong><br>Unit Cost: ৳ ${unitBuyPrice} | Qty: ${quantity}<br>Total Cost: ৳ ${totalCost} | Total Sales: ৳ ${totalSales}`;
+                        debugInfo.innerHTML = `<strong>Calculation:</strong><br>Unit Cost: ৳ ${unitBuyPrice} | Qty: ${quantity}<br>Gross Sale: ৳ ${netSales + discount} | Discount: ৳ ${discount}<br>Total Cost: ৳ ${totalCost} | Net Sales: ৳ ${netSales}`;
                     }
                     itemSelect.onchange = calculateProfit;
                     quantityInput.oninput = calculateProfit;
                     saleInput.oninput = calculateProfit;
+                    discountInput.oninput = calculateProfit;
                 } catch (error) {
                     console.error("Error loading items:", error);
                     itemSelect.innerHTML = '<option value="">Failed to load items</option>';
@@ -2172,10 +2254,13 @@
                 manualSaleForm.onsubmit = async (e) => {
                     e.preventDefault(); 
                     const btn = manualSaleForm.querySelector('button[type="submit"]');
+                    const userName = document.getElementById('manual-user-name').value;
+                    const userMobile = document.getElementById('manual-user-mobile').value;
                     const itemSelect = document.getElementById('manual-item-selection');
                     const itemName = itemSelect.value;
                     const quantity = Number(document.getElementById('manual-quantity').value);
                     const saleAmount = Number(document.getElementById('manual-sale-amount').value);
+                    const discountAmount = Number(document.getElementById('manual-discount-amount').value) || 0;
                     const profitAmount = Number(document.getElementById('manual-profit-amount').value);
                     
                     if (!itemName || quantity <= 0 || document.getElementById('manual-sale-amount').value.trim() === '') {
@@ -2187,14 +2272,20 @@
                     btn.disabled = true;
                     btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Saving...`;
                     
+                    const trxId = 'MANUAL-' + Date.now().toString().slice(-6);
+
                     try {
                         await db.collection('payments').add({
-                            itemName: `${itemName} (x${quantity})`,
+                            userName: userName,
+                            userMobile: userMobile,
+                            itemName: itemName,
+                            quantity: quantity,
                             amount: saleAmount,
+                            discountAmount: discountAmount,
                             profit: profitAmount,
                             status: 'approved',
                             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                            transactionId: 'manual_entry',
+                            transactionId: trxId,
                             userEmail: 'admin@manual.sale'
                         });
                         showToast('Sale added successfully!', 'success');
@@ -2426,10 +2517,15 @@
                     let updateData = { status: newStatus };
 
                     if (newStatus === 'approved') {
-                        const serviceQuery = await db.collection('services').where('name', '==', paymentData.itemName).limit(1).get();
+                        let baseName = paymentData.itemName;
+                        if(baseName.includes('(x')) {
+                            baseName = baseName.replace(/\(x\d+\)$/, '').trim();
+                        }
+                        const serviceQuery = await db.collection('services').where('name', '==', baseName).limit(1).get();
                         if (!serviceQuery.empty) {
                             const serviceData = serviceQuery.docs[0].data();
-                            updateData.profit = (Number(paymentData.amount) || 0) - (Number(serviceData.purchasePrice) || 0);
+                            let qty = paymentData.quantity || 1;
+                            updateData.profit = (Number(paymentData.amount) || 0) - ((Number(serviceData.purchasePrice) || 0) * qty);
                         } else {
                             updateData.profit = Number(paymentData.amount) || 0;
                         }
@@ -2472,16 +2568,91 @@
                     const paymentDoc = await db.collection('payments').doc(paymentId).get();
                     if (!paymentDoc.exists) { showToast('Payment not found!', 'error'); return; }
                     const paymentData = paymentDoc.data();
-                    const userQuery = await db.collection('users').where('email', '==', paymentData.userEmail).limit(1).get();
-                    if (userQuery.empty) { showToast(`Student not found.`, 'error'); return; }
-                    const userData = userQuery.docs[0].data(), studentMobile = userData.mobile;
-                    if (!studentMobile || studentMobile.trim() === '') { showToast(`No mobile number found for '${userData.name || userData.email}'.`, 'error'); return; }
+                    let studentMobile = paymentData.userMobile;
+                    let studentName = paymentData.userName || 'N/A';
+                    
+                    if(!studentMobile && paymentData.userEmail && paymentData.userEmail !== 'admin@manual.sale') {
+                        const userQuery = await db.collection('users').where('email', '==', paymentData.userEmail).limit(1).get();
+                        if (!userQuery.empty) { 
+                            const userData = userQuery.docs[0].data();
+                            studentMobile = userData.mobile;
+                            if(!studentName || studentName === 'N/A') studentName = userData.name || 'N/A';
+                        }
+                    }
+                    
+                    if (!studentMobile || studentMobile.trim() === '') { showToast(`No mobile number found.`, 'error'); return; }
                     let formattedMobile = studentMobile.replace(/[^0-9]/g, '');
                     if (formattedMobile.startsWith('01') && formattedMobile.length === 11) formattedMobile = '880' + formattedMobile.substring(1);
-                    const date = new Date().toLocaleDateString('en-GB'), studentName = userData.name || 'N/A', itemName = paymentData.itemName, amount = paymentData.amount, trxID = paymentData.transactionId || 'N/A', paymentStatus = 'Payment Successfull';
+                    const date = new Date().toLocaleDateString('en-GB'), itemName = paymentData.itemName, amount = paymentData.amount, trxID = paymentData.transactionId || 'N/A', paymentStatus = 'Payment Successfull';
                     const message = `Date                   : ${date}\nStudent Name   : ${studentName}\nService/Course : ${itemName}\nAmount              : ${amount} BDT\nTrxID                  : ${trxID}\nPayment Status : ${paymentStatus}`;
                     window.open(`https://api.whatsapp.com/send?phone=${formattedMobile}&text=${encodeURIComponent(message)}`, '_blank');
                 } catch (error) { showToast("Failed to prepare WhatsApp receipt.", "error"); }
+            };
+
+            // VOUCHER PRINTING FUNCTION
+            window.printReceipt = async (paymentId) => {
+                try {
+                    const doc = await db.collection('payments').doc(paymentId).get();
+                    if (!doc.exists) {
+                        showToast('Payment not found', 'error');
+                        return;
+                    }
+                    const data = doc.data();
+
+                    // Fill Customer & Meta info
+                    let custName = data.userName;
+                    if(!custName && data.userEmail !== 'admin@manual.sale') custName = data.userEmail;
+                    if(!custName) custName = "Walk-in Customer";
+                    
+                    document.getElementById('receipt-customer').textContent = custName;
+                    document.getElementById('receipt-voucher').textContent = data.transactionId || 'N/A';
+                    document.getElementById('receipt-date').textContent = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString('en-GB', {day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit'}) : new Date().toLocaleString('en-GB');
+
+                    // Calculate Items
+                    let qty = data.quantity || 1;
+                    let itemName = data.itemName || 'N/A';
+                    
+                    if (!data.quantity && itemName.includes('(x')) {
+                        const match = itemName.match(/\(x(\d+)\)$/);
+                        if (match) {
+                            qty = parseInt(match[1]);
+                            itemName = itemName.replace(/\(x\d+\)$/, '').trim();
+                        }
+                    }
+
+                    let netAmount = Number(data.amount) || 0;
+                    let discount = Number(data.discountAmount) || 0;
+                    let grossAmount = netAmount + discount;
+                    let rate = grossAmount / qty;
+
+                    const tbody = document.getElementById('receipt-items');
+                    tbody.innerHTML = `<tr>
+                        <td style="padding:4px 0;">1</td>
+                        <td style="padding:4px 0;">${itemName}</td>
+                        <td style="text-align:center; padding:4px 0;">${qty}</td>
+                        <td style="text-align:right; padding:4px 0;">${rate.toFixed(2)}</td>
+                        <td style="text-align:right; padding:4px 0;">${grossAmount.toFixed(2)}</td>
+                        <td style="text-align:right; padding:4px 0;">${discount.toFixed(2)}</td>
+                    </tr>`;
+
+                    // Fill Summary
+                    document.getElementById('receipt-amount').textContent = grossAmount.toFixed(2);
+                    document.getElementById('receipt-discount').textContent = discount.toFixed(2);
+                    document.getElementById('receipt-net').textContent = netAmount.toFixed(2);
+                    document.getElementById('receipt-cash').textContent = netAmount.toFixed(2);
+
+                    // Fetch logo
+                    const logoDoc = await db.collection('site_settings').doc('header_settings').get();
+                    if (logoDoc.exists && logoDoc.data().logoImageUrl) {
+                        document.getElementById('receipt-logo').src = logoDoc.data().logoImageUrl;
+                    }
+
+                    // Trigger Print
+                    window.print();
+                } catch (err) {
+                    showToast('Failed to print receipt', 'error');
+                    console.error(err);
+                }
             };
 
             async function renderGeneric(collection, tableBodyId, rowRenderer) {
@@ -2509,23 +2680,41 @@
                         const timestamp = payment.timestamp ? new Date(payment.timestamp.seconds * 1000).toLocaleString('en-US') : 'N/A';
                         const statusClass = (payment.status || 'pending').toLowerCase();
                         const profit = (payment.status === 'approved' && payment.profit != null) ? `৳ ${payment.profit}` : 'N/A';
+                        
+                        const nameDisplay = payment.userName ? `<div style="font-weight: 500;">${payment.userName}</div>` : '';
+                        const mobileDisplay = payment.userMobile ? `<div><small style="color:var(--text-muted);">${payment.userMobile}</small></div>` : '';
+                        const emailDisplay = payment.userEmail !== 'admin@manual.sale' ? `<div><small>${payment.userEmail}</small></div>` : `<div><small style="color:var(--accent-yellow);">Manual Sale</small></div>`;
+                        const customerInfo = `${nameDisplay}${mobileDisplay}${emailDisplay}`;
+                        
+                        const discountDisplay = payment.discountAmount ? `৳ ${payment.discountAmount}` : '৳ 0';
+                        
+                        const printBtn = `<button class="btn-edit" style="background:#fffbeb !important; color:#d97706;" onclick="printReceipt('${payment.id}')" title="Print Receipt"><span class="material-symbols-outlined">print</span></button>`;
+                        const editBtn = `<button class="btn-edit" onclick="openModalForEdit('payments', '${payment.id}')" title="Edit Payment"><span class="material-symbols-outlined">edit</span></button>`;
                         const whatsappBtn = (payment.status === 'approved' && payment.userEmail !== 'admin@manual.sale') ? `<button class="btn-whatsapp" onclick="sendWhatsAppReceipt('${payment.id}')" title="Send WhatsApp Receipt"><span class="material-symbols-outlined">send</span></button>` : '';
+                        
                         tableHTML += `<tr>
-                            <td data-label="Email">${payment.userEmail}</td>
+                            <td data-label="Customer Info">${customerInfo}</td>
                             <td data-label="Item">${payment.itemName}</td>
                             <td data-label="Amount">৳ ${payment.amount}</td>
+                            <td data-label="Discount">${discountDisplay}</td>
                             <td data-label="Profit">${profit}</td>
-                            <td data-label="TrxID">${payment.transactionId}</td>
+                            <td data-label="TrxID">${payment.transactionId || 'N/A'}</td>
                             <td data-label="Time">${timestamp}</td>
                             <td data-label="Status"><span class="status-badge ${statusClass}">${payment.status}</span></td>
                             <td class="actions-cell" data-label="Action">
-                                <select class="status-select" onchange="updatePaymentStatus('${payment.id}', this.value)">
-                                    <option value="pending" ${payment.status === 'pending' ? 'selected' : ''}>Pending</option>
-                                    <option value="approved" ${payment.status === 'approved' ? 'selected' : ''}>Approved</option>
-                                    <option value="rejected" ${payment.status === 'rejected' ? 'selected' : ''}>Rejected</option>
-                                </select>
-                                ${whatsappBtn}
-                                <button class="btn-delete" onclick="deleteItem('payments', '${payment.id}')"><span class="material-symbols-outlined">delete</span></button>
+                                <div style="display:flex; flex-wrap:wrap; gap:5px; justify-content:flex-end;">
+                                    <select class="status-select" onchange="updatePaymentStatus('${payment.id}', this.value)" style="margin-bottom: 5px;">
+                                        <option value="pending" ${payment.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                        <option value="approved" ${payment.status === 'approved' ? 'selected' : ''}>Approved</option>
+                                        <option value="rejected" ${payment.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+                                    </select>
+                                    <div style="display:flex;">
+                                        ${printBtn}
+                                        ${whatsappBtn}
+                                        ${editBtn}
+                                        <button class="btn-delete" onclick="deleteItem('payments', '${payment.id}')" title="Delete Payment"><span class="material-symbols-outlined">delete</span></button>
+                                    </div>
+                                </div>
                             </td>
                         </tr>`;
                     });
@@ -2733,6 +2922,19 @@
                 let newItem;
                 try {
                     switch (collection) {
+                        case 'payments':
+                            newItem = {
+                                userName: formData.get('userName'),
+                                userMobile: formData.get('userMobile'),
+                                userEmail: formData.get('userEmail'),
+                                itemName: formData.get('itemName'),
+                                quantity: Number(formData.get('quantity')) || 1,
+                                amount: Number(formData.get('amount')),
+                                discountAmount: Number(formData.get('discountAmount')),
+                                profit: Number(formData.get('profit')),
+                                transactionId: formData.get('transactionId')
+                            };
+                            break;
                         case 'services':
                             newItem = { name: formData.get('name'), description: formData.get('description'), purchasePrice: Number(formData.get('purchasePrice')), oldPrice: Number(formData.get('oldPrice')), currentPrice: Number(formData.get('currentPrice')), commission: Number(formData.get('commission')), features: formData.get('features').split(',').map(f => f.trim()) };
                             break;
@@ -2810,7 +3012,7 @@
             closeModalBtn.addEventListener('click', () => adminModal.classList.add('hidden'));
 
             function getBengaliTypeName(collection) {
-                const names = { services: 'Service', courses: 'Course', enrollments: 'Enrollment', joinClass: 'Class Link', online_classes: 'Online Class Batch', curriculum: 'Curriculum', users: 'Student', withdrawals: 'Withdrawal Request', trust_screenshots: 'Trust Screenshot', payment_gateways: 'Payment Gateway', coupons: 'Coupon' };
+                const names = { payments: 'Payment', services: 'Service', courses: 'Course', enrollments: 'Enrollment', joinClass: 'Class Link', online_classes: 'Online Class Batch', curriculum: 'Curriculum', users: 'Student', withdrawals: 'Withdrawal Request', trust_screenshots: 'Trust Screenshot', payment_gateways: 'Payment Gateway', coupons: 'Coupon' };
                 return names[collection] || 'Notice';
             }
 
@@ -2834,6 +3036,16 @@
 
             function getFormFields(type, data = {}, extra = {}) {
                 switch (type) {
+                    case 'payments': return `
+                        <div class="form-group"><label>Customer Name</label><input type="text" name="userName" value="${data.userName || ''}"></div>
+                        <div class="form-group"><label>Customer Mobile</label><input type="text" name="userMobile" value="${data.userMobile || ''}"></div>
+                        <div class="form-group"><label>Email (readonly)</label><input type="text" name="userEmail" value="${data.userEmail || ''}" readonly></div>
+                        <div class="form-group"><label>Item Name</label><input type="text" name="itemName" value="${data.itemName || ''}" required></div>
+                        <div class="form-group"><label>Quantity</label><input type="number" name="quantity" value="${data.quantity || 1}" required></div>
+                        <div class="form-group"><label>Amount (Net BDT)</label><input type="number" name="amount" value="${data.amount || 0}" required></div>
+                        <div class="form-group"><label>Discount Amount (BDT)</label><input type="number" name="discountAmount" value="${data.discountAmount || 0}"></div>
+                        <div class="form-group"><label>Profit (BDT)</label><input type="number" name="profit" value="${data.profit || 0}" required></div>
+                        <div class="form-group"><label>Transaction ID</label><input type="text" name="transactionId" value="${data.transactionId || ''}"></div>`;
                     case 'services': return `<div class="form-group"><label>Service Name</label><input type="text" name="name" value="${data.name || ''}" required></div><div class="form-group"><label>Short Description</label><textarea name="description" rows="3">${data.description || ''}</textarea></div><div class="form-group"><label>Purchase Price (BDT)</label><input type="number" name="purchasePrice" value="${data.purchasePrice || 0}" required></div><div class="form-group"><label>Selling Price (BDT)</label><input type="number" name="currentPrice" value="${data.currentPrice || 0}" required></div><div class="form-group"><label>Commission (BDT)</label><input type="number" name="commission" value="${data.commission || 0}"></div><div class="form-group"><label>Old Price (BDT)</label><input type="number" name="oldPrice" value="${data.oldPrice || 0}"></div><div class="form-group"><label>Features (Comma Separated)</label><input type="text" name="features" value="${(data.features || []).join(', ')}"></div>`;
                     case 'payment_gateways': return `<div class="form-group"><label>Gateway Name</label><input type="text" name="name" value="${data.name || ''}" placeholder="e.g., Bkash" required></div><div class="form-group"><label>Account Number</label><input type="text" name="accountNumber" value="${data.accountNumber || ''}" placeholder="e.g., 01700000000" required></div><div class="form-group"><label>Logo URL</label><input type="text" name="logoUrl" value="${data.logoUrl || ''}" placeholder="https://example.com/bkash.png" required></div><div class="form-group"><label>CSS Theme Class</label><input type="text" name="theme" value="${data.theme || ''}" placeholder="e.g., bkash-theme" required></div><div class="form-group"><label>Payment Instructions (Comma separated per line)</label><textarea name="instructions" rows="5" placeholder="Dial *247#, go to Send Money, etc...">${data.instructions || ''}</textarea></div><div class="form-group"><label>Status</label><select name="status"><option value="true" ${data.status === true ? 'selected' : ''}>Active</option><option value="false" ${!data.status ? 'selected' : ''}>Inactive</option></select></div>`;
                     case 'coupons': return `<div class="form-group"><label>Coupon Code</label><input type="text" name="code" value="${data.code || ''}" placeholder="e.g., MYSALES50" required style="text-transform: uppercase;"></div><div class="form-group"><label>Discount Type</label><select name="discountType" required><option value="percentage" ${data.discountType === 'percentage' ? 'selected' : ''}>Percentage (%)</option><option value="flat" ${data.discountType === 'flat' ? 'selected' : ''}>Flat Amount (৳)</option></select></div><div class="form-group"><label>Discount Value</label><input type="number" name="discountValue" value="${data.discountValue || ''}" placeholder="e.g., 50" required></div><div class="form-group"><label>Status</label><select name="active"><option value="true" ${data.active !== false ? 'selected' : ''}>Active</option><option value="false" ${data.active === false ? 'selected' : ''}>Inactive</option></select></div>`;
