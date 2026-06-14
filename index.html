@@ -1097,7 +1097,7 @@
                         </div>
                     </div>
                     <div class="hero-image-wrapper">
-                        <img id="hero-image" src="hhttps://i.postimg.cc/0Nyd3wCr/photo-6127637989216161105-y-removebg-preview.png"
+                        <img id="hero-image" src="hhttps://i.postimg.cc/0Nyd3wCr/photo-6127637989216161105-y-removebg-preview.png">
                     </div>
                 </div>
             </section>
@@ -1432,7 +1432,7 @@
     </div>
 
 
-    <!-- NEW BKASH PAYMENT MODAL (Your existing one untouched) -->
+    <!-- NEW BKASH PAYMENT MODAL -->
     <div class="login-modal hidden" id="payment-modal">
         <div class="login-card">
             <div class="bkash-wrapper">
@@ -1674,7 +1674,7 @@
         </a>
     </nav>
 
-    <!-- Original Application Logic Intact (Only English Strings Updated) -->
+    <!-- Original Application Logic Intact (Added Modal Routes Implementation) -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyAu6Lo33AH6GWFDHusaP14fmAHb0LEzWOQ",
@@ -1777,43 +1777,88 @@
 
             // NEW CHECKOUT MODAL ELEMENTS
             const checkoutModal = document.getElementById('checkout-modal');
-            const closeCheckoutModalBtn = document.getElementById('close-checkout-modal-btn');
             const checkoutApplyCouponBtn = document.getElementById('checkout-apply-coupon-btn');
             const checkoutCouponInput = document.getElementById('checkout-coupon-input');
             const checkoutPayBtn = document.getElementById('checkout-pay-btn');
 
             // --- START: SPA ROUTING CORE ---
+            function getUnderlyingPage() {
+                if (auth.currentUser) {
+                    const activeDash = document.querySelector('.dashboard-page:not(.hidden)');
+                    return activeDash ? activeDash.id : 'my-courses-page';
+                } else {
+                    const activePage = document.querySelector('.page-section:not(.hidden)');
+                    return activePage ? activePage.id : 'home';
+                }
+            }
+
             function navigateTo(targetId, addToHistory = true) {
                 if(!targetId) return;
+
+                const modalRoutes = ['login', 'signup', 'forgot-password', 'dollarsell', 'checkout'];
+                const isModal = modalRoutes.includes(targetId);
+
                 const el = document.getElementById(targetId);
                 const isDashboardPage = el && el.classList.contains('dashboard-page');
                 const isMainPage = el && el.classList.contains('page-section');
 
+                let effectiveTargetId = targetId;
+
+                // Auth and state checks
                 if (isDashboardPage && !auth.currentUser) {
-                    targetId = 'home';
-                } else if (!isDashboardPage && !isMainPage) {
-                    targetId = 'home';
+                    effectiveTargetId = 'login';
+                } else if (effectiveTargetId === 'dollarsell' && !auth.currentUser) {
+                    effectiveTargetId = 'login';
+                } else if (effectiveTargetId === 'checkout' && !auth.currentUser) {
+                    effectiveTargetId = 'login';
+                } else if (effectiveTargetId === 'checkout' && (!window.checkoutState || !window.checkoutState.courseName)) {
+                    effectiveTargetId = 'courses'; // Prevent empty checkout access
+                } else if (!isDashboardPage && !isMainPage && !isModal) {
+                    effectiveTargetId = 'home';
                 }
 
                 if (addToHistory) {
-                    const path = targetId === 'home' ? '/' : `/${targetId}`;
+                    const path = effectiveTargetId === 'home' ? '/' : `/${effectiveTargetId}`;
                     if (window.location.pathname !== path) {
                         try {
-                            window.history.pushState({ section: targetId }, '', path);
+                            if (effectiveTargetId !== targetId) window.history.replaceState({ section: effectiveTargetId }, '', path);
+                            else window.history.pushState({ section: effectiveTargetId }, '', path);
                         } catch(e) {
-                            console.warn("History pushState blocked by browser.");
+                            console.warn("History push/replaceState blocked by browser.");
                         }
                     }
                 }
 
-                if (isDashboardPage && auth.currentUser) {
-                    switchDashboardPage(targetId);
-                    mainContent.classList.add('hidden');
-                    dashboardContent.classList.remove('hidden');
+                if (isModal) {
+                    // Ensure underlying main page is visible
+                    if(document.querySelectorAll('.page-section:not(.hidden)').length === 0 && document.querySelectorAll('.dashboard-page:not(.hidden)').length === 0) {
+                        showPageSection('home');
+                        dashboardContent.classList.add('hidden');
+                        mainContent.classList.remove('hidden');
+                    }
+
+                    // Hide all modals first
+                    document.querySelectorAll('.login-modal').forEach(m => m.classList.add('hidden'));
+
+                    // Show target modal
+                    if (effectiveTargetId === 'login') document.getElementById('login-modal').classList.remove('hidden');
+                    else if (effectiveTargetId === 'signup') document.getElementById('signup-modal').classList.remove('hidden');
+                    else if (effectiveTargetId === 'forgot-password') document.getElementById('forgot-password-modal').classList.remove('hidden');
+                    else if (effectiveTargetId === 'dollarsell') document.getElementById('dollar-sell-modal').classList.remove('hidden');
+                    else if (effectiveTargetId === 'checkout') document.getElementById('checkout-modal').classList.remove('hidden');
                 } else {
-                    showPageSection(targetId);
-                    dashboardContent.classList.add('hidden');
-                    mainContent.classList.remove('hidden');
+                    // Hide modals if navigating to a standard page
+                    document.querySelectorAll('.login-modal').forEach(m => m.classList.add('hidden'));
+
+                    if (isDashboardPage && auth.currentUser) {
+                        switchDashboardPage(effectiveTargetId);
+                        mainContent.classList.add('hidden');
+                        dashboardContent.classList.remove('hidden');
+                    } else {
+                        showPageSection(effectiveTargetId);
+                        dashboardContent.classList.add('hidden');
+                        mainContent.classList.remove('hidden');
+                    }
                 }
             }
 
@@ -1882,12 +1927,14 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
-            function showLoginModal() { signupModal.classList.add('hidden'); forgotPasswordModal.classList.add('hidden'); loginModal.classList.remove('hidden'); }
-            function hideLoginModal() { loginModal.classList.add('hidden'); }
-            function showSignupModal() { loginModal.classList.add('hidden'); forgotPasswordModal.classList.add('hidden'); signupModal.classList.remove('hidden'); }
-            function hideSignupModal() { signupModal.classList.add('hidden'); }
-            function showForgotPasswordModal() { loginModal.classList.add('hidden'); signupModal.classList.add('hidden'); forgotPasswordModal.classList.remove('hidden'); }
-            function hideForgotPasswordModal() { forgotPasswordModal.classList.add('hidden'); }
+            // Map standard functions directly to navigateTo for robust routing
+            function showLoginModal() { navigateTo('login'); }
+            function hideLoginModal() { document.getElementById('login-modal').classList.add('hidden'); navigateTo(getUnderlyingPage()); }
+            function showSignupModal() { navigateTo('signup'); }
+            function hideSignupModal() { document.getElementById('signup-modal').classList.add('hidden'); navigateTo(getUnderlyingPage()); }
+            function showForgotPasswordModal() { navigateTo('forgot-password'); }
+            function hideForgotPasswordModal() { document.getElementById('forgot-password-modal').classList.add('hidden'); navigateTo(getUnderlyingPage()); }
+            
             function togglePassword() {
                 const passwordInput = document.getElementById('login-password');
                 const icon = document.getElementById('password-toggle');
@@ -1918,7 +1965,11 @@
                 const email = document.getElementById('login-email').value;
                 const password = document.getElementById('login-password').value;
                 auth.signInWithEmailAndPassword(email, password)
-                    .then(() => { hideLoginModal(); showToast(`Welcome! You have successfully logged in.`, 'success'); })
+                    .then(() => { 
+                        document.getElementById('login-modal').classList.add('hidden');
+                        navigateTo('my-courses-page'); // After login, directly take them to dashboard
+                        showToast(`Welcome! You have successfully logged in.`, 'success'); 
+                    })
                     .catch((error) => { showToast(error.code === 'auth/user-not-found' ? "No account found with this email." : "Incorrect password. Please try again.", 'error'); });
             }
             
@@ -1937,7 +1988,8 @@
                     .then(() => {
                         db.collection('notifications').add({ title: 'New Student Registration', message: `A new student (${email}) has signed up.`, timestamp: firebase.firestore.FieldValue.serverTimestamp(), type: 'new_user', read: false });
                         showToast("Sign up successful! Please log in now.", 'success');
-                        signupForm.reset(); showLoginModal();
+                        signupForm.reset(); 
+                        navigateTo('login'); 
                     })
                     .catch((error) => { showToast(error.code === 'auth/email-already-in-use' ? "An account already exists with this email." : "Password must be at least 6 characters long.", 'error'); });
             }
@@ -1985,7 +2037,8 @@
 
                     if (!initialRouteHandled) {
                         const path = window.location.pathname;
-                        if (path === '/' || path === '/home' || path === '/index.html') navigateTo('my-courses-page', false);
+                        // Redirect users to dashboard if they are already logged in and visit auth pages
+                        if (['/', '/home', '/index.html', '/login', '/signup', '/forgot-password'].includes(path)) navigateTo('my-courses-page', false);
                         else handleInitialRoute(false);
                         initialRouteHandled = true;
                     }
@@ -2002,14 +2055,32 @@
                 }
             });
 
-            // UI Listeners
+            // UI Listeners - Updated for SPA links
             loginSignupBtn.addEventListener('click', showLoginModal);
-            document.querySelectorAll('.login-modal').forEach(modal => { modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); }); });
-            document.querySelectorAll('.close-modal-btn').forEach(btn => { btn.addEventListener('click', () => { btn.closest('.login-modal').classList.add('hidden'); }); });
-            showSignupBtn.addEventListener('click', (e) => { e.preventDefault(); showSignupModal(); });
-            showLoginBtn.addEventListener('click', (e) => { e.preventDefault(); showLoginModal(); });
-            forgotPasswordLink.addEventListener('click', (e) => { e.preventDefault(); showForgotPasswordModal(); });
-            backToLoginLink.addEventListener('click', (e) => { e.preventDefault(); showLoginModal(); });
+            
+            document.querySelectorAll('.login-modal').forEach(modal => { 
+                modal.addEventListener('click', (e) => { 
+                    if (e.target === modal) {
+                        modal.classList.add('hidden'); 
+                        navigateTo(getUnderlyingPage());
+                    }
+                }); 
+            });
+            
+            document.querySelectorAll('.close-modal-btn').forEach(btn => { 
+                btn.addEventListener('click', () => { 
+                    const modal = btn.closest('.login-modal');
+                    if(modal) {
+                        modal.classList.add('hidden');
+                        navigateTo(getUnderlyingPage());
+                    }
+                }); 
+            });
+            
+            showSignupBtn.addEventListener('click', (e) => { e.preventDefault(); navigateTo('signup'); });
+            showLoginBtn.addEventListener('click', (e) => { e.preventDefault(); navigateTo('login'); });
+            forgotPasswordLink.addEventListener('click', (e) => { e.preventDefault(); navigateTo('forgot-password'); });
+            backToLoginLink.addEventListener('click', (e) => { e.preventDefault(); navigateTo('login'); });
             forgotPasswordForm.addEventListener('submit', handlePasswordResetRequest);
             passwordToggle.addEventListener('click', togglePassword);
             loginForm.addEventListener('submit', handleLogin);
@@ -2234,7 +2305,7 @@
                 } catch(e){}
             }
 
-            // --- Updated handleBuyNowClick to open Checkout Modal ---
+            // Updated handleBuyNowClick mapped to direct SPA navigation
             function handleBuyNowClick(e) {
                 e.preventDefault(); 
                 if(auth.currentUser) {
@@ -2275,9 +2346,9 @@
                     bkashLabel.classList.add('active');
                     document.querySelector('input[value="bkash"]').checked = true;
 
-                    checkoutModal.classList.remove('hidden');
+                    navigateTo('checkout'); // Open checkout modal via SPA link
                 } else {
-                    showLoginModal();
+                    navigateTo('login'); // Send to login via SPA link
                 }
             }
 
@@ -2288,9 +2359,6 @@
                     this.closest('.payment-method-label').classList.add('active');
                 });
             });
-
-            // Close Checkout Modal
-            closeCheckoutModalBtn.addEventListener('click', () => checkoutModal.classList.add('hidden'));
 
             // Apply Coupon Logic
             checkoutApplyCouponBtn.addEventListener('click', async () => {
@@ -2343,9 +2411,6 @@
                 const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
                 
                 if (selectedMethod === 'bkash') {
-                    // Hide checkout modal
-                    checkoutModal.classList.add('hidden');
-
                     // Setup bKash Modal
                     const randomInvoice = "Inv No: DA-" + Math.floor(10000000 + Math.random() * 90000000);
                     const finalPriceStr = window.checkoutState.finalPrice.toString();
@@ -2366,6 +2431,9 @@
 
                     bkashStep1.classList.remove('hidden');
                     bkashStep2.classList.add('hidden');
+                    
+                    // Route to Payment Process (Direct overlay)
+                    checkoutModal.classList.add('hidden');
                     paymentModal.classList.remove('hidden');
                 } else {
                     showToast("দুঃখিত, এই পেমেন্ট মেথডটি বর্তমানে এভেইলেবল নয়। দয়া করে বিকাশ সিলেক্ট করুন।", "info");
@@ -2390,7 +2458,10 @@
                 bkashStep2.classList.remove('hidden');
             });
 
-            bkashCloseBtn.addEventListener('click', () => paymentModal.classList.add('hidden'));
+            bkashCloseBtn.addEventListener('click', () => { 
+                paymentModal.classList.add('hidden'); 
+                navigateTo(getUnderlyingPage()); 
+            });
 
             paymentForm.addEventListener('submit', async e => {
                 e.preventDefault(); 
@@ -2509,14 +2580,15 @@
                 paymentModal.classList.remove('hidden');  
             });
 
-            document.getElementById('dollar-sell-nav-link').addEventListener('click', e=>{e.preventDefault(); if(auth.currentUser) document.getElementById('dollar-sell-modal').classList.remove('hidden'); else showLoginModal();});
-            document.getElementById('mobile-dollar-sell-btn').addEventListener('click', e=>{e.preventDefault(); if(auth.currentUser) document.getElementById('dollar-sell-modal').classList.remove('hidden'); else showLoginModal();});
-            document.getElementById('close-dollar-sell-modal').addEventListener('click', ()=>document.getElementById('dollar-sell-modal').classList.add('hidden'));
+            // Redirect modal calls through the SPA router instead of hidden toggle
+            document.getElementById('dollar-sell-nav-link').addEventListener('click', e=>{e.preventDefault(); navigateTo('dollarsell');});
+            document.getElementById('mobile-dollar-sell-btn').addEventListener('click', e=>{e.preventDefault(); navigateTo('dollarsell');});
+            
             async function fetchLiveDollarRates() { try { const d = await db.collection('site_settings').doc('dollar_rates').get(); if(d.exists) liveDollarRates=d.data(); }catch(e){} }
             document.getElementById('ds-card-type').addEventListener('change', function(){ const r=liveDollarRates[this.value]||105; document.getElementById('rate-text').textContent=`1 Dollar = ${r} BDT`; document.getElementById('ds-rate-display').style.display='block';});
             document.getElementById('ds-payment-method').addEventListener('change', function(){ const g=document.getElementById('ds-number-group'); if(this.value){ g.classList.remove('hidden'); document.getElementById('ds-phone-number').setAttribute('required','true'); } else g.classList.add('hidden'); });
             document.getElementById('dollar-sell-form').addEventListener('submit', e=>{
-                e.preventDefault(); const u=auth.currentUser; if(!u) return; db.collection('dollar_sells').add({ userId:u.uid, userEmail:u.email, cardType:document.getElementById('ds-card-type').value, cardLink:document.getElementById('ds-card-link').value, paymentMethod:document.getElementById('ds-payment-method').value, phoneNumber:document.getElementById('ds-phone-number').value, status:'pending', timestamp:firebase.firestore.FieldValue.serverTimestamp() }).then(()=>{ showToast('Submitted successfully!', 'success'); document.getElementById('dollar-sell-modal').classList.add('hidden'); document.getElementById('dollar-sell-form').reset(); });
+                e.preventDefault(); const u=auth.currentUser; if(!u) return; db.collection('dollar_sells').add({ userId:u.uid, userEmail:u.email, cardType:document.getElementById('ds-card-type').value, cardLink:document.getElementById('ds-card-link').value, paymentMethod:document.getElementById('ds-payment-method').value, phoneNumber:document.getElementById('ds-phone-number').value, status:'pending', timestamp:firebase.firestore.FieldValue.serverTimestamp() }).then(()=>{ showToast('Submitted successfully!', 'success'); document.getElementById('dollar-sell-modal').classList.add('hidden'); navigateTo(getUnderlyingPage()); document.getElementById('dollar-sell-form').reset(); });
             });
 
             setInterval(function() {
