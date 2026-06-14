@@ -496,6 +496,53 @@
             .modal-form-panel { width: 100%; padding: 32px 24px; }
         }
         
+        /* ================= NEW CHECKOUT MODAL STYLES ================= */
+        .checkout-card { max-width: 1000px; padding: 40px; width: 95%; display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; border-radius: 16px; position: relative; background: #fff; border: 1px solid var(--border-color); overflow-y: auto; max-height: 90vh;}
+        .checkout-section-title { font-size: 1.1rem; color: var(--brand-primary); font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; display: flex; justify-content: space-between; align-items: center;}
+        
+        /* Left Column */
+        .checkout-item-details { display: flex; gap: 16px; align-items: center; padding-bottom: 24px; border-bottom: 1px solid var(--border-color); margin-bottom: 24px;}
+        .checkout-item-details img { width: 120px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color); }
+        .checkout-item-info h4 { font-size: 1.1rem; color: var(--brand-primary); margin-bottom: 4px; line-height: 1.3;}
+        .checkout-item-info p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;}
+        
+        .checkout-coupon-area { background: var(--background-body); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); }
+        .checkout-coupon-area label { font-size: 0.95rem; font-weight: 600; color: var(--text-dark); display: block; margin-bottom: 12px; }
+        .coupon-input-group { display: flex; gap: 12px; }
+        .coupon-input-group input { flex: 1; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; outline: none; transition: 0.3s; }
+        .coupon-input-group input:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1); }
+        .coupon-input-group button { background: #fff; border: 1px solid #38bdf8; color: #0284c7; padding: 0 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .coupon-input-group button:hover { background: #e0f2fe; }
+
+        /* Right Column */
+        .checkout-summary-box { background: var(--background-body); padding: 24px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 24px; }
+        .summary-row { display: flex; justify-content: space-between; font-size: 0.95rem; color: var(--text-dark); margin-bottom: 12px; }
+        .summary-row.discount { color: #0284c7; }
+        .summary-row.total { font-weight: 700; font-size: 1.1rem; border-top: 1px solid var(--border-color); padding-top: 12px; margin-top: 4px; margin-bottom: 0; color: var(--brand-primary); }
+        
+        .payment-methods { margin-bottom: 24px; }
+        .payment-method-label { display: flex; justify-content: space-between; align-items: center; padding: 16px; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 12px; cursor: pointer; transition: 0.3s; background: #fff; }
+        .payment-method-label:hover { border-color: #cbd5e1; }
+        .payment-method-label.active { border-color: #38bdf8; background: #f0f9ff; box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2); }
+        .pm-left { display: flex; align-items: center; gap: 12px; font-weight: 600; color: var(--text-dark); font-size: 0.95rem;}
+        .pm-left input { width: 18px; height: 18px; accent-color: #0284c7; cursor: pointer; }
+        .pm-right img { height: 28px; object-fit: contain; }
+
+        .btn-pay-now { width: 100%; background: #0284c7; color: white; border: none; padding: 16px; border-radius: 8px; font-size: 1.05rem; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-pay-now:hover { background: #0369a1; }
+
+        .supported-banks { text-align: center; margin-top: 24px; }
+        .supported-banks p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; }
+        .supported-banks img { height: 40px; object-fit: contain; }
+
+        @media (max-width: 768px) {
+            .checkout-card { grid-template-columns: 1fr; padding: 24px; gap: 24px; }
+            .checkout-item-details { flex-direction: column; text-align: center; }
+            .checkout-item-details img { width: 100%; height: auto; max-width: 200px; }
+            .coupon-input-group { flex-direction: column; }
+            .coupon-input-group button { padding: 12px; }
+        }
+
         /* ================= BKASH PAYMENT MODAL STYLES ================= */
         #payment-modal .login-card { max-width: 420px; padding: 0; background: var(--background-card); display: block;}
         .bkash-wrapper { width: 100%; font-family: 'Inter', sans-serif; }
@@ -759,7 +806,7 @@
         /* --- Dollar Sell Modal (Fixed & Premium) --- */
         #dollar-sell-modal .login-card { 
             max-width: 440px; 
-            display: block; /* FIXES THE SQUISHED SIDE-BY-SIDE LAYOUT */
+            display: block; 
             overflow: hidden; 
             border-radius: 24px; 
             background: var(--background-card); 
@@ -1297,7 +1344,95 @@
 
     </main>
 
-    <!-- NEW BKASH PAYMENT MODAL -->
+    <!-- NEW CHECKOUT MODAL -->
+    <div class="login-modal hidden" id="checkout-modal">
+        <div class="checkout-card">
+            <button class="close-modal-btn" id="close-checkout-modal-btn" aria-label="Close">&times;</button>
+            
+            <!-- Left Side: Item & Coupon -->
+            <div>
+                <div class="checkout-section-title">
+                    <span>কোর্সের নাম</span>
+                    <span>কোর্সের মূল্য</span>
+                </div>
+                
+                <div class="checkout-item-details">
+                    <img id="checkout-item-img" src="https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png" alt="Course Image">
+                    <div class="checkout-item-info">
+                        <h4 id="checkout-item-name">Loading Course...</h4>
+                        <p>ড্রিমস একাডেমি এমন একটি প্রতিষ্ঠান, যেখানে স্কিল ডেভেলপমেন্টের জন্য উন্নত মান দেওয়া হয়।</p>
+                    </div>
+                    <div style="font-weight: 700; color: var(--brand-primary); font-size: 1.1rem; margin-left: auto;" id="checkout-item-price">৳0.00</div>
+                </div>
+
+                <div class="checkout-coupon-area">
+                    <label>আপনার কি কুপন কোড আছে ?</label>
+                    <div class="coupon-input-group">
+                        <input type="text" id="checkout-coupon-input" placeholder="কুপন কোড ব্যবহার করুন">
+                        <button type="button" id="checkout-apply-coupon-btn">সাবমিট করুন <span class="material-symbols-outlined" style="font-size: 18px; vertical-align: middle;">arrow_forward</span></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Order Summary & Payment -->
+            <div>
+                <div class="checkout-section-title">
+                    <span>আপনার অর্ডার ডিটেইলস</span>
+                </div>
+
+                <div class="checkout-summary-box">
+                    <div class="summary-row">
+                        <span>কোর্সের মূল্য</span>
+                        <span id="checkout-original-price-display">৳0.00</span>
+                    </div>
+                    <div class="summary-row discount">
+                        <span>ডিসকাউন্ট</span>
+                        <span id="checkout-discount-display">-৳0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>মোট টাকা</span>
+                        <span id="checkout-total-display">৳0.00</span>
+                    </div>
+                </div>
+
+                <div style="font-size: 0.95rem; font-weight: 600; color: var(--brand-primary); margin-bottom: 12px;">পেমেন্ট মেথড সিলেক্ট করুন</div>
+                <div class="payment-methods">
+                    <label class="payment-method-label active">
+                        <div class="pm-left">
+                            <input type="radio" name="payment_method" value="bkash" checked>
+                            বিকাশ
+                        </div>
+                        <div class="pm-right">
+                            <img src="https://1000logos.net/wp-content/uploads/2021/02/B%E0%A6%AC%E0%A6%BF%E0%A6%95%E0%A6%BE%E0%A6%B6-Logo.png" alt="bKash">
+                        </div>
+                    </label>
+
+                    <label class="payment-method-label">
+                        <div class="pm-left">
+                            <input type="radio" name="payment_method" value="other">
+                            অন্যান্য পেমেন্ট মাধ্যম
+                        </div>
+                        <div class="pm-right" style="display: flex; gap: 4px;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" style="height: 16px;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" style="height: 16px;">
+                        </div>
+                    </label>
+                </div>
+
+                <button type="button" class="btn-pay-now" id="checkout-pay-btn">
+                    পেমেন্ট করুন <span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>
+                </button>
+
+                <div class="supported-banks">
+                    <p>আপনি যে ব্যাংকগুলি দ্বারা পেমেন্ট করতে পারবেন।</p>
+                    <img src="https://1000logos.net/wp-content/uploads/2021/02/B%E0%A6%AC%E0%A6%BF%E0%A6%95%E0%A6%BE%E0%A6%B6-Logo.png" alt="bKash Supported">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- NEW BKASH PAYMENT MODAL (Your existing one untouched) -->
     <div class="login-modal hidden" id="payment-modal">
         <div class="login-card">
             <div class="bkash-wrapper">
@@ -1559,6 +1694,15 @@
         let liveDollarRates = { ACH: 105, VISA: 105, APPLE: 98 };
         let initialRouteHandled = false;
         
+        // Checkout State variables
+        window.checkoutState = {
+            courseName: "",
+            originalPrice: 0,
+            discount: 0,
+            finalPrice: 0,
+            image: ""
+        };
+        
         document.addEventListener('DOMContentLoaded', function() {
             const loginSignupBtn = document.getElementById('login-signup-btn');
             const loginModal = document.getElementById('login-modal');
@@ -1630,6 +1774,13 @@
             const IMGBB_API_KEY = "41b94ddf4c1e99c53b0253d7daefadef";
             const backToMyCoursesBtn = document.getElementById('back-to-my-courses');
             const searchInput = document.getElementById('course-search-input');
+
+            // NEW CHECKOUT MODAL ELEMENTS
+            const checkoutModal = document.getElementById('checkout-modal');
+            const closeCheckoutModalBtn = document.getElementById('close-checkout-modal-btn');
+            const checkoutApplyCouponBtn = document.getElementById('checkout-apply-coupon-btn');
+            const checkoutCouponInput = document.getElementById('checkout-coupon-input');
+            const checkoutPayBtn = document.getElementById('checkout-pay-btn');
 
             // --- START: SPA ROUTING CORE ---
             function navigateTo(targetId, addToHistory = true) {
@@ -2071,7 +2222,7 @@
             }
             function cleanupNotifications() { if(notificationListener) notificationListener(); notificationListContainer.innerHTML='<li class="no-notification-message">No notifications.</li>'; notificationBadge.classList.add('hidden'); }
 
-            // ================= AUTO BKASH PAYMENT LOGIC =================
+            // ================= AUTO BKASH PAYMENT LOGIC & CHECKOUT MODAL =================
             async function loadPaymentGateways() {
                 try { 
                     const snap = await db.collection('payment_gateways').where('status','==',true).get(); 
@@ -2083,22 +2234,130 @@
                 } catch(e){}
             }
 
+            // --- Updated handleBuyNowClick to open Checkout Modal ---
             function handleBuyNowClick(e) {
                 e.preventDefault(); 
                 if(auth.currentUser) {
                     const b = e.currentTarget;
                     const courseName = b.dataset.name;
-                    const price = b.dataset.price;
-                    const randomInvoice = "Inv No: DA-" + Math.floor(10000000 + Math.random() * 90000000);
+                    const price = parseFloat(b.dataset.price);
 
+                    let imgSrc = 'https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png';
+                    const card = b.closest('.course-card') || b.closest('.service-card');
+                    if (card) {
+                        const imgEl = card.querySelector('img');
+                        if (imgEl) imgSrc = imgEl.src;
+                    }
+
+                    // Reset Checkout State
+                    window.checkoutState = {
+                        courseName: courseName,
+                        originalPrice: price,
+                        discount: 0,
+                        finalPrice: price,
+                        image: imgSrc
+                    };
+
+                    // Populate Checkout Modal UI
+                    document.getElementById('checkout-item-name').innerText = courseName;
+                    document.getElementById('checkout-item-price').innerText = `৳${price}`;
+                    document.getElementById('checkout-item-img').src = imgSrc;
+                    
+                    document.getElementById('checkout-original-price-display').innerText = `৳${price}`;
+                    document.getElementById('checkout-discount-display').innerText = `-৳0.00`;
+                    document.getElementById('checkout-total-display').innerText = `৳${price}`;
+                    
+                    checkoutCouponInput.value = '';
+                    
+                    // Reset Payment method to bkash
+                    document.querySelectorAll('.payment-method-label').forEach(l => l.classList.remove('active'));
+                    const bkashLabel = document.querySelector('input[value="bkash"]').closest('.payment-method-label');
+                    bkashLabel.classList.add('active');
+                    document.querySelector('input[value="bkash"]').checked = true;
+
+                    checkoutModal.classList.remove('hidden');
+                } else {
+                    showLoginModal();
+                }
+            }
+
+            // Style payment method selection
+            document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    document.querySelectorAll('.payment-method-label').forEach(l => l.classList.remove('active'));
+                    this.closest('.payment-method-label').classList.add('active');
+                });
+            });
+
+            // Close Checkout Modal
+            closeCheckoutModalBtn.addEventListener('click', () => checkoutModal.classList.add('hidden'));
+
+            // Apply Coupon Logic
+            checkoutApplyCouponBtn.addEventListener('click', async () => {
+                const code = checkoutCouponInput.value.trim();
+                if (!code) return showToast("দয়া করে একটি কুপন কোড লিখুন", "error");
+
+                checkoutApplyCouponBtn.innerText = "...";
+                checkoutApplyCouponBtn.disabled = true;
+
+                try {
+                    const snap = await db.collection('coupons').where('code', '==', code).where('active', '==', true).get();
+                    if (snap.empty) {
+                        showToast("কুপন কোডটি সঠিক নয় অথবা মেয়াদ উত্তীর্ণ!", "error");
+                        window.checkoutState.discount = 0;
+                        window.checkoutState.finalPrice = window.checkoutState.originalPrice;
+                    } else {
+                        const coupon = snap.docs[0].data();
+                        let discountAmount = 0;
+                        if (coupon.discountType === 'percentage') {
+                            discountAmount = (window.checkoutState.originalPrice * coupon.discountValue) / 100;
+                        } else {
+                            discountAmount = coupon.discountValue;
+                        }
+
+                        if (discountAmount > window.checkoutState.originalPrice) {
+                            discountAmount = window.checkoutState.originalPrice;
+                        }
+
+                        window.checkoutState.discount = discountAmount;
+                        window.checkoutState.finalPrice = window.checkoutState.originalPrice - discountAmount;
+
+                        showToast("কুপন সফলভাবে যুক্ত হয়েছে!", "success");
+                    }
+                    
+                    // Update UI
+                    document.getElementById('checkout-discount-display').innerText = `-৳${window.checkoutState.discount.toFixed(2)}`;
+                    document.getElementById('checkout-total-display').innerText = `৳${window.checkoutState.finalPrice.toFixed(2)}`;
+
+                } catch(error) {
+                    console.error(error);
+                    showToast("সমস্যা হয়েছে, অনুগ্রহ করে আবার চেষ্টা করুন।", "error");
+                }
+                
+                checkoutApplyCouponBtn.innerText = "সাবমিট করুন ->";
+                checkoutApplyCouponBtn.disabled = false;
+            });
+
+            // Proceed to Payment Action
+            checkoutPayBtn.addEventListener('click', () => {
+                const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
+                
+                if (selectedMethod === 'bkash') {
+                    // Hide checkout modal
+                    checkoutModal.classList.add('hidden');
+
+                    // Setup bKash Modal
+                    const randomInvoice = "Inv No: DA-" + Math.floor(10000000 + Math.random() * 90000000);
+                    const finalPriceStr = window.checkoutState.finalPrice.toString();
+                    
                     document.getElementById('bkash-invoice-no').innerText = randomInvoice;
                     document.getElementById('bkash-invoice-no-2').innerText = randomInvoice;
-                    document.getElementById('bkash-step1-amount').innerText = `৳${price}`;
-                    document.getElementById('bkash-step2-amount').innerText = `৳${price}`;
-                    document.getElementById('bkash-step2-course').innerText = courseName;
+                    document.getElementById('bkash-step1-amount').innerText = `৳${finalPriceStr}`;
+                    document.getElementById('bkash-step2-amount').innerText = `৳${finalPriceStr}`;
+                    document.getElementById('bkash-step2-course').innerText = window.checkoutState.courseName;
                     
-                    document.getElementById('payment-course-name').value = courseName;
-                    document.getElementById('payment-amount').value = price;
+                    document.getElementById('payment-course-name').value = window.checkoutState.courseName;
+                    document.getElementById('payment-amount').value = finalPriceStr;
 
                     bkashPhoneInput.value = '';
                     paymentTrxInput.value = '';
@@ -2109,9 +2368,11 @@
                     bkashStep2.classList.add('hidden');
                     paymentModal.classList.remove('hidden');
                 } else {
-                    showLoginModal();
+                    showToast("দুঃখিত, এই পেমেন্ট মেথডটি বর্তমানে এভেইলেবল নয়। দয়া করে বিকাশ সিলেক্ট করুন।", "info");
                 }
-            }
+            });
+
+            // --- END NEW CHECKOUT MODAL LOGIC ---
 
             bkashPhoneInput.addEventListener('input', function() {
                 if (this.value.length >= 11) {
