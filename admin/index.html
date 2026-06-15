@@ -502,23 +502,31 @@
         }
 
         /* --- Dashboard Stats Grid --- */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 24px;
-        }
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* কার্ডের সাইজ 240px থেকে কমিয়ে 180px করা হয়েছে */
+    gap: 16px; /* মাঝখানের ফাঁকা জায়গা কমানো হয়েছে */
+}
 
-        .stat-card {
-            background: var(--surface);
-            padding: 24px;
-            border-radius: var(--card-radius);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
+.stat-card {
+    background: var(--surface);
+    padding: 16px; /* কার্ডের ভেতরের প্যাডিং 24px থেকে কমিয়ে 16px করা হয়েছে */
+    border-radius: var(--card-radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* আইকন ও লেখার মাঝের গ্যাপ কমানো হয়েছে */
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* লেখার সাইজ একটু মানানসই করা হলো */
+.stat-card h3 {
+    font-size: 1.5em; /* লেখার সাইজ একটু ছোট করা হয়েছে */
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-top: 8px;
+}
         .stat-card:hover {
             transform: translateY(-4px);
             box-shadow: var(--shadow-lg);
@@ -897,7 +905,7 @@
                 <li data-page="users-page"><a href="#"><span class="material-symbols-outlined">group</span> Student Management</a></li>
                 
                 <!-- NEW FOLLOW UP PAGE LINK -->
-                <li data-page="follow-up-page"><a href="#"><span class="material-symbols-outlined">quick_reply</span> Follow up Message</a></li>
+                <li data-page="follow-up-page"><a href="#"><span class="material-symbols-outlined">forum</span> Follow Up</a></li>
 
                 <li data-page="services-page"><a href="#"><span class="material-symbols-outlined">construction</span> Service Management</a></li>
                 <li data-page="service-stock-page"><a href="#"><span class="material-symbols-outlined">inventory</span> Service Stock</a></li>
@@ -1044,7 +1052,7 @@
                     <button class="btn btn-add" id="export-followup-btn"><span class="material-symbols-outlined">download</span> Export CSV</button>
                 </div>
                 
-                <div class="stats-grid" style="margin-bottom: 24px;">
+                <div class="stats-grid" style="margin-bottom: 24px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
                     <div class="stat-card">
                         <div class="header-row">
                             <div class="icon-wrapper" style="background:#eef2ff; color:var(--primary-blue);"><span class="material-symbols-outlined icon">send</span></div>
