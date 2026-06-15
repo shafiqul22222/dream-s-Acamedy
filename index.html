@@ -1224,6 +1224,11 @@
                                 <li data-page="my-courses-page" class="active"><a href="#my-courses-page"><span class="material-symbols-outlined">menu_book</span> My Courses</a></li>
                                 <li data-page="class-joining-page"><a href="#class-joining-page"><span class="material-symbols-outlined">video_camera_front</span> Live Class</a></li>
                                 <li data-page="my-profile-page"><a href="#my-profile-page"><span class="material-symbols-outlined">manage_accounts</span> Profile Settings</a></li>
+                                <!-- নতুন বাটন সমূহ শুরু -->
+                                <li data-page="my-services-page"><a href="#my-services-page"><span class="material-symbols-outlined">design_services</span> My Services</a></li>
+                                <li data-page="ssn-generate-page"><a href="#ssn-generate-page"><span class="material-symbols-outlined">badge</span> SSN Generate</a></li>
+                                <li data-page="ssn-list-page"><a href="#ssn-list-page"><span class="material-symbols-outlined">list_alt</span> SSN LIST</a></li>
+                                <!-- নতুন বাটন সমূহ শেষ -->
                             </ul>
                         </nav>
                         <div class="countdown-timer">
@@ -1336,6 +1341,80 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- ================= NEW PAGES START ================= -->
+
+                        <!-- My Services Page -->
+                        <div class="dashboard-page hidden" id="my-services-page">
+                            <div class="content-header"><h2>My Services</h2></div>
+                            <div class="content-card">
+                                <div style="overflow-x:auto;">
+                                    <table class="class-schedule-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Service Name</th>
+                                                <th>Amount</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="my-services-table-body">
+                                            <tr><td colspan="4" style="text-align: center;">Loading services...</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SSN Generate Page -->
+                        <div class="dashboard-page hidden" id="ssn-generate-page">
+                            <div class="content-header"><h2>American Fake SSN Generate</h2></div>
+                            <div class="content-card">
+                                <div class="form-group" style="max-width: 400px; margin-bottom: 24px;">
+                                    <label for="ssn-country-select">Select Country</label>
+                                    <select id="ssn-country-select" style="width: 100%; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: var(--background-body); margin-top: 8px;">
+                                        <option value="USA">USA</option>
+                                        <option value="CANADA">CANADA</option>
+                                        <option value="UK">UK</option>
+                                    </select>
+                                    <button id="btn-generate-ssn" class="btn btn-gradient" style="margin-top: 16px; width: 100%;">Generate Random SSN <span class="material-symbols-outlined">autorenew</span></button>
+                                </div>
+
+                                <div id="ssn-output-area" class="hidden" style="background: var(--background-body); padding: 24px; border-radius: 16px; border: 1px solid var(--border-color); position: relative;">
+                                    <button id="copy-ssn-btn" class="btn btn-outline" style="position: absolute; top: 16px; right: 16px; padding: 6px 12px; font-size: 0.8rem;"><span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span> Copy</button>
+                                    <h4 style="margin-bottom: 16px; color: var(--brand-primary);">Generated Details</h4>
+                                    <div id="ssn-details-text" style="line-height: 1.8; font-size: 0.95rem; color: var(--text-dark);">
+                                        <!-- Data will appear here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SSN List Page -->
+                        <div class="dashboard-page hidden" id="ssn-list-page">
+                            <div class="content-header"><h2>Generated SSN List</h2></div>
+                            <div class="content-card">
+                                <div style="overflow-x:auto;">
+                                    <table class="class-schedule-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Name</th>
+                                                <th>SSN / Number</th>
+                                                <th>Country</th>
+                                                <th>State</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="ssn-list-table-body">
+                                            <tr><td colspan="6" style="text-align: center;">Loading SSN...</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ================= NEW PAGES END ================= -->
 
                     </main>
                 </div>
@@ -1924,6 +2003,11 @@
                 if (targetPageId === 'my-profile-page') populateProfileForm();
                 if (targetPageId === 'my-courses-page') displayMyCourses();
                 if (targetPageId === 'class-joining-page') displayLiveClasses();
+                
+                // NEW PAGES INTEGRATION
+                if (targetPageId === 'my-services-page') displayMyServices();
+                if (targetPageId === 'ssn-list-page') displaySSNList();
+
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
@@ -2598,6 +2682,190 @@
                 document.getElementById('minutes').innerHTML = `${Math.floor((distance%3600000)/60000).toString().padStart(2,'0')}<span>Mins</span>`;
                 document.getElementById('seconds').innerHTML = `${Math.floor((distance%60000)/1000).toString().padStart(2,'0')}<span>Secs</span>`;
             }, 1000);
+
+            // ==================== NEW FEATURES LOGIC START ====================
+
+            // 1. My Services Logic
+            async function displayMyServices() {
+                const tbody = document.getElementById('my-services-table-body');
+                const user = auth.currentUser;
+                if (!user || !tbody) return;
+
+                try {
+                    const snap = await db.collection('payments').where('userId', '==', user.uid).orderBy('timestamp', 'desc').get();
+                    if (snap.empty) {
+                        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">You have not purchased any services yet.</td></tr>';
+                        return;
+                    }
+                    
+                    let html = '';
+                    snap.forEach(doc => {
+                        const data = doc.data();
+                        const date = data.timestamp ? data.timestamp.toDate().toLocaleDateString() : 'N/A';
+                        html += `<tr>
+                                    <td>${date}</td>
+                                    <td style="font-weight: 600; color: var(--brand-primary);">${data.itemName}</td>
+                                    <td>৳${data.amount}</td>
+                                    <td><span class="status-tag status-completed">${data.status || 'Success'}</span></td>
+                                 </tr>`;
+                    });
+                    tbody.innerHTML = html;
+                } catch (e) {
+                    console.error(e);
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Error loading services.</td></tr>';
+                }
+            }
+
+            // 2. SSN Generate Logic
+            const btnGenerateSsn = document.getElementById('btn-generate-ssn');
+            if(btnGenerateSsn) {
+                btnGenerateSsn.addEventListener('click', async () => {
+                    const country = document.getElementById('ssn-country-select').value;
+                    const user = auth.currentUser;
+                    if(!user) return;
+
+                    btnGenerateSsn.innerHTML = 'Generating... <span class="material-symbols-outlined">hourglass_empty</span>';
+                    btnGenerateSsn.disabled = true;
+
+                    // Fake Data Arrays
+                    const firstNames = ["James", "John", "Robert", "Michael", "William", "David", "Richard", "Joseph", "Thomas", "Charles", "Emma", "Olivia", "Ava", "Isabella", "Sophia", "Mia", "Amelia", "Harper"];
+                    const lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez"];
+                    const states = { "USA": ["CA", "NY", "TX", "FL", "IL"], "CANADA": ["ON", "QC", "BC", "AB", "MB"], "UK": ["ENG", "SCT", "WAL", "NIR"] };
+                    const cities = ["Springfield", "Riverside", "Georgetown", "Fairview", "Madison", "Franklin", "Greenville", "Bristol", "Clinton"];
+                    const counties = ["Orange County", "Cook County", "King County", "Wayne County", "Dallas County"];
+
+                    const randomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
+                    const randomNum = (len) => Math.floor(Math.random() * Math.pow(10, len)).toString().padStart(len, '0');
+                    const randomYear = Math.floor(Math.random() * (2000 - 1950 + 1)) + 1950;
+                    const randomMonth = Math.floor(Math.random() * 12) + 1;
+                    const randomDay = Math.floor(Math.random() * 28) + 1;
+
+                    const fakeData = {
+                        name: `${randomItem(firstNames)} ${randomItem(lastNames)}`,
+                        dob: `${randomMonth.toString().padStart(2, '0')}/${randomDay.toString().padStart(2, '0')}/${randomYear}`,
+                        number: country === 'USA' ? `${randomNum(3)}-${randomNum(2)}-${randomNum(4)}` : `${randomNum(9)}`,
+                        country: country,
+                        state: randomItem(states[country]),
+                        county: randomItem(counties),
+                        city: randomItem(cities),
+                        zip: randomNum(5)
+                    };
+
+                    // Output formatting
+                    const outputText = `
+                        <strong>Name:</strong> <span id="gen-name">${fakeData.name}</span><br>
+                        <strong>Date of Birth:</strong> <span id="gen-dob">${fakeData.dob}</span><br>
+                        <strong>Number (SSN/ID):</strong> <span id="gen-number">${fakeData.number}</span><br>
+                        <strong>Country:</strong> <span id="gen-country">${fakeData.country}</span><br>
+                        <strong>State:</strong> <span id="gen-state">${fakeData.state}</span><br>
+                        <strong>County:</strong> <span id="gen-county">${fakeData.county}</span><br>
+                        <strong>City:</strong> <span id="gen-city">${fakeData.city}</span><br>
+                        <strong>Zip Code:</strong> <span id="gen-zip">${fakeData.zip}</span>
+                    `;
+
+                    document.getElementById('ssn-details-text').innerHTML = outputText;
+                    document.getElementById('ssn-output-area').classList.remove('hidden');
+
+                    // Save to Database
+                    try {
+                        await db.collection('ssn_list').add({
+                            userId: user.uid,
+                            ...fakeData,
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                        showToast("SSN Generated & Saved to List successfully!", "success");
+                    } catch (error) {
+                        console.error(error);
+                    }
+
+                    btnGenerateSsn.innerHTML = 'Generate Random SSN <span class="material-symbols-outlined">autorenew</span>';
+                    btnGenerateSsn.disabled = false;
+                });
+            }
+
+            // Copy SSN Logic
+            const copyBtn = document.getElementById('copy-ssn-btn');
+            if (copyBtn) {
+                copyBtn.addEventListener('click', () => {
+                    const textToCopy = document.getElementById('ssn-details-text').innerText;
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        showToast("SSN details copied to clipboard!", "success");
+                    });
+                });
+            }
+
+            // 3. SSN List Logic
+            async function displaySSNList() {
+                const tbody = document.getElementById('ssn-list-table-body');
+                const user = auth.currentUser;
+                if (!user || !tbody) return;
+
+                try {
+                    const snap = await db.collection('ssn_list').where('userId', '==', user.uid).orderBy('timestamp', 'desc').get();
+                    if (snap.empty) {
+                        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No generated SSN found.</td></tr>';
+                        return;
+                    }
+                    
+                    let html = '';
+                    snap.forEach(doc => {
+                        const data = doc.data();
+                        const date = data.timestamp ? data.timestamp.toDate().toLocaleDateString() : 'N/A';
+                        html += `<tr>
+                                    <td>${date}</td>
+                                    <td id="name-${doc.id}">${data.name}</td>
+                                    <td id="number-${doc.id}" style="font-family: monospace; font-weight: bold;">${data.number}</td>
+                                    <td>${data.country}</td>
+                                    <td>${data.state}</td>
+                                    <td>
+                                        <button onclick="editSSN('${doc.id}')" style="background:none; border:none; color:var(--brand-secondary); cursor:pointer; margin-right:8px;"><span class="material-symbols-outlined" style="font-size: 20px;">edit</span></button>
+                                        <button onclick="deleteSSN('${doc.id}')" style="background:none; border:none; color:#ef4444; cursor:pointer;"><span class="material-symbols-outlined" style="font-size: 20px;">delete</span></button>
+                                    </td>
+                                 </tr>`;
+                    });
+                    tbody.innerHTML = html;
+                } catch (e) {
+                    console.error(e);
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Error loading data.</td></tr>';
+                }
+            }
+
+            // Edit & Delete Window functions
+            window.deleteSSN = async function(docId) {
+                if(confirm("Are you sure you want to delete this SSN?")) {
+                    try {
+                        await db.collection('ssn_list').doc(docId).delete();
+                        showToast("SSN deleted successfully!", "success");
+                        displaySSNList(); // Refresh list
+                    } catch(e) {
+                        showToast("Error deleting SSN.", "error");
+                    }
+                }
+            };
+
+            window.editSSN = async function(docId) {
+                const currentName = document.getElementById(`name-${docId}`).innerText;
+                const currentNumber = document.getElementById(`number-${docId}`).innerText;
+                
+                const newName = prompt("Edit Name:", currentName);
+                if(newName === null) return; 
+                
+                const newNumber = prompt("Edit Number:", currentNumber);
+                if(newNumber === null) return;
+
+                try {
+                    await db.collection('ssn_list').doc(docId).update({
+                        name: newName,
+                        number: newNumber
+                    });
+                    showToast("SSN updated successfully!", "success");
+                    displaySSNList(); // Refresh list
+                } catch(e) {
+                    showToast("Error updating SSN.", "error");
+                }
+            };
+
+            // ==================== NEW FEATURES LOGIC END ====================
 
             fetchLiveDollarRates();
             loadPaymentGateways(); displayServices(); displayCourses(); displayNotices(); displayTrustScreenshots(); loadHeroImage(); loadAboutUsImage(); loadHeaderLogo(); loadSocialMediaLinks(); loadContactUsImage(); loadFloatingChatIcon();
