@@ -895,6 +895,10 @@
                 <li data-page="manual-sale-page"><a href="#"><span class="material-symbols-outlined">add_shopping_cart</span> Manual Sales</a></li>
                 <li data-page="dollar-exchange-page"><a href="#"><span class="material-symbols-outlined">currency_exchange</span> Dollar Exchange</a></li>
                 <li data-page="users-page"><a href="#"><span class="material-symbols-outlined">group</span> Student Management</a></li>
+                
+                <!-- NEW FOLLOW UP PAGE LINK -->
+                <li data-page="follow-up-page"><a href="#"><span class="material-symbols-outlined">quick_reply</span> Follow up Message</a></li>
+
                 <li data-page="services-page"><a href="#"><span class="material-symbols-outlined">construction</span> Service Management</a></li>
                 <li data-page="service-stock-page"><a href="#"><span class="material-symbols-outlined">inventory</span> Service Stock</a></li>
                 <li data-page="send-service-page"><a href="#"><span class="material-symbols-outlined">send</span> Send Service</a></li>
@@ -982,6 +986,18 @@
                             <p>Total Students</p>
                         </div>
                     </div>
+                    
+                    <!-- TOTAL FOLLOW-UPS ON DASHBOARD -->
+                    <div id="total-followups-card" class="stat-card" style="cursor: pointer;">
+                        <div class="header-row">
+                            <div class="icon-wrapper" style="background:#e0f2fe; color:#0284c7;"><span class="material-symbols-outlined icon">quick_reply</span></div>
+                        </div>
+                        <div>
+                            <h3 id="main-total-followups">0</h3>
+                            <p>Total Follow-up Messages</p>
+                        </div>
+                    </div>
+
                     <div class="stat-card">
                         <div class="header-row">
                             <div class="icon-wrapper" style="background:#e0f2fe; color:#0284c7;"><span class="material-symbols-outlined icon">construction</span></div>
@@ -1018,6 +1034,82 @@
                             <p>Total Screenshots</p>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- NEW FOLLOW UP PAGE -->
+            <div id="follow-up-page" class="page">
+                <div class="page-header">
+                    <h1>Student Follow-up History</h1>
+                    <button class="btn btn-add" id="export-followup-btn"><span class="material-symbols-outlined">download</span> Export CSV</button>
+                </div>
+                
+                <div class="stats-grid" style="margin-bottom: 24px;">
+                    <div class="stat-card">
+                        <div class="header-row">
+                            <div class="icon-wrapper" style="background:#eef2ff; color:var(--primary-blue);"><span class="material-symbols-outlined icon">send</span></div>
+                        </div>
+                        <div><h3 id="fu-total-sent">0</h3><p>Total Sent Messages</p></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="header-row">
+                            <div class="icon-wrapper" style="background:#ffe4e6; color:var(--accent-red);"><span class="material-symbols-outlined icon">sms_failed</span></div>
+                        </div>
+                        <div><h3 id="fu-total-failed">0</h3><p>Total Failed</p></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="header-row">
+                            <div class="icon-wrapper" style="background:#d1fae5; color:#059669;"><span class="material-symbols-outlined icon">thumb_up</span></div>
+                        </div>
+                        <div><h3 id="fu-total-interested">0</h3><p>Interested Students</p></div>
+                    </div>
+                    <div class="stat-card pending-card">
+                        <div class="header-row">
+                            <div class="icon-wrapper"><span class="material-symbols-outlined icon">pending_actions</span></div>
+                        </div>
+                        <div><h3 id="fu-total-pending">0</h3><p>Pending Follow-up</p></div>
+                    </div>
+                </div>
+
+                <div class="content-box">
+                    <div style="display:flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px;">
+                        <div class="search-bar-container" style="flex: 1; min-width: 250px; margin-bottom: 0;">
+                            <input type="text" id="fu-search-input" placeholder="Search by Student Name or Phone Number...">
+                        </div>
+                        <select id="fu-status-filter" class="form-group" style="margin-bottom: 0; width: 150px; padding: 12px; border-radius: var(--btn-radius); border: 1px solid var(--border-color);">
+                            <option value="all">All Messages</option>
+                            <option value="sent">Sent Messages</option>
+                            <option value="failed">Not Send (Failed)</option>
+                            <option value="pending">Pending Send</option>
+                        </select>
+                        <select id="fu-result-filter" class="form-group" style="margin-bottom: 0; width: 180px; padding: 12px; border-radius: var(--btn-radius); border: 1px solid var(--border-color);">
+                            <option value="all">All Results</option>
+                            <option value="Interested">Interested</option>
+                            <option value="Not Interested">Not Interested</option>
+                            <option value="No Response">No Response</option>
+                            <option value="Already Joined">Already Joined Another</option>
+                            <option value="Phone Off">Phone Off</option>
+                            <option value="Pending">Pending</option>
+                        </select>
+                        <input type="date" id="fu-date-filter" class="form-group" style="margin-bottom: 0; padding: 12px; border-radius: var(--btn-radius); border: 1px solid var(--border-color);">
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Serial</th>
+                                <th>Student Name</th>
+                                <th>Phone Number</th>
+                                <th>Course Name</th>
+                                <th>Message Date</th>
+                                <th>Status</th>
+                                <th>Follow-up Result</th>
+                                <th>Next Follow-up</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="follow-up-table-body"></tbody>
+                    </table>
                 </div>
             </div>
 
@@ -1105,7 +1197,6 @@
                 </div>
             </div>
 
-            <!-- NEW COUPON PAGE -->
             <div id="coupons-page" class="page">
                 <div class="page-header">
                     <h1>Coupon Management</h1><button class="btn btn-add" onclick="openModalForAdd('coupons')"><span class="material-symbols-outlined">add</span> New Coupon</button>
@@ -1561,13 +1652,19 @@
     <div id="student-whatsapp-modal" class="modal hidden">
         <div class="modal-content" style="max-width: 500px;">
             <div class="modal-header">
-                <h2 style="font-weight: 600;">Send WhatsApp Message</h2>
+                <h2 style="font-weight: 600;">Send Follow-up Message</h2>
                 <button id="close-whatsapp-modal"><span class="material-symbols-outlined">close</span></button>
             </div>
             <form id="student-whatsapp-form">
                 <div class="form-group">
                     <label>Recipient Number</label>
                     <input type="text" id="wa-recipient-number" readonly style="background: var(--background-light);">
+                    <input type="hidden" id="wa-student-name">
+                </div>
+                <!-- NEW FIELD FOR FOLLOW UP TRACKING -->
+                <div class="form-group">
+                    <label>Course Related to Follow-up (Optional)</label>
+                    <input type="text" id="wa-course-name" placeholder="e.g. Freelancing Batch 12">
                 </div>
                 <div class="form-group">
                     <label>Message</label>
@@ -1675,12 +1772,12 @@
             const aboutUsSettingsForm = document.getElementById('about-us-settings-form');
             const contactUsSettingsForm = document.getElementById('contact-us-settings-form');
             const chatIconSettingsForm = document.getElementById('chat-icon-settings-form'); 
-            const macrodroidSettingsForm = document.getElementById('macrodroid-settings-form'); // Added
+            const macrodroidSettingsForm = document.getElementById('macrodroid-settings-form'); 
             
-            const studentWhatsappModal = document.getElementById('student-whatsapp-modal'); // Added
-            const closeWhatsappModalBtn = document.getElementById('close-whatsapp-modal'); // Added
-            const cancelWhatsappModalBtn = document.getElementById('cancel-whatsapp-modal'); // Added
-            const studentWhatsappForm = document.getElementById('student-whatsapp-form'); // Added
+            const studentWhatsappModal = document.getElementById('student-whatsapp-modal'); 
+            const closeWhatsappModalBtn = document.getElementById('close-whatsapp-modal'); 
+            const cancelWhatsappModalBtn = document.getElementById('cancel-whatsapp-modal'); 
+            const studentWhatsappForm = document.getElementById('student-whatsapp-form'); 
 
             const socialMediaForm = document.getElementById('social-media-form');
             const addSocialLinkBtn = document.getElementById('add-social-link-btn');
@@ -1708,7 +1805,6 @@
                     return;
                 }
                 
-                // Format Number to ensure 880
                 let formattedMobile = number.replace(/[^0-9]/g, '');
                 if (formattedMobile.startsWith('01') && formattedMobile.length === 11) {
                     formattedMobile = '880' + formattedMobile.substring(1);
@@ -1719,18 +1815,18 @@
                 const url = `${baseUrl}?number=${encodeURIComponent(formattedMobile)}&message=${encodeURIComponent(message)}`;
                 
                 try {
-                    // Send request silently in background via no-cors mode
                     fetch(url, { mode: 'no-cors' });
                     if(showToastMsg) showToast("Triggered MacroDroid to send message silently!", "success");
                 } catch (error) {
                     if(showToastMsg) showToast("Failed to trigger MacroDroid.", "error");
                 }
             };
-            // ------------------------------------------
 
-            // --- STUDENT WHATSAPP MODAL LOGIC ---
-            window.openStudentWhatsappModal = (mobile) => {
+            // --- STUDENT WHATSAPP MODAL LOGIC (UPDATED WITH FOLLOW UP TRACKING) ---
+            window.openStudentWhatsappModal = (mobile, name = 'N/A') => {
                 document.getElementById('wa-recipient-number').value = mobile || 'N/A';
+                document.getElementById('wa-student-name').value = name;
+                document.getElementById('wa-course-name').value = '';
                 document.getElementById('wa-message-text').value = '';
                 document.getElementById('wa-send-all').checked = false;
                 studentWhatsappModal.classList.remove('hidden');
@@ -1744,43 +1840,100 @@
                 const message = document.getElementById('wa-message-text').value.trim();
                 const sendAll = document.getElementById('wa-send-all').checked;
                 const singleMobile = document.getElementById('wa-recipient-number').value;
+                const studentName = document.getElementById('wa-student-name').value || 'N/A';
+                const courseName = document.getElementById('wa-course-name').value.trim() || 'N/A';
 
                 if (!message) { showToast('Message is empty', 'error'); return; }
 
                 const submitBtn = studentWhatsappForm.querySelector('button[type="submit"]');
                 const originalBtnText = submitBtn.innerHTML;
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = "Sending...";
+                submitBtn.innerHTML = "Sending & Tracking...";
 
                 if (sendAll) {
                     try {
                         const usersSnapshot = await db.collection('users').get();
                         let count = 0;
+                        const trackingPromises = [];
+
                         usersSnapshot.forEach(doc => {
                             const data = doc.data();
                             if (data.mobile) {
-                                window.sendViaMacroDroid(data.mobile, message, false); // false to hide individual toasts
+                                window.sendViaMacroDroid(data.mobile, message, false); 
+                                
+                                // Auto Record Follow-up
+                                trackingPromises.push(db.collection('follow_ups').add({
+                                    studentName: data.name || 'N/A',
+                                    phoneNumber: data.mobile,
+                                    courseName: courseName,
+                                    messageContent: message,
+                                    status: 'sent',
+                                    followUpResult: 'Pending',
+                                    adminNote: '',
+                                    nextFollowUpDate: '',
+                                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                                }));
                                 count++;
                             }
                         });
-                        showToast(`Triggered MacroDroid for ${count} students!`, 'success');
+                        await Promise.all(trackingPromises);
+                        showToast(`Triggered MacroDroid for ${count} students & Saved!`, 'success');
                     } catch (error) {
                         showToast('Failed to retrieve students from database.', 'error');
                     }
                 } else {
                     if (!singleMobile || singleMobile === 'N/A') {
                         showToast('No mobile number found for this student.', 'error');
+                        
+                        // Track Failed Follow up
+                        await db.collection('follow_ups').add({
+                            studentName: studentName,
+                            phoneNumber: singleMobile || 'N/A',
+                            courseName: courseName,
+                            messageContent: message,
+                            status: 'failed',
+                            followUpResult: 'No Response',
+                            adminNote: 'No mobile number found.',
+                            nextFollowUpDate: '',
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                        });
                     } else {
                         await window.sendViaMacroDroid(singleMobile, message, false);
-                        showToast('Triggered MacroDroid for this student!', 'success');
+                        
+                        // Track Success Follow up
+                        await db.collection('follow_ups').add({
+                            studentName: studentName,
+                            phoneNumber: singleMobile,
+                            courseName: courseName,
+                            messageContent: message,
+                            status: 'sent',
+                            followUpResult: 'Pending',
+                            adminNote: '',
+                            nextFollowUpDate: '',
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+
+                        showToast('Triggered MacroDroid & Follow-up Saved!', 'success');
                     }
                 }
 
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalBtnText;
                 studentWhatsappModal.classList.add('hidden');
+                
+                // Refresh followups if we are on that page
+                if(document.getElementById('follow-up-page').classList.contains('active')) {
+                    renderFollowUps();
+                }
             });
-            // -------------------------------------
+
+            // DASHBOARD CLICKS
+            const totalFollowupsCard = document.getElementById('total-followups-card');
+            if (totalFollowupsCard) {
+                totalFollowupsCard.addEventListener('click', () => {
+                    navigateTo('follow-up-page');
+                });
+            }
 
             const pendingPaymentsCard = document.getElementById('pending-payments-card');
             if (pendingPaymentsCard) {
@@ -1967,6 +2120,7 @@
                     case 'manual-sale-page': renderManualSalePage(); break;
                     case 'dollar-exchange-page': renderDollarRatesSettings(); renderDollarSellRequests(); break;
                     case 'users-page': renderUsers(); break;
+                    case 'follow-up-page': renderFollowUps(); break;
                     case 'services-page': renderServices(); break;
                     case 'service-stock-page': renderServiceStock(); break;
                     case 'send-service-page': renderSendServicePage(); break;
@@ -2000,6 +2154,7 @@
                     const paymentsSnapshot = await db.collection('payments').get();
                     const dollarExchangeSnapshot = await db.collection('dollar_exchange').get();
                     const dollarRequestsSnapshot = await db.collection('dollar_sells').where('status', '==', 'pending').get();
+                    const followupsSnapshot = await db.collection('follow_ups').get();
 
                     let totalSales = 0, currentMonthSales = 0, totalProfit = 0, currentMonthProfit = 0, pendingPaymentsCount = 0;
                     const now = new Date(), currentMonth = now.getMonth(), currentYear = now.getFullYear();
@@ -2039,6 +2194,7 @@
                     document.getElementById('pending-payments').textContent = pendingPaymentsCount;
                     document.getElementById('pending-dollar-requests').textContent = dollarRequestsSnapshot.size;
                     document.getElementById('total-students').textContent = usersSnapshot.size;
+                    document.getElementById('main-total-followups').textContent = followupsSnapshot.size;
                     document.getElementById('total-services').textContent = servicesSnapshot.size;
                     document.getElementById('total-courses').textContent = coursesSnapshot.size;
                     document.getElementById('total-notices').textContent = noticesSnapshot.size;
@@ -2046,6 +2202,115 @@
                 } catch (error) {
                     console.error("Error loading dashboard data:", error);
                 }
+            }
+
+            // --- NEW: FOLLOW UP SYSTEM RENDER & LOGIC ---
+            async function renderFollowUps() {
+                const tableBody = document.getElementById('follow-up-table-body');
+                tableBody.innerHTML = `<tr><td colspan="9" style="text-align: center;">Loading data...</td></tr>`;
+                try {
+                    const snapshot = await db.collection('follow_ups').orderBy('timestamp', 'desc').get();
+                    if (snapshot.empty) { tableBody.innerHTML = `<tr><td colspan="9" style="text-align: center;">No follow-up records found.</td></tr>`; return; }
+                    
+                    let totalSent = 0, totalFailed = 0, totalInterested = 0, totalPending = 0;
+                    let windowFollowUps = [];
+
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        data.id = doc.id;
+                        windowFollowUps.push(data);
+                        
+                        if(data.status === 'sent') totalSent++;
+                        if(data.status === 'failed') totalFailed++;
+                        if(data.followUpResult === 'Pending') totalPending++;
+                        if(data.followUpResult === 'Interested') totalInterested++;
+                    });
+                    
+                    document.getElementById('fu-total-sent').textContent = totalSent;
+                    document.getElementById('fu-total-failed').textContent = totalFailed;
+                    document.getElementById('fu-total-interested').textContent = totalInterested;
+                    document.getElementById('fu-total-pending').textContent = totalPending;
+                    
+                    window.allFollowUpsData = windowFollowUps; 
+                    window.applyFollowUpFilters();
+
+                } catch (error) { 
+                    tableBody.innerHTML = `<tr><td colspan="9" style="color: red; text-align: center;">Error: ${error.message}</td></tr>`; 
+                }
+            }
+
+            window.applyFollowUpFilters = () => {
+                 const searchTerm = document.getElementById('fu-search-input').value.toLowerCase().trim();
+                 const statusFilter = document.getElementById('fu-status-filter').value;
+                 const resultFilter = document.getElementById('fu-result-filter').value;
+                 const dateFilter = document.getElementById('fu-date-filter').value; 
+                 
+                 const tableBody = document.getElementById('follow-up-table-body');
+                 let tableHTML = '';
+                 let sn = 1;
+                 
+                 (window.allFollowUpsData || []).forEach(data => {
+                     if (statusFilter !== 'all' && data.status !== statusFilter) return;
+                     if (resultFilter !== 'all' && data.followUpResult !== resultFilter) return;
+                     
+                     const timestampStr = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString('en-US') : 'N/A';
+                     const dateOnly = data.timestamp ? new Date(data.timestamp.seconds * 1000).toISOString().split('T')[0] : '';
+                     
+                     if (dateFilter && dateOnly !== dateFilter) return;
+                     
+                     const searchMatch = (data.studentName || '').toLowerCase().includes(searchTerm) || (data.phoneNumber || '').toLowerCase().includes(searchTerm);
+                     if (searchTerm && !searchMatch) return;
+                     
+                     let statusBadgeClass = 'pending';
+                     if(data.status === 'sent') statusBadgeClass = 'approved'; 
+                     if(data.status === 'failed') statusBadgeClass = 'rejected'; 
+                     
+                     tableHTML += `<tr>
+                        <td data-label="SN">${sn++}</td>
+                        <td data-label="Student Name">${data.studentName || 'N/A'}</td>
+                        <td data-label="Phone Number"><span class="copyable-mobile" onclick="copyToClipboard('${data.phoneNumber || ''}')" title="Copy">${data.phoneNumber || 'N/A'}</span></td>
+                        <td data-label="Course Name">${data.courseName || 'N/A'}</td>
+                        <td data-label="Message Date">${timestampStr}</td>
+                        <td data-label="Status"><span class="status-badge ${statusBadgeClass}">${data.status === 'failed' ? 'Not Send' : data.status || 'Pending'}</span></td>
+                        <td data-label="Result">${data.followUpResult || 'Pending'}</td>
+                        <td data-label="Next Date">${data.nextFollowUpDate || 'N/A'}</td>
+                        <td class="actions-cell" data-label="Action">
+                            <button class="btn-edit" onclick="openModalForEdit('follow_ups', '${data.id}')" title="Edit Follow-up Result/Notes"><span class="material-symbols-outlined">edit</span></button>
+                            <button class="btn-delete" onclick="deleteItem('follow_ups', '${data.id}')" title="Delete Record"><span class="material-symbols-outlined">delete</span></button>
+                        </td>
+                     </tr>`;
+                 });
+                 
+                 if(tableHTML === '') tableHTML = `<tr><td colspan="9" style="text-align: center;">No matching records found.</td></tr>`;
+                 tableBody.innerHTML = tableHTML;
+            };
+
+            // Bind filter events
+            if(document.getElementById('fu-search-input')) {
+                document.getElementById('fu-search-input').addEventListener('input', applyFollowUpFilters);
+                document.getElementById('fu-status-filter').addEventListener('change', applyFollowUpFilters);
+                document.getElementById('fu-result-filter').addEventListener('change', applyFollowUpFilters);
+                document.getElementById('fu-date-filter').addEventListener('change', applyFollowUpFilters);
+                
+                // Export CSV Logic
+                document.getElementById('export-followup-btn').addEventListener('click', () => {
+                    if (!window.allFollowUpsData || window.allFollowUpsData.length === 0) {
+                        showToast("No data to export", "error"); return;
+                    }
+                    let csv = 'Serial,Student Name,Phone Number,Course Name,Message Date,Status,Result,Next Follow-up,Admin Note\n';
+                    window.allFollowUpsData.forEach((row, i) => {
+                        const date = row.timestamp ? new Date(row.timestamp.seconds * 1000).toLocaleString('en-US').replace(/,/g, '') : 'N/A';
+                        const name = (row.studentName || '').replace(/,/g, ' ');
+                        const course = (row.courseName || 'N/A').replace(/,/g, ' ');
+                        const note = (row.adminNote || '').replace(/,/g, ' ');
+                        csv += `${i+1},${name},${row.phoneNumber},${course},${date},${row.status},${row.followUpResult},${row.nextFollowUpDate},${note}\n`;
+                    });
+                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.setAttribute('hidden', ''); a.setAttribute('href', url); a.setAttribute('download', 'follow_up_history.csv');
+                    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                });
             }
 
             let reportChartInstance = null;
@@ -2565,7 +2830,6 @@
                 const serviceInfo = serviceInfoTextarea.value.trim();
                 if (!recipientNumber || !serviceInfo) { showToast("Fill all details.", "error"); return; }
                 
-                // Uses the MacroDroid API logic
                 window.sendViaMacroDroid(recipientNumber, serviceInfo);
             });
 
@@ -2634,7 +2898,6 @@
                 try { await db.collection('site_settings').doc('floating_chat').set({ imageUrl: newUrl }, { merge: true }); showToast("Chat icon updated!"); renderSettings(); } catch (error) { showToast("Failed to save.", "error"); }
             });
             
-            // MacroDroid Settings Form Submit
             if(macrodroidSettingsForm) {
                 macrodroidSettingsForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
@@ -2755,7 +3018,6 @@
                     }
                     const data = doc.data();
 
-                    // Fill Customer & Meta info
                     let custName = data.userName;
                     if(!custName && data.userEmail !== 'admin@manual.sale') custName = data.userEmail;
                     if(!custName) custName = "Walk-in Customer";
@@ -2764,7 +3026,6 @@
                     document.getElementById('receipt-voucher').textContent = data.transactionId || 'N/A';
                     document.getElementById('receipt-date').textContent = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString('en-GB', {day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit'}) : new Date().toLocaleString('en-GB');
 
-                    // Calculate Items
                     let qty = data.quantity || 1;
                     let itemName = data.itemName || 'N/A';
                     
@@ -2791,19 +3052,16 @@
                         <td style="text-align:right; padding:4px 0;">${discount.toFixed(2)}</td>
                     </tr>`;
 
-                    // Fill Summary
                     document.getElementById('receipt-amount').textContent = grossAmount.toFixed(2);
                     document.getElementById('receipt-discount').textContent = discount.toFixed(2);
                     document.getElementById('receipt-net').textContent = netAmount.toFixed(2);
                     document.getElementById('receipt-cash').textContent = netAmount.toFixed(2);
 
-                    // Fetch logo
                     const logoDoc = await db.collection('site_settings').doc('header_settings').get();
                     if (logoDoc.exists && logoDoc.data().logoImageUrl) {
                         document.getElementById('receipt-logo').src = logoDoc.data().logoImageUrl;
                     }
 
-                    // Trigger Print
                     window.print();
                 } catch (err) {
                     showToast('Failed to print receipt', 'error');
@@ -2906,7 +3164,7 @@
                                         <td data-label="Referral Code">${user.referralCode || 'N/A'}</td>
                                         <td data-label="Balance">৳ ${user.affiliateBalance || 0}</td>
                                         <td class="actions-cell" data-label="Action">
-                                            <button class="btn-whatsapp" onclick="openStudentWhatsappModal('${user.mobile}')" title="Send WhatsApp Message"><span class="material-symbols-outlined">chat</span></button>
+                                            <button class="btn-whatsapp" onclick="openStudentWhatsappModal('${user.mobile}', '${user.name || ''}')" title="Send Follow-up Message"><span class="material-symbols-outlined">chat</span></button>
                                             <button class="btn-edit" onclick="openModalForEdit('users', '${user.id}')" title="Edit Student"><span class="material-symbols-outlined">edit</span></button>
                                             <button class="btn-delete" onclick="deleteItem('users', '${user.id}')" title="Delete Student"><span class="material-symbols-outlined">delete</span></button>
                                         </td>
@@ -3079,7 +3337,7 @@
                         showToast('Deleted successfully.');
                         const activePage = document.querySelector('.page.active').id;
                         navigateTo(activePage); 
-                        if (collection !== 'service_stock') renderDashboard();
+                        if (collection !== 'service_stock' && collection !== 'follow_ups') renderDashboard();
                     } catch (error) { showToast('Failed to delete item.', 'error'); }
                 }
             };
@@ -3158,6 +3416,17 @@
                         case 'trust_screenshots':
                             newItem = { title: formData.get('title'), imageUrl: formData.get('imageUrl'), timestamp: firebase.firestore.FieldValue.serverTimestamp() };
                             break;
+                        case 'follow_ups':
+                            newItem = {
+                                studentName: formData.get('studentName'),
+                                phoneNumber: formData.get('phoneNumber'),
+                                courseName: formData.get('courseName'),
+                                status: formData.get('status'),
+                                followUpResult: formData.get('followUpResult'),
+                                adminNote: formData.get('adminNote'),
+                                nextFollowUpDate: formData.get('nextFollowUpDate')
+                            };
+                            break;
                         default:
                             newItem = { title: formData.get('title'), description: formData.get('description'), timestamp: firebase.firestore.FieldValue.serverTimestamp() };
                     }
@@ -3165,7 +3434,7 @@
                     else await db.collection(collection).add(newItem);
                     adminModal.classList.add('hidden');
                     navigateTo(document.querySelector('.page.active').id);
-                    renderDashboard();
+                    if (collection !== 'follow_ups') renderDashboard();
                     showToast('Saved successfully.');
                 } catch (error) { showToast(`Failed to save: ${error.message}`, "error"); }
             }
@@ -3179,7 +3448,7 @@
             closeModalBtn.addEventListener('click', () => adminModal.classList.add('hidden'));
 
             function getBengaliTypeName(collection) {
-                const names = { payments: 'Payment', services: 'Service', courses: 'Course', enrollments: 'Enrollment', joinClass: 'Class Link', online_classes: 'Online Class Batch', curriculum: 'Curriculum', users: 'Student', withdrawals: 'Withdrawal Request', trust_screenshots: 'Trust Screenshot', payment_gateways: 'Payment Gateway', coupons: 'Coupon' };
+                const names = { payments: 'Payment', services: 'Service', courses: 'Course', enrollments: 'Enrollment', joinClass: 'Class Link', online_classes: 'Online Class Batch', curriculum: 'Curriculum', users: 'Student', withdrawals: 'Withdrawal Request', trust_screenshots: 'Trust Screenshot', payment_gateways: 'Payment Gateway', coupons: 'Coupon', follow_ups: 'Follow-up Record' };
                 return names[collection] || 'Notice';
             }
 
@@ -3236,6 +3505,34 @@
                     case 'withdrawals': return `<div class="form-group"><label>Student Email (readonly)</label><input type="email" name="userEmail" value="${data.userEmail || ''}" readonly></div><div class="form-group"><label>Amount (BDT)</label><input type="number" name="amount" value="${data.amount || 0}" required></div><div class="form-group"><label>Method</label><input type="text" name="method" value="${data.method || ''}" required></div><div class="form-group"><label>Account Number</label><input type="text" name="accountNumber" value="${data.accountNumber || ''}" required></div>`;
                     case 'users': return `<div class="form-group"><label>Full Name</label><input type="text" name="name" value="${data.name || ''}" ></div><div class="form-group"><label>Email (readonly)</label><input type="email" name="email" value="${data.email || ''}" readonly></div><div class="form-group"><label>Mobile</label><input type="text" name="mobile" value="${data.mobile || ''}" ></div><div class="form-group"><label>Title</label><input type="text" name="title" value="${data.title || ''}" ></div><div class="form-group"><label>Referral Code</label><input type="text" name="referralCode" value="${data.referralCode || ''}" ></div><div class="form-group"><label>Affiliate Balance (BDT)</label><input type="number" name="affiliateBalance" value="${data.affiliateBalance || 0}" ></div><div class="form-group"><label>New Password</label><input type="text" name="password" placeholder="Leave blank to keep unchanged"></div>`;
                     case 'trust_screenshots': return `<div class="form-group"><label>Title</label><input type="text" name="title" value="${data.title || ''}" required></div><div class="form-group"><label>Image URL</label><input type="text" name="imageUrl" value="${data.imageUrl || ''}" required></div>`;
+                    
+                    // NEW FOLLOW UP EDIT FORM
+                    case 'follow_ups':
+                        return `
+                            <div class="form-group"><label>Student Name</label><input type="text" name="studentName" value="${data.studentName || ''}" readonly style="background:var(--background-light);"></div>
+                            <div class="form-group"><label>Phone Number</label><input type="text" name="phoneNumber" value="${data.phoneNumber || ''}" readonly style="background:var(--background-light);"></div>
+                            <div class="form-group"><label>Course Name (Optional)</label><input type="text" name="courseName" value="${data.courseName || ''}"></div>
+                            <div class="form-group"><label>Message Status</label>
+                                <select name="status">
+                                    <option value="sent" ${data.status === 'sent' ? 'selected' : ''}>Sent</option>
+                                    <option value="failed" ${data.status === 'failed' ? 'selected' : ''}>Not Send (Failed)</option>
+                                    <option value="pending" ${data.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label>Follow-up Result</label>
+                                <select name="followUpResult">
+                                    <option value="Pending" ${data.followUpResult === 'Pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="Interested" ${data.followUpResult === 'Interested' ? 'selected' : ''}>Interested</option>
+                                    <option value="Not Interested" ${data.followUpResult === 'Not Interested' ? 'selected' : ''}>Not Interested</option>
+                                    <option value="No Response" ${data.followUpResult === 'No Response' ? 'selected' : ''}>No Response</option>
+                                    <option value="Already Joined" ${data.followUpResult === 'Already Joined' ? 'selected' : ''}>Already Joined Another</option>
+                                    <option value="Phone Off" ${data.followUpResult === 'Phone Off' ? 'selected' : ''}>Phone Off</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label>Admin Note</label><textarea name="adminNote" rows="3" placeholder="e.g. Student will join next week">${data.adminNote || ''}</textarea></div>
+                            <div class="form-group"><label>Next Follow-up Date</label><input type="date" name="nextFollowUpDate" value="${data.nextFollowUpDate || ''}"></div>
+                        `;
+
                     default: return `<div class="form-group"><label>Title</label><input type="text" name="title" value="${data.title || ''}" required></div><div class="form-group"><label>Description</label><textarea name="description" rows="4" required>${data.description || ''}</textarea></div>`;
                 }
             }
