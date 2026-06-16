@@ -1083,6 +1083,29 @@
                 </div>
             </div>
         </div>
+        <!-- ================= NEW: Set New Password Modal ================= -->
+        <div class="login-modal hidden" id="set-new-password-modal">
+            <div class="login-card" style="max-width: 480px; display: block; text-align: center;">
+                <div class="modal-form-panel" style="width: 100%;">
+                    <h2>Set New Password</h2>
+                    <p style="margin-top: -20px; margin-bottom: 32px; color: var(--text-muted); font-size: 0.95rem;">Enter your new secure password below.</p>
+                    <form id="set-new-password-form">
+                        <div class="input-group">
+                            <span class="material-symbols-outlined">lock</span>
+                            <input type="password" id="new-reset-password" placeholder=" " required minlength="6">
+                            <label for="new-reset-password">New Password</label>
+                        </div>
+                        <div class="input-group">
+                            <span class="material-symbols-outlined">lock_reset</span>
+                            <input type="password" id="confirm-new-reset-password" placeholder=" " required minlength="6">
+                            <label for="confirm-new-reset-password">Confirm Password</label>
+                        </div>
+                        <button type="submit" class="btn btn-gradient" style="width:100%;">Update Password <span class="material-symbols-outlined">save</span></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- ================= END NEW MODAL ================= -->
 
         <!-- ======================= Main Content (Logged Out View / Public Sections) ======================= -->
         <div id="main-content">
@@ -1797,6 +1820,73 @@
             const forgotPasswordLink = document.getElementById('forgot-password-link');
             const forgotPasswordForm = document.getElementById('forgot-password-form');
             const backToLoginLink = document.getElementById('back-to-login-link');
+            // --- NEW: Elements for Set New Password ---
+            const setNewPasswordModal = document.getElementById('set-new-password-modal');
+            const setNewPasswordForm = document.getElementById('set-new-password-form');
+            let resetOobCode = null; // টোকেন সেভ রাখার জন্য
+
+            // URL চেক করে oobCode বের করার ফাংশন
+            function checkPasswordResetAction() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const mode = urlParams.get('mode');
+                const oobCode = urlParams.get('oobCode');
+
+                if (mode === 'resetPassword' && oobCode) {
+                    resetOobCode = oobCode; // কোডটি সেভ করে রাখা
+                    
+                    // সব মডাল বন্ধ করে নতুন পাসওয়ার্ডের মডাল ওপেন করা
+                    document.querySelectorAll('.login-modal').forEach(m => m.classList.add('hidden'));
+                    setNewPasswordModal.classList.remove('hidden');
+
+                    // URL পরিষ্কার করে দেওয়া (যাতে রিলোড দিলে আবার ওপেন না হয়)
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+            }
+            // পেজ লোড হলেই চেক করবে কোনো রিসেট লিংক থেকে এসেছে কিনা
+            checkPasswordResetAction();
+
+            // নতুন পাসওয়ার্ড সাবমিট করার ফাংশন
+            setNewPasswordForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const newPassword = document.getElementById('new-reset-password').value;
+                const confirmPassword = document.getElementById('confirm-new-reset-password').value;
+
+                if (newPassword !== confirmPassword) {
+                    showToast("Passwords do not match!", 'error');
+                    return;
+                }
+
+                if (!resetOobCode) {
+                    showToast("Invalid or expired reset link. Please try again.", 'error');
+                    return;
+                }
+
+                const submitBtn = setNewPasswordForm.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = 'Updating... <span class="material-symbols-outlined">hourglass_empty</span>';
+
+                // ফায়ারবেসের মেইন ফাংশন
+                auth.confirmPasswordReset(resetOobCode, newPassword)
+                    .then(() => {
+                        showToast("Password updated successfully! You can now log in.", "success");
+                        setNewPasswordModal.classList.add('hidden');
+                        setNewPasswordForm.reset();
+                        resetOobCode = null;
+                        navigateTo('login'); // লগিন মডাল ওপেন করা
+                    })
+                    .catch((error) => {
+                        let msg = "Error updating password.";
+                        if (error.code === 'auth/expired-action-code' || error.code === 'auth/invalid-action-code') {
+                            msg = "This reset link has expired or already been used. Please request a new one.";
+                        }
+                        showToast(msg, "error");
+                    })
+                    .finally(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = 'Update Password <span class="material-symbols-outlined">save</span>';
+                    });
+            });
+            // --- END NEW JS ---
 
             const loggedOutView = document.getElementById('logged-out-view');
             const loggedInView = document.getElementById('logged-in-view');
