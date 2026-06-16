@@ -779,28 +779,83 @@
             .video-entry-inputs { grid-template-columns: 1fr; }
             .video-entry .btn-remove { justify-self: start; }
 
+            /* ===== UPDATED MOBILE TABLE CSS ===== */
             .data-table thead { display: none; }
-            .data-table tr {
-                display: block; margin-bottom: 16px; border: 1px solid var(--border-color);
-                border-radius: var(--card-radius); padding: 16px; background-color: var(--surface); box-shadow: var(--shadow-sm);
-            }
-            .data-table td {
-                display: flex; justify-content: space-between; align-items: center;
-                padding: 12px 0; text-align: right; border-bottom: 1px solid #f1f5f9;
-            }
-            .data-table tr td:last-child { border-bottom: none; padding-bottom: 0; }
-            .data-table td::before {
-                content: attr(data-label); font-weight: 500; font-size: 0.85em; color: var(--text-muted); text-align: left; margin-right: 16px; text-transform: uppercase; letter-spacing: 0.05em;
-            }
-            .data-table .actions-cell { justify-content: flex-end; gap: 8px; padding-top: 16px; }
             
-            #payments-page .data-table .actions-cell, #dollar-exchange-page .data-table .actions-cell {
-                display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+            .data-table tr {
+                display: block; 
+                margin-bottom: 16px; 
+                border: 1px solid var(--border-color);
+                border-radius: var(--card-radius); 
+                background-color: var(--surface); 
+                box-shadow: var(--shadow-sm);
+                overflow: hidden; /* Fix layout bleeding */
             }
-            #payments-page .data-table .actions-cell .status-select, #payments-page .data-table .actions-cell .btn-save-status,
-            #dollar-exchange-page .data-table .actions-cell .status-select, #dollar-exchange-page .data-table .actions-cell .btn-save-status {
-                width: 100%; max-width: 100%; margin: 0;
+            
+            .data-table td {
+                display: block; /* Changed to block to fix overlap issues */
+                text-align: right; 
+                padding: 12px 16px 12px 45%; /* Left padding holds the label */
+                border-bottom: 1px solid #f1f5f9;
+                position: relative;
+                word-break: break-word; /* Prevents long text from going off screen */
+                min-height: 48px;
             }
+            
+            .data-table tr td:last-child { border-bottom: none; }
+            
+            .data-table td::before {
+                content: attr(data-label); 
+                font-weight: 600; 
+                font-size: 0.85em; 
+                color: var(--text-muted); 
+                text-align: left; 
+                text-transform: uppercase; 
+                letter-spacing: 0.05em;
+                position: absolute; /* Keeps label cleanly on the left */
+                left: 16px; 
+                top: 12px; 
+                width: 40%;
+                white-space: normal;
+            }
+
+            /* Action buttons fixed formatting */
+            .data-table .actions-cell { 
+                display: flex !important; 
+                flex-wrap: wrap; 
+                justify-content: flex-end; 
+                align-items: center; 
+                gap: 8px; 
+                padding: 16px; /* Reset padding for action row */
+            }
+            
+            .data-table .actions-cell::before {
+                position: static; /* Put label back in normal flow */
+                width: auto; 
+                margin-right: auto; /* Push action buttons to the right */
+                margin-bottom: 0;
+            }
+            
+            /* Target nested div containers inside actions (like in Payment Management) */
+            .data-table .actions-cell > div {
+                width: 100%; 
+                display: flex; 
+                flex-wrap: wrap; 
+                justify-content: flex-end; 
+                gap: 8px; 
+            }
+
+            /* Make dropdowns full width on mobile for cleaner look */
+            .actions-cell .status-select {
+                width: 100%;
+                margin-bottom: 8px;
+            }
+            
+            #payments-page .data-table .actions-cell .status-select,
+            #dollar-exchange-page .data-table .actions-cell .status-select {
+                margin: 0 0 10px 0;
+            }
+            /* ===== END UPDATED MOBILE TABLE CSS ===== */
         }
 
         /* --- Toast Styles (Modern Snackbar) --- */
@@ -3106,7 +3161,7 @@
                         const nameDisplay = payment.userName ? `<div style="font-weight: 500;">${payment.userName}</div>` : '';
                         const mobileDisplay = payment.userMobile ? `<div><small style="color:var(--text-muted);">${payment.userMobile}</small></div>` : '';
                         const emailDisplay = payment.userEmail !== 'admin@manual.sale' ? `<div><small>${payment.userEmail}</small></div>` : `<div><small style="color:var(--accent-yellow);">Manual Sale</small></div>`;
-                        const customerInfo = `${nameDisplay}${mobileDisplay}${emailDisplay}`;
+                        const customerInfo = `<div>${nameDisplay}${mobileDisplay}${emailDisplay}</div>`;
                         
                         const discountDisplay = payment.discountAmount ? `৳ ${payment.discountAmount}` : '৳ 0';
                         
