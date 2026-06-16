@@ -820,30 +820,33 @@
             }
 
             /* Action buttons fixed formatting */
-            .data-table .actions-cell { 
-                display: flex !important; 
-                flex-wrap: wrap; 
-                justify-content: flex-end; 
-                align-items: center; 
-                gap: 8px; 
-                padding: 16px; /* Reset padding for action row */
-            }
-            
-            .data-table .actions-cell::before {
-                position: static; /* Put label back in normal flow */
-                width: auto; 
-                margin-right: auto; /* Push action buttons to the right */
-                margin-bottom: 0;
-            }
-            
-            /* Target nested div containers inside actions (like in Payment Management) */
-            .data-table .actions-cell > div {
-                width: 100%; 
-                display: flex; 
-                flex-wrap: wrap; 
-                justify-content: flex-end; 
-                gap: 8px; 
-            }
+.data-table .actions-cell { 
+    display: flex !important; 
+    flex-wrap: wrap; 
+    justify-content: center; /* বাটনগুলোকে মাঝে নিয়ে আসবে */
+    align-items: center; 
+    gap: 10px; 
+    padding: 16px; 
+    border-top: 1px dashed var(--border-color); /* ডাটা থেকে আলাদা বোঝাতে উপরে হালকা বর্ডার */
+    background-color: #f8fafc; /* অ্যাকশন সেকশনটা একটু হাইলাইট করবে */
+}
+
+.data-table .actions-cell::before {
+    position: static; 
+    width: 100%; /* লেবেলটাকে পুরো জায়গা দিয়ে বাটনগুলোকে নিচে পাঠিয়ে দেবে */
+    text-align: center; /* 'ACTION' লেখাটি মাঝে থাকবে */
+    margin-right: 0; 
+    margin-bottom: 8px;
+}
+
+/* Target nested div containers inside actions (like in Payment Management) */
+.data-table .actions-cell > div {
+    width: 100%; 
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; /* Payment পেজের বাটনগুলোকেও মাঝে পাশাপাশি আনবে */
+    gap: 10px; 
+}
 
             /* Make dropdowns full width on mobile for cleaner look */
             .actions-cell .status-select {
