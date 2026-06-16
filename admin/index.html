@@ -819,45 +819,49 @@
                 white-space: normal;
             }
 
-            /* Action buttons fixed formatting */
-.data-table .actions-cell { 
-    display: flex !important; 
-    flex-wrap: wrap; 
-    justify-content: center; /* বাটনগুলোকে মাঝে নিয়ে আসবে */
-    align-items: center; 
-    gap: 10px; 
-    padding: 16px; 
-    border-top: 1px dashed var(--border-color); /* ডাটা থেকে আলাদা বোঝাতে উপরে হালকা বর্ডার */
-    background-color: #f8fafc; /* অ্যাকশন সেকশনটা একটু হাইলাইট করবে */
-}
+            /* ===== Action buttons CENTERED formatting for ALL pages ===== */
+            .data-table .actions-cell { 
+                display: flex !important; 
+                flex-wrap: wrap !important; 
+                justify-content: center !important; /* বাটনগুলোকে একদম মাঝে আনবে */
+                align-items: center !important; 
+                gap: 12px !important; 
+                padding: 20px 16px !important; 
+                border-top: 1px dashed var(--border-color); /* ডাটা থেকে আলাদা করার জন্য বর্ডার */
+                background-color: #f8fafc; /* অ্যাকশন এরিয়া হাইলাইট করবে */
+            }
+            
+            .data-table .actions-cell::before {
+                position: static !important; 
+                width: 100% !important; /* লেবেলকে পুরো লাইন জুড়ে বসাবে */
+                text-align: center !important; /* 'ACTION' লেখা মাঝে আনবে */
+                margin-right: 0 !important; 
+                margin-bottom: 12px !important; /* বাটনের উপরে একটু ফাঁকা জায়গা */
+            }
+            
+            /* Payment Management বা অন্যান্য পেজে যেখানে বাটনগুলো <div> এর ভেতর থাকে */
+            .data-table .actions-cell > div {
+                width: 100% !important; 
+                display: flex !important; 
+                flex-wrap: wrap !important; 
+                justify-content: center !important; /* সব বাটন মাঝে আনবে */
+                align-items: center !important;
+                gap: 10px !important; 
+            }
 
-.data-table .actions-cell::before {
-    position: static; 
-    width: 100%; /* লেবেলটাকে পুরো জায়গা দিয়ে বাটনগুলোকে নিচে পাঠিয়ে দেবে */
-    text-align: center; /* 'ACTION' লেখাটি মাঝে থাকবে */
-    margin-right: 0; 
-    margin-bottom: 8px;
-}
-
-/* Target nested div containers inside actions (like in Payment Management) */
-.data-table .actions-cell > div {
-    width: 100%; 
-    display: flex; 
-    flex-wrap: wrap; 
-    justify-content: center; /* Payment পেজের বাটনগুলোকেও মাঝে পাশাপাশি আনবে */
-    gap: 10px; 
-}
-
-            /* Make dropdowns full width on mobile for cleaner look */
+            /* ড্রপডাউন (Select Status) ডিজাইন */
             .actions-cell .status-select {
-                width: 100%;
-                margin-bottom: 8px;
+                width: 100% !important;
+                max-width: 250px !important; /* বেশি বড় যেন না হয় */
+                margin: 0 auto 12px auto !important; /* মাঝে রেখে নিচে ফাঁকা জায়গা দেবে */
+                text-align: center;
             }
             
             #payments-page .data-table .actions-cell .status-select,
             #dollar-exchange-page .data-table .actions-cell .status-select {
-                margin: 0 0 10px 0;
+                margin: 0 auto 12px auto !important;
             }
+            /* ========================================================== */
             /* ===== END UPDATED MOBILE TABLE CSS ===== */
         }
 
