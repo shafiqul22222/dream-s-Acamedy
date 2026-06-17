@@ -295,7 +295,7 @@
         
         /* --- Hero Section (Super Premium Background & Layout) --- */
         .hero-section { 
-            padding: 140px 0 120px; 
+            padding: 120px 0 160px; /* Extra bottom padding for the floating stats */
             background-color: var(--background-body); 
             background-image: 
                 radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.1) 0px, transparent 50%),
@@ -328,16 +328,49 @@
         }
 
         @media (max-width: 1024px) {
+            .hero-section { padding-bottom: 220px; } /* More space for stats on mobile */
             .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 50px; }
             .hero-content { order: 2; display: flex; flex-direction: column; align-items: center;}
             .hero-image-wrapper { order: 1; }
             .hero-content p { margin-left: auto; margin-right: auto; }
             .hero-content h1 { font-size: 3.2rem; }
-            .hero-buttons { justify-content: center; }
+            .hero-buttons { justify-content: center; flex-wrap: wrap; }
+        }
+
+        /* --- Stats/Counters Section (NEW - EduFutureIT Style) --- */
+        .stats-section {
+            background: var(--gradient-primary);
+            padding: 50px 0;
+            margin-top: -100px; /* Pull it up over the hero bottom */
+            position: relative;
+            z-index: 10;
+            border-radius: 30px;
+            box-shadow: var(--shadow-xl), 0 20px 40px -10px rgba(192, 38, 211, 0.4);
+            width: 92%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 80px;
+            color: white;
+        }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center; }
+        .stat-item { padding: 10px; transition: var(--transition-bounce); }
+        .stat-item:hover { transform: translateY(-5px); }
+        .stat-icon { background: rgba(255,255,255,0.15); width: 80px; height: 80px; border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; backdrop-filter: blur(5px); transform: rotate(5deg); transition: var(--transition-bounce);}
+        .stat-item:hover .stat-icon { transform: rotate(0deg) scale(1.1); background: rgba(255,255,255,0.25); }
+        .stat-icon span { font-size: 40px; color: white; }
+        .stat-item h3 { font-size: 2.8rem; color: white; margin-bottom: 5px; font-weight: 800; letter-spacing: -1px;}
+        .stat-item p { color: rgba(255,255,255,0.8); font-weight: 600; font-size: 1.05rem; letter-spacing: 0.5px; text-transform: uppercase;}
+
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .stat-item h3 { font-size: 2rem; }
+            .stat-icon { width: 60px; height: 60px; }
+            .stat-icon span { font-size: 30px; }
         }
 
         /* --- Common Section Styles --- */
-        .section { padding: 120px 0; position: relative;}
+        .section { padding: 80px 0; position: relative;}
         .section-title { 
             text-align: center; margin-bottom: 70px; font-size: 2.8rem; 
             color: var(--brand-primary); font-weight: 800; letter-spacing: -0.02em; 
@@ -345,7 +378,7 @@
         }
         .section-title::after {
             content: ''; position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%);
-            width: 80px; height: 5px; background: var(--gradient-primary); border-radius: 10px;
+            width: 80px; height: 6px; background: var(--gradient-primary); border-radius: 10px;
         }
 
         /* --- About Section (Bento Grid Style) --- */
@@ -407,7 +440,7 @@
         .slider-btn.next-btn { right: 20px; }
 
         /* --- Services & Courses Sections (Premium Glowing Cards) --- */
-        .services-section, .courses-section { background-color: var(--background-card); padding: 120px 0; }
+        .services-section, .courses-section { background-color: var(--background-card); padding: 100px 0; }
         .courses-section { background-color: var(--background-body); }
         .service-grid, .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 40px; justify-items: center; }
         
@@ -423,7 +456,7 @@
         }
         /* Top accent line on hover */
         .service-card::before, .course-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
             background: var(--gradient-primary); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; z-index: 2;
         }
         .service-card:hover::before, .course-card:hover::before { transform: scaleX(1); }
@@ -484,6 +517,17 @@
         .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 24px; border-top: 1px solid var(--border-color); }
         .price { font-size: 1.8rem; font-weight: 800; color: var(--brand-primary); letter-spacing: -0.02em; }
         .buy-now-btn { width: auto; padding: 12px 24px; font-size: 0.95rem; animation: pulseGlow 2.5s infinite; border-color: var(--brand-secondary); color: var(--brand-secondary);}
+
+        /* --- NEW: Video Reviews Section (Student Feedback) --- */
+        .video-reviews-section { background: linear-gradient(to bottom, #fff, var(--background-body)); }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+        .video-card { background: var(--background-card); border-radius: 24px; overflow: hidden; box-shadow: var(--shadow-md); transition: var(--transition-bounce); border: 1px solid var(--border-color); }
+        .video-card:hover { transform: translateY(-12px); box-shadow: var(--shadow-xl); border-color: var(--brand-secondary); }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; background: #000; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .video-info { padding: 24px; text-align: center; }
+        .video-info h4 { font-size: 1.25rem; margin-bottom: 8px; color: var(--brand-primary); font-weight: 800;}
+        .video-info p { font-size: 1rem; color: var(--text-muted); margin: 0; font-weight: 500;}
 
         /* --- Notice Board (Sleek List) --- */
         .notice-list-public { max-width: 850px; margin: 0 auto; }
@@ -851,7 +895,7 @@
             body { padding-bottom: 70px; }
             .main-header .main-nav { display: none; }
             .main-header .search-bar { display: none; }
-            .hero-section { padding: 80px 0 100px; text-align: center; }
+            .hero-section { padding: 80px 0 160px; text-align: center; } /* More space for mobile stats */
             .hero-grid { gap: 40px; }
             .hero-content h1 { font-size: 2.8rem; }
             .hero-content p { font-size: 1.05rem; max-width: 100%; }
@@ -1021,18 +1065,11 @@
                 <ul>
                     <li class="active"><a href="#home">Home</a></li>
                     <li><a href="#about">About</a></li>
-                    <li><a href="#trust">Reviews</a></li>
+                    <li><a href="#courses">Course</a></li>
                     <li><a href="#services">Services</a></li>
-                    <li><a href="javascript:void(0)" id="dollar-sell-nav-link" style="color: var(--brand-accent); font-weight: 700;">Dollar Sell</a></li>
-                    <li class="nav-dropdown">
-                        <a href="#courses">Course</a>
-                        <div class="dropdown-menu">
-                            <a href="#">Live Course</a>
-                            <a href="#">Recorded Course</a>
-                            <a href="#">Free Class</a>
-                        </div>
-                    </li>
+                    <li><a href="#video-reviews">Reviews</a></li>
                     <li><a href="#noticeboard">Notice</a></li>
+                    <li><a href="javascript:void(0)" id="dollar-sell-nav-link" style="color: var(--brand-accent); font-weight: 700;">Dollar Sell</a></li>
                 </ul>
             </nav>
             <div class="header-right">
@@ -1082,7 +1119,7 @@
     </header>
 
     <main>
-        <!-- Modals for Login/Signup/Reset -->
+        <!-- Modals for Login/Signup/Reset/Password Update remain exactly same -->
         <div class="login-modal hidden" id="login-modal">
             <div class="login-card">
                 <button class="close-modal-btn" aria-label="Close">&times;</button>
@@ -1186,7 +1223,7 @@
                 </div>
             </div>
         </div>
-        <!-- ================= NEW: Set New Password Modal ================= -->
+        
         <div class="login-modal hidden" id="set-new-password-modal">
             <div class="login-card" style="max-width: 500px; display: block; text-align: center;">
                 <div class="modal-form-panel" style="width: 100%;">
@@ -1208,11 +1245,12 @@
                 </div>
             </div>
         </div>
-        <!-- ================= END NEW MODAL ================= -->
 
-        <!-- ======================= Main Content (Logged Out View / Public Sections) ======================= -->
+        <!-- ======================= Main Content (Single Page Scroll for Home) ======================= -->
+        <!-- We removed the 'hidden' class from sections so they are all naturally visible on the home page -->
         <div id="main-content">
 
+            <!-- 1. Hero Section -->
             <section class="hero-section page-section" id="home">
                 <div class="container hero-grid">
                     <div class="hero-content">
@@ -1229,7 +1267,36 @@
                 </div>
             </section>
 
-            <section class="section about-section page-section hidden" id="about">
+            <!-- 2. New Stats / Counter Section -->
+            <section class="stats-section page-section" id="stats">
+                <div class="container">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-icon"><span class="material-symbols-outlined">groups</span></div>
+                            <h3>15,000+</h3>
+                            <p>Successful Students</p>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon"><span class="material-symbols-outlined">library_books</span></div>
+                            <h3>50+</h3>
+                            <p>Premium Courses</p>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon"><span class="material-symbols-outlined">workspace_premium</span></div>
+                            <h3>98%</h3>
+                            <p>Success Ratio</p>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon"><span class="material-symbols-outlined">support_agent</span></div>
+                            <h3>24/7</h3>
+                            <p>Lifetime Support</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. About Section -->
+            <section class="section about-section page-section" id="about">
                 <div class="container">
                     <h2 class="section-title">Get to Know Us</h2>
                     <div class="about-grid">
@@ -1275,9 +1342,66 @@
                 </div>
             </section>
 
-            <section class="section trust-section page-section hidden" id="trust">
+            <!-- 4. Courses Section (Moved up for better conversion) -->
+            <section class="courses-section page-section" id="courses">
                 <div class="container">
-                    <h2 class="section-title">What Our Students Say</h2>
+                    <h2 class="section-title">Our Popular Courses</h2>
+                    <div class="course-grid" id="courses-container"></div>
+                </div>
+            </section>
+
+            <!-- 5. Services Section -->
+            <section class="services-section page-section" id="services">
+                <div class="container">
+                    <h2 class="section-title">Our Services</h2>
+                    <div class="service-grid" id="services-container"></div>
+                </div>
+            </section>
+
+            <!-- 6. NEW: Video Reviews Section -->
+            <section class="section video-reviews-section page-section" id="video-reviews">
+                <div class="container">
+                    <h2 class="section-title">Student Success Stories</h2>
+                    <div class="video-grid">
+                        <!-- Example Video Card 1 -->
+                        <div class="video-card">
+                            <div class="video-wrapper">
+                                <!-- Replace src with your YouTube embed links -->
+                                <iframe src="https://www.youtube.com/embed/ScMzIvxBSi4?controls=1" title="Student Review" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                            <div class="video-info">
+                                <h4>Digital Marketing Success</h4>
+                                <p>Freelancer Rahim - Earning $500/mo</p>
+                            </div>
+                        </div>
+                        <!-- Example Video Card 2 -->
+                        <div class="video-card">
+                            <div class="video-wrapper">
+                                <iframe src="https://www.youtube.com/embed/ScMzIvxBSi4?controls=1" title="Student Review" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                            <div class="video-info">
+                                <h4>Web Development Journey</h4>
+                                <p>Student Karim - Top Rated Seller</p>
+                            </div>
+                        </div>
+                        <!-- Example Video Card 3 -->
+                        <div class="video-card">
+                            <div class="video-wrapper">
+                                <iframe src="https://www.youtube.com/embed/ScMzIvxBSi4?controls=1" title="Student Review" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                            <div class="video-info">
+                                <h4>CPA Marketing Results</h4>
+                                <p>Freelancer Amina - Successful Career</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. Existing Trust Slider (Screenshots) -->
+            <section class="section trust-section page-section" id="trust">
+                <div class="container">
+                    <h2 class="section-title" style="margin-bottom: 40px; font-size: 2.2rem;">More Student Feedbacks</h2>
                     <div class="slider-wrapper">
                         <div class="screenshot-grid" id="screenshot-container"></div>
                         <button class="slider-btn prev-btn"><span class="material-symbols-outlined">chevron_left</span></button>
@@ -1286,28 +1410,16 @@
                 </div>
             </section>
 
-            <section class="services-section page-section hidden" id="services">
-                <div class="container">
-                    <h2 class="section-title">Our Services</h2>
-                    <div class="service-grid" id="services-container"></div>
-                </div>
-            </section>
-
-            <section class="courses-section page-section hidden" id="courses">
-                <div class="container">
-                    <h2 class="section-title">Our Courses</h2>
-                    <div class="course-grid" id="courses-container"></div>
-                </div>
-            </section>
-
-            <section class="courses-section page-section hidden" id="noticeboard" style="background-color: var(--background-card);">
+            <!-- 8. Noticeboard -->
+            <section class="section page-section" id="noticeboard" style="background-color: var(--background-card);">
                 <div class="container">
                     <h2 class="section-title">Recent Notices</h2>
                     <div class="notice-list-public" id="notice-board"></div>
                 </div>
             </section>
 
-            <section class="section contact-cta-section page-section hidden" id="contact-us">
+            <!-- 9. Contact Section -->
+            <section class="section contact-cta-section page-section" id="contact-us">
                 <div class="container">
                     <div class="contact-cta-box">
                         <div class="contact-grid">
@@ -1368,6 +1480,7 @@
                     </aside>
 
                     <main class="dashboard-content">
+                        <!-- Dashboard Pages ... (Unchanged to protect your internal logic) -->
                         <div class="dashboard-page" id="my-courses-page">
                            <div class="content-header"><h2>My Enrolled Courses</h2></div>
                            <div class="course-grid" id="my-courses-grid"></div>
@@ -1467,7 +1580,6 @@
                             </div>
                         </div>
 
-                        <!-- My Services Page -->
                         <div class="dashboard-page hidden" id="my-services-page">
                             <div class="content-header"><h2>My Services</h2></div>
                             <div class="content-card">
@@ -1489,7 +1601,6 @@
                             </div>
                         </div>
 
-                        <!-- SSN Generate Page -->
                         <div class="dashboard-page hidden" id="ssn-generate-page">
                             <div class="content-header"><h2>American Fake SSN Generate</h2></div>
                             <div class="content-card">
@@ -1513,7 +1624,6 @@
                             </div>
                         </div>
 
-                        <!-- SSN List Page -->
                         <div class="dashboard-page hidden" id="ssn-list-page">
                             <div class="content-header"><h2>Generated SSN List</h2></div>
                             <div class="content-card">
@@ -1630,7 +1740,6 @@
             </div>
         </div>
     </div>
-
 
     <!-- NEW BKASH PAYMENT MODAL -->
     <div class="login-modal hidden" id="payment-modal">
@@ -1811,7 +1920,7 @@
                     <ul>
                         <li><a href="#courses">All Courses</a></li>
                         <li><a href="#about">About Us</a></li>
-                        <li><a href="#trust">Student Reviews</a></li>
+                        <li><a href="#video-reviews">Student Reviews</a></li>
                         <li><a href="https://wa.me/8801701126965" target="_blank">Helpdesk</a></li>
                     </ul>
                 </div>
@@ -1856,10 +1965,6 @@
             <span class="material-symbols-outlined" style="color: var(--brand-accent);">currency_exchange</span>
             <span style="color: var(--brand-accent); font-weight: 700;">Dollar Sell</span>
         </a>
-        <a href="#noticeboard" class="mobile-nav-link">
-            <span class="material-symbols-outlined">campaign</span>
-            <span>Notice</span>
-        </a>
         <a href="#courses" class="mobile-nav-link">
             <span class="material-symbols-outlined">menu_book</span>
             <span>Course</span>
@@ -1868,13 +1973,17 @@
             <span class="material-symbols-outlined">grid_view</span>
             <span>Services</span>
         </a>
-        <a href="#about" class="mobile-nav-link">
-            <span class="material-symbols-outlined">more_horiz</span>
-            <span>More</span>
+        <a href="#video-reviews" class="mobile-nav-link">
+            <span class="material-symbols-outlined">star</span>
+            <span>Reviews</span>
+        </a>
+        <a href="#noticeboard" class="mobile-nav-link">
+            <span class="material-symbols-outlined">campaign</span>
+            <span>Notice</span>
         </a>
     </nav>
 
-    <!-- Original Application Logic Intact (Added Modal Routes Implementation) -->
+    <!-- App Logic -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyAu6Lo33AH6GWFDHusaP14fmAHb0LEzWOQ",
@@ -1905,45 +2014,32 @@
         
         document.addEventListener('DOMContentLoaded', function() {
             const loginSignupBtn = document.getElementById('login-signup-btn');
-            const loginModal = document.getElementById('login-modal');
             const loginForm = document.getElementById('login-form');
             const passwordToggle = document.getElementById('password-toggle');
-            
-            const signupModal = document.getElementById('signup-modal');
             const signupForm = document.getElementById('signup-form');
             const showSignupBtn = document.getElementById('show-signup-modal-btn');
             const showLoginBtn = document.getElementById('show-login-modal-btn');
-            
-            const forgotPasswordModal = document.getElementById('forgot-password-modal');
-            const forgotPasswordLink = document.getElementById('forgot-password-link');
             const forgotPasswordForm = document.getElementById('forgot-password-form');
             const backToLoginLink = document.getElementById('back-to-login-link');
-            // --- NEW: Elements for Set New Password ---
+            const forgotPasswordLink = document.getElementById('forgot-password-link');
+            
             const setNewPasswordModal = document.getElementById('set-new-password-modal');
             const setNewPasswordForm = document.getElementById('set-new-password-form');
-            let resetOobCode = null; // টোকেন সেভ রাখার জন্য
+            let resetOobCode = null;
 
-            // URL চেক করে oobCode বের করার ফাংশন
             function checkPasswordResetAction() {
                 const urlParams = new URLSearchParams(window.location.search);
                 const mode = urlParams.get('mode');
                 const oobCode = urlParams.get('oobCode');
-
                 if (mode === 'resetPassword' && oobCode) {
-                    resetOobCode = oobCode; // কোডটি সেভ করে রাখা
-                    
-                    // সব মডাল বন্ধ করে নতুন পাসওয়ার্ডের মডাল ওপেন করা
+                    resetOobCode = oobCode; 
                     document.querySelectorAll('.login-modal').forEach(m => m.classList.add('hidden'));
                     setNewPasswordModal.classList.remove('hidden');
-
-                    // URL পরিষ্কার করে দেওয়া (যাতে রিলোড দিলে আবার ওপেন না হয়)
                     window.history.replaceState({}, document.title, window.location.pathname);
                 }
             }
-            // পেজ লোড হলেই চেক করবে কোনো রিসেট লিংক থেকে এসেছে কিনা
             checkPasswordResetAction();
 
-            // নতুন পাসওয়ার্ড সাবমিট করার ফাংশন
             setNewPasswordForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const newPassword = document.getElementById('new-reset-password').value;
@@ -1953,7 +2049,6 @@
                     showToast("Passwords do not match!", 'error');
                     return;
                 }
-
                 if (!resetOobCode) {
                     showToast("Invalid or expired reset link. Please try again.", 'error');
                     return;
@@ -1963,14 +2058,13 @@
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = 'Updating... <span class="material-symbols-outlined">hourglass_empty</span>';
 
-                // ফায়ারবেসের মেইন ফাংশন
                 auth.confirmPasswordReset(resetOobCode, newPassword)
                     .then(() => {
                         showToast("Password updated successfully! You can now log in.", "success");
                         setNewPasswordModal.classList.add('hidden');
                         setNewPasswordForm.reset();
                         resetOobCode = null;
-                        navigateTo('login'); // লগিন মডাল ওপেন করা
+                        navigateTo('login');
                     })
                     .catch((error) => {
                         let msg = "Error updating password.";
@@ -1984,7 +2078,6 @@
                         submitBtn.innerHTML = 'Update Password <span class="material-symbols-outlined">save</span>';
                     });
             });
-            // --- END NEW JS ---
 
             const loggedOutView = document.getElementById('logged-out-view');
             const loggedInView = document.getElementById('logged-in-view');
@@ -2042,20 +2135,18 @@
             const backToMyCoursesBtn = document.getElementById('back-to-my-courses');
             const searchInput = document.getElementById('course-search-input');
 
-            // NEW CHECKOUT MODAL ELEMENTS
             const checkoutModal = document.getElementById('checkout-modal');
             const checkoutApplyCouponBtn = document.getElementById('checkout-apply-coupon-btn');
             const checkoutCouponInput = document.getElementById('checkout-coupon-input');
             const checkoutPayBtn = document.getElementById('checkout-pay-btn');
 
-            // --- START: SPA ROUTING CORE ---
+            // --- SPA ROUTING (Updated for Single Page Landing Feel) ---
             function getUnderlyingPage() {
-                if (auth.currentUser) {
+                if (auth.currentUser && !dashboardContent.classList.contains('hidden')) {
                     const activeDash = document.querySelector('.dashboard-page:not(.hidden)');
                     return activeDash ? activeDash.id : 'my-courses-page';
                 } else {
-                    const activePage = document.querySelector('.page-section:not(.hidden)');
-                    return activePage ? activePage.id : 'home';
+                    return 'home'; // Since all main page elements are now visible, just return home
                 }
             }
 
@@ -2071,7 +2162,6 @@
 
                 let effectiveTargetId = targetId;
 
-                // Auth and state checks
                 if (isDashboardPage && !auth.currentUser) {
                     effectiveTargetId = 'login';
                 } else if (effectiveTargetId === 'dollarsell' && !auth.currentUser) {
@@ -2079,7 +2169,7 @@
                 } else if (effectiveTargetId === 'checkout' && !auth.currentUser) {
                     effectiveTargetId = 'login';
                 } else if (effectiveTargetId === 'checkout' && (!window.checkoutState || !window.checkoutState.courseName)) {
-                    effectiveTargetId = 'courses'; // Prevent empty checkout access
+                    effectiveTargetId = 'courses'; 
                 } else if (!isDashboardPage && !isMainPage && !isModal) {
                     effectiveTargetId = 'home';
                 }
@@ -2090,31 +2180,23 @@
                         try {
                             if (effectiveTargetId !== targetId) window.history.replaceState({ section: effectiveTargetId }, '', path);
                             else window.history.pushState({ section: effectiveTargetId }, '', path);
-                        } catch(e) {
-                            console.warn("History push/replaceState blocked by browser.");
-                        }
+                        } catch(e) {}
                     }
                 }
 
                 if (isModal) {
-                    // Ensure underlying main page is visible
-                    if(document.querySelectorAll('.page-section:not(.hidden)').length === 0 && document.querySelectorAll('.dashboard-page:not(.hidden)').length === 0) {
+                    // Make sure underlying content is visible
+                    if(dashboardContent.classList.contains('hidden') && mainContent.classList.contains('hidden')) {
                         showPageSection('home');
-                        dashboardContent.classList.add('hidden');
-                        mainContent.classList.remove('hidden');
                     }
-
-                    // Hide all modals first
                     document.querySelectorAll('.login-modal').forEach(m => m.classList.add('hidden'));
 
-                    // Show target modal
                     if (effectiveTargetId === 'login') document.getElementById('login-modal').classList.remove('hidden');
                     else if (effectiveTargetId === 'signup') document.getElementById('signup-modal').classList.remove('hidden');
                     else if (effectiveTargetId === 'forgot-password') document.getElementById('forgot-password-modal').classList.remove('hidden');
                     else if (effectiveTargetId === 'dollarsell') document.getElementById('dollar-sell-modal').classList.remove('hidden');
                     else if (effectiveTargetId === 'checkout') document.getElementById('checkout-modal').classList.remove('hidden');
                 } else {
-                    // Hide modals if navigating to a standard page
                     document.querySelectorAll('.login-modal').forEach(m => m.classList.add('hidden'));
 
                     if (isDashboardPage && auth.currentUser) {
@@ -2142,7 +2224,6 @@
                 let targetId = path === '/' ? 'home' : path.substring(1).replace(/\/$/, "");
                 navigateTo(targetId, addToHistory);
             }
-            // --- END: SPA ROUTING CORE ---
 
             function showToast(message, type = 'info') {
                 const toastContainer = document.getElementById('toast-container');
@@ -2156,23 +2237,58 @@
                 setTimeout(() => { toast.remove(); }, 4000);
             }
 
+            // Updated for Single Page Landing layout
             function showPageSection(targetId) {
-                mainContentSections.forEach(section => section.classList.add('hidden'));
+                // Display ALL main content sections
+                mainContentSections.forEach(section => section.classList.remove('hidden'));
+                
                 const targetSection = document.getElementById(targetId);
-                if (targetSection) targetSection.classList.remove('hidden');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-
+                if (targetSection) {
+                    if (targetId === 'home') {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                        const headerOffset = 90; // Fixed header spacing
+                        const elementPosition = targetSection.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                    }
+                }
+                
+                // Update nav manually here just in case, but scroll listener handles it too
                 navLiElements.forEach(li => li.classList.remove('active'));
                 const activeNavLink = document.querySelector(`.main-nav a[href="#${targetId}"]`);
                 if (activeNavLink) {
                     const parentLi = activeNavLink.closest('li');
                     if(parentLi) parentLi.classList.add('active');
                 }
-                mobileNavLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${targetId}`) link.classList.add('active');
-                });
             }
+
+            // ScrollSpy functionality to dynamically update active nav link while scrolling
+            window.addEventListener('scroll', () => {
+                if(!mainContent.classList.contains('hidden')) {
+                    let current = '';
+                    mainContentSections.forEach(section => {
+                        const sectionTop = section.offsetTop;
+                        if (pageYOffset >= sectionTop - 120) {
+                            current = section.getAttribute('id');
+                        }
+                    });
+
+                    navLiElements.forEach(li => {
+                        li.classList.remove('active');
+                        const link = li.querySelector(`a[href="#${current}"]`);
+                        if(link) li.classList.add('active');
+                    });
+                    
+                    mobileNavLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
+                    });
+                }
+
+                if(window.scrollY > 300) scrollTopBtn.classList.add('show'); 
+                else scrollTopBtn.classList.remove('show');
+            });
 
             function switchDashboardPage(targetPageId) {
                 dashboardPages.forEach(page => page.classList.add('hidden'));
@@ -2191,21 +2307,14 @@
                 if (targetPageId === 'my-profile-page') populateProfileForm();
                 if (targetPageId === 'my-courses-page') displayMyCourses();
                 if (targetPageId === 'class-joining-page') displayLiveClasses();
-                
-                // NEW PAGES INTEGRATION
                 if (targetPageId === 'my-services-page') displayMyServices();
                 if (targetPageId === 'ssn-list-page') displaySSNList();
 
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
-            // Map standard functions directly to navigateTo for robust routing
             function showLoginModal() { navigateTo('login'); }
             function hideLoginModal() { document.getElementById('login-modal').classList.add('hidden'); navigateTo(getUnderlyingPage()); }
-            function showSignupModal() { navigateTo('signup'); }
-            function hideSignupModal() { document.getElementById('signup-modal').classList.add('hidden'); navigateTo(getUnderlyingPage()); }
-            function showForgotPasswordModal() { navigateTo('forgot-password'); }
-            function hideForgotPasswordModal() { document.getElementById('forgot-password-modal').classList.add('hidden'); navigateTo(getUnderlyingPage()); }
             
             function togglePassword() {
                 const passwordInput = document.getElementById('login-password');
@@ -2221,7 +2330,7 @@
                 const photoUrl = userData.photoURL || 'https://i.ibb.co/L1LQtBm/default-avatar.png';
 
                 if (sidebarAvatar) sidebarAvatar.src = photoUrl;
-                document.querySelector('.sidebar-user h4').textContent = `Welcome, ${displayName.split(' ')[0]}`;
+                document.querySelector('.sidebar-user h4').textContent = `Hi, ${displayName.split(' ')[0]}`;
                 if (headerAvatar) headerAvatar.src = photoUrl;
                 document.querySelector('.profile-dropdown-header h4').textContent = displayName;
                 document.querySelector('.profile-dropdown-header p').textContent = userEmail;
@@ -2239,7 +2348,7 @@
                 auth.signInWithEmailAndPassword(email, password)
                     .then(() => { 
                         document.getElementById('login-modal').classList.add('hidden');
-                        navigateTo('my-courses-page'); // After login, directly take them to dashboard
+                        navigateTo('my-courses-page'); 
                         showToast(`Welcome! You have successfully logged in.`, 'success'); 
                     })
                     .catch((error) => { showToast(error.code === 'auth/user-not-found' ? "No account found with this email." : "Incorrect password. Please try again.", 'error'); });
@@ -2276,7 +2385,9 @@
 
                 auth.sendPasswordResetEmail(email).then(() => {
                     showToast(`Password reset link has been sent to ${email}.`, 'success');
-                    hideForgotPasswordModal(); emailInput.value = ''; 
+                    document.getElementById('forgot-password-modal').classList.add('hidden');
+                    navigateTo(getUnderlyingPage());
+                    emailInput.value = ''; 
                 }).catch(() => { showToast("No account found with this email.", 'error'); }).finally(() => { submitBtn.disabled = false; submitBtn.innerHTML = 'Submit <span class="material-symbols-outlined">send</span>'; });
             }
 
@@ -2309,7 +2420,6 @@
 
                     if (!initialRouteHandled) {
                         const path = window.location.pathname;
-                        // Redirect users to dashboard if they are already logged in and visit auth pages
                         if (['/', '/home', '/index.html', '/login', '/signup', '/forgot-password'].includes(path)) navigateTo('my-courses-page', false);
                         else handleInitialRoute(false);
                         initialRouteHandled = true;
@@ -2327,7 +2437,6 @@
                 }
             });
 
-            // UI Listeners - Updated for SPA links
             loginSignupBtn.addEventListener('click', showLoginModal);
             
             document.querySelectorAll('.login-modal').forEach(modal => { 
@@ -2439,7 +2548,6 @@
                 } else if (msg) { msg.remove(); }
             }
 
-            window.addEventListener('scroll', () => { if(window.scrollY > 300) scrollTopBtn.classList.add('show'); else scrollTopBtn.classList.remove('show'); });
             scrollTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
             async function loadHeaderLogo() {
@@ -2591,7 +2699,6 @@
             }
             function cleanupNotifications() { if(notificationListener) notificationListener(); notificationListContainer.innerHTML='<li class="no-notification-message">No notifications.</li>'; notificationBadge.classList.add('hidden'); }
 
-            // ================= AUTO BKASH PAYMENT LOGIC & CHECKOUT MODAL =================
             async function loadPaymentGateways() {
                 try { 
                     const snap = await db.collection('payment_gateways').where('status','==',true).get(); 
@@ -2603,7 +2710,6 @@
                 } catch(e){}
             }
 
-            // Updated handleBuyNowClick mapped to direct SPA navigation
             function handleBuyNowClick(e) {
                 e.preventDefault(); 
                 if(auth.currentUser) {
@@ -2618,7 +2724,6 @@
                         if (imgEl) imgSrc = imgEl.src;
                     }
 
-                    // Reset Checkout State
                     window.checkoutState = {
                         courseName: courseName,
                         originalPrice: price,
@@ -2627,7 +2732,6 @@
                         image: imgSrc
                     };
 
-                    // Populate Checkout Modal UI
                     document.getElementById('checkout-item-name').innerText = courseName;
                     document.getElementById('checkout-item-price').innerText = `৳${price}`;
                     document.getElementById('checkout-item-img').src = imgSrc;
@@ -2638,19 +2742,17 @@
                     
                     checkoutCouponInput.value = '';
                     
-                    // Reset Payment method to bkash
                     document.querySelectorAll('.payment-method-label').forEach(l => l.classList.remove('active'));
                     const bkashLabel = document.querySelector('input[value="bkash"]').closest('.payment-method-label');
                     bkashLabel.classList.add('active');
                     document.querySelector('input[value="bkash"]').checked = true;
 
-                    navigateTo('checkout'); // Open checkout modal via SPA link
+                    navigateTo('checkout'); 
                 } else {
-                    navigateTo('login'); // Send to login via SPA link
+                    navigateTo('login'); 
                 }
             }
 
-            // Style payment method selection
             document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
                 radio.addEventListener('change', function() {
                     document.querySelectorAll('.payment-method-label').forEach(l => l.classList.remove('active'));
@@ -2658,7 +2760,6 @@
                 });
             });
 
-            // Apply Coupon Logic
             checkoutApplyCouponBtn.addEventListener('click', async () => {
                 const code = checkoutCouponInput.value.trim();
                 if (!code) return showToast("দয়া করে একটি কুপন কোড লিখুন", "error");
@@ -2691,12 +2792,10 @@
                         showToast("কুপন সফলভাবে যুক্ত হয়েছে!", "success");
                     }
                     
-                    // Update UI
                     document.getElementById('checkout-discount-display').innerText = `-৳${window.checkoutState.discount.toFixed(2)}`;
                     document.getElementById('checkout-total-display').innerText = `৳${window.checkoutState.finalPrice.toFixed(2)}`;
 
                 } catch(error) {
-                    console.error(error);
                     showToast("সমস্যা হয়েছে, অনুগ্রহ করে আবার চেষ্টা করুন।", "error");
                 }
                 
@@ -2704,12 +2803,10 @@
                 checkoutApplyCouponBtn.disabled = false;
             });
 
-            // Proceed to Payment Action
             checkoutPayBtn.addEventListener('click', () => {
                 const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
                 
                 if (selectedMethod === 'bkash') {
-                    // Setup bKash Modal
                     const randomInvoice = "Inv No: DA-" + Math.floor(10000000 + Math.random() * 90000000);
                     const finalPriceStr = window.checkoutState.finalPrice.toString();
                     
@@ -2730,15 +2827,12 @@
                     bkashStep1.classList.remove('hidden');
                     bkashStep2.classList.add('hidden');
                     
-                    // Route to Payment Process (Direct overlay)
                     checkoutModal.classList.add('hidden');
                     paymentModal.classList.remove('hidden');
                 } else {
                     showToast("দুঃখিত, এই মাধ্যমটি বর্তমানে এভেইলেবল নয়। দয়া করে বিকাশ সিলেক্ট করুন।", "info");
                 }
             });
-
-            // --- END NEW CHECKOUT MODAL LOGIC ---
 
             bkashPhoneInput.addEventListener('input', function() {
                 if (this.value.length >= 11) {
@@ -2853,12 +2947,7 @@
                     displayMyCourses();
 
                 } catch (error) {
-                    console.error(error);
-                    if(error.message.includes("permission") || error.message.includes("Missing or insufficient")) {
-                        showToast("Database permission error! Check Firebase Rules.", "error");
-                    } else {
-                        showToast('Server error! Please try again later.', 'error');
-                    }
+                    showToast('Server error! Please try again later.', 'error');
                     paymentSubmitBtn.disabled = false;
                     paymentSubmitBtn.innerText = 'VERIFY PAYMENT';
                 }
@@ -2878,7 +2967,6 @@
                 paymentModal.classList.remove('hidden');  
             });
 
-            // Redirect modal calls through the SPA router instead of hidden toggle
             document.getElementById('dollar-sell-nav-link').addEventListener('click', e=>{e.preventDefault(); navigateTo('dollarsell');});
             document.getElementById('mobile-dollar-sell-btn').addEventListener('click', e=>{e.preventDefault(); navigateTo('dollarsell');});
             
@@ -2897,9 +2985,6 @@
                 document.getElementById('seconds').innerHTML = `${Math.floor((distance%60000)/1000).toString().padStart(2,'0')}<span>Secs</span>`;
             }, 1000);
 
-            // ==================== NEW FEATURES LOGIC START ====================
-
-            // 1. My Services Logic
             async function displayMyServices() {
                 const tbody = document.getElementById('my-services-table-body');
                 const user = auth.currentUser;
@@ -2925,12 +3010,10 @@
                     });
                     tbody.innerHTML = html;
                 } catch (e) {
-                    console.error(e);
                     tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Error loading services.</td></tr>';
                 }
             }
 
-            // 2. SSN Generate Logic
             const btnGenerateSsn = document.getElementById('btn-generate-ssn');
             if(btnGenerateSsn) {
                 btnGenerateSsn.addEventListener('click', async () => {
@@ -2941,7 +3024,6 @@
                     btnGenerateSsn.innerHTML = 'Generating... <span class="material-symbols-outlined">hourglass_empty</span>';
                     btnGenerateSsn.disabled = true;
 
-                    // Fake Data Arrays
                     const firstNames = ["James", "John", "Robert", "Michael", "William", "David", "Richard", "Joseph", "Thomas", "Charles", "Emma", "Olivia", "Ava", "Isabella", "Sophia", "Mia", "Amelia", "Harper"];
                     const lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez"];
                     const states = { "USA": ["CA", "NY", "TX", "FL", "IL"], "CANADA": ["ON", "QC", "BC", "AB", "MB"], "UK": ["ENG", "SCT", "WAL", "NIR"] };
@@ -2965,7 +3047,6 @@
                         zip: randomNum(5)
                     };
 
-                    // Output formatting
                     const outputText = `
                         <strong>Name:</strong> <span id="gen-name">${fakeData.name}</span><br>
                         <strong>Date of Birth:</strong> <span id="gen-dob">${fakeData.dob}</span><br>
@@ -2980,7 +3061,6 @@
                     document.getElementById('ssn-details-text').innerHTML = outputText;
                     document.getElementById('ssn-output-area').classList.remove('hidden');
 
-                    // Save to Database
                     try {
                         await db.collection('ssn_list').add({
                             userId: user.uid,
@@ -2988,16 +3068,13 @@
                             timestamp: firebase.firestore.FieldValue.serverTimestamp()
                         });
                         showToast("SSN Generated & Saved to List successfully!", "success");
-                    } catch (error) {
-                        console.error(error);
-                    }
+                    } catch (error) {}
 
                     btnGenerateSsn.innerHTML = 'Generate Random SSN <span class="material-symbols-outlined">autorenew</span>';
                     btnGenerateSsn.disabled = false;
                 });
             }
 
-            // Copy SSN Logic
             const copyBtn = document.getElementById('copy-ssn-btn');
             if (copyBtn) {
                 copyBtn.addEventListener('click', () => {
@@ -3008,7 +3085,6 @@
                 });
             }
 
-            // 3. SSN List Logic
             async function displaySSNList() {
                 const tbody = document.getElementById('ssn-list-table-body');
                 const user = auth.currentUser;
@@ -3039,21 +3115,17 @@
                     });
                     tbody.innerHTML = html;
                 } catch (e) {
-                    console.error(e);
                     tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Error loading data.</td></tr>';
                 }
             }
 
-            // Edit & Delete Window functions
             window.deleteSSN = async function(docId) {
                 if(confirm("Are you sure you want to delete this SSN?")) {
                     try {
                         await db.collection('ssn_list').doc(docId).delete();
                         showToast("SSN deleted successfully!", "success");
-                        displaySSNList(); // Refresh list
-                    } catch(e) {
-                        showToast("Error deleting SSN.", "error");
-                    }
+                        displaySSNList(); 
+                    } catch(e) { showToast("Error deleting SSN.", "error"); }
                 }
             };
 
@@ -3068,18 +3140,11 @@
                 if(newNumber === null) return;
 
                 try {
-                    await db.collection('ssn_list').doc(docId).update({
-                        name: newName,
-                        number: newNumber
-                    });
+                    await db.collection('ssn_list').doc(docId).update({ name: newName, number: newNumber });
                     showToast("SSN updated successfully!", "success");
-                    displaySSNList(); // Refresh list
-                } catch(e) {
-                    showToast("Error updating SSN.", "error");
-                }
+                    displaySSNList(); 
+                } catch(e) { showToast("Error updating SSN.", "error"); }
             };
-
-            // ==================== NEW FEATURES LOGIC END ====================
 
             fetchLiveDollarRates();
             loadPaymentGateways(); displayServices(); displayCourses(); displayNotices(); displayTrustScreenshots(); loadHeroImage(); loadAboutUsImage(); loadHeaderLogo(); loadSocialMediaLinks(); loadContactUsImage(); loadFloatingChatIcon();
