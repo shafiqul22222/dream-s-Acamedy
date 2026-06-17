@@ -2379,7 +2379,13 @@
                     const snap = await db.collection('services').get(); let html = '';
                     snap.forEach(d => {
                         const s = d.data(); if(s.status===false) return; const save = Math.round(((s.oldPrice-s.currentPrice)/s.oldPrice)*100);
-                        html += `<div class="service-card"><div class="service-header"><div class="service-icon-box"><span class="material-symbols-outlined">${iconMap(s.name)}</span></div><h3>${s.name}</h3><p class="plan-description">${s.description}</p></div><div class="pricing-area"><div class="pricing-info"><span class="old-price">৳ ${s.oldPrice}</span>${save>0?`<span class="save-badge">Save ${save}%</span>`:''}</div><div class="current-price"><span class="price-amount">৳ ${s.currentPrice}</span></div></div><div class="service-body"><ul class="service-features">${(s.features||[]).map(f=>`<li><span class="material-symbols-outlined">check_circle</span><span>${f}</span></li>`).join('')}</ul><a href="#" class="btn-service-action buy-now-btn" data-name="${s.name}" data-price="${s.currentPrice}">Order Now <span class="material-symbols-outlined">shopping_cart_checkout</span></a></div></div>`;
+                        
+                        // নতুন ইমেজ লজিক (ইমেজ থাকলে ইমেজ দেখাবে, নাহলে ডিফল্ট আইকন)
+                        const mediaDisplay = s.imageUrl 
+                            ? `<img src="${s.imageUrl}" alt="${s.name}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">` 
+                            : `<div class="service-icon-box"><span class="material-symbols-outlined">${iconMap(s.name)}</span></div>`;
+                            
+                        html += `<div class="service-card"><div class="service-header">${mediaDisplay}<h3>${s.name}</h3><p class="plan-description">${s.description}</p></div><div class="pricing-area"><div class="pricing-info"><span class="old-price">৳ ${s.oldPrice}</span>${save>0?`<span class="save-badge">Save ${save}%</span>`:''}</div><div class="current-price"><span class="price-amount">৳ ${s.currentPrice}</span></div></div><div class="service-body"><ul class="service-features">${(s.features||[]).map(f=>`<li><span class="material-symbols-outlined">check_circle</span><span>${f}</span></li>`).join('')}</ul><a href="#" class="btn-service-action buy-now-btn" data-name="${s.name}" data-price="${s.currentPrice}">Order Now <span class="material-symbols-outlined">shopping_cart_checkout</span></a></div></div>`;
                     });
                     container.innerHTML = html;
                     document.querySelectorAll('.buy-now-btn').forEach(btn => btn.addEventListener('click', handleBuyNowClick));
