@@ -1247,7 +1247,6 @@
         </div>
 
         <!-- ======================= Main Content (Single Page Scroll for Home) ======================= -->
-        <!-- We removed the 'hidden' class from sections so they are all naturally visible on the home page -->
         <div id="main-content">
 
             <!-- 1. Hero Section -->
@@ -1267,7 +1266,7 @@
                 </div>
             </section>
 
-            <!-- 2. New Stats / Counter Section -->
+            <!-- 2. Stats / Counter Section -->
             <section class="stats-section page-section" id="stats">
                 <div class="container">
                     <div class="stats-grid">
@@ -1342,7 +1341,7 @@
                 </div>
             </section>
 
-            <!-- 4. Courses Section (Moved up for better conversion) -->
+            <!-- 4. Courses Section -->
             <section class="courses-section page-section" id="courses">
                 <div class="container">
                     <h2 class="section-title">Our Popular Courses</h2>
@@ -1362,38 +1361,8 @@
             <section class="section video-reviews-section page-section" id="video-reviews">
                 <div class="container">
                     <h2 class="section-title">Student Success Stories</h2>
-                    <div class="video-grid">
-                        <!-- Example Video Card 1 -->
-                        <div class="video-card">
-                            <div class="video-wrapper">
-                                <!-- Replace src with your YouTube embed links -->
-                                <iframe src="https://www.youtube.com/embed/ScMzIvxBSi4?controls=1" title="Student Review" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            </div>
-                            <div class="video-info">
-                                <h4>Digital Marketing Success</h4>
-                                <p>Freelancer Rahim - Earning $500/mo</p>
-                            </div>
-                        </div>
-                        <!-- Example Video Card 2 -->
-                        <div class="video-card">
-                            <div class="video-wrapper">
-                                <iframe src="https://www.youtube.com/embed/ScMzIvxBSi4?controls=1" title="Student Review" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            </div>
-                            <div class="video-info">
-                                <h4>Web Development Journey</h4>
-                                <p>Student Karim - Top Rated Seller</p>
-                            </div>
-                        </div>
-                        <!-- Example Video Card 3 -->
-                        <div class="video-card">
-                            <div class="video-wrapper">
-                                <iframe src="https://www.youtube.com/embed/ScMzIvxBSi4?controls=1" title="Student Review" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            </div>
-                            <div class="video-info">
-                                <h4>CPA Marketing Results</h4>
-                                <p>Freelancer Amina - Successful Career</p>
-                            </div>
-                        </div>
+                    <div class="video-grid" id="video-reviews-container">
+                        <p style="text-align:center; width:100%;">Loading reviews...</p>
                     </div>
                 </div>
             </section>
@@ -1480,7 +1449,7 @@
                     </aside>
 
                     <main class="dashboard-content">
-                        <!-- Dashboard Pages ... (Unchanged to protect your internal logic) -->
+                        <!-- Dashboard Pages ... -->
                         <div class="dashboard-page" id="my-courses-page">
                            <div class="content-header"><h2>My Enrolled Courses</h2></div>
                            <div class="course-grid" id="my-courses-grid"></div>
@@ -2003,13 +1972,8 @@
         let liveDollarRates = { ACH: 105, VISA: 105, APPLE: 98 };
         let initialRouteHandled = false;
         
-        // Checkout State variables
         window.checkoutState = {
-            courseName: "",
-            originalPrice: 0,
-            discount: 0,
-            finalPrice: 0,
-            image: ""
+            courseName: "", originalPrice: 0, discount: 0, finalPrice: 0, image: ""
         };
         
         document.addEventListener('DOMContentLoaded', function() {
@@ -2146,7 +2110,7 @@
                     const activeDash = document.querySelector('.dashboard-page:not(.hidden)');
                     return activeDash ? activeDash.id : 'my-courses-page';
                 } else {
-                    return 'home'; // Since all main page elements are now visible, just return home
+                    return 'home';
                 }
             }
 
@@ -2185,7 +2149,6 @@
                 }
 
                 if (isModal) {
-                    // Make sure underlying content is visible
                     if(dashboardContent.classList.contains('hidden') && mainContent.classList.contains('hidden')) {
                         showPageSection('home');
                     }
@@ -2237,9 +2200,7 @@
                 setTimeout(() => { toast.remove(); }, 4000);
             }
 
-            // Updated for Single Page Landing layout
             function showPageSection(targetId) {
-                // Display ALL main content sections
                 mainContentSections.forEach(section => section.classList.remove('hidden'));
                 
                 const targetSection = document.getElementById(targetId);
@@ -2247,14 +2208,13 @@
                     if (targetId === 'home') {
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                     } else {
-                        const headerOffset = 90; // Fixed header spacing
+                        const headerOffset = 90; 
                         const elementPosition = targetSection.getBoundingClientRect().top;
                         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
                         window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
                     }
                 }
                 
-                // Update nav manually here just in case, but scroll listener handles it too
                 navLiElements.forEach(li => li.classList.remove('active'));
                 const activeNavLink = document.querySelector(`.main-nav a[href="#${targetId}"]`);
                 if (activeNavLink) {
@@ -2263,7 +2223,6 @@
                 }
             }
 
-            // ScrollSpy functionality to dynamically update active nav link while scrolling
             window.addEventListener('scroll', () => {
                 if(!mainContent.classList.contains('hidden')) {
                     let current = '';
@@ -2578,6 +2537,34 @@
                 const container = document.getElementById('screenshot-container');
                 try { const snap = await db.collection('trust_screenshots').orderBy('timestamp', 'desc').get(); let html=''; snap.forEach(d=>html+=`<div class="screenshot-item"><img src="${d.data().imageUrl}"></div>`); container.innerHTML = html; initTrustSlider(); } catch(e){}
             }
+
+            // --- NEW: FETCH & DISPLAY VIDEO REVIEWS ---
+            async function displayVideoReviews() {
+                const container = document.getElementById('video-reviews-container');
+                if(!container) return;
+                try { 
+                    const snap = await db.collection('video_reviews').orderBy('timestamp', 'desc').get(); 
+                    if(snap.empty) { container.innerHTML = '<p style="text-align:center; width:100%;">No reviews found.</p>'; return; }
+                    let html=''; 
+                    snap.forEach(d => {
+                        const data = d.data();
+                        html += `
+                        <div class="video-card">
+                            <div class="video-wrapper">
+                                <iframe src="${data.youtubeLink}" title="Student Review" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                            <div class="video-info">
+                                <h4>${data.title}</h4>
+                                <p>${data.subtitle}</p>
+                            </div>
+                        </div>`;
+                    }); 
+                    container.innerHTML = html; 
+                } catch(e){
+                    container.innerHTML = '<p style="text-align:center; color:red; width:100%;">Failed to load reviews.</p>';
+                }
+            }
+
             async function displayServices() {
                 const container = document.getElementById('services-container');
                 const iconMap = name => { const n = name.toLowerCase(); return n.includes('ip')||n.includes('proxy')?'dns':n.includes('number')||n.includes('otp')?'sms':n.includes('server')||n.includes('vps')?'router':n.includes('bank')||n.includes('card')?'credit_card':n.includes('id')||n.includes('verify')?'verified_user':'workspace_premium'; };
@@ -2625,7 +2612,6 @@
                 function getYouTubeEmbedUrl(url) {
     if (!url) return ''; 
     
-    // গুগল ড্রাইভ লিংক চেক করা
     if (url.includes('drive.google.com/file/d/')) {
         const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
         if (match && match[1]) {
@@ -2633,7 +2619,6 @@
         }
     }
     
-    // ইউটিউব লিংক চেক করা
     let videoId = ''; 
     try { 
         const urlObj = new URL(url); 
@@ -3147,7 +3132,7 @@
             };
 
             fetchLiveDollarRates();
-            loadPaymentGateways(); displayServices(); displayCourses(); displayNotices(); displayTrustScreenshots(); loadHeroImage(); loadAboutUsImage(); loadHeaderLogo(); loadSocialMediaLinks(); loadContactUsImage(); loadFloatingChatIcon();
+            loadPaymentGateways(); displayServices(); displayCourses(); displayNotices(); displayTrustScreenshots(); displayVideoReviews(); loadHeroImage(); loadAboutUsImage(); loadHeaderLogo(); loadSocialMediaLinks(); loadContactUsImage(); loadFloatingChatIcon();
         });
     </script>
 </body>
