@@ -2412,8 +2412,30 @@
                 }catch(e){}
             }
             function getYouTubeEmbedUrl(url) {
-                if (!url) return ''; let videoId = ''; try { const urlObj = new URL(url); if (urlObj.hostname === 'youtu.be') videoId = urlObj.pathname.slice(1); else if (urlObj.hostname.includes('youtube.com')) videoId = urlObj.searchParams.get('v'); } catch(e) {} return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
-            }
+                function getYouTubeEmbedUrl(url) {
+    if (!url) return ''; 
+    
+    // গুগল ড্রাইভ লিংক চেক করা
+    if (url.includes('drive.google.com/file/d/')) {
+        const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) {
+            return `https://drive.google.com/file/d/${match[1]}/preview`;
+        }
+    }
+    
+    // ইউটিউব লিংক চেক করা
+    let videoId = ''; 
+    try { 
+        const urlObj = new URL(url); 
+        if (urlObj.hostname === 'youtu.be') {
+            videoId = urlObj.pathname.slice(1); 
+        } else if (urlObj.hostname.includes('youtube.com')) {
+            videoId = urlObj.searchParams.get('v'); 
+        } 
+    } catch(e) {} 
+    
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+}
             async function fetchAndDisplayCurriculum(courseName, batch) {
                 const container = document.getElementById('curriculum-list-container'), player = document.getElementById('youtube-player'), placeholder = document.getElementById('video-placeholder'), noteContainer = document.getElementById('class-note-container');
                 player.src = ''; placeholder.classList.remove('hidden'); noteContainer.classList.add('hidden');
