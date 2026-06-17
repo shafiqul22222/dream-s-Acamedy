@@ -18,20 +18,20 @@
     <style>
         /* --- Premium SaaS Variables --- */
         :root {
-            --primary-blue: #4f46e5; /* Deep Indigo */
+            --primary-blue: #4f46e5; 
             --primary-hover: #4338ca;
             --secondary-blue: #6366f1;
             --light-blue: #818cf8;
-            --accent-green: #10b981; /* Emerald */
-            --accent-red: #f43f5e; /* Rose */
-            --accent-yellow: #f59e0b; /* Amber */
+            --accent-green: #10b981; 
+            --accent-red: #f43f5e; 
+            --accent-yellow: #f59e0b; 
             
-            --background-light: #f8fafc; /* Slate 50 */
+            --background-light: #f8fafc; 
             --surface: #ffffff;
-            --text-dark: #0f172a; /* Slate 900 */
-            --text-muted: #64748b; /* Slate 500 */
+            --text-dark: #0f172a; 
+            --text-muted: #64748b; 
             --text-light: #ffffff;
-            --border-color: #e2e8f0; /* Slate 200 */
+            --border-color: #e2e8f0; 
             
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
             --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
@@ -40,882 +40,208 @@
             --btn-radius: 10px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        html, body { height: 100%; background-color: var(--background-light); color: var(--text-dark); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        .hidden { display: none !important; }
 
-        html, body {
-            height: 100%;
-            background-color: var(--background-light);
-            color: var(--text-dark);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* --- START: GORGEOUS LOGIN PAGE STYLES --- */
+        /* --- LOGIN PAGE --- */
         #login-page {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+            display: flex; align-items: center; justify-content: center; height: 100vh;
             background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden;
         }
-
-        /* Modern Abstract Background Elements */
-        #login-page::before, #login-page::after {
-            content: '';
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.5;
-        }
-        #login-page::before {
-            width: 400px; height: 400px;
-            background: var(--primary-blue);
-            top: -100px; left: -100px;
-        }
-        #login-page::after {
-            width: 300px; height: 300px;
-            background: var(--light-blue);
-            bottom: -50px; right: -50px;
-        }
+        #login-page::before, #login-page::after { content: ''; position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.5; }
+        #login-page::before { width: 400px; height: 400px; background: var(--primary-blue); top: -100px; left: -100px; }
+        #login-page::after { width: 300px; height: 300px; background: var(--light-blue); bottom: -50px; right: -50px; }
 
         .login-box {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 48px 40px;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            width: 90%;
-            max-width: 420px;
-            text-align: center;
-            animation: fadeInFromBottom 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            position: relative;
-            z-index: 10;
+            background: rgba(255, 255, 255, 0.03); padding: 48px 40px; border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1); width: 90%; max-width: 420px;
+            text-align: center; animation: fadeInFromBottom 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            position: relative; z-index: 10;
         }
+        @keyframes fadeInFromBottom { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes fadeInFromBottom {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .login-box h2 {
-            margin-bottom: 35px;
-            color: var(--text-light);
-            font-weight: 700;
-            font-size: 1.8em;
-            letter-spacing: -0.5px;
-        }
-
-        .login-box .input-group {
-            position: relative;
-            margin-bottom: 24px;
-            text-align: left;
-        }
-
+        .login-box h2 { margin-bottom: 35px; color: var(--text-light); font-weight: 700; font-size: 1.8em; letter-spacing: -0.5px; }
+        .login-box .input-group { position: relative; margin-bottom: 24px; text-align: left; }
         .login-box .input-group input {
-            width: 100%;
-            padding: 16px 16px 16px 48px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: var(--btn-radius);
-            background: rgba(0, 0, 0, 0.2);
-            color: var(--text-light);
-            font-size: 1em;
-            transition: all 0.3s ease;
+            width: 100%; padding: 16px 16px 16px 48px; border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--btn-radius); background: rgba(0, 0, 0, 0.2); color: var(--text-light);
+            font-size: 1em; transition: all 0.3s ease;
         }
-
         .login-box .input-group label {
-            position: absolute;
-            top: 50%;
-            left: 48px;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.5);
-            font-weight: 500;
-            pointer-events: none;
-            transition: all 0.3s ease;
+            position: absolute; top: 50%; left: 48px; transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5); font-weight: 500; pointer-events: none; transition: all 0.3s ease;
+        }
+        .login-box .input-group span.icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: rgba(255, 255, 255, 0.5); }
+        .login-box .input-group input:focus { outline: none; border-color: var(--light-blue); background: rgba(0, 0, 0, 0.4); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2); }
+        .login-box .input-group input:focus + label, .login-box .input-group input:valid + label {
+            top: -10px; left: 12px; font-size: 0.8em; color: var(--light-blue); background: #151a30; padding: 0 8px; border-radius: 4px;
         }
 
-        .login-box .input-group span.icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.5);
-        }
+        .btn { padding: 12px 24px; border: none; border-radius: var(--btn-radius); cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s ease; font-size: 0.95em; }
+        .btn-primary { background: var(--primary-blue); color: var(--text-light); width: 100%; justify-content: center; padding: 16px; font-size: 1.05em; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4); }
 
-        .login-box .input-group input:focus {
-            outline: none;
-            border-color: var(--light-blue);
-            background: rgba(0, 0, 0, 0.4);
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
-        }
-
-        .login-box .input-group input:focus + label,
-        .login-box .input-group input:valid + label {
-            top: -10px;
-            left: 12px;
-            font-size: 0.8em;
-            color: var(--light-blue);
-            background: #151a30; /* Fake label bg for overlap */
-            padding: 0 8px;
-            border-radius: 4px;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: var(--btn-radius);
-            cursor: pointer;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-            font-size: 0.95em;
-        }
-
-        .btn-primary {
-            background: var(--primary-blue);
-            color: var(--text-light);
-            width: 100%;
-            justify-content: center;
-            padding: 16px;
-            font-size: 1.05em;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
-        }
-
-        /* --- Admin Panel Layout --- */
-        #admin-panel {
-            display: flex;
-        }
-
-        .sidebar {
-            width: 280px;
-            background: var(--surface);
-            border-right: 1px solid var(--border-color);
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            display: flex;
-            flex-direction: column;
-            z-index: 100;
-        }
-
-        .sidebar-header {
-            padding: 24px;
-            font-size: 1.4em;
-            font-weight: 700;
-            color: var(--text-dark);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .sidebar-nav {
-            list-style: none;
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 16px 12px;
-        }
-
-        /* Custom Scrollbar for Sidebar */
+        /* --- ADMIN PANEL LAYOUT --- */
+        #admin-panel { display: flex; }
+        .sidebar { width: 280px; background: var(--surface); border-right: 1px solid var(--border-color); height: 100vh; position: fixed; top: 0; left: 0; display: flex; flex-direction: column; z-index: 100; }
+        .sidebar-header { padding: 24px; font-size: 1.4em; font-weight: 700; color: var(--text-dark); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 10px; }
+        .sidebar-nav { list-style: none; flex-grow: 1; overflow-y: auto; padding: 16px 12px; }
         .sidebar-nav::-webkit-scrollbar { width: 5px; }
         .sidebar-nav::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-
-        .sidebar-nav a {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 12px 16px;
-            text-decoration: none;
-            color: var(--text-muted);
-            font-weight: 500;
-            border-radius: 10px;
-            transition: all 0.2s;
-            margin-bottom: 4px;
-        }
+        .sidebar-nav a { display: flex; align-items: center; gap: 14px; padding: 12px 16px; text-decoration: none; color: var(--text-muted); font-weight: 500; border-radius: 10px; transition: all 0.2s; margin-bottom: 4px; }
+        .sidebar-nav a .material-symbols-outlined { font-size: 20px; }
+        .sidebar-nav li.active a, .sidebar-nav a:hover { background: var(--background-light); color: var(--primary-blue); }
+        .sidebar-nav li.active a { background: #eef2ff; color: var(--primary-blue); font-weight: 600; }
         
-        .sidebar-nav a .material-symbols-outlined {
-            font-size: 20px;
-        }
+        .logout-btn { display: flex; align-items: center; gap: 14px; padding: 20px 24px; background: var(--surface); border: none; width: 100%; text-align: left; font-size: 0.95em; font-weight: 600; color: var(--text-muted); cursor: pointer; border-top: 1px solid var(--border-color); transition: all 0.2s; }
+        .logout-btn:hover { background-color: #fff1f2; color: var(--accent-red); }
 
-        .sidebar-nav li.active a,
-        .sidebar-nav a:hover {
-            background: var(--background-light);
-            color: var(--primary-blue);
-        }
-        
-        .sidebar-nav li.active a {
-            background: #eef2ff;
-            color: var(--primary-blue);
-            font-weight: 600;
-        }
+        .main-content { margin-left: 280px; width: calc(100% - 280px); padding: 40px; max-width: 1600px; }
+        .page { display: none; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .page.active { display: block; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+        .page-header h1 { color: var(--text-dark); font-size: 1.8em; font-weight: 700; letter-spacing: -0.5px; }
+        .btn-add { background-color: var(--primary-blue); color: var(--text-light); box-shadow: var(--shadow-sm); }
+        .btn-add:hover { background-color: var(--primary-hover); }
 
-        .logout-btn {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 20px 24px;
-            background: var(--surface);
-            border: none;
-            width: 100%;
-            text-align: left;
-            font-size: 0.95em;
-            font-weight: 600;
-            color: var(--text-muted);
-            cursor: pointer;
-            border-top: 1px solid var(--border-color);
-            transition: all 0.2s;
-        }
+        /* --- CARDS & TABLES --- */
+        .content-box { background: var(--surface); padding: 24px; border-radius: var(--card-radius); box-shadow: var(--shadow); border: 1px solid var(--border-color); overflow-x: auto; margin-bottom: 24px; }
+        .search-bar-container { margin-bottom: 24px; position: relative; }
+        .search-bar-container input { width: 100%; padding: 14px 16px 14px 44px; border: 1px solid var(--border-color); border-radius: var(--btn-radius); font-size: 0.95em; background: var(--surface); transition: all 0.2s; box-shadow: var(--shadow-sm); }
+        .search-bar-container::before { content: 'search'; font-family: 'Material Symbols Outlined'; position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+        .search-bar-container input:focus { outline: none; border-color: var(--primary-blue); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
 
-        .logout-btn:hover {
-            background-color: #fff1f2;
-            color: var(--accent-red);
-        }
-
-        .main-content {
-            margin-left: 280px;
-            width: calc(100% - 280px);
-            padding: 40px;
-            max-width: 1600px;
-        }
-
-        .page {
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .page-header h1 {
-            color: var(--text-dark);
-            font-size: 1.8em;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .btn-add {
-            background-color: var(--primary-blue);
-            color: var(--text-light);
-            box-shadow: var(--shadow-sm);
-        }
-        .btn-add:hover {
-            background-color: var(--primary-hover);
-        }
-
-        /* --- Content Cards & Tables --- */
-        .content-box {
-            background: var(--surface);
-            padding: 24px;
-            border-radius: var(--card-radius);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-            overflow-x: auto;
-            margin-bottom: 24px;
-        }
-
-        .search-bar-container {
-            margin-bottom: 24px;
-            position: relative;
-        }
-
-        .search-bar-container input {
-            width: 100%;
-            padding: 14px 16px 14px 44px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--btn-radius);
-            font-size: 0.95em;
-            background: var(--surface);
-            transition: all 0.2s;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .search-bar-container::before {
-            content: 'search';
-            font-family: 'Material Symbols Outlined';
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            pointer-events: none;
-        }
-
-        .search-bar-container input:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            font-size: 0.9em;
-        }
-
-        .data-table th,
-        .data-table td {
-            padding: 16px;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-            vertical-align: middle;
-        }
-
-        .data-table th {
-            background-color: var(--background-light);
-            color: var(--text-muted);
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.75em;
-            letter-spacing: 0.05em;
-        }
-        
+        .data-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.9em; }
+        .data-table th, .data-table td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        .data-table th { background-color: var(--background-light); color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.75em; letter-spacing: 0.05em; }
         .data-table th:first-child { border-top-left-radius: 8px; }
         .data-table th:last-child { border-top-right-radius: 8px; }
         .data-table tr:last-child td { border-bottom: none; }
-
-        .data-table tbody tr {
-            transition: background-color 0.2s;
-        }
-        .data-table tbody tr:hover {
-            background-color: #f8fafc;
-        }
-
-        .actions-cell {
-            white-space: nowrap;
-            width: 1%;
-        }
-
-        .actions-cell button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            margin: 2px;
-            padding: 6px;
-            border-radius: 6px;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
+        .data-table tbody tr { transition: background-color 0.2s; }
+        .data-table tbody tr:hover { background-color: #f8fafc; }
+        
+        .actions-cell { white-space: nowrap; width: 1%; }
+        .actions-cell button { background: none; border: none; cursor: pointer; margin: 2px; padding: 6px; border-radius: 6px; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; }
         .btn-edit { background: #eff6ff !important; color: var(--secondary-blue); }
         .btn-edit:hover { background: #dbeafe !important; }
-        
         .btn-delete { background: #fff1f2 !important; color: var(--accent-red); }
         .btn-delete:hover { background: #ffe4e6 !important; }
-
         .btn-whatsapp { background: #ecfdf5 !important; color: var(--accent-green); }
         .btn-whatsapp:hover { background: #d1fae5 !important; }
-
         .actions-cell .material-symbols-outlined { font-size: 18px; }
 
-        .status-select {
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            font-size: 0.85em;
-            background: var(--surface);
-            cursor: pointer;
-            outline: none;
-            transition: border-color 0.2s;
-        }
+        .status-select { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.85em; background: var(--surface); cursor: pointer; outline: none; transition: border-color 0.2s; }
         .status-select:focus { border-color: var(--primary-blue); }
-
-        .referrer-input {
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            font-size: 0.85em;
-            margin-right: 5px;
-            width: 120px;
-        }
-
-        .status-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.75em;
-            letter-spacing: 0.02em;
-            display: inline-block;
-            text-transform: capitalize;
-        }
-
+        .status-badge { padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 0.75em; letter-spacing: 0.02em; display: inline-block; text-transform: capitalize; }
         .status-badge.pending { background-color: #fef3c7; color: #b45309; }
         .status-badge.approved { background-color: #d1fae5; color: #047857; }
         .status-badge.rejected { background-color: #ffe4e6; color: #be123c; }
         .status-badge.paid { background-color: #d1fae5; color: #047857; }
-
-        .btn-save-status {
-            background-color: var(--background-light);
-            color: var(--text-dark);
-            border: 1px solid var(--border-color);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.85em;
-            margin-left: 8px;
-        }
+        .btn-save-status { background-color: var(--background-light); color: var(--text-dark); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 8px; font-size: 0.85em; margin-left: 8px; }
         .btn-save-status:hover { background-color: var(--border-color); }
+        .table-image-preview { max-width: 120px; max-height: 60px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border-color); }
 
-        .table-image-preview {
-            max-width: 120px;
-            max-height: 60px;
-            border-radius: 8px;
-            object-fit: cover;
-            border: 1px solid var(--border-color);
-        }
-
-        /* --- Dashboard Stats Grid --- */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* কার্ডের সাইজ 240px থেকে কমিয়ে 180px করা হয়েছে */
-    gap: 16px; /* মাঝখানের ফাঁকা জায়গা কমানো হয়েছে */
-}
-
-.stat-card {
-    background: var(--surface);
-    padding: 16px; /* কার্ডের ভেতরের প্যাডিং 24px থেকে কমিয়ে 16px করা হয়েছে */
-    border-radius: var(--card-radius);
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border-color);
-    display: flex;
-    flex-direction: column;
-    gap: 12px; /* আইকন ও লেখার মাঝের গ্যাপ কমানো হয়েছে */
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-/* লেখার সাইজ একটু মানানসই করা হলো */
-.stat-card h3 {
-    font-size: 1.5em; /* লেখার সাইজ একটু ছোট করা হয়েছে */
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-top: 8px;
-}
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .stat-card .header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .stat-card .icon-wrapper {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #eef2ff;
-            color: var(--primary-blue);
-        }
-
+        /* --- STATS GRID --- */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+        .stat-card { background: var(--surface); padding: 16px; border-radius: var(--card-radius); box-shadow: var(--shadow); border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 12px; transition: transform 0.2s, box-shadow 0.2s; }
+        .stat-card h3 { font-size: 1.5em; font-weight: 700; color: var(--text-dark); margin-top: 8px; }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .stat-card .header-row { display: flex; justify-content: space-between; align-items: flex-start; }
+        .stat-card .icon-wrapper { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: #eef2ff; color: var(--primary-blue); }
         .stat-card .icon { font-size: 24px; }
-
-        .stat-card h3 {
-            font-size: 1.8em;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-top: 8px;
-        }
-
-        .stat-card p {
-            color: var(--text-muted);
-            font-size: 0.9em;
-            font-weight: 500;
-        }
-
+        .stat-card p { color: var(--text-muted); font-size: 0.9em; font-weight: 500; }
         .stat-card.pending-card .icon-wrapper { background: #fef3c7; color: #d97706; }
         .stat-card.sales-card .icon-wrapper { background: #d1fae5; color: #059669; }
 
-        /* --- Modals --- */
-        .modal {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: var(--surface);
-            padding: 32px;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            animation: modalScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @keyframes modalScaleIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 16px;
-        }
-
-        .modal-header h2 { 
-            color: var(--text-dark); 
-            font-size: 1.25em; 
-        }
-
-        #close-modal, #close-whatsapp-modal {
-            background: #f1f5f9;
-            border: none;
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            color: var(--text-muted);
-            transition: all 0.2s;
-        }
+        /* --- MODALS --- */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+        .modal-content { background: var(--surface); padding: 32px; border-radius: 20px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); animation: modalScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes modalScaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; }
+        .modal-header h2 { color: var(--text-dark); font-size: 1.25em; }
+        #close-modal, #close-whatsapp-modal { background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); transition: all 0.2s; }
         #close-modal:hover, #close-whatsapp-modal:hover { background: #e2e8f0; color: var(--text-dark); }
-
+        
         .form-group { margin-bottom: 20px; }
-        .form-group label { 
-            display: block; 
-            margin-bottom: 8px; 
-            font-weight: 500; 
-            font-size: 0.9em; 
-            color: var(--text-dark); 
-        }
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--btn-radius);
-            font-size: 0.95em;
-            transition: all 0.2s;
-            background: var(--background-light);
-        }
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-            background: var(--surface);
-        }
-
-        .modal-footer { 
-            margin-top: 32px; 
-            display: flex; 
-            justify-content: flex-end; 
-            gap: 12px; 
-        }
-
-        .btn-cancel {
-            background: var(--background-light);
-            color: var(--text-dark);
-            border: 1px solid var(--border-color);
-        }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.9em; color: var(--text-dark); }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: var(--btn-radius); font-size: 0.95em; transition: all 0.2s; background: var(--background-light); }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); background: var(--surface); }
+        .modal-footer { margin-top: 32px; display: flex; justify-content: flex-end; gap: 12px; }
+        .btn-cancel { background: var(--background-light); color: var(--text-dark); border: 1px solid var(--border-color); }
         .btn-cancel:hover { background: var(--border-color); }
         
         .filter-btn-group { display: flex; gap: 8px; flex-wrap: wrap;}
-        .filter-btn {
-            background-color: var(--surface);
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85em;
-            font-weight: 500;
-            transition: all 0.2s ease-in-out;
-        }
+        .filter-btn { background-color: var(--surface); border: 1px solid var(--border-color); color: var(--text-muted); padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.85em; font-weight: 500; transition: all 0.2s ease-in-out; }
         .filter-btn:hover { background-color: var(--background-light); color: var(--text-dark); }
-        .filter-btn.active {
-            background-color: var(--text-dark);
-            color: var(--text-light);
-            border-color: var(--text-dark);
-        }
+        .filter-btn.active { background-color: var(--text-dark); color: var(--text-light); border-color: var(--text-dark); }
 
-        /* Forms specific areas */
-        .module-container {
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            background-color: var(--background-light);
-        }
-        .module-header-flex {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
-        }
-        .module-header-flex h4 { font-size: 1.05em; color: var(--text-dark); }
-
-        .btn-remove {
-            background: #fff1f2; color: var(--accent-red);
-            border: 1px solid #ffe4e6; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; cursor: pointer;
-        }
-
-        .btn-add-small {
-            background: #eef2ff; color: var(--primary-blue);
-            padding: 8px 16px; font-size: 0.85em; margin-top: 10px; border-radius: 8px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 500;
-        }
-
-        .video-entry {
-            display: flex; flex-direction: column; gap: 12px;
-            border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: 16px;
-        }
+        /* Other Form Components */
+        .module-container { border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 20px; background-color: var(--background-light); }
+        .module-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .btn-remove { background: #fff1f2; color: var(--accent-red); border: 1px solid #ffe4e6; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; cursor: pointer; }
+        .btn-add-small { background: #eef2ff; color: var(--primary-blue); padding: 8px 16px; font-size: 0.85em; margin-top: 10px; border-radius: 8px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; }
+        .video-entry { display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: 16px; }
         .video-entry:first-child { border-top: none; padding-top: 0; margin-top: 0; }
-        .video-entry-inputs {
-            display: grid; grid-template-columns: 1fr 1fr 100px auto; gap: 12px; align-items: center;
-        }
+        .video-entry-inputs { display: grid; grid-template-columns: 1fr 1fr 100px auto; gap: 12px; align-items: center; }
         .video-entry input, .video-entry textarea { padding: 10px; width: 100%; border: 1px solid var(--border-color); border-radius: 8px; }
-        .video-entry textarea { resize: vertical; min-height: 60px; }
-
-        .social-link-entry {
-            display: grid; grid-template-columns: 1fr 2fr auto; gap: 12px; align-items: center;
-            padding: 16px; border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; background: var(--background-light);
-        }
-        .social-link-entry input, .social-link-entry select {
-            padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95em;
-        }
-
-        /* Switch */
+        
+        .social-link-entry { display: grid; grid-template-columns: 1fr 2fr auto; gap: 12px; align-items: center; padding: 16px; border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; background: var(--background-light); }
+        
         .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #cbd5e1; transition: .3s; border-radius: 34px;
-        }
-        .slider:before {
-            position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
-            background-color: white; transition: .3s; border-radius: 50%; box-shadow: var(--shadow-sm);
-        }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; box-shadow: var(--shadow-sm); }
         input:checked + .slider { background-color: var(--accent-green); }
         input:checked + .slider:before { transform: translateX(20px); }
 
         .student-active-indicator { color: var(--accent-green); font-weight: 600; }
         .student-inactive-indicator { color: var(--text-muted); }
 
-        /* --- Mobile Responsive Styles --- */
-        .mobile-header {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            z-index: 90;
-            padding: 16px 20px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            align-items: center;
-            gap: 16px;
-        }
-
-        #mobile-menu-btn {
-            background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-dark);
-        }
-
+        /* --- RESPONSIVE MOBILE CSS --- */
+        .mobile-header { display: none; position: fixed; top: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); z-index: 90; padding: 16px 20px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); align-items: center; gap: 16px; }
+        #mobile-menu-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-dark); }
         #mobile-page-title { font-size: 1.1em; font-weight: 600; color: var(--text-dark); }
-
-        #overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(2px); z-index: 98;
-        }
+        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(2px); z-index: 98; }
 
         @media (max-width: 1024px) {
             .sidebar { width: 250px; }
             .main-content { margin-left: 250px; width: calc(100% - 250px); }
         }
-
         @media (max-width: 768px) {
             .mobile-header { display: flex; }
             .main-content { margin-left: 0; width: 100%; padding: 80px 20px 30px; }
             .sidebar { left: -280px; z-index: 99; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--shadow-lg); }
             .sidebar.open { left: 0; }
-            .video-entry-inputs { grid-template-columns: 1fr; }
-            .video-entry .btn-remove { justify-self: start; }
-
-            /* ===== UPDATED MOBILE TABLE CSS ===== */
             .data-table thead { display: none; }
-            
-            .data-table tr {
-                display: block; 
-                margin-bottom: 16px; 
-                border: 1px solid var(--border-color);
-                border-radius: var(--card-radius); 
-                background-color: var(--surface); 
-                box-shadow: var(--shadow-sm);
-                overflow: hidden; /* Fix layout bleeding */
-            }
-            
-            .data-table td {
-                display: block; /* Changed to block to fix overlap issues */
-                text-align: right; 
-                padding: 12px 16px 12px 45%; /* Left padding holds the label */
-                border-bottom: 1px solid #f1f5f9;
-                position: relative;
-                word-break: break-word; /* Prevents long text from going off screen */
-                min-height: 48px;
-            }
-            
+            .data-table tr { display: block; margin-bottom: 16px; border: 1px solid var(--border-color); border-radius: var(--card-radius); background-color: var(--surface); box-shadow: var(--shadow-sm); overflow: hidden; }
+            .data-table td { display: block; text-align: right; padding: 12px 16px 12px 45%; border-bottom: 1px solid #f1f5f9; position: relative; word-break: break-word; min-height: 48px; }
             .data-table tr td:last-child { border-bottom: none; }
-            
-            .data-table td::before {
-                content: attr(data-label); 
-                font-weight: 600; 
-                font-size: 0.85em; 
-                color: var(--text-muted); 
-                text-align: left; 
-                text-transform: uppercase; 
-                letter-spacing: 0.05em;
-                position: absolute; /* Keeps label cleanly on the left */
-                left: 16px; 
-                top: 12px; 
-                width: 40%;
-                white-space: normal;
-            }
-
-            /* ===== Action buttons CENTERED formatting for ALL pages ===== */
-            .data-table .actions-cell { 
-                display: flex !important; 
-                flex-wrap: wrap !important; 
-                justify-content: center !important; /* বাটনগুলোকে একদম মাঝে আনবে */
-                align-items: center !important; 
-                gap: 12px !important; 
-                padding: 20px 16px !important; 
-                border-top: 1px dashed var(--border-color); /* ডাটা থেকে আলাদা করার জন্য বর্ডার */
-                background-color: #f8fafc; /* অ্যাকশন এরিয়া হাইলাইট করবে */
-            }
-            
-            .data-table .actions-cell::before {
-                position: static !important; 
-                width: 100% !important; /* লেবেলকে পুরো লাইন জুড়ে বসাবে */
-                text-align: center !important; /* 'ACTION' লেখা মাঝে আনবে */
-                margin-right: 0 !important; 
-                margin-bottom: 12px !important; /* বাটনের উপরে একটু ফাঁকা জায়গা */
-            }
-            
-            /* Payment Management বা অন্যান্য পেজে যেখানে বাটনগুলো <div> এর ভেতর থাকে */
-            .data-table .actions-cell > div {
-                width: 100% !important; 
-                display: flex !important; 
-                flex-wrap: wrap !important; 
-                justify-content: center !important; /* সব বাটন মাঝে আনবে */
-                align-items: center !important;
-                gap: 10px !important; 
-            }
-
-            /* ড্রপডাউন (Select Status) ডিজাইন */
-            .actions-cell .status-select {
-                width: 100% !important;
-                max-width: 250px !important; /* বেশি বড় যেন না হয় */
-                margin: 0 auto 12px auto !important; /* মাঝে রেখে নিচে ফাঁকা জায়গা দেবে */
-                text-align: center;
-            }
-            
-            #payments-page .data-table .actions-cell .status-select,
-            #dollar-exchange-page .data-table .actions-cell .status-select {
-                margin: 0 auto 12px auto !important;
-            }
-            /* ========================================================== */
-            /* ===== END UPDATED MOBILE TABLE CSS ===== */
+            .data-table td::before { content: attr(data-label); font-weight: 600; font-size: 0.85em; color: var(--text-muted); text-align: left; text-transform: uppercase; position: absolute; left: 16px; top: 12px; width: 40%; white-space: normal; }
+            .data-table .actions-cell { display: flex !important; flex-wrap: wrap !important; justify-content: center !important; align-items: center !important; gap: 12px !important; padding: 20px 16px !important; border-top: 1px dashed var(--border-color); background-color: #f8fafc; }
+            .data-table .actions-cell::before { position: static !important; width: 100% !important; text-align: center !important; margin-right: 0 !important; margin-bottom: 12px !important; }
+            .actions-cell .status-select { width: 100% !important; max-width: 250px !important; margin: 0 auto 12px auto !important; text-align: center; }
         }
 
-        /* --- Toast Styles (Modern Snackbar) --- */
-        #toast-container {
-            position: fixed; bottom: 24px; right: 24px; z-index: 9999;
-            display: flex; flex-direction: column; gap: 12px; pointer-events: none;
-        }
-        .toast-card {
-            background-color: var(--text-dark);
-            color: var(--text-light);
-            padding: 14px 20px;
-            border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
-            display: flex; align-items: center; gap: 12px;
-            min-width: 300px; max-width: 400px;
-            transform: translateY(100%) scale(0.9); opacity: 0;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative; overflow: hidden; pointer-events: auto; font-size: 0.9em; font-weight: 500;
-        }
+        /* --- TOAST STYLES --- */
+        #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; pointer-events: none; }
+        .toast-card { background-color: var(--text-dark); color: var(--text-light); padding: 14px 20px; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 12px; min-width: 300px; max-width: 400px; transform: translateY(100%) scale(0.9); opacity: 0; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; pointer-events: auto; font-size: 0.9em; font-weight: 500; }
         .toast-card.show { transform: translateY(0) scale(1); opacity: 1; }
         .toast-card .icon { font-size: 20px; }
         .toast-card.success .icon { color: var(--accent-green); }
         .toast-card.error .icon { color: var(--accent-red); }
 
-        /* Report Page */
-        #reports-page .date-range-selector {
-            display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 24px; background: var(--background-light); padding: 16px; border-radius: 12px; border: 1px solid var(--border-color);
-        }
-        #reports-page .date-range-selector label { font-weight: 500; color: var(--text-muted); font-size: 0.9em; }
-        #reports-page .date-range-selector input[type="date"] {
-            padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--surface); color: var(--text-dark); outline: none;
-        }
+        /* Report & Print */
+        #reports-page .date-range-selector { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 24px; background: var(--background-light); padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); }
         #reports-page .chart-container { margin-bottom: 32px; padding: 16px; background: var(--surface); border: 1px solid var(--border-color); border-radius: 16px; box-shadow: var(--shadow-sm); }
-        
-        /* --- PRINT STYLES FOR VOUCHER --- */
         .hidden-print { display: none; }
         @media print {
-            body * {
-                visibility: hidden;
-            }
-            #print-section, #print-section * {
-                visibility: visible;
-            }
-            #print-section {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 300px; /* Standard Thermal Size ~80mm */
-                font-family: 'Courier New', Courier, monospace;
-                font-size: 12px;
-                color: #000;
-                padding: 10px;
-            }
+            body * { visibility: hidden; }
+            #print-section, #print-section * { visibility: visible; }
+            #print-section { position: absolute; left: 0; top: 0; width: 300px; font-family: 'Courier New', Courier, monospace; font-size: 12px; color: #000; padding: 10px; }
             @page { margin: 0; }
             .hidden-print { display: block !important; }
         }
@@ -926,6 +252,7 @@
 
     <div id="toast-container"></div>
 
+    <!-- LOGIN PAGE -->
     <div id="login-page">
         <div class="login-box">
             <h2>Admin Login</h2>
@@ -945,6 +272,7 @@
         </div>
     </div>
 
+    <!-- ADMIN PANEL -->
     <div id="admin-panel" class="hidden">
         <header class="mobile-header">
             <button id="mobile-menu-btn" class="material-symbols-outlined">menu</button>
@@ -966,7 +294,6 @@
                 <li data-page="dollar-exchange-page"><a href="#"><span class="material-symbols-outlined">currency_exchange</span> Dollar Exchange</a></li>
                 <li data-page="users-page"><a href="#"><span class="material-symbols-outlined">group</span> Student Management</a></li>
                 
-                <!-- NEW FOLLOW UP PAGE LINK -->
                 <li data-page="follow-up-page"><a href="#"><span class="material-symbols-outlined">forum</span> Follow Up</a></li>
 
                 <li data-page="services-page"><a href="#"><span class="material-symbols-outlined">construction</span> Service Management</a></li>
@@ -976,7 +303,11 @@
                 <li data-page="enrollments-page"><a href="#"><span class="material-symbols-outlined">assignment_ind</span> Course Enrollments</a></li>
                 <li data-page="curriculum-page"><a href="#"><span class="material-symbols-outlined">list_alt</span> Curriculum Management</a></li>
                 <li data-page="notices-page"><a href="#"><span class="material-symbols-outlined">campaign</span> Noticeboard</a></li>
+                
                 <li data-page="trust-screenshots-page"><a href="#"><span class="material-symbols-outlined">verified</span> Trust Screenshots</a></li>
+                <!-- NEW VIDEO REVIEWS LINK -->
+                <li data-page="video-reviews-page"><a href="#"><span class="material-symbols-outlined">video_library</span> Video Reviews</a></li>
+
                 <li data-page="join-class-page"><a href="#"><span class="material-symbols-outlined">video_call</span> Class Joining</a></li>
                 <li data-page="online-classes-page"><a href="#"><span class="material-symbols-outlined">video_camera_front</span> Online Classes</a></li>
                 <li data-page="withdrawals-page"><a href="#"><span class="material-symbols-outlined">paid</span> Withdrawals</a></li>
@@ -988,205 +319,96 @@
         <div id="overlay" class="hidden"></div>
 
         <main class="main-content">
+            <!-- Dashboard Page -->
             <div id="dashboard-page" class="page active">
-                <div class="page-header">
-                    <h1>Overview Dashboard</h1>
-                </div>
+                <div class="page-header"><h1>Overview Dashboard</h1></div>
                 <div class="stats-grid">
                     <div id="pending-payments-card" class="stat-card pending-card" style="cursor: pointer;">
-                        <div class="header-row">
-                            <div class="icon-wrapper"><span class="material-symbols-outlined icon">pending_actions</span></div>
-                        </div>
-                        <div>
-                            <h3 id="pending-payments">0</h3>
-                            <p>Pending Payments</p>
-                        </div>
+                        <div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">pending_actions</span></div></div>
+                        <div><h3 id="pending-payments">0</h3><p>Pending Payments</p></div>
                     </div>
                     <div id="pending-dollar-requests-card" class="stat-card pending-card" style="cursor: pointer;">
-                        <div class="header-row">
-                            <div class="icon-wrapper"><span class="material-symbols-outlined icon">currency_exchange</span></div>
-                        </div>
-                        <div>
-                            <h3 id="pending-dollar-requests">0</h3>
-                            <p>Pending Dollar Requests</p>
-                        </div>
+                        <div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">currency_exchange</span></div></div>
+                        <div><h3 id="pending-dollar-requests">0</h3><p>Pending Dollar Requests</p></div>
                     </div>
                     <div class="stat-card sales-card">
-                        <div class="header-row">
-                            <div class="icon-wrapper"><span class="material-symbols-outlined icon">payments</span></div>
-                        </div>
-                        <div>
-                            <h3 id="total-sales">৳0</h3>
-                            <p>Total Sales Value</p>
-                        </div>
+                        <div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">payments</span></div></div>
+                        <div><h3 id="total-sales">৳0</h3><p>Total Sales Value</p></div>
                     </div>
                     <div class="stat-card sales-card">
-                        <div class="header-row">
-                            <div class="icon-wrapper"><span class="material-symbols-outlined icon">today</span></div>
-                        </div>
-                        <div>
-                            <h3 id="current-month-sales">৳0</h3>
-                            <p>Current Month Sales</p>
-                        </div>
+                        <div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">today</span></div></div>
+                        <div><h3 id="current-month-sales">৳0</h3><p>Current Month Sales</p></div>
                     </div>
                     <div class="stat-card sales-card">
-                        <div class="header-row">
-                            <div class="icon-wrapper"><span class="material-symbols-outlined icon">trending_up</span></div>
-                        </div>
-                        <div>
-                            <h3 id="total-profit">৳0</h3>
-                            <p>Total Profit</p>
-                        </div>
+                        <div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">trending_up</span></div></div>
+                        <div><h3 id="total-profit">৳0</h3><p>Total Profit</p></div>
                     </div>
                     <div class="stat-card sales-card">
-                        <div class="header-row">
-                            <div class="icon-wrapper"><span class="material-symbols-outlined icon">show_chart</span></div>
-                        </div>
-                        <div>
-                            <h3 id="current-month-profit">৳0</h3>
-                            <p>Current Month Profit</p>
-                        </div>
+                        <div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">show_chart</span></div></div>
+                        <div><h3 id="current-month-profit">৳0</h3><p>Current Month Profit</p></div>
                     </div>
                     <div id="total-students-card" class="stat-card" style="cursor: pointer;">
-                        <div class="header-row">
-                            <div class="icon-wrapper" style="background:#f3e8ff; color:#9333ea;"><span class="material-symbols-outlined icon">group</span></div>
-                        </div>
-                        <div>
-                            <h3 id="total-students">0</h3>
-                            <p>Total Students</p>
-                        </div>
+                        <div class="header-row"><div class="icon-wrapper" style="background:#f3e8ff; color:#9333ea;"><span class="material-symbols-outlined icon">group</span></div></div>
+                        <div><h3 id="total-students">0</h3><p>Total Students</p></div>
                     </div>
-                    
-                    <!-- TOTAL FOLLOW-UPS ON DASHBOARD -->
                     <div id="total-followups-card" class="stat-card" style="cursor: pointer;">
-    <div class="header-row">
-        <div class="icon-wrapper" style="background:#e0f2fe; color:#0284c7;"><span class="material-symbols-outlined icon">forum</span></div>
-    </div>
-    <div>
-        <h3 id="main-total-followups">0</h3>
-        <p>Total Follow-up Messages</p>
-    </div>
-</div>
-
-                    <div class="stat-card">
-                        <div class="header-row">
-                            <div class="icon-wrapper" style="background:#e0f2fe; color:#0284c7;"><span class="material-symbols-outlined icon">construction</span></div>
-                        </div>
-                        <div>
-                            <h3 id="total-services">0</h3>
-                            <p>Total Services</p>
-                        </div>
+                        <div class="header-row"><div class="icon-wrapper" style="background:#e0f2fe; color:#0284c7;"><span class="material-symbols-outlined icon">forum</span></div></div>
+                        <div><h3 id="main-total-followups">0</h3><p>Total Follow-up Messages</p></div>
                     </div>
                     <div class="stat-card">
-                        <div class="header-row">
-                            <div class="icon-wrapper" style="background:#ffedd5; color:#ea580c;"><span class="material-symbols-outlined icon">school</span></div>
-                        </div>
-                        <div>
-                            <h3 id="total-courses">0</h3>
-                            <p>Total Courses</p>
-                        </div>
+                        <div class="header-row"><div class="icon-wrapper" style="background:#e0f2fe; color:#0284c7;"><span class="material-symbols-outlined icon">construction</span></div></div>
+                        <div><h3 id="total-services">0</h3><p>Total Services</p></div>
                     </div>
                     <div class="stat-card">
-                        <div class="header-row">
-                            <div class="icon-wrapper" style="background:#fce7f3; color:#db2777;"><span class="material-symbols-outlined icon">campaign</span></div>
-                        </div>
-                        <div>
-                            <h3 id="total-notices">0</h3>
-                            <p>Total Notices</p>
-                        </div>
+                        <div class="header-row"><div class="icon-wrapper" style="background:#ffedd5; color:#ea580c;"><span class="material-symbols-outlined icon">school</span></div></div>
+                        <div><h3 id="total-courses">0</h3><p>Total Courses</p></div>
                     </div>
                     <div class="stat-card">
-                        <div class="header-row">
-                            <div class="icon-wrapper" style="background:#ecfeff; color:#0891b2;"><span class="material-symbols-outlined icon">verified</span></div>
-                        </div>
-                        <div>
-                            <h3 id="total-screenshots">0</h3>
-                            <p>Total Screenshots</p>
-                        </div>
+                        <div class="header-row"><div class="icon-wrapper" style="background:#fce7f3; color:#db2777;"><span class="material-symbols-outlined icon">campaign</span></div></div>
+                        <div><h3 id="total-notices">0</h3><p>Total Notices</p></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="header-row"><div class="icon-wrapper" style="background:#ecfeff; color:#0891b2;"><span class="material-symbols-outlined icon">verified</span></div></div>
+                        <div><h3 id="total-screenshots">0</h3><p>Total Screenshots</p></div>
                     </div>
                 </div>
             </div>
 
-            <!-- NEW FOLLOW UP PAGE -->
+            <!-- Follow Up Page -->
             <div id="follow-up-page" class="page">
                 <div class="page-header">
                     <h1>Student Follow-up History</h1>
                     <button class="btn btn-add" id="export-followup-btn"><span class="material-symbols-outlined">download</span> Export CSV</button>
                 </div>
-                
                 <div class="stats-grid" style="margin-bottom: 24px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-                    <div class="stat-card">
-                        <div class="header-row">
-                            <div class="icon-wrapper" style="background:#eef2ff; color:var(--primary-blue);"><span class="material-symbols-outlined icon">send</span></div>
-                        </div>
-                        <div><h3 id="fu-total-sent">0</h3><p>Total Sent Messages</p></div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="header-row">
-                            <div class="icon-wrapper" style="background:#ffe4e6; color:var(--accent-red);"><span class="material-symbols-outlined icon">sms_failed</span></div>
-                        </div>
-                        <div><h3 id="fu-total-failed">0</h3><p>Total Failed</p></div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="header-row">
-                            <div class="icon-wrapper" style="background:#d1fae5; color:#059669;"><span class="material-symbols-outlined icon">thumb_up</span></div>
-                        </div>
-                        <div><h3 id="fu-total-interested">0</h3><p>Interested Students</p></div>
-                    </div>
-                    <div class="stat-card pending-card">
-                        <div class="header-row">
-                            <div class="icon-wrapper"><span class="material-symbols-outlined icon">pending_actions</span></div>
-                        </div>
-                        <div><h3 id="fu-total-pending">0</h3><p>Pending Follow-up</p></div>
-                    </div>
+                    <div class="stat-card"><div class="header-row"><div class="icon-wrapper" style="background:#eef2ff; color:var(--primary-blue);"><span class="material-symbols-outlined icon">send</span></div></div><div><h3 id="fu-total-sent">0</h3><p>Total Sent Messages</p></div></div>
+                    <div class="stat-card"><div class="header-row"><div class="icon-wrapper" style="background:#ffe4e6; color:var(--accent-red);"><span class="material-symbols-outlined icon">sms_failed</span></div></div><div><h3 id="fu-total-failed">0</h3><p>Total Failed</p></div></div>
+                    <div class="stat-card"><div class="header-row"><div class="icon-wrapper" style="background:#d1fae5; color:#059669;"><span class="material-symbols-outlined icon">thumb_up</span></div></div><div><h3 id="fu-total-interested">0</h3><p>Interested Students</p></div></div>
+                    <div class="stat-card pending-card"><div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">pending_actions</span></div></div><div><h3 id="fu-total-pending">0</h3><p>Pending Follow-up</p></div></div>
                 </div>
-
                 <div class="content-box">
                     <div style="display:flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px;">
                         <div class="search-bar-container" style="flex: 1; min-width: 250px; margin-bottom: 0;">
                             <input type="text" id="fu-search-input" placeholder="Search by Student Name or Phone Number...">
                         </div>
                         <select id="fu-status-filter" class="form-group" style="margin-bottom: 0; width: 150px; padding: 12px; border-radius: var(--btn-radius); border: 1px solid var(--border-color);">
-                            <option value="all">All Messages</option>
-                            <option value="sent">Sent Messages</option>
-                            <option value="failed">Not Send (Failed)</option>
-                            <option value="pending">Pending Send</option>
+                            <option value="all">All Messages</option><option value="sent">Sent Messages</option><option value="failed">Not Send (Failed)</option><option value="pending">Pending Send</option>
                         </select>
                         <select id="fu-result-filter" class="form-group" style="margin-bottom: 0; width: 180px; padding: 12px; border-radius: var(--btn-radius); border: 1px solid var(--border-color);">
-                            <option value="all">All Results</option>
-                            <option value="Interested">Interested</option>
-                            <option value="Not Interested">Not Interested</option>
-                            <option value="No Response">No Response</option>
-                            <option value="Already Joined">Already Joined Another</option>
-                            <option value="Phone Off">Phone Off</option>
-                            <option value="Pending">Pending</option>
+                            <option value="all">All Results</option><option value="Interested">Interested</option><option value="Not Interested">Not Interested</option><option value="No Response">No Response</option><option value="Already Joined">Already Joined Another</option><option value="Phone Off">Phone Off</option><option value="Pending">Pending</option>
                         </select>
                         <input type="date" id="fu-date-filter" class="form-group" style="margin-bottom: 0; padding: 12px; border-radius: var(--btn-radius); border: 1px solid var(--border-color);">
                     </div>
-
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Serial</th>
-                                <th>Student Name</th>
-                                <th>Phone Number</th>
-                                <th>Course Name</th>
-                                <th>Message Date</th>
-                                <th>Status</th>
-                                <th>Follow-up Result</th>
-                                <th>Next Follow-up</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Serial</th><th>Student Name</th><th>Phone Number</th><th>Course Name</th><th>Message Date</th><th>Status</th><th>Follow-up Result</th><th>Next Follow-up</th><th>Action</th></tr></thead>
                         <tbody id="follow-up-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Reports Page -->
             <div id="reports-page" class="page">
-                <div class="page-header">
-                    <h1>Sales & Profit Reports</h1>
-                </div>
+                <div class="page-header"><h1>Sales & Profit Reports</h1></div>
                 <div class="content-box">
                     <div class="date-range-selector">
                         <label for="start-date">Start Date:</label><input type="date" id="start-date">
@@ -1197,23 +419,14 @@
                     <div id="report-table-container">
                         <h3 style="margin-top: 24px; margin-bottom: 16px; font-weight: 600;">Detailed Report</h3>
                         <table class="data-table" id="report-table">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Total Sales (BDT)</th>
-                                    <th>Total Profit (BDT)</th>
-                                </tr>
-                            </thead>
-                            <tbody id="report-table-body">
-                                <tr>
-                                    <td colspan="3" style="text-align:center; color: var(--text-muted);">Please select dates to generate a report.</td>
-                                </tr>
-                            </tbody>
+                            <thead><tr><th>Date</th><th>Total Sales (BDT)</th><th>Total Profit (BDT)</th></tr></thead>
+                            <tbody id="report-table-body"><tr><td colspan="3" style="text-align:center; color: var(--text-muted);">Please select dates to generate a report.</td></tr></tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
+            <!-- Payments Page -->
             <div id="payments-page" class="page">
                 <div class="page-header">
                     <h1>Payment Management</h1>
@@ -1224,248 +437,136 @@
                         <button class="filter-btn" data-filter="rejected">Rejected</button>
                     </div>
                 </div>
-                <div class="search-bar-container">
-                    <input type="text" id="payment-search-input" placeholder="Search by Email, Course/Service, or TrxID...">
-                </div>
+                <div class="search-bar-container"><input type="text" id="payment-search-input" placeholder="Search by Email, Course/Service, or TrxID..."></div>
                 <div class="content-box">
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Customer Info</th>
-                                <th>Course/Service</th>
-                                <th>Amount</th>
-                                <th>Discount</th>
-                                <th>Profit</th>
-                                <th>TrxID</th>
-                                <th>Time</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Customer Info</th><th>Course/Service</th><th>Amount</th><th>Discount</th><th>Profit</th><th>TrxID</th><th>Time</th><th>Status</th><th>Action</th></tr></thead>
                         <tbody id="payments-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Payment Gateways Page -->
             <div id="payment-gateways-page" class="page">
-                <div class="page-header">
-                    <h1>Payment Gateways</h1><button class="btn btn-add" onclick="openModalForAdd('payment_gateways')"><span class="material-symbols-outlined">add</span> New Gateway</button>
-                </div>
+                <div class="page-header"><h1>Payment Gateways</h1><button class="btn btn-add" onclick="openModalForAdd('payment_gateways')"><span class="material-symbols-outlined">add</span> New Gateway</button></div>
                 <div class="content-box">
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Logo</th>
-                                <th>Gateway Name</th>
-                                <th>Account Number</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Logo</th><th>Gateway Name</th><th>Account Number</th><th>Status</th><th>Action</th></tr></thead>
                         <tbody id="gateways-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Coupons Page -->
             <div id="coupons-page" class="page">
-                <div class="page-header">
-                    <h1>Coupon Management</h1><button class="btn btn-add" onclick="openModalForAdd('coupons')"><span class="material-symbols-outlined">add</span> New Coupon</button>
-                </div>
+                <div class="page-header"><h1>Coupon Management</h1><button class="btn btn-add" onclick="openModalForAdd('coupons')"><span class="material-symbols-outlined">add</span> New Coupon</button></div>
                 <div class="content-box">
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Coupon Code</th>
-                                <th>Discount Type</th>
-                                <th>Discount Value</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Coupon Code</th><th>Discount Type</th><th>Discount Value</th><th>Status</th><th>Action</th></tr></thead>
                         <tbody id="coupons-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Manual Sale Page -->
             <div id="manual-sale-page" class="page">
-                <div class="page-header">
-                    <h1>Add Manual Sales</h1>
-                </div>
+                <div class="page-header"><h1>Add Manual Sales</h1></div>
                 <div class="content-box">
                     <p style="margin-bottom: 24px; font-size: 0.9em; color: var(--text-muted);">Record direct or cash payments here. Added sales and profits will reflect directly on your dashboard.</p>
                     <form id="manual-sale-form">
                         <div class="form-group"><label for="manual-user-name">Customer Name (Optional)</label><input type="text" id="manual-user-name" class="form-group" placeholder="e.g., Shafiqul Islam"></div>
                         <div class="form-group"><label for="manual-user-mobile">Customer Mobile (Optional)</label><input type="text" id="manual-user-mobile" class="form-group" placeholder="e.g., 017XXXXXXXX"></div>
-                        
-                        <div class="form-group"><label for="manual-item-selection">Select Service or Course</label><select id="manual-item-selection" class="form-group" required>
-                                <option value="">Loading...</option>
-                            </select></div>
+                        <div class="form-group"><label for="manual-item-selection">Select Service or Course</label><select id="manual-item-selection" class="form-group" required><option value="">Loading...</option></select></div>
                         <div class="form-group"><label for="manual-quantity">Quantity</label><input type="number" id="manual-quantity" class="form-group" value="1" min="1" required></div>
-                        
                         <div class="form-group"><label for="manual-sale-amount">Net Total Sales (BDT)</label><input type="number" id="manual-sale-amount" class="form-group" placeholder="e.g., 500" required></div>
                         <div class="form-group"><label for="manual-discount-amount">Discount Amount (BDT)</label><input type="number" id="manual-discount-amount" class="form-group" placeholder="e.g., 50" value="0"></div>
                         <div class="form-group"><label for="manual-profit-amount">Total Profit (BDT)</label><input type="number" id="manual-profit-amount" class="form-group" placeholder="e.g., 150" required></div>
-                        
                         <button type="submit" class="btn btn-primary" style="width: auto;"><span class="material-symbols-outlined">save</span> Add Sale</button>
                     </form>
                 </div>
             </div>
 
+            <!-- Dollar Exchange Page -->
             <div id="dollar-exchange-page" class="page">
-                <div class="page-header">
-                    <h1>Dollar Exchange & Requests</h1>
-                </div>
-
+                <div class="page-header"><h1>Dollar Exchange & Requests</h1></div>
                 <div class="content-box" style="margin-bottom: 32px; border-left: 4px solid var(--accent-yellow);">
                     <h3 style="margin-bottom: 20px; color: var(--text-dark); font-weight: 600;">Set Current Dollar Rates</h3>
                     <form id="dollar-rate-settings-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; align-items: end;">
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label for="rate-ach">ACH Rate (BDT)</label>
-                            <input type="number" id="rate-ach" placeholder="e.g., 105" required>
-                        </div>
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label for="rate-visa">VISA Rate (BDT)</label>
-                            <input type="number" id="rate-visa" placeholder="e.g., 105" required>
-                        </div>
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label for="rate-apple">APPLE Rate (BDT)</label>
-                            <input type="number" id="rate-apple" placeholder="e.g., 98" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="height: 44px; padding: 0 20px; width:100%;">
-                            <span class="material-symbols-outlined">update</span> Update Rates
-                        </button>
+                        <div class="form-group" style="margin-bottom: 0;"><label for="rate-ach">ACH Rate (BDT)</label><input type="number" id="rate-ach" placeholder="e.g., 105" required></div>
+                        <div class="form-group" style="margin-bottom: 0;"><label for="rate-visa">VISA Rate (BDT)</label><input type="number" id="rate-visa" placeholder="e.g., 105" required></div>
+                        <div class="form-group" style="margin-bottom: 0;"><label for="rate-apple">APPLE Rate (BDT)</label><input type="number" id="rate-apple" placeholder="e.g., 98" required></div>
+                        <button type="submit" class="btn btn-primary" style="height: 44px; padding: 0 20px; width:100%;"><span class="material-symbols-outlined">update</span> Update Rates</button>
                     </form>
                 </div>
                 <div class="content-box">
                     <p style="margin-bottom: 24px; font-size: 0.9em; color: var(--text-muted);">Add manual dollar buy/sell records here.</p>
                     <form id="dollar-exchange-form">
-                        <div class="form-group"><label for="exchange-type">Transaction Type</label><select id="exchange-type" class="form-group" required>
-                                <option value="sell">Sell Dollars</option>
-                                <option value="buy">Buy Dollars</option>
-                            </select></div>
+                        <div class="form-group"><label for="exchange-type">Transaction Type</label><select id="exchange-type" class="form-group" required><option value="sell">Sell Dollars</option><option value="buy">Buy Dollars</option></select></div>
                         <div class="form-group"><label for="dollar-buy-amount">Total Buying Cost (BDT)</label><input type="number" id="dollar-buy-amount" class="form-group" placeholder="e.g., 10000" required></div>
                         <div class="form-group"><label for="dollar-sell-amount">Total Selling Value (BDT)</label><input type="number" id="dollar-sell-amount" class="form-group" placeholder="e.g., 10500" required></div>
                         <div class="form-group"><label for="dollar-profit-amount">Total Profit (BDT)</label><input type="number" id="dollar-profit-amount" class="form-group" placeholder="e.g., 500" required></div>
                         <button type="submit" class="btn btn-primary" style="width: auto;"><span class="material-symbols-outlined">save</span> Add Transaction</button>
                     </form>
                 </div>
-
                 <div class="content-box" style="margin-top: 32px;">
                     <h3 style="margin-bottom: 20px; color: var(--text-dark); font-weight: 600;">User Dollar Sell Requests</h3>
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Name & Email</th>
-                                <th>Card Type</th>
-                                <th>Card Link</th>
-                                <th>Payment Method</th>
-                                <th>Mobile</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="dollar-sell-requests-body">
-                            <tr><td colspan="7" style="text-align:center; color: var(--text-muted);">Loading...</td></tr>
-                        </tbody>
+                        <thead><tr><th>Name & Email</th><th>Card Type</th><th>Card Link</th><th>Payment Method</th><th>Mobile</th><th>Status</th><th>Action</th></tr></thead>
+                        <tbody id="dollar-sell-requests-body"><tr><td colspan="7" style="text-align:center; color: var(--text-muted);">Loading...</td></tr></tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Users Page -->
             <div id="users-page" class="page">
-                <div class="page-header">
-                    <h1>Student Management</h1>
-                </div>
+                <div class="page-header"><h1>Student Management</h1></div>
                 <div class="search-bar-container"><input type="text" id="user-search-input" placeholder="Search students by name, email, or mobile..."></div>
                 <div class="content-box">
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Mobile</th>
-                                <th>Referral Code</th>
-                                <th>Balance</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Name</th><th>Email</th><th>Mobile</th><th>Referral Code</th><th>Balance</th><th>Action</th></tr></thead>
                         <tbody id="users-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Services Page -->
             <div id="services-page" class="page">
-                <div class="page-header">
-                    <h1>Service Management</h1><button class="btn btn-add" onclick="openModalForAdd('services')"><span class="material-symbols-outlined">add</span> New Service</button>
-                </div>
+                <div class="page-header"><h1>Service Management</h1><button class="btn btn-add" onclick="openModalForAdd('services')"><span class="material-symbols-outlined">add</span> New Service</button></div>
                 <div class="content-box">
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Image</th>
-                                <th>Service Name</th>
-                                <th>Buy Price</th>
-                                <th>Selling Price</th>
-                                <th>Commission</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Image</th><th>Service Name</th><th>Buy Price</th><th>Selling Price</th><th>Commission</th><th>Status</th><th>Action</th></tr></thead>
                         <tbody id="services-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Service Stock Page -->
             <div id="service-stock-page" class="page">
-                <div class="page-header">
-                    <h1>Service Stock Management</h1>
-                </div>
+                <div class="page-header"><h1>Service Stock Management</h1></div>
                 <div class="content-box" style="margin-bottom: 32px;">
                     <form id="service-stock-form">
-                        <div class="form-group">
-                            <label for="stock-service-selection">Select Service</label>
-                            <select id="stock-service-selection" required>
-                                <option value="">Loading...</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="stock-quantity">Quantity</label>
-                            <input type="text" id="stock-quantity" placeholder="e.g., 50 Pcs or Standard Pack" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="stock-topup-id">Top-up IDs (Enter each on a new line)</label>
-                            <textarea id="stock-topup-id" rows="5" placeholder="Enter IDs, codes, or other info here" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: auto;">
-                            <span class="material-symbols-outlined">inventory_2</span> Add Stock
-                        </button>
+                        <div class="form-group"><label for="stock-service-selection">Select Service</label><select id="stock-service-selection" required><option value="">Loading...</option></select></div>
+                        <div class="form-group"><label for="stock-quantity">Quantity</label><input type="text" id="stock-quantity" placeholder="e.g., 50 Pcs or Standard Pack" required></div>
+                        <div class="form-group"><label for="stock-topup-id">Top-up IDs (Enter each on a new line)</label><textarea id="stock-topup-id" rows="5" placeholder="Enter IDs, codes, or other info here" required></textarea></div>
+                        <button type="submit" class="btn btn-primary" style="width: auto;"><span class="material-symbols-outlined">inventory_2</span> Add Stock</button>
                     </form>
                 </div>
                 <div class="content-box">
                     <h3 style="margin-bottom: 16px; font-weight: 600;">Current Stock Inventory</h3>
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Service Name</th>
-                                <th>Quantity</th>
-                                <th>Top-up ID</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Service Name</th><th>Quantity</th><th>Top-up ID</th><th>Action</th></tr></thead>
                         <tbody id="service-stock-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Send Service Page -->
             <div id="send-service-page" class="page">
-                <div class="page-header">
-                    <h1>Send Service via WhatsApp</h1>
-                </div>
+                <div class="page-header"><h1>Send Service via WhatsApp</h1></div>
                 <div class="content-box">
                     <form id="send-service-form">
                         <div class="form-group"><label for="whatsapp-number">Student's WhatsApp Number</label><input type="text" id="whatsapp-number" placeholder="e.g., 017XXXXXXXX" required></div>
-                        <div class="form-group"><label for="service-selection">Select Service or Course</label><select id="service-selection" required>
-                                <option value="">Loading...</option>
-                            </select></div>
+                        <div class="form-group"><label for="service-selection">Select Service or Course</label><select id="service-selection" required><option value="">Loading...</option></select></div>
                         <div class="form-group"><label for="service-info">Service Details (Message to send)</label><textarea id="service-info" rows="8" placeholder="Enter service details like login ID, password, or instructions..." required></textarea></div>
                         <button type="submit" class="btn btn-primary" style="width: auto;"><span class="material-symbols-outlined">send</span> Send Silently</button>
                     </form>
@@ -1473,172 +574,120 @@
                 </div>
             </div>
 
+            <!-- Courses Page -->
             <div id="courses-page" class="page">
-                <div class="page-header">
-                    <h1>Course Management</h1><button class="btn btn-add" onclick="openModalForAdd('courses')"><span class="material-symbols-outlined">add</span> New Course</button>
-                </div>
+                <div class="page-header"><h1>Course Management</h1><button class="btn btn-add" onclick="openModalForAdd('courses')"><span class="material-symbols-outlined">add</span> New Course</button></div>
                 <div class="content-box">
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Course Name</th>
-                                <th>Instructor</th>
-                                <th>Price</th>
-                                <th>Commission</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Course Name</th><th>Instructor</th><th>Price</th><th>Commission</th><th>Action</th></tr></thead>
                         <tbody id="courses-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Enrollments Page -->
             <div id="enrollments-page" class="page">
-                <div class="page-header">
-                    <h1>Course Enrollments</h1><button class="btn btn-add" onclick="openModalForAdd('enrollments')"><span class="material-symbols-outlined">add</span> New Enrollment</button>
-                </div>
+                <div class="page-header"><h1>Course Enrollments</h1><button class="btn btn-add" onclick="openModalForAdd('enrollments')"><span class="material-symbols-outlined">add</span> New Enrollment</button></div>
                 <div class="content-box">
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Student Email</th>
-                                <th>Course Name</th>
-                                <th>Batch No.</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Student Email</th><th>Course Name</th><th>Batch No.</th><th>Action</th></tr></thead>
                         <tbody id="enrollments-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Curriculum Page -->
             <div id="curriculum-page" class="page">
-                <div class="page-header">
-                    <h1>Curriculum Management</h1><button class="btn btn-add" onclick="openModalForAdd('curriculum')"><span class="material-symbols-outlined">add</span> New Curriculum</button>
-                </div>
+                <div class="page-header"><h1>Curriculum Management</h1><button class="btn btn-add" onclick="openModalForAdd('curriculum')"><span class="material-symbols-outlined">add</span> New Curriculum</button></div>
                 <div class="content-box">
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Course Name</th>
-                                <th>Batch No.</th>
-                                <th>Total Modules</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Course Name</th><th>Batch No.</th><th>Total Modules</th><th>Action</th></tr></thead>
                         <tbody id="curriculum-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Notices Page -->
             <div id="notices-page" class="page">
-                <div class="page-header">
-                    <h1>Noticeboard</h1><button class="btn btn-add" onclick="openModalForAdd('notices')"><span class="material-symbols-outlined">add</span> New Notice</button>
-                </div>
+                <div class="page-header"><h1>Noticeboard</h1><button class="btn btn-add" onclick="openModalForAdd('notices')"><span class="material-symbols-outlined">add</span> New Notice</button></div>
                 <div class="content-box">
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Description</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Title</th><th>Description</th><th>Action</th></tr></thead>
                         <tbody id="notices-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Trust Screenshots Page -->
             <div id="trust-screenshots-page" class="page">
-                <div class="page-header">
-                    <h1>Trust Screenshots</h1><button class="btn btn-add" onclick="openModalForAdd('trust_screenshots')"><span class="material-symbols-outlined">add</span> New Screenshot</button>
-                </div>
+                <div class="page-header"><h1>Trust Screenshots</h1><button class="btn btn-add" onclick="openModalForAdd('trust_screenshots')"><span class="material-symbols-outlined">add</span> New Screenshot</button></div>
                 <div class="content-box">
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Image</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Title</th><th>Image</th><th>Action</th></tr></thead>
                         <tbody id="trust-screenshots-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
-            <div id="join-class-page" class="page">
+            <!-- NEW: Video Reviews Page -->
+            <div id="video-reviews-page" class="page">
                 <div class="page-header">
-                    <h1>Class Joining Links</h1><button class="btn btn-add" onclick="openModalForAdd('joinClass')"><span class="material-symbols-outlined">add</span> New Link</button>
-                </div>
-                <div class="content-box">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Course Name</th>
-                                <th>Batch No.</th>
-                                <th>Topic</th>
-                                <th>Class Link</th>
-                                <th>Schedule Time</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="join-class-table-body"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="online-classes-page" class="page">
-                <div class="page-header">
-                    <h1>Online Classes Batches</h1>
-                    <button class="btn btn-add" onclick="openModalForAdd('online_classes')">
-                        <span class="material-symbols-outlined">add</span> New Batch
+                    <h1>Video Reviews Management</h1>
+                    <button class="btn btn-add" onclick="openModalForAdd('video_reviews')">
+                        <span class="material-symbols-outlined">add</span> New Video Review
                     </button>
                 </div>
                 <div class="content-box">
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Batch No.</th>
-                                <th>Students</th>
-                                <th>Total Bill</th>
-                                <th>Paid Bill</th>
-                                <th>Due Bill</th>
-                                <th>Class Schedule (4)</th>
+                                <th>Title</th>
+                                <th>Subtitle/Student Name</th>
+                                <th>YouTube Link</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
+                        <tbody id="video-reviews-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Join Class Page -->
+            <div id="join-class-page" class="page">
+                <div class="page-header"><h1>Class Joining Links</h1><button class="btn btn-add" onclick="openModalForAdd('joinClass')"><span class="material-symbols-outlined">add</span> New Link</button></div>
+                <div class="content-box">
+                    <table class="data-table">
+                        <thead><tr><th>Course Name</th><th>Batch No.</th><th>Topic</th><th>Class Link</th><th>Schedule Time</th><th>Action</th></tr></thead>
+                        <tbody id="join-class-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Online Classes Page -->
+            <div id="online-classes-page" class="page">
+                <div class="page-header"><h1>Online Classes Batches</h1><button class="btn btn-add" onclick="openModalForAdd('online_classes')"><span class="material-symbols-outlined">add</span> New Batch</button></div>
+                <div class="content-box">
+                    <table class="data-table">
+                        <thead><tr><th>Batch No.</th><th>Students</th><th>Total Bill</th><th>Paid Bill</th><th>Due Bill</th><th>Class Schedule (4)</th><th>Action</th></tr></thead>
                         <tbody id="online-classes-table-body"></tbody>
                     </table>
                 </div>
             </div>
             
+            <!-- Withdrawals Page -->
             <div id="withdrawals-page" class="page">
-                <div class="page-header">
-                    <h1>Withdrawal Requests</h1>
-                </div>
+                <div class="page-header"><h1>Withdrawal Requests</h1></div>
                 <div class="content-box">
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Email</th>
-                                <th>Amount</th>
-                                <th>Method</th>
-                                <th>Account No.</th>
-                                <th>Request Date</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Email</th><th>Amount</th><th>Method</th><th>Account No.</th><th>Request Date</th><th>Status</th><th>Action</th></tr></thead>
                         <tbody id="withdrawals-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Settings Page -->
             <div id="settings-page" class="page">
-                <div class="page-header">
-                    <h1>Website Settings</h1>
-                </div>
+                <div class="page-header"><h1>Website Settings</h1></div>
                 <div class="content-box">
                     <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; font-weight: 600;">Hero Section</h3>
                     <form id="hero-settings-form">
@@ -1660,7 +709,6 @@
                         <div class="form-group"><label>Current Image Preview</label><img id="about-us-image-preview" src="https://i.ibb.co/JqgWkCg/placeholder.png" alt="About Us Image Preview" style="max-width: 100%; max-height: 250px; border: 1px solid var(--border-color); border-radius: 8px; object-fit: cover;"></div>
                         <button type="submit" class="btn btn-primary" style="width: auto;">Save Settings</button>
                     </form>
-                    
                     <hr style="margin: 32px 0; border: none; border-top: 1px solid var(--border-color);">
                     <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; font-weight: 600;">Contact Us Section</h3>
                     <form id="contact-us-settings-form">
@@ -1668,18 +716,11 @@
                         <div class="form-group"><label>Current Image Preview</label><img id="contact-us-image-preview" src="https://i.ibb.co/mcxJLzJ/portrait-happy-male-student-with-backpack-holding-mobile-phone.png" alt="Contact Image Preview" style="max-width: 100%; max-height: 250px; border: 1px solid var(--border-color); border-radius: 8px; object-fit: cover;"></div>
                         <button type="submit" class="btn btn-primary" style="width: auto;">Save Settings</button>
                     </form>
-                    
                     <hr style="margin: 32px 0; border: none; border-top: 1px solid var(--border-color);">
                     <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; font-weight: 600;">Floating Chat Button</h3>
                     <form id="chat-icon-settings-form">
-                        <div class="form-group">
-                            <label for="chat-icon-image-url">Chat Icon Image URL</label>
-                            <input type="text" id="chat-icon-image-url" placeholder="Enter icon URL">
-                        </div>
-                        <div class="form-group">
-                            <label>Current Icon Preview</label>
-                            <img id="chat-icon-image-preview" src="https://i.ibb.co/hC68Fj8/man-in-suit.png" alt="Chat Icon Preview" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--border-color); object-fit: cover; background: #fff; box-shadow: var(--shadow-sm);">
-                        </div>
+                        <div class="form-group"><label for="chat-icon-image-url">Chat Icon Image URL</label><input type="text" id="chat-icon-image-url" placeholder="Enter icon URL"></div>
+                        <div class="form-group"><label>Current Icon Preview</label><img id="chat-icon-image-preview" src="https://i.ibb.co/hC68Fj8/man-in-suit.png" alt="Chat Icon Preview" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--border-color); object-fit: cover; background: #fff; box-shadow: var(--shadow-sm);"></div>
                         <button type="submit" class="btn btn-primary" style="width: auto;">Save Icon</button>
                     </form>
 
@@ -1732,7 +773,6 @@
                     <input type="text" id="wa-recipient-number" readonly style="background: var(--background-light);">
                     <input type="hidden" id="wa-student-name">
                 </div>
-                <!-- NEW FIELD FOR FOLLOW UP TRACKING -->
                 <div class="form-group">
                     <label>Course Related to Follow-up (Optional)</label>
                     <input type="text" id="wa-course-name" placeholder="e.g. Freelancing Batch 12">
@@ -1804,6 +844,7 @@
         </div>
     </div>
 
+    <!-- Firebase Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
@@ -1865,7 +906,6 @@
             const mobilePageTitle = document.getElementById('mobile-page-title');
             const overlay = document.getElementById('overlay');
 
-            // --- MACRODROID SEND WA GLOBAL FUNCTION ---
             window.sendViaMacroDroid = async (number, message, showToastMsg = true) => {
                 const doc = await db.collection('site_settings').doc('macrodroid_webhook').get();
                 let baseUrl = "";
@@ -1893,7 +933,6 @@
                 }
             };
 
-            // --- STUDENT WHATSAPP MODAL LOGIC (UPDATED WITH FOLLOW UP TRACKING) ---
             window.openStudentWhatsappModal = (mobile, name = 'N/A') => {
                 document.getElementById('wa-recipient-number').value = mobile || 'N/A';
                 document.getElementById('wa-student-name').value = name;
@@ -1931,8 +970,6 @@
                             const data = doc.data();
                             if (data.mobile) {
                                 window.sendViaMacroDroid(data.mobile, message, false); 
-                                
-                                // Auto Record Follow-up
                                 trackingPromises.push(db.collection('follow_ups').add({
                                     studentName: data.name || 'N/A',
                                     phoneNumber: data.mobile,
@@ -1955,8 +992,6 @@
                 } else {
                     if (!singleMobile || singleMobile === 'N/A') {
                         showToast('No mobile number found for this student.', 'error');
-                        
-                        // Track Failed Follow up
                         await db.collection('follow_ups').add({
                             studentName: studentName,
                             phoneNumber: singleMobile || 'N/A',
@@ -1970,8 +1005,6 @@
                         });
                     } else {
                         await window.sendViaMacroDroid(singleMobile, message, false);
-                        
-                        // Track Success Follow up
                         await db.collection('follow_ups').add({
                             studentName: studentName,
                             phoneNumber: singleMobile,
@@ -1983,7 +1016,6 @@
                             nextFollowUpDate: '',
                             timestamp: firebase.firestore.FieldValue.serverTimestamp()
                         });
-
                         showToast('Triggered MacroDroid & Follow-up Saved!', 'success');
                     }
                 }
@@ -1992,7 +1024,6 @@
                 submitBtn.innerHTML = originalBtnText;
                 studentWhatsappModal.classList.add('hidden');
                 
-                // Refresh followups if we are on that page
                 if(document.getElementById('follow-up-page').classList.contains('active')) {
                     renderFollowUps();
                 }
@@ -2000,40 +1031,24 @@
 
             // DASHBOARD CLICKS
             const totalFollowupsCard = document.getElementById('total-followups-card');
-            if (totalFollowupsCard) {
-                totalFollowupsCard.addEventListener('click', () => {
-                    navigateTo('follow-up-page');
-                });
-            }
+            if (totalFollowupsCard) totalFollowupsCard.addEventListener('click', () => navigateTo('follow-up-page'));
 
             const pendingPaymentsCard = document.getElementById('pending-payments-card');
             if (pendingPaymentsCard) {
                 pendingPaymentsCard.addEventListener('click', () => {
                     document.querySelectorAll('#payment-filter-buttons .filter-btn').forEach(btn => {
                         btn.classList.remove('active');
-                        if (btn.dataset.filter === 'pending') {
-                            btn.classList.add('active');
-                        }
+                        if (btn.dataset.filter === 'pending') btn.classList.add('active');
                     });
-                    navigateTo('payments-page', {
-                        filter: 'pending'
-                    });
+                    navigateTo('payments-page', { filter: 'pending' });
                 });
             }
             
             const pendingDollarRequestsCard = document.getElementById('pending-dollar-requests-card');
-            if (pendingDollarRequestsCard) {
-                pendingDollarRequestsCard.addEventListener('click', () => {
-                    navigateTo('dollar-exchange-page');
-                });
-            }
+            if (pendingDollarRequestsCard) pendingDollarRequestsCard.addEventListener('click', () => navigateTo('dollar-exchange-page'));
 
             const totalStudentsCard = document.getElementById('total-students-card');
-            if (totalStudentsCard) {
-                totalStudentsCard.addEventListener('click', () => {
-                    navigateTo('users-page');
-                });
-            }
+            if (totalStudentsCard) totalStudentsCard.addEventListener('click', () => navigateTo('users-page'));
 
             const userSearchInput = document.getElementById('user-search-input');
             if (userSearchInput) {
@@ -2041,15 +1056,11 @@
                     const searchTerm = userSearchInput.value.toLowerCase().trim();
                     const tableBody = document.getElementById('users-table-body');
                     const rows = tableBody.getElementsByTagName('tr');
-
                     Array.from(rows).forEach(row => {
                         if (row.getElementsByTagName('td').length > 0) {
                             const rowText = row.textContent || row.innerText;
-                            if (rowText.toLowerCase().includes(searchTerm)) {
-                                row.style.display = "";
-                            } else {
-                                row.style.display = 'none';
-                            }
+                            if (rowText.toLowerCase().includes(searchTerm)) row.style.display = "";
+                            else row.style.display = 'none';
                         }
                     });
                 });
@@ -2060,15 +1071,11 @@
                     const searchTerm = paymentSearchInput.value.toLowerCase().trim();
                     const tableBody = document.getElementById('payments-table-body');
                     const rows = tableBody.getElementsByTagName('tr');
-
                     Array.from(rows).forEach(row => {
                         if (row.getElementsByTagName('td').length > 0) {
                             const rowText = row.textContent || row.innerText;
-                            if (rowText.toLowerCase().includes(searchTerm)) {
-                                row.style.display = "";
-                            } else {
-                                row.style.display = 'none';
-                            }
+                            if (rowText.toLowerCase().includes(searchTerm)) row.style.display = "";
+                            else row.style.display = 'none';
                         }
                     });
                 });
@@ -2106,9 +1113,7 @@
                         adminPanel.classList.remove('hidden');
                         navigateTo('dashboard-page');
                     } else {
-                        auth.signOut().then(() => {
-                            showToast('Sorry, only the admin can log in here!', 'error');
-                        });
+                        auth.signOut().then(() => { showToast('Sorry, only the admin can log in here!', 'error'); });
                     }
                 } else {
                     loginPage.classList.remove('hidden');
@@ -2120,22 +1125,13 @@
                 e.preventDefault();
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
-                
                 if (email.toLowerCase() !== ADMIN_EMAIL) {
-                    showToast('Sorry, only the admin can log in here!', 'error');
-                    return;
+                    showToast('Sorry, only the admin can log in here!', 'error'); return;
                 }
-
-                auth.signInWithEmailAndPassword(email, password)
-                    .catch(error => {
-                        console.error("Login Error:", error);
-                        showToast('Invalid email or password!', 'error');
-                    });
+                auth.signInWithEmailAndPassword(email, password).catch(error => { showToast('Invalid email or password!', 'error'); });
             });
 
-            logoutBtn.addEventListener('click', () => {
-                auth.signOut();
-            });
+            logoutBtn.addEventListener('click', () => { auth.signOut(); });
 
             if (mobileMenuBtn) {
                 mobileMenuBtn.addEventListener('click', () => {
@@ -2151,16 +1147,8 @@
             }
 
             window.copyToClipboard = function(text) {
-                if (!text || text.trim() === 'N/A' || text.trim() === '') {
-                    showToast("No text found.", "error");
-                    return;
-                }
-                navigator.clipboard.writeText(text).then(function() {
-                    showToast(`"${text}" copied to clipboard.`);
-                }, function(err) {
-                    console.error('Async: Could not copy text: ', err);
-                    showToast('Sorry, could not copy text.', "error");
-                });
+                if (!text || text.trim() === 'N/A' || text.trim() === '') { showToast("No text found.", "error"); return; }
+                navigator.clipboard.writeText(text).then(function() { showToast(`"${text}" copied to clipboard.`); }, function(err) { showToast('Sorry, could not copy text.', "error"); });
             }
 
             function navigateTo(pageId, options = {}) {
@@ -2200,6 +1188,7 @@
                     case 'curriculum-page': renderCurriculum(); break;
                     case 'notices-page': renderNotices(); break;
                     case 'trust-screenshots-page': renderTrustScreenshots(); break;
+                    case 'video-reviews-page': renderVideoReviews(); break; // NEW RENDER CALL
                     case 'join-class-page': renderJoinClass(); break;
                     case 'online-classes-page': renderOnlineClasses(); break;
                     case 'withdrawals-page': renderWithdrawals(); break;
@@ -2270,12 +1259,9 @@
                     document.getElementById('total-courses').textContent = coursesSnapshot.size;
                     document.getElementById('total-notices').textContent = noticesSnapshot.size;
                     document.getElementById('total-screenshots').textContent = screenshotsSnapshot.size;
-                } catch (error) {
-                    console.error("Error loading dashboard data:", error);
-                }
+                } catch (error) { console.error("Error loading dashboard data:", error); }
             }
 
-            // --- NEW: FOLLOW UP SYSTEM RENDER & LOGIC ---
             async function renderFollowUps() {
                 const tableBody = document.getElementById('follow-up-table-body');
                 tableBody.innerHTML = `<tr><td colspan="9" style="text-align: center;">Loading data...</td></tr>`;
@@ -2305,9 +1291,7 @@
                     window.allFollowUpsData = windowFollowUps; 
                     window.applyFollowUpFilters();
 
-                } catch (error) { 
-                    tableBody.innerHTML = `<tr><td colspan="9" style="color: red; text-align: center;">Error: ${error.message}</td></tr>`; 
-                }
+                } catch (error) { tableBody.innerHTML = `<tr><td colspan="9" style="color: red; text-align: center;">Error: ${error.message}</td></tr>`; }
             }
 
             window.applyFollowUpFilters = () => {
@@ -2356,18 +1340,14 @@
                  tableBody.innerHTML = tableHTML;
             };
 
-            // Bind filter events
             if(document.getElementById('fu-search-input')) {
                 document.getElementById('fu-search-input').addEventListener('input', applyFollowUpFilters);
                 document.getElementById('fu-status-filter').addEventListener('change', applyFollowUpFilters);
                 document.getElementById('fu-result-filter').addEventListener('change', applyFollowUpFilters);
                 document.getElementById('fu-date-filter').addEventListener('change', applyFollowUpFilters);
                 
-                // Export CSV Logic
                 document.getElementById('export-followup-btn').addEventListener('click', () => {
-                    if (!window.allFollowUpsData || window.allFollowUpsData.length === 0) {
-                        showToast("No data to export", "error"); return;
-                    }
+                    if (!window.allFollowUpsData || window.allFollowUpsData.length === 0) { showToast("No data to export", "error"); return; }
                     let csv = 'Serial,Student Name,Phone Number,Course Name,Message Date,Status,Result,Next Follow-up,Admin Note\n';
                     window.allFollowUpsData.forEach((row, i) => {
                         const date = row.timestamp ? new Date(row.timestamp.seconds * 1000).toLocaleString('en-US').replace(/,/g, '') : 'N/A';
@@ -2401,18 +1381,10 @@
                 const endDateValue = document.getElementById('end-date').value;
                 const generateBtn = document.getElementById('generate-report-btn');
 
-                if (!startDateValue || !endDateValue) {
-                    showToast('Please select start and end dates.', 'error');
-                    return;
-                }
-                
+                if (!startDateValue || !endDateValue) { showToast('Please select start and end dates.', 'error'); return; }
                 const startDate = new Date(startDateValue + 'T00:00:00');
                 const endDate = new Date(endDateValue + 'T23:59:59');
-
-                if (isNaN(startDate) || isNaN(endDate)) {
-                    showToast('Please select valid dates.', 'error');
-                    return;
-                }
+                if (isNaN(startDate) || isNaN(endDate)) { showToast('Please select valid dates.', 'error'); return; }
                 
                 generateBtn.disabled = true;
                 generateBtn.innerHTML = '<span class="material-symbols-outlined">sync</span> Loading...';
@@ -2441,13 +1413,8 @@
                     const profitData = sortedDates.map(date => dailyData[date].profit);
                     updateReportChart(labels, salesData, profitData);
                     updateReportTable(sortedDates, dailyData);
-                } catch (error) {
-                    console.error("Error generating report:", error);
-                    showToast('Error generating report.', 'error');
-                } finally {
-                    generateBtn.disabled = false;
-                    generateBtn.innerHTML = 'Generate Report';
-                }
+                } catch (error) { showToast('Error generating report.', 'error'); } 
+                finally { generateBtn.disabled = false; generateBtn.innerHTML = 'Generate Report'; }
             }
 
             function updateReportChart(labels, salesData, profitData) {
@@ -2457,46 +1424,21 @@
                     type: 'line',
                     data: {
                         labels: labels,
-                        datasets: [{
-                            label: 'Total Sales',
-                            data: salesData,
-                            borderColor: 'rgba(79, 70, 229, 1)',
-                            backgroundColor: 'rgba(79, 70, 229, 0.1)',
-                            borderWidth: 2,
-                            fill: true,
-                            tension: 0.4
-                        }, {
-                            label: 'Total Profit',
-                            data: profitData,
-                            borderColor: 'rgba(16, 185, 129, 1)',
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                            borderWidth: 2,
-                            fill: true,
-                            tension: 0.4
-                        }]
+                        datasets: [{ label: 'Total Sales', data: salesData, borderColor: 'rgba(79, 70, 229, 1)', backgroundColor: 'rgba(79, 70, 229, 0.1)', borderWidth: 2, fill: true, tension: 0.4 }, { label: 'Total Profit', data: profitData, borderColor: 'rgba(16, 185, 129, 1)', backgroundColor: 'rgba(16, 185, 129, 0.1)', borderWidth: 2, fill: true, tension: 0.4 }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: { y: { beginAtZero: true, ticks: { callback: value => `৳${value}` } } },
-                        plugins: { tooltip: { callbacks: { label: context => `${context.dataset.label}: ৳${context.parsed.y.toLocaleString('en-US')}` } } }
-                    }
+                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { callback: value => `৳${value}` } } }, plugins: { tooltip: { callbacks: { label: context => `${context.dataset.label}: ৳${context.parsed.y.toLocaleString('en-US')}` } } } }
                 });
             }
 
             function updateReportTable(sortedDates, dailyData) {
                 const tableBody = document.getElementById('report-table-body');
-                if (sortedDates.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="3" style="text-align:center;">No data found for the selected dates.</td></tr>`;
-                    return;
-                }
+                if (sortedDates.length === 0) { tableBody.innerHTML = `<tr><td colspan="3" style="text-align:center;">No data found for the selected dates.</td></tr>`; return; }
                 let tableHTML = '';
                 let totalSales = 0, totalProfit = 0;
                 sortedDates.forEach(date => {
                     const data = dailyData[date];
                     const formattedDate = new Date(date).toLocaleDateString('en-US');
-                    totalSales += data.sales;
-                    totalProfit += data.profit;
+                    totalSales += data.sales; totalProfit += data.profit;
                     tableHTML += `<tr><td data-label="Date">${formattedDate}</td><td data-label="Total Sales">৳ ${data.sales.toLocaleString('en-US')}</td><td data-label="Total Profit">৳ ${data.profit.toLocaleString('en-US')}</td></tr>`;
                 });
                 tableHTML += `<tr style="font-weight: 700; background-color: var(--background-light);"><td data-label="Total">Total</td><td data-label="Total Sales">৳ ${totalSales.toLocaleString('en-US')}</td><td data-label="Total Profit">৳ ${totalProfit.toLocaleString('en-US')}</td></tr>`;
@@ -2512,10 +1454,7 @@
                         document.getElementById('rate-visa').value = data.VISA || 105;
                         document.getElementById('rate-apple').value = data.APPLE || 98;
                     }
-                } catch (error) {
-                    console.error("Error loading dollar rates:", error);
-                    showToast("Failed to load rates.", "error");
-                }
+                } catch (error) { showToast("Failed to load rates.", "error"); }
             }
 
             const dollarRateSettingsForm = document.getElementById('dollar-rate-settings-form');
@@ -2524,25 +1463,12 @@
                     e.preventDefault();
                     const btn = dollarRateSettingsForm.querySelector('button[type="submit"]');
                     const oldText = btn.innerHTML;
-                    btn.disabled = true;
-                    btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Updating...`;
+                    btn.disabled = true; btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Updating...`;
 
-                    const rates = {
-                        ACH: Number(document.getElementById('rate-ach').value),
-                        VISA: Number(document.getElementById('rate-visa').value),
-                        APPLE: Number(document.getElementById('rate-apple').value)
-                    };
-
-                    try {
-                        await db.collection('site_settings').doc('dollar_rates').set(rates, { merge: true });
-                        showToast("Dollar rates updated successfully!", "success");
-                    } catch (error) {
-                        console.error("Error saving rates:", error);
-                        showToast("Failed to save rates.", "error");
-                    } finally {
-                        btn.disabled = false;
-                        btn.innerHTML = oldText;
-                    }
+                    const rates = { ACH: Number(document.getElementById('rate-ach').value), VISA: Number(document.getElementById('rate-visa').value), APPLE: Number(document.getElementById('rate-apple').value) };
+                    try { await db.collection('site_settings').doc('dollar_rates').set(rates, { merge: true }); showToast("Dollar rates updated successfully!", "success"); } 
+                    catch (error) { showToast("Failed to save rates.", "error"); } 
+                    finally { btn.disabled = false; btn.innerHTML = oldText; }
                 });
             }
 
@@ -2552,102 +1478,45 @@
                 tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Loading...</td></tr>';
                 try {
                     const snapshot = await db.collection('dollar_sells').orderBy('timestamp', 'desc').get();
-                    if (snapshot.empty) {
-                        tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No requests found.</td></tr>';
-                        return;
-                    }
+                    if (snapshot.empty) { tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No requests found.</td></tr>'; return; }
                     let html = '';
                     snapshot.forEach(doc => {
                         const data = doc.data();
                         const id = doc.id;
                         const statusClass = (data.status || 'pending').toLowerCase();
-                        
                         let cardLinkDisplay = 'N/A';
                         if (data.cardLink) {
-                            cardLinkDisplay = `
-                                <div style="display:flex; align-items:center; gap:8px;">
-                                    <a href="${data.cardLink}" target="_blank" style="color:var(--primary-blue); font-weight:500; text-decoration:none;">View</a>
-                                    <span class="material-symbols-outlined" 
-                                          style="cursor:pointer; font-size:16px; color:var(--text-muted);" 
-                                          onclick="copyToClipboard('${data.cardLink}')"
-                                          title="Click to copy link">content_copy</span>
-                                </div>
-                            `;
+                            cardLinkDisplay = `<div style="display:flex; align-items:center; gap:8px;"><a href="${data.cardLink}" target="_blank" style="color:var(--primary-blue); font-weight:500; text-decoration:none;">View</a><span class="material-symbols-outlined" style="cursor:pointer; font-size:16px; color:var(--text-muted);" onclick="copyToClipboard('${data.cardLink}')" title="Click to copy link">content_copy</span></div>`;
                         }
-
-                        html += `
-                        <tr>
-                            <td data-label="Name & Email">
-                                <div style="font-weight: 500;">${data.userName || 'N/A'}</div>
-                                <small style="color:var(--text-muted);">${data.userEmail || ''}</small>
-                            </td>
-                            <td data-label="Card Type">${data.cardType || 'N/A'}</td>
-                            <td data-label="Card Link">${cardLinkDisplay}</td>
-                            <td data-label="Payment Method">${data.paymentMethod || 'N/A'}</td>
-                            <td data-label="Mobile">
-                                <span class="copyable-mobile" style="cursor:pointer;" onclick="copyToClipboard('${data.phoneNumber || ''}')" title="Click to copy">
-                                    ${data.phoneNumber || 'N/A'}
-                                </span>
-                            </td>
+                        html += `<tr>
+                            <td data-label="Name & Email"><div style="font-weight: 500;">${data.userName || 'N/A'}</div><small style="color:var(--text-muted);">${data.userEmail || ''}</small></td>
+                            <td data-label="Card Type">${data.cardType || 'N/A'}</td><td data-label="Card Link">${cardLinkDisplay}</td><td data-label="Payment Method">${data.paymentMethod || 'N/A'}</td>
+                            <td data-label="Mobile"><span class="copyable-mobile" style="cursor:pointer;" onclick="copyToClipboard('${data.phoneNumber || ''}')" title="Click to copy">${data.phoneNumber || 'N/A'}</span></td>
                             <td data-label="Status"><span class="status-badge ${statusClass}">${data.status || 'pending'}</span></td>
-                            <td class="actions-cell" data-label="Action">
-                                <select class="status-select" onchange="updateDollarSellStatus('${id}', this.value)">
-                                    <option value="pending" ${data.status === 'pending' ? 'selected' : ''}>Pending</option>
-                                    <option value="approved" ${data.status === 'approved' ? 'selected' : ''}>Approved</option>
-                                    <option value="rejected" ${data.status === 'rejected' ? 'selected' : ''}>Rejected</option>
-                                </select>
-                                <button class="btn-delete" onclick="deleteItem('dollar_sells', '${id}')">
-                                    <span class="material-symbols-outlined">delete</span>
-                                </button>
-                            </td>
-                        </tr>
-                        `;
+                            <td class="actions-cell" data-label="Action"><select class="status-select" onchange="updateDollarSellStatus('${id}', this.value)"><option value="pending" ${data.status === 'pending' ? 'selected' : ''}>Pending</option><option value="approved" ${data.status === 'approved' ? 'selected' : ''}>Approved</option><option value="rejected" ${data.status === 'rejected' ? 'selected' : ''}>Rejected</option></select><button class="btn-delete" onclick="deleteItem('dollar_sells', '${id}')"><span class="material-symbols-outlined">delete</span></button></td>
+                        </tr>`;
                     });
                     tableBody.innerHTML = html;
-                } catch (error) {
-                    console.error("Error fetching requests:", error);
-                    tableBody.innerHTML = `<tr><td colspan="7" style="color:red; text-align:center;">Error: ${error.message}</td></tr>`;
-                }
+                } catch (error) { tableBody.innerHTML = `<tr><td colspan="7" style="color:red; text-align:center;">Error: ${error.message}</td></tr>`; }
             }
 
             window.updateDollarSellStatus = async (id, newStatus) => {
                 try {
                     const docRef = db.collection('dollar_sells').doc(id);
                     const docSnap = await docRef.get();
-                    
                     if(!docSnap.exists) throw new Error("Document not found");
                     const data = docSnap.data();
-
                     await docRef.update({ status: newStatus });
-
                     if(data.userId) {
-                        let title = 'Dollar Sell Update';
-                        let msg = '';
-                        if(newStatus === 'approved') {
-                            title = 'Dollar Sell Successful';
-                            msg = `Your ${data.cardType} dollar sell request is approved. You will receive payment soon.`;
-                        } else if (newStatus === 'rejected') {
-                            title = 'Dollar Sell Rejected';
-                            msg = `Your dollar sell request has been rejected.`;
-                        }
-
+                        let title = 'Dollar Sell Update', msg = '';
+                        if(newStatus === 'approved') { title = 'Dollar Sell Successful'; msg = `Your ${data.cardType} dollar sell request is approved. You will receive payment soon.`; } 
+                        else if (newStatus === 'rejected') { title = 'Dollar Sell Rejected'; msg = `Your dollar sell request has been rejected.`; }
                         if(newStatus !== 'pending') {
-                            await db.collection('notifications').add({
-                                targetUid: data.userId,
-                                title: title,
-                                message: msg,
-                                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                                type: 'dollar_sell_update',
-                                read: false
-                            });
+                            await db.collection('notifications').add({ targetUid: data.userId, title: title, message: msg, timestamp: firebase.firestore.FieldValue.serverTimestamp(), type: 'dollar_sell_update', read: false });
                         }
                     }
-                    showToast("Status updated successfully!", "success");
-                    renderDollarSellRequests();
-                } catch (error) {
-                    console.error("Error updating status:", error);
-                    showToast("Failed to update status.", "error");
-                }
+                    showToast("Status updated successfully!", "success"); renderDollarSellRequests();
+                } catch (error) { showToast("Failed to update status.", "error"); }
             };
 
             async function renderManualSalePage() {
@@ -2678,19 +1547,11 @@
                 try {
                     const servicesSnapshot = await db.collection('services').get();
                     const coursesSnapshot = await db.collection('courses').get();
-
                     let optionsHTML = '<option value="" disabled selected>Select an item</option>';
                     optionsHTML += '<optgroup label="Services">';
-                    servicesSnapshot.forEach(doc => {
-                        const data = doc.data();
-                        const price = data.purchasePrice ? parseFloat(data.purchasePrice) : 0;
-                        optionsHTML += `<option value="${data.name}" data-price="${price}">${data.name}</option>`;
-                    });
+                    servicesSnapshot.forEach(doc => { const data = doc.data(); const price = data.purchasePrice ? parseFloat(data.purchasePrice) : 0; optionsHTML += `<option value="${data.name}" data-price="${price}">${data.name}</option>`; });
                     optionsHTML += '</optgroup><optgroup label="Courses">';
-                    coursesSnapshot.forEach(doc => {
-                        const data = doc.data();
-                        optionsHTML += `<option value="${data.name}" data-price="0">${data.name}</option>`;
-                    });
+                    coursesSnapshot.forEach(doc => { const data = doc.data(); optionsHTML += `<option value="${data.name}" data-price="0">${data.name}</option>`; });
                     optionsHTML += '</optgroup>';
                     itemSelect.innerHTML = optionsHTML;
 
@@ -2703,11 +1564,7 @@
                         const discount = parseFloat(discountInput.value) || 0;
                         const totalCost = unitBuyPrice * quantity;
                         
-                        if (saleInput.value.trim() !== "") {
-                            profitInput.value = netSales - totalCost;
-                        } else {
-                            profitInput.value = '';
-                        }
+                        if (saleInput.value.trim() !== "") { profitInput.value = netSales - totalCost; } else { profitInput.value = ''; }
                         debugInfo.style.display = 'block';
                         debugInfo.innerHTML = `<strong>Calculation:</strong><br>Unit Cost: ৳ ${unitBuyPrice} | Qty: ${quantity}<br>Gross Sale: ৳ ${netSales + discount} | Discount: ৳ ${discount}<br>Total Cost: ৳ ${totalCost} | Net Sales: ৳ ${netSales}`;
                     }
@@ -2715,10 +1572,7 @@
                     quantityInput.oninput = calculateProfit;
                     saleInput.oninput = calculateProfit;
                     discountInput.oninput = calculateProfit;
-                } catch (error) {
-                    console.error("Error loading items:", error);
-                    itemSelect.innerHTML = '<option value="">Failed to load items</option>';
-                }
+                } catch (error) { itemSelect.innerHTML = '<option value="">Failed to load items</option>'; }
             }
 
             const manualSaleForm = document.getElementById('manual-sale-form');
@@ -2735,81 +1589,38 @@
                     const discountAmount = Number(document.getElementById('manual-discount-amount').value) || 0;
                     const profitAmount = Number(document.getElementById('manual-profit-amount').value);
                     
-                    if (!itemName || quantity <= 0 || document.getElementById('manual-sale-amount').value.trim() === '') {
-                        showToast("Please fill in item, quantity and amounts correctly.", "error");
-                        return;
-                    }
+                    if (!itemName || quantity <= 0 || document.getElementById('manual-sale-amount').value.trim() === '') { showToast("Please fill in item, quantity and amounts correctly.", "error"); return; }
                     
                     const originalBtnText = btn.innerHTML;
-                    btn.disabled = true;
-                    btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Saving...`;
-                    
+                    btn.disabled = true; btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Saving...`;
                     const trxId = 'MANUAL-' + Date.now().toString().slice(-6);
 
                     try {
                         await db.collection('payments').add({
-                            userName: userName,
-                            userMobile: userMobile,
-                            itemName: itemName,
-                            quantity: quantity,
-                            amount: saleAmount,
-                            discountAmount: discountAmount,
-                            profit: profitAmount,
-                            status: 'approved',
-                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                            transactionId: trxId,
-                            userEmail: 'admin@manual.sale'
+                            userName: userName, userMobile: userMobile, itemName: itemName, quantity: quantity, amount: saleAmount, discountAmount: discountAmount, profit: profitAmount, status: 'approved', timestamp: firebase.firestore.FieldValue.serverTimestamp(), transactionId: trxId, userEmail: 'admin@manual.sale'
                         });
                         showToast('Sale added successfully!', 'success');
-                        manualSaleForm.reset();
-                        document.getElementById('manual-item-selection').value = "";
-                        document.getElementById('calc-debug-info').style.display = 'none';
-                        renderDashboard();
-                    } catch (error) {
-                        console.error("Error adding sale:", error);
-                        showToast(`Error: ${error.message}`, "error");
-                    } finally {
-                        btn.disabled = false;
-                        btn.innerHTML = originalBtnText;
-                    }
+                        manualSaleForm.reset(); document.getElementById('manual-item-selection').value = ""; document.getElementById('calc-debug-info').style.display = 'none'; renderDashboard();
+                    } catch (error) { showToast(`Error: ${error.message}`, "error"); } finally { btn.disabled = false; btn.innerHTML = originalBtnText; }
                 };
             }
 
             const dollarExchangeForm = document.getElementById('dollar-exchange-form');
             if (dollarExchangeForm) {
-                const buyInput = document.getElementById('dollar-buy-amount'),
-                    sellInput = document.getElementById('dollar-sell-amount'),
-                    profitInput = document.getElementById('dollar-profit-amount');
-                const autoCalcProfit = () => {
-                    if (parseFloat(buyInput.value) > 0) profitInput.value = (parseFloat(sellInput.value) || 0) - (parseFloat(buyInput.value) || 0);
-                };
+                const buyInput = document.getElementById('dollar-buy-amount'), sellInput = document.getElementById('dollar-sell-amount'), profitInput = document.getElementById('dollar-profit-amount');
+                const autoCalcProfit = () => { if (parseFloat(buyInput.value) > 0) profitInput.value = (parseFloat(sellInput.value) || 0) - (parseFloat(buyInput.value) || 0); };
                 buyInput.addEventListener('input', autoCalcProfit);
                 sellInput.addEventListener('input', autoCalcProfit);
                 dollarExchangeForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
                     const btn = dollarExchangeForm.querySelector('button[type="submit"]');
-                    const exchangeType = document.getElementById('exchange-type').value,
-                        buyAmount = Number(buyInput.value),
-                        sellAmount = Number(sellInput.value),
-                        profitAmount = Number(profitInput.value);
-                    if (buyAmount <= 0 || sellAmount < 0 || profitAmount === null) {
-                        showToast("Please fill amounts properly.", "error");
-                        return;
-                    }
-                    btn.disabled = true;
-                    btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Adding...`;
+                    const exchangeType = document.getElementById('exchange-type').value, buyAmount = Number(buyInput.value), sellAmount = Number(sellInput.value), profitAmount = Number(profitInput.value);
+                    if (buyAmount <= 0 || sellAmount < 0 || profitAmount === null) { showToast("Please fill amounts properly.", "error"); return; }
+                    btn.disabled = true; btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Adding...`;
                     try {
-                        await db.collection('dollar_exchange').add({
-                            type: exchangeType, buyAmount: buyAmount, sellAmount: sellAmount, profit: profitAmount, timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                        });
-                        showToast('Transaction added successfully!');
-                        dollarExchangeForm.reset(); renderDashboard();
-                    } catch (error) {
-                        showToast(`Failed to add: ${error.message}`, "error");
-                    } finally {
-                        btn.disabled = false;
-                        btn.innerHTML = `<span class="material-symbols-outlined">save</span> Add Transaction`;
-                    }
+                        await db.collection('dollar_exchange').add({ type: exchangeType, buyAmount: buyAmount, sellAmount: sellAmount, profit: profitAmount, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+                        showToast('Transaction added successfully!'); dollarExchangeForm.reset(); renderDashboard();
+                    } catch (error) { showToast(`Failed to add: ${error.message}`, "error"); } finally { btn.disabled = false; btn.innerHTML = `<span class="material-symbols-outlined">save</span> Add Transaction`; }
                 });
             }
 
@@ -2818,16 +1629,13 @@
                 selectionDropdown.innerHTML = '<option value="">Loading...</option>';
                 try {
                     const servicesSnapshot = await db.collection('services').get();
-                    if (servicesSnapshot.empty) {
-                        selectionDropdown.innerHTML = '<option value="">No services found</option>';
-                    } else {
+                    if (servicesSnapshot.empty) { selectionDropdown.innerHTML = '<option value="">No services found</option>'; } 
+                    else {
                         let optionsHTML = '<option value="" disabled selected>Select a Service</option>';
                         servicesSnapshot.forEach(doc => { optionsHTML += `<option value="${doc.data().name}">${doc.data().name}</option>`; });
                         selectionDropdown.innerHTML = optionsHTML;
                     }
-                } catch (error) {
-                    selectionDropdown.innerHTML = '<option value="">Failed to load</option>';
-                }
+                } catch (error) { selectionDropdown.innerHTML = '<option value="">Failed to load</option>'; }
                 await renderGeneric('service_stock', 'service-stock-table-body', (stockItem) => `<tr><td data-label="Service Name">${stockItem.serviceName}</td><td data-label="Quantity">${stockItem.quantity}</td><td data-label="Topup ID" style="white-space: pre-wrap; word-break: break-all;">${stockItem.topupId}</td><td class="actions-cell" data-label="Action"><button class="btn-delete" onclick="deleteItem('service_stock', '${stockItem.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             }
 
@@ -2844,13 +1652,8 @@
                     btn.disabled = true; btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Adding...`;
                     try {
                         await db.collection('service_stock').add({ serviceName, quantity, topupId, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-                        showToast('Stock added successfully!');
-                        serviceStockForm.reset(); renderServiceStock(); 
-                    } catch (error) {
-                        showToast(`Failed: ${error.message}`, "error");
-                    } finally {
-                        btn.disabled = false; btn.innerHTML = `<span class="material-symbols-outlined">inventory_2</span> Add Stock`;
-                    }
+                        showToast('Stock added successfully!'); serviceStockForm.reset(); renderServiceStock(); 
+                    } catch (error) { showToast(`Failed: ${error.message}`, "error"); } finally { btn.disabled = false; btn.innerHTML = `<span class="material-symbols-outlined">inventory_2</span> Add Stock`; }
                 });
             }
 
@@ -2859,9 +1662,7 @@
                 try {
                     const servicesSnapshot = await db.collection('services').get();
                     const coursesSnapshot = await db.collection('courses').get();
-                    if (servicesSnapshot.empty && coursesSnapshot.empty) {
-                        serviceSelection.innerHTML = '<option value="">No services or courses found</option>'; return;
-                    }
+                    if (servicesSnapshot.empty && coursesSnapshot.empty) { serviceSelection.innerHTML = '<option value="">No services or courses found</option>'; return; }
                     let optionsHTML = '<option value="" disabled selected>Select a Service/Course</option><optgroup label="Services">';
                     servicesSnapshot.forEach(doc => { optionsHTML += `<option value="${doc.data().name}" data-type="service">${doc.data().name}</option>`; });
                     optionsHTML += '</optgroup><optgroup label="Courses">';
@@ -2872,8 +1673,7 @@
             }
 
             function updateServiceInfoTemplate() {
-                const selectedOption = serviceSelection.options[serviceSelection.selectedIndex],
-                    selectedValue = selectedOption.value, type = selectedOption.dataset.type, today = new Date().toLocaleDateString('en-GB');
+                const selectedOption = serviceSelection.options[serviceSelection.selectedIndex], selectedValue = selectedOption.value, type = selectedOption.dataset.type, today = new Date().toLocaleDateString('en-GB');
                 let template = '';
                 if (type === 'service') {
                     const lowerCaseValue = selectedValue.toLowerCase();
@@ -2894,49 +1694,29 @@
             }
             if (serviceSelection) serviceSelection.addEventListener('change', updateServiceInfoTemplate);
             
-            // SEND SERVICE VIA MACRODROID WEBHOOK
             if (sendServiceForm) sendServiceForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 let recipientNumber = document.getElementById('whatsapp-number').value.trim();
                 const serviceInfo = serviceInfoTextarea.value.trim();
                 if (!recipientNumber || !serviceInfo) { showToast("Fill all details.", "error"); return; }
-                
                 window.sendViaMacroDroid(recipientNumber, serviceInfo);
             });
 
             async function renderSettings() {
                 try {
                     const heroDoc = await db.collection('site_settings').doc('hero_section').get();
-                    if (heroDoc.exists && heroDoc.data().imageUrl) {
-                        document.getElementById('hero-image-url').value = heroDoc.data().imageUrl;
-                        document.getElementById('hero-image-preview').src = heroDoc.data().imageUrl;
-                    }
+                    if (heroDoc.exists && heroDoc.data().imageUrl) { document.getElementById('hero-image-url').value = heroDoc.data().imageUrl; document.getElementById('hero-image-preview').src = heroDoc.data().imageUrl; }
                     const logoDoc = await db.collection('site_settings').doc('header_settings').get();
-                    if (logoDoc.exists && logoDoc.data().logoImageUrl) {
-                        document.getElementById('logo-image-url').value = logoDoc.data().logoImageUrl;
-                        document.getElementById('logo-image-preview').src = logoDoc.data().logoImageUrl;
-                    }
+                    if (logoDoc.exists && logoDoc.data().logoImageUrl) { document.getElementById('logo-image-url').value = logoDoc.data().logoImageUrl; document.getElementById('logo-image-preview').src = logoDoc.data().logoImageUrl; }
                     const aboutUsDoc = await db.collection('site_settings').doc('about_us_section').get();
-                    if (aboutUsDoc.exists && aboutUsDoc.data().imageUrl) {
-                        document.getElementById('about-us-image-url').value = aboutUsDoc.data().imageUrl;
-                        document.getElementById('about-us-image-preview').src = aboutUsDoc.data().imageUrl;
-                    }
+                    if (aboutUsDoc.exists && aboutUsDoc.data().imageUrl) { document.getElementById('about-us-image-url').value = aboutUsDoc.data().imageUrl; document.getElementById('about-us-image-preview').src = aboutUsDoc.data().imageUrl; }
                     const contactUsDoc = await db.collection('site_settings').doc('contact_section').get();
-                    if (contactUsDoc.exists && contactUsDoc.data().imageUrl) {
-                        document.getElementById('contact-us-image-url').value = contactUsDoc.data().imageUrl;
-                        document.getElementById('contact-us-image-preview').src = contactUsDoc.data().imageUrl;
-                    }
+                    if (contactUsDoc.exists && contactUsDoc.data().imageUrl) { document.getElementById('contact-us-image-url').value = contactUsDoc.data().imageUrl; document.getElementById('contact-us-image-preview').src = contactUsDoc.data().imageUrl; }
                     const chatDoc = await db.collection('site_settings').doc('floating_chat').get();
-                    if (chatDoc.exists && chatDoc.data().imageUrl) {
-                        document.getElementById('chat-icon-image-url').value = chatDoc.data().imageUrl;
-                        document.getElementById('chat-icon-image-preview').src = chatDoc.data().imageUrl;
-                    }
+                    if (chatDoc.exists && chatDoc.data().imageUrl) { document.getElementById('chat-icon-image-url').value = chatDoc.data().imageUrl; document.getElementById('chat-icon-image-preview').src = chatDoc.data().imageUrl; }
                     
-                    // Fetch MacroDroid Setting
                     const mdDoc = await db.collection('site_settings').doc('macrodroid_webhook').get();
-                    if (mdDoc.exists && mdDoc.data().url) {
-                        document.getElementById('macrodroid-webhook-url').value = mdDoc.data().url;
-                    }
+                    if (mdDoc.exists && mdDoc.data().url) { document.getElementById('macrodroid-webhook-url').value = mdDoc.data().url; }
 
                     const socialDoc = await db.collection('site_settings').doc('social_media').get();
                     socialLinksContainer.innerHTML = '';
@@ -3053,7 +1833,6 @@
                 } catch (error) { showToast(`Failed to update status: ${error.message}`, 'error'); }
             };
 
-            // SEND RECEIPT VIA MACRODROID WEBHOOK
             window.sendWhatsAppReceipt = async (paymentId) => {
                 try {
                     const paymentDoc = await db.collection('payments').doc(paymentId).get();
@@ -3079,7 +1858,6 @@
                 } catch (error) { showToast("Failed to prepare WhatsApp receipt.", "error"); }
             };
 
-            // VOUCHER PRINTING FUNCTION
             window.printReceipt = async (paymentId) => {
                 try {
                     const doc = await db.collection('payments').doc(paymentId).get();
@@ -3263,6 +2041,7 @@
             const renderCurriculum = () => renderGeneric('curriculum', 'curriculum-table-body', (curr) => `<tr><td data-label="Course Name">${curr.courseName}</td><td data-label="Batch No.">${curr.batch}</td><td data-label="Modules">${curr.modules ? curr.modules.length : 0}</td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('curriculum', '${curr.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('curriculum', '${curr.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderNotices = () => renderGeneric('notices', 'notices-table-body', (notice) => `<tr><td data-label="Title">${notice.title}</td><td data-label="Description">${(notice.description || '').substring(0, 50)}...</td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('notices', '${notice.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('notices', '${notice.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderTrustScreenshots = () => renderGeneric('trust_screenshots', 'trust-screenshots-table-body', (item) => `<tr><td data-label="Title">${item.title}</td><td data-label="Image"><img src="${item.imageUrl}" alt="${item.title}" class="table-image-preview"></td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('trust_screenshots', '${item.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('trust_screenshots', '${item.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            const renderVideoReviews = () => renderGeneric('video_reviews', 'video-reviews-table-body', (item) => `<tr><td data-label="Title">${item.title}</td><td data-label="Subtitle">${item.subtitle}</td><td data-label="YouTube Link"><a href="${item.youtubeLink}" target="_blank" style="color:var(--primary-blue); font-weight:500;">Watch Video</a></td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('video_reviews', '${item.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('video_reviews', '${item.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderJoinClass = () => renderGeneric('joinClass', 'join-class-table-body', (item) => `<tr><td data-label="Course Name">${item.courseName}</td><td data-label="Batch No.">${item.batch || 'N/A'}</td><td data-label="Topic">${item.topic || 'N/A'}</td><td data-label="Link"><a href="${item.link}" target="_blank" style="color:var(--primary-blue);font-weight:500;">Class Link</a></td><td data-label="Time">${item.dateTime ? new Date(item.dateTime.seconds * 1000).toLocaleString('en-US') : 'N/A'}</td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('joinClass', '${item.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('joinClass', '${item.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderOnlineClasses = () => renderGeneric('online_classes', 'online-classes-table-body', (item) => {
                 const dueBill = (Number(item.totalBill) || 0) - (Number(item.paidBill) || 0);
@@ -3293,7 +2072,6 @@
                 try { await db.collection('payment_gateways').doc(docId).update({ status: isChecked }); showToast(`Status updated successfully.`); } catch (error) { showToast('Failed to update status.', 'error'); renderPaymentGateways(); }
             };
             
-            // --- COUPON MANAGEMENT LOGIC ---
             window.updateCouponStatus = async (docId, isChecked) => {
                 try {
                     await db.collection('coupons').doc(docId).update({ active: isChecked });
@@ -3488,6 +2266,9 @@
                         case 'trust_screenshots':
                             newItem = { title: formData.get('title'), imageUrl: formData.get('imageUrl'), timestamp: firebase.firestore.FieldValue.serverTimestamp() };
                             break;
+                        case 'video_reviews':
+                            newItem = { title: formData.get('title'), subtitle: formData.get('subtitle'), youtubeLink: formData.get('youtubeLink'), timestamp: firebase.firestore.FieldValue.serverTimestamp() };
+                            break;
                         case 'follow_ups':
                             newItem = {
                                 studentName: formData.get('studentName'),
@@ -3520,7 +2301,7 @@
             closeModalBtn.addEventListener('click', () => adminModal.classList.add('hidden'));
 
             function getBengaliTypeName(collection) {
-                const names = { payments: 'Payment', services: 'Service', courses: 'Course', enrollments: 'Enrollment', joinClass: 'Class Link', online_classes: 'Online Class Batch', curriculum: 'Curriculum', users: 'Student', withdrawals: 'Withdrawal Request', trust_screenshots: 'Trust Screenshot', payment_gateways: 'Payment Gateway', coupons: 'Coupon', follow_ups: 'Follow-up Record' };
+                const names = { payments: 'Payment', services: 'Service', courses: 'Course', enrollments: 'Enrollment', joinClass: 'Class Link', online_classes: 'Online Class Batch', curriculum: 'Curriculum', users: 'Student', withdrawals: 'Withdrawal Request', trust_screenshots: 'Trust Screenshot', video_reviews: 'Video Review', payment_gateways: 'Payment Gateway', coupons: 'Coupon', follow_ups: 'Follow-up Record' };
                 return names[collection] || 'Notice';
             }
 
@@ -3565,9 +2346,7 @@
                         <div class="form-group"><label>Total Students Enrolled</label><input type="number" name="studentCount" value="${data.studentCount || 0}" required></div>
                         <div class="form-group"><label>Total Bill (BDT)</label><input type="number" name="totalBill" value="${data.totalBill || 0}" required></div>
                         <div class="form-group"><label>Paid Bill (BDT)</label><input type="number" name="paidBill" value="${data.paidBill || 0}" required></div>
-                        
                         <h4 style="margin-top: 24px; margin-bottom: 16px; color: var(--text-dark); border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">Class Schedule (Next 4)</h4>
-                        
                         <div class="form-group"><label>Class 1 Time</label><input type="text" name="class1" value="${data.class1 || ''}" placeholder="e.g., 12 Oct 2024, 08:00 PM"></div>
                         <div class="form-group"><label>Class 2 Time</label><input type="text" name="class2" value="${data.class2 || ''}" placeholder="e.g., 14 Oct 2024, 08:00 PM"></div>
                         <div class="form-group"><label>Class 3 Time</label><input type="text" name="class3" value="${data.class3 || ''}" placeholder="e.g., 16 Oct 2024, 08:00 PM"></div>
@@ -3577,8 +2356,10 @@
                     case 'withdrawals': return `<div class="form-group"><label>Student Email (readonly)</label><input type="email" name="userEmail" value="${data.userEmail || ''}" readonly></div><div class="form-group"><label>Amount (BDT)</label><input type="number" name="amount" value="${data.amount || 0}" required></div><div class="form-group"><label>Method</label><input type="text" name="method" value="${data.method || ''}" required></div><div class="form-group"><label>Account Number</label><input type="text" name="accountNumber" value="${data.accountNumber || ''}" required></div>`;
                     case 'users': return `<div class="form-group"><label>Full Name</label><input type="text" name="name" value="${data.name || ''}" ></div><div class="form-group"><label>Email (readonly)</label><input type="email" name="email" value="${data.email || ''}" readonly></div><div class="form-group"><label>Mobile</label><input type="text" name="mobile" value="${data.mobile || ''}" ></div><div class="form-group"><label>Title</label><input type="text" name="title" value="${data.title || ''}" ></div><div class="form-group"><label>Referral Code</label><input type="text" name="referralCode" value="${data.referralCode || ''}" ></div><div class="form-group"><label>Affiliate Balance (BDT)</label><input type="number" name="affiliateBalance" value="${data.affiliateBalance || 0}" ></div><div class="form-group"><label>New Password</label><input type="text" name="password" placeholder="Leave blank to keep unchanged"></div>`;
                     case 'trust_screenshots': return `<div class="form-group"><label>Title</label><input type="text" name="title" value="${data.title || ''}" required></div><div class="form-group"><label>Image URL</label><input type="text" name="imageUrl" value="${data.imageUrl || ''}" required></div>`;
-                    
-                    // NEW FOLLOW UP EDIT FORM
+                    case 'video_reviews': 
+                        return `<div class="form-group"><label>Title (e.g., Digital Marketing Success)</label><input type="text" name="title" value="${data.title || ''}" required></div>
+                                <div class="form-group"><label>Subtitle (e.g., Freelancer Rahim - Earning $500/mo)</label><input type="text" name="subtitle" value="${data.subtitle || ''}" required></div>
+                                <div class="form-group"><label>YouTube Embed URL (e.g., https://www.youtube.com/embed/...)</label><input type="text" name="youtubeLink" value="${data.youtubeLink || ''}" required></div>`;
                     case 'follow_ups':
                         return `
                             <div class="form-group"><label>Student Name</label><input type="text" name="studentName" value="${data.studentName || ''}" readonly style="background:var(--background-light);"></div>
