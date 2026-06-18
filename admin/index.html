@@ -844,6 +844,9 @@
         </div>
     </div>
 
+    <!-- EmailJS Script -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
     <!-- Firebase Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
@@ -931,6 +934,29 @@
                 } catch (error) {
                     if(showToastMsg) showToast("Failed to trigger MacroDroid.", "error");
                 }
+            };
+
+            // === NEW: Email Sending Function ===
+            window.sendServiceEmail = function(userEmail, userName, serviceName, serviceDetails) {
+                // ১. নিচে আপনার EmailJS এর Public Key বসান
+                emailjs.init("YOUR_PUBLIC_KEY_HERE"); 
+
+                var templateParams = {
+                    to_email: userEmail,
+                    to_name: userName,
+                    service_name: serviceName,
+                    service_details: serviceDetails
+                };
+                 
+                // ২. নিচে আপনার Service ID এবং Template ID বসান
+                emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+                    .then(function(response) {
+                       console.log('Email sent successfully!', response.status, response.text);
+                       showToast("Service details sent to customer's email!", "success");
+                    }, function(error) {
+                       console.log('Failed to send email...', error);
+                       showToast("Payment approved, but failed to send email. Check EmailJS setup.", "error");
+                    });
             };
 
             window.openStudentWhatsappModal = (mobile, name = 'N/A') => {
@@ -1188,7 +1214,7 @@
                     case 'curriculum-page': renderCurriculum(); break;
                     case 'notices-page': renderNotices(); break;
                     case 'trust-screenshots-page': renderTrustScreenshots(); break;
-                    case 'video-reviews-page': renderVideoReviews(); break; // NEW RENDER CALL
+                    case 'video-reviews-page': renderVideoReviews(); break; 
                     case 'join-class-page': renderJoinClass(); break;
                     case 'online-classes-page': renderOnlineClasses(); break;
                     case 'withdrawals-page': renderWithdrawals(); break;
@@ -1799,6 +1825,56 @@
                         } else {
                             updateData.profit = Number(paymentData.amount) || 0;
                         }
+
+                        // ==========================================
+                        // NEW LOGIC: STOCK DEDUCTION & EMAIL SENDING
+                        // ==========================================
+                        let deliveredServiceDetails = "";
+                        let qtyToDeduct = paymentData.quantity || 1;
+                        
+                        // ডাটাবেস থেকে স্টক চেক করা
+                        const stockQuery = await db.collection('service_stock').where('serviceName', '==', baseName).get();
+                        if (!stockQuery.empty) {
+                            let stockDoc = stockQuery.docs[0];
+                            let stockData = stockDoc.data();
+                            
+                            // Top-up ID এর টেক্সটগুলোকে লাইন বাই লাইন ভাগ করা
+                            let stockLines = stockData.topupId ? stockData.topupId.split('\n').filter(line => line.trim() !== '') : [];
+                            let extractedLines = [];
+                            
+                            // কাস্টমার যত পিস অর্ডার করেছে ততগুলো লাইন স্টক থেকে বের করা
+                            for(let i=0; i<qtyToDeduct; i++) {
+                                if(stockLines.length > 0) {
+                                    extractedLines.push(stockLines.shift()); // প্রথম লাইন নিয়ে নেওয়া
+                                }
+                            }
+                            
+                            if (extractedLines.length > 0) {
+                                deliveredServiceDetails = extractedLines.join('\n');
+                                
+                                // বাকি থাকা স্টক আপডেট করা বা শেষ হয়ে গেলে মুছে ফেলা
+                                let remainingQty = (Number(stockData.quantity) || 0) - extractedLines.length;
+                                let remainingTopupId = stockLines.join('\n');
+                                
+                                if (remainingQty <= 0 && stockLines.length === 0) {
+                                    await db.collection('service_stock').doc(stockDoc.id).delete();
+                                } else {
+                                    await db.collection('service_stock').doc(stockDoc.id).update({
+                                        quantity: remainingQty,
+                                        topupId: remainingTopupId
+                                    });
+                                }
+                                
+                                // EmailJS এর মাধ্যমে অটোমেটিক ইমেইল পাঠানো
+                                let userEmailToUse = paymentData.userEmail;
+                                if(userEmailToUse && userEmailToUse !== 'admin@manual.sale') {
+                                    window.sendServiceEmail(userEmailToUse, paymentData.userName || 'Customer', baseName, deliveredServiceDetails);
+                                }
+                            } else {
+                                showToast("Stock is empty for this service! Mail not sent.", "error");
+                            }
+                        }
+                        // ==========================================
 
                         if (paymentData.userId) {
                             await db.collection('notifications').add({
