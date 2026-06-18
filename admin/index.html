@@ -476,6 +476,7 @@
                     <form id="manual-sale-form">
                         <div class="form-group"><label for="manual-user-name">Customer Name (Optional)</label><input type="text" id="manual-user-name" class="form-group" placeholder="e.g., Shafiqul Islam"></div>
                         <div class="form-group"><label for="manual-user-mobile">Customer Mobile (Optional)</label><input type="text" id="manual-user-mobile" class="form-group" placeholder="e.g., 017XXXXXXXX"></div>
+                        <div class="form-group"><label for="manual-user-email">Customer Email (Optional)</label><input type="email" id="manual-user-email" class="form-group" placeholder="e.g., customer@email.com"></div>
                         <div class="form-group"><label for="manual-item-selection">Select Service or Course</label><select id="manual-item-selection" class="form-group" required><option value="">Loading...</option></select></div>
                         <div class="form-group"><label for="manual-quantity">Quantity</label><input type="number" id="manual-quantity" class="form-group" value="1" min="1" required></div>
                         <div class="form-group"><label for="manual-sale-amount">Net Total Sales (BDT)</label><input type="number" id="manual-sale-amount" class="form-group" placeholder="e.g., 500" required></div>
@@ -1608,6 +1609,10 @@
                     const btn = manualSaleForm.querySelector('button[type="submit"]');
                     const userName = document.getElementById('manual-user-name').value;
                     const userMobile = document.getElementById('manual-user-mobile').value;
+                    // NEW: Email Field Data
+                    let userEmail = document.getElementById('manual-user-email') ? document.getElementById('manual-user-email').value.trim() : '';
+                    if(!userEmail) userEmail = 'admin@manual.sale'; // Default
+                    
                     const itemSelect = document.getElementById('manual-item-selection');
                     const itemName = itemSelect.value;
                     const quantity = Number(document.getElementById('manual-quantity').value);
@@ -1622,12 +1627,74 @@
                     const trxId = 'MANUAL-' + Date.now().toString().slice(-6);
 
                     try {
-                        await db.collection('payments').add({
-                            userName: userName, userMobile: userMobile, itemName: itemName, quantity: quantity, amount: saleAmount, discountAmount: discountAmount, profit: profitAmount, status: 'approved', timestamp: firebase.firestore.FieldValue.serverTimestamp(), transactionId: trxId, userEmail: 'admin@manual.sale'
+                        // ডাটাবেসে পেমেন্ট অ্যাড করা
+                        const newPaymentRef = await db.collection('payments').add({
+                            userName: userName, userMobile: userMobile, userEmail: userEmail, itemName: itemName, quantity: quantity, amount: saleAmount, discountAmount: discountAmount, profit: profitAmount, status: 'approved', timestamp: firebase.firestore.FieldValue.serverTimestamp(), transactionId: trxId
                         });
+
+                        // ==========================================
+                        // NEW LOGIC: STOCK DEDUCTION & EMAIL FOR MANUAL SALE
+                        // ==========================================
+                        let baseName = itemName;
+                        if(baseName.includes('(x')) {
+                            baseName = baseName.replace(/\(x\d+\)$/, '').trim();
+                        }
+                        const stockQuery = await db.collection('service_stock').where('serviceName', '==', baseName).get();
+                        
+                        if (!stockQuery.empty) {
+                            let stockDoc = stockQuery.docs[0];
+                            let stockData = stockDoc.data();
+                            let stockLines = stockData.topupId ? stockData.topupId.split('\n').filter(line => line.trim() !== '') : [];
+                            let extractedLines = [];
+                            
+                            // কাস্টমার যত পিস অর্ডার করেছে ততগুলো লাইন স্টক থেকে বের করা
+                            for(let i=0; i<quantity; i++) {
+                                if(stockLines.length > 0) {
+                                    extractedLines.push(stockLines.shift());
+                                }
+                            }
+                            
+                            if (extractedLines.length > 0) {
+                                let deliveredServiceDetails = extractedLines.join('\n');
+                                
+                                // স্টক আপডেট করা
+                                let remainingQty = (Number(stockData.quantity) || 0) - extractedLines.length;
+                                let remainingTopupId = stockLines.join('\n');
+                                
+                                if (remainingQty <= 0 && stockLines.length === 0) {
+                                    await db.collection('service_stock').doc(stockDoc.id).delete();
+                                } else {
+                                    await db.collection('service_stock').doc(stockDoc.id).update({
+                                        quantity: remainingQty,
+                                        topupId: remainingTopupId
+                                    });
+                                }
+                                
+                                // ইমেইল পাঠানো
+                                if(userEmail !== 'admin@manual.sale') {
+                                    window.sendServiceEmail(userEmail, userName || 'Customer', baseName, deliveredServiceDetails);
+                                }
+                            } else {
+                                showToast("Stock is empty for this service! Mail not sent.", "error");
+                            }
+                        }
+
+                        // হোয়াটসঅ্যাপে মেসেজ পাঠানো (যদি মোবাইল নাম্বার দেওয়া হয়)
+                        if(userMobile && userMobile.trim() !== '') {
+                             setTimeout(() => { window.sendWhatsAppReceipt(newPaymentRef.id); }, 500);
+                        }
+
                         showToast('Sale added successfully!', 'success');
-                        manualSaleForm.reset(); document.getElementById('manual-item-selection').value = ""; document.getElementById('calc-debug-info').style.display = 'none'; renderDashboard();
-                    } catch (error) { showToast(`Error: ${error.message}`, "error"); } finally { btn.disabled = false; btn.innerHTML = originalBtnText; }
+                        manualSaleForm.reset(); 
+                        if(document.getElementById('manual-user-email')) document.getElementById('manual-user-email').value = "";
+                        document.getElementById('manual-item-selection').value = ""; 
+                        document.getElementById('calc-debug-info').style.display = 'none'; 
+                        renderDashboard();
+                    } catch (error) { 
+                        showToast(`Error: ${error.message}`, "error"); 
+                    } finally { 
+                        btn.disabled = false; btn.innerHTML = originalBtnText; 
+                    }
                 };
             }
 
