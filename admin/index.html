@@ -939,7 +939,7 @@
             // === NEW: Email Sending Function ===
             window.sendServiceEmail = function(userEmail, userName, serviceName, serviceDetails) {
                 // ১. নিচে আপনার EmailJS এর Public Key বসান
-                emailjs.init("YOUR_PUBLIC_KEY_HERE"); 
+                emailjs.init("2sllYqrmoE4ElloEP"); 
 
                 var templateParams = {
                     to_email: userEmail,
@@ -949,7 +949,7 @@
                 };
                  
                 // ২. নিচে আপনার Service ID এবং Template ID বসান
-                emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+                emailjs.send('service_hx86raa', 'template_3dlgemn', templateParams)
                     .then(function(response) {
                        console.log('Email sent successfully!', response.status, response.text);
                        showToast("Service details sent to customer's email!", "success");
