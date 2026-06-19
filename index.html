@@ -1870,7 +1870,63 @@
             </div>
         </div>
     </div>
-
+<!-- ======================= SSN View/Edit Modal ======================= -->
+    <div class="login-modal hidden" id="ssn-view-edit-modal">
+        <div class="login-card" style="max-width: 700px; display: block; overflow-y: auto; max-height: 90vh;">
+            <div class="modal-form-panel" style="width: 100%; padding: 40px;">
+                <button class="close-modal-btn" id="close-ssn-modal-btn" type="button" aria-label="Close">&times;</button>
+                <h2 style="margin-bottom: 24px; font-size: 1.8rem; color: var(--brand-primary);">View / Edit SSN Details</h2>
+                <form id="ssn-edit-form">
+                    <input type="hidden" id="edit-ssn-id">
+                    <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <input type="text" id="edit-ssn-name" placeholder=" " required>
+                            <label for="edit-ssn-name">Full Name</label>
+                            <span class="material-symbols-outlined">person</span>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <input type="text" id="edit-ssn-dob" placeholder=" " required>
+                            <label for="edit-ssn-dob">Date of Birth</label>
+                            <span class="material-symbols-outlined">calendar_month</span>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <input type="text" id="edit-ssn-number" placeholder=" " required>
+                            <label for="edit-ssn-number">SSN / Number</label>
+                            <span class="material-symbols-outlined">badge</span>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <input type="text" id="edit-ssn-country" placeholder=" " required>
+                            <label for="edit-ssn-country">Country</label>
+                            <span class="material-symbols-outlined">public</span>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <input type="text" id="edit-ssn-state" placeholder=" " required>
+                            <label for="edit-ssn-state">State</label>
+                            <span class="material-symbols-outlined">map</span>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <input type="text" id="edit-ssn-county" placeholder=" ">
+                            <label for="edit-ssn-county">County</label>
+                            <span class="material-symbols-outlined">location_city</span>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <input type="text" id="edit-ssn-city" placeholder=" ">
+                            <label for="edit-ssn-city">City</label>
+                            <span class="material-symbols-outlined">apartment</span>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <input type="text" id="edit-ssn-zip" placeholder=" ">
+                            <label for="edit-ssn-zip">Zip Code</label>
+                            <span class="material-symbols-outlined">pin_drop</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-gradient" style="width: 100%; margin-top: 24px;">
+                        Update & Save <span class="material-symbols-outlined">save</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
     <!-- ======================= Footer ======================= -->
     <footer class="main-footer">
         <div class="container">
@@ -3070,6 +3126,8 @@
                 });
             }
 
+            window.ssnDataCache = {}; // Global variable to store loaded SSN details
+
             async function displaySSNList() {
                 const tbody = document.getElementById('ssn-list-table-body');
                 const user = auth.currentUser;
@@ -3082,19 +3140,21 @@
                         return;
                     }
                     
+                    window.ssnDataCache = {}; // Clear old cache
                     let html = '';
                     snap.forEach(doc => {
                         const data = doc.data();
+                        window.ssnDataCache[doc.id] = data; // Save to cache for modal viewing
                         const date = data.timestamp ? data.timestamp.toDate().toLocaleDateString() : 'N/A';
                         html += `<tr>
                                     <td>${date}</td>
-                                    <td id="name-${doc.id}" style="font-weight: 600;">${data.name}</td>
-                                    <td id="number-${doc.id}" style="font-family: monospace; font-weight: bold; font-size: 1.05rem; color: var(--brand-secondary);">${data.number}</td>
+                                    <td style="font-weight: 600;">${data.name}</td>
+                                    <td style="font-family: monospace; font-weight: bold; font-size: 1.05rem; color: var(--brand-secondary);">${data.number}</td>
                                     <td>${data.country}</td>
                                     <td>${data.state}</td>
                                     <td>
-                                        <button onclick="editSSN('${doc.id}')" style="background:none; border:none; color:var(--brand-secondary); cursor:pointer; margin-right:12px; transition: transform 0.2s;"><span class="material-symbols-outlined" style="font-size: 22px;">edit</span></button>
-                                        <button onclick="deleteSSN('${doc.id}')" style="background:none; border:none; color:#ef4444; cursor:pointer; transition: transform 0.2s;"><span class="material-symbols-outlined" style="font-size: 22px;">delete</span></button>
+                                        <button onclick="openSSNModal('${doc.id}')" title="View / Edit" style="background:none; border:none; color:var(--brand-secondary); cursor:pointer; margin-right:12px; transition: transform 0.2s;"><span class="material-symbols-outlined" style="font-size: 22px;">visibility</span></button>
+                                        <button onclick="deleteSSN('${doc.id}')" title="Delete" style="background:none; border:none; color:#ef4444; cursor:pointer; transition: transform 0.2s;"><span class="material-symbols-outlined" style="font-size: 22px;">delete</span></button>
                                     </td>
                                  </tr>`;
                     });
@@ -3114,26 +3174,66 @@
                 }
             };
 
-            window.editSSN = async function(docId) {
-                const currentName = document.getElementById(`name-${docId}`).innerText;
-                const currentNumber = document.getElementById(`number-${docId}`).innerText;
-                
-                const newName = prompt("Edit Name:", currentName);
-                if(newName === null) return; 
-                
-                const newNumber = prompt("Edit Number:", currentNumber);
-                if(newNumber === null) return;
+            // --- NEW: View and Edit SSN Details Dynamically ---
+            window.openSSNModal = function(docId) {
+                const data = window.ssnDataCache[docId];
+                if(!data) return showToast("Data not found!", "error");
 
-                try {
-                    await db.collection('ssn_list').doc(docId).update({ name: newName, number: newNumber });
-                    showToast("SSN updated successfully!", "success");
-                    displaySSNList(); 
-                } catch(e) { showToast("Error updating SSN.", "error"); }
+                // Populate Form Fields
+                document.getElementById('edit-ssn-id').value = docId;
+                document.getElementById('edit-ssn-name').value = data.name || '';
+                document.getElementById('edit-ssn-dob').value = data.dob || '';
+                document.getElementById('edit-ssn-number').value = data.number || '';
+                document.getElementById('edit-ssn-country').value = data.country || '';
+                document.getElementById('edit-ssn-state').value = data.state || '';
+                document.getElementById('edit-ssn-county').value = data.county || '';
+                document.getElementById('edit-ssn-city').value = data.city || '';
+                document.getElementById('edit-ssn-zip').value = data.zip || '';
+
+                // Show Modal
+                document.getElementById('ssn-view-edit-modal').classList.remove('hidden');
             };
 
-            fetchLiveDollarRates();
-            loadPaymentGateways(); displayServices(); displayCourses(); displayNotices(); displayTrustScreenshots(); displayVideoReviews(); loadHeroImage(); loadAboutUsImage(); loadHeaderLogo(); loadSocialMediaLinks(); loadContactUsImage(); loadFloatingChatIcon();
-        });
+            const closeSsnModalBtn = document.getElementById('close-ssn-modal-btn');
+            if(closeSsnModalBtn) {
+                closeSsnModalBtn.addEventListener('click', () => {
+                    document.getElementById('ssn-view-edit-modal').classList.add('hidden');
+                });
+            }
+
+            const ssnEditForm = document.getElementById('ssn-edit-form');
+            if(ssnEditForm) {
+                ssnEditForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const docId = document.getElementById('edit-ssn-id').value;
+                    const updatedData = {
+                        name: document.getElementById('edit-ssn-name').value,
+                        dob: document.getElementById('edit-ssn-dob').value,
+                        number: document.getElementById('edit-ssn-number').value,
+                        country: document.getElementById('edit-ssn-country').value,
+                        state: document.getElementById('edit-ssn-state').value,
+                        county: document.getElementById('edit-ssn-county').value,
+                        city: document.getElementById('edit-ssn-city').value,
+                        zip: document.getElementById('edit-ssn-zip').value,
+                    };
+
+                    const submitBtn = e.target.querySelector('button[type="submit"]');
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = 'Updating... <span class="material-symbols-outlined">hourglass_empty</span>';
+
+                    try {
+                        await db.collection('ssn_list').doc(docId).update(updatedData);
+                        showToast("SSN details updated successfully!", "success");
+                        document.getElementById('ssn-view-edit-modal').classList.add('hidden');
+                        displaySSNList(); 
+                    } catch(error) {
+                        showToast("Error updating SSN details.", "error");
+                    } finally {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = 'Update & Save <span class="material-symbols-outlined">save</span>';
+                    }
+                });
+            }
     </script>
 </body>
 </html>
