@@ -3229,11 +3229,16 @@
                     } catch(error) {
                         showToast("Error updating SSN details.", "error");
                     } finally {
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = 'Update & Save <span class="material-symbols-outlined">save</span>';
-                    }
-                });
-            }
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Update & Save <span class="material-symbols-outlined">save</span>';
+                }
+            });
+        }
+
+        // নিচের এই লাইনগুলো ভুলবশত ডিলিট হয়ে গিয়েছিল
+        fetchLiveDollarRates();
+        loadPaymentGateways(); displayServices(); displayCourses(); displayNotices(); displayTrustScreenshots(); displayVideoReviews(); loadHeroImage(); loadAboutUsImage(); loadHeaderLogo(); loadSocialMediaLinks(); loadContactUsImage(); loadFloatingChatIcon();
+    });
     </script>
 </body>
 </html>
