@@ -1683,6 +1683,8 @@
                         if(userMobile && userMobile.trim() !== '') {
                              setTimeout(() => { window.sendWhatsAppReceipt(newPaymentRef.id); }, 500);
                         }
+                        // ইমেইলে মানি রিসিট পাঠানো
+                        setTimeout(() => { window.sendPaymentReceiptEmail(newPaymentRef.id); }, 500);
 
                         showToast('Sale added successfully!', 'success');
                         manualSaleForm.reset(); 
@@ -1969,7 +1971,7 @@
 
                     await paymentDocRef.update(updateData);
                     showToast('Status updated successfully!');
-                    if (newStatus === 'approved') { setTimeout(() => { window.sendWhatsAppReceipt(docId); }, 500); }
+                    if (newStatus === 'approved') { setTimeout(() => { window.sendWhatsAppReceipt(docId); window.sendPaymentReceiptEmail(docId); }, 500); }
                     const activeFilter = document.querySelector('#payment-filter-buttons .filter-btn.active').dataset.filter;
                     renderPayments(activeFilter === 'all' ? null : activeFilter);
                     renderDashboard();
@@ -1999,6 +2001,44 @@
                     
                     window.sendViaMacroDroid(studentMobile, message);
                 } catch (error) { showToast("Failed to prepare WhatsApp receipt.", "error"); }
+            };
+            // === NEW: Payment Receipt Email Function ===
+            window.sendPaymentReceiptEmail = async (paymentId) => {
+                try {
+                    const paymentDoc = await db.collection('payments').doc(paymentId).get();
+                    if (!paymentDoc.exists) return;
+                    const paymentData = paymentDoc.data();
+                    
+                    let userEmail = paymentData.userEmail;
+                    let userName = paymentData.userName || 'Customer';
+                    
+                    // ইমেইল না থাকলে মেইল পাঠানো স্কিপ করবে
+                    if(!userEmail || userEmail === 'admin@manual.sale' || userEmail.trim() === '') return;
+
+                    const date = paymentData.timestamp ? new Date(paymentData.timestamp.seconds * 1000).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB');
+                    
+                    emailjs.init("YOUR_PUBLIC_KEY_HERE"); // আপনার Public Key বসান
+
+                    var templateParams = {
+                        to_email: userEmail,
+                        to_name: userName,
+                        item_name: paymentData.itemName,
+                        amount: paymentData.amount,
+                        trx_id: paymentData.transactionId || 'N/A',
+                        date: date
+                    };
+                     
+                    // এখানে Service ID এবং আপনার ২য় (নতুন) Template ID টি বসান
+                    emailjs.send('service_6y1h5ow', 'template_vz0zzih', templateParams)
+                        .then(function(response) {
+                           console.log('Payment receipt email sent successfully!');
+                        }, function(error) {
+                           console.log('Failed to send receipt email...', error);
+                        });
+
+                } catch (error) {
+                    console.error("Failed to prepare email receipt.", error);
+                }
             };
 
             window.printReceipt = async (paymentId) => {
