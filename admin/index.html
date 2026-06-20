@@ -294,6 +294,10 @@
                 <li data-page="dollar-exchange-page"><a href="#"><span class="material-symbols-outlined">currency_exchange</span> Dollar Exchange</a></li>
                 <li data-page="users-page"><a href="#"><span class="material-symbols-outlined">group</span> Student Management</a></li>
                 
+                <!-- NEW FEATURES -->
+                <li data-page="user-notifications-page"><a href="#"><span class="material-symbols-outlined">notifications_active</span> Push Notifications</a></li>
+                <li data-page="certificates-page"><a href="#"><span class="material-symbols-outlined">workspace_premium</span> Certificates</a></li>
+
                 <li data-page="follow-up-page"><a href="#"><span class="material-symbols-outlined">forum</span> Follow Up</a></li>
 
                 <li data-page="services-page"><a href="#"><span class="material-symbols-outlined">construction</span> Service Management</a></li>
@@ -529,6 +533,34 @@
                 </div>
             </div>
 
+            <!-- NEW: User Notifications Page -->
+            <div id="user-notifications-page" class="page">
+                <div class="page-header">
+                    <h1>Push Notifications Management</h1>
+                    <button class="btn btn-add" onclick="openModalForAdd('user_notifications')"><span class="material-symbols-outlined">add</span> Send Notification</button>
+                </div>
+                <div class="content-box">
+                    <table class="data-table">
+                        <thead><tr><th>Date</th><th>Target User</th><th>Title</th><th>Message</th><th>Type</th><th>Action</th></tr></thead>
+                        <tbody id="user-notifications-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- NEW: Certificates Page -->
+            <div id="certificates-page" class="page">
+                <div class="page-header">
+                    <h1>Certificate Management</h1>
+                </div>
+                <div class="search-bar-container"><input type="text" id="cert-search-input" placeholder="Search by Certificate ID, Student Email or Course Name..."></div>
+                <div class="content-box">
+                    <table class="data-table">
+                        <thead><tr><th>Certificate ID</th><th>Student Email</th><th>Course Name</th><th>Issue Date</th><th>Action</th></tr></thead>
+                        <tbody id="certificates-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- Services Page -->
             <div id="services-page" class="page">
                 <div class="page-header"><h1>Service Management</h1><button class="btn btn-add" onclick="openModalForAdd('services')"><span class="material-symbols-outlined">add</span> New Service</button></div>
@@ -629,7 +661,7 @@
                 </div>
             </div>
 
-            <!-- NEW: Video Reviews Page -->
+            <!-- Video Reviews Page -->
             <div id="video-reviews-page" class="page">
                 <div class="page-header">
                     <h1>Video Reviews Management</h1>
@@ -757,9 +789,9 @@
                             <input type="text" id="emailjs-template-receipt" placeholder="e.g., template_vz0zzih">
                         </div>
                         <div class="form-group">
-    <label for="emailjs-template-otp">OTP Email Template ID (For Sign Up verification)</label>
-    <input type="text" id="emailjs-template-otp" placeholder="e.g., template_abc123">
-</div>
+                            <label for="emailjs-template-otp">OTP Email Template ID (For Sign Up verification)</label>
+                            <input type="text" id="emailjs-template-otp" placeholder="e.g., template_abc123">
+                        </div>
                         <button type="submit" class="btn btn-primary" style="width: auto;">Save EmailJS Settings</button>
                     </form>
 
@@ -932,6 +964,7 @@
             
             const paymentSearchInput = document.getElementById('payment-search-input');
             const paymentFilterButtons = document.getElementById('payment-filter-buttons');
+            const certSearchInput = document.getElementById('cert-search-input');
 
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
             const mobilePageTitle = document.getElementById('mobile-page-title');
@@ -964,7 +997,7 @@
                 }
             };
 
-            // === UPDATED: Email Sending Function ===
+            // === Email Sending Function ===
             window.sendServiceEmail = async function(userEmail, userName, serviceName, serviceDetails) {
                 try {
                     const doc = await db.collection('site_settings').doc('emailjs_settings').get();
@@ -997,7 +1030,7 @@
                 }
             };
 
-            // === UPDATED: Payment Receipt Email Function ===
+            // === Payment Receipt Email Function ===
             window.sendPaymentReceiptEmail = async (paymentId) => {
                 try {
                     const paymentDoc = await db.collection('payments').doc(paymentId).get();
@@ -1007,7 +1040,6 @@
                     let userEmail = paymentData.userEmail;
                     let userName = paymentData.userName || 'Customer';
                     
-                    // ইমেইল না থাকলে মেইল পাঠানো স্কিপ করবে
                     if(!userEmail || userEmail === 'admin@manual.sale' || userEmail.trim() === '') return;
 
                     const date = paymentData.timestamp ? new Date(paymentData.timestamp.seconds * 1000).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB');
@@ -1040,6 +1072,44 @@
 
                 } catch (error) {
                     console.error("Failed to prepare email receipt.", error);
+                }
+            };
+
+            // === Student Progress Modal Logic (NEW) ===
+            window.viewStudentProgress = async (userId, userName) => {
+                modalTitle.textContent = `Progress: ${userName}`;
+                modalForm.innerHTML = `<p style="text-align:center; margin: 30px 0;">Loading progress...</p>`;
+                adminModal.classList.remove('hidden');
+                
+                try {
+                    const progressSnapshot = await db.collection('progress').where('user_id', '==', userId).get();
+                    if (progressSnapshot.empty) {
+                        modalForm.innerHTML = `<p style="text-align:center; padding:20px; color:var(--text-muted);">No learning progress found for this student.</p>`;
+                        return;
+                    }
+                    
+                    let html = '<div style="display:flex; flex-direction:column; gap:16px;">';
+                    progressSnapshot.forEach(doc => {
+                        const data = doc.data();
+                        const percentage = data.percentage || 0;
+                        html += `
+                            <div style="border: 1px solid var(--border-color); padding: 20px; border-radius: 12px; background: var(--background-light);">
+                                <h4 style="margin-bottom: 12px; font-size: 1.1em; color: var(--text-dark);">${data.course_name || 'Course'}</h4>
+                                <div style="display:flex; justify-content:space-between; margin-bottom: 8px; font-size: 0.9em; font-weight: 500; color: var(--text-muted);">
+                                    <span>Progress: <strong style="color:var(--primary-blue);">${percentage}%</strong></span>
+                                    <span>Completed: <strong>${data.completed_lessons || 0}</strong> Lessons</span>
+                                </div>
+                                <div style="width:100%; background:#e2e8f0; border-radius:10px; height:10px; overflow:hidden;">
+                                    <div style="width:${percentage}%; background:var(--primary-blue); height:100%; border-radius:10px;"></div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                    modalForm.innerHTML = html;
+                    modalForm.onsubmit = (e) => { e.preventDefault(); adminModal.classList.add('hidden'); };
+                } catch (error) {
+                    modalForm.innerHTML = `<p style="color:red; text-align:center; padding:20px;">Error loading progress data.</p>`;
                 }
             };
 
@@ -1190,6 +1260,21 @@
                     });
                 });
             }
+
+            if (certSearchInput) {
+                certSearchInput.addEventListener('keyup', () => {
+                    const searchTerm = certSearchInput.value.toLowerCase().trim();
+                    const tableBody = document.getElementById('certificates-table-body');
+                    const rows = tableBody.getElementsByTagName('tr');
+                    Array.from(rows).forEach(row => {
+                        if (row.getElementsByTagName('td').length > 0) {
+                            const rowText = row.textContent || row.innerText;
+                            if (rowText.toLowerCase().includes(searchTerm)) row.style.display = "";
+                            else row.style.display = 'none';
+                        }
+                    });
+                });
+            }
             
             if (paymentFilterButtons) {
                 paymentFilterButtons.addEventListener('click', (e) => {
@@ -1289,6 +1374,8 @@
                     case 'manual-sale-page': renderManualSalePage(); break;
                     case 'dollar-exchange-page': renderDollarRatesSettings(); renderDollarSellRequests(); break;
                     case 'users-page': renderUsers(); break;
+                    case 'user-notifications-page': renderUserNotifications(); break; // NEW
+                    case 'certificates-page': renderCertificates(); break; // NEW
                     case 'follow-up-page': renderFollowUps(); break;
                     case 'services-page': renderServices(); break;
                     case 'service-stock-page': renderServiceStock(); break;
@@ -1692,9 +1779,8 @@
                     const btn = manualSaleForm.querySelector('button[type="submit"]');
                     const userName = document.getElementById('manual-user-name').value;
                     const userMobile = document.getElementById('manual-user-mobile').value;
-                    // NEW: Email Field Data
                     let userEmail = document.getElementById('manual-user-email') ? document.getElementById('manual-user-email').value.trim() : '';
-                    if(!userEmail) userEmail = 'admin@manual.sale'; // Default
+                    if(!userEmail) userEmail = 'admin@manual.sale'; 
                     
                     const itemSelect = document.getElementById('manual-item-selection');
                     const itemName = itemSelect.value;
@@ -1710,14 +1796,10 @@
                     const trxId = 'MANUAL-' + Date.now().toString().slice(-6);
 
                     try {
-                        // ডাটাবেসে পেমেন্ট অ্যাড করা
                         const newPaymentRef = await db.collection('payments').add({
                             userName: userName, userMobile: userMobile, userEmail: userEmail, itemName: itemName, quantity: quantity, amount: saleAmount, discountAmount: discountAmount, profit: profitAmount, status: 'approved', timestamp: firebase.firestore.FieldValue.serverTimestamp(), transactionId: trxId
                         });
 
-                        // ==========================================
-                        // NEW LOGIC: STOCK DEDUCTION & EMAIL FOR MANUAL SALE
-                        // ==========================================
                         let baseName = itemName;
                         if(baseName.includes('(x')) {
                             baseName = baseName.replace(/\(x\d+\)$/, '').trim();
@@ -1730,7 +1812,6 @@
                             let stockLines = stockData.topupId ? stockData.topupId.split('\n').filter(line => line.trim() !== '') : [];
                             let extractedLines = [];
                             
-                            // কাস্টমার যত পিস অর্ডার করেছে ততগুলো লাইন স্টক থেকে বের করা
                             for(let i=0; i<quantity; i++) {
                                 if(stockLines.length > 0) {
                                     extractedLines.push(stockLines.shift());
@@ -1740,7 +1821,6 @@
                             if (extractedLines.length > 0) {
                                 let deliveredServiceDetails = extractedLines.join('\n');
                                 
-                                // স্টক আপডেট করা
                                 let remainingQty = (Number(stockData.quantity) || 0) - extractedLines.length;
                                 let remainingTopupId = stockLines.join('\n');
                                 
@@ -1753,7 +1833,6 @@
                                     });
                                 }
                                 
-                                // ইমেইল পাঠানো
                                 if(userEmail !== 'admin@manual.sale') {
                                     window.sendServiceEmail(userEmail, userName || 'Customer', baseName, deliveredServiceDetails);
                                 }
@@ -1762,11 +1841,9 @@
                             }
                         }
 
-                        // হোয়াটসঅ্যাপে মেসেজ পাঠানো (যদি মোবাইল নাম্বার দেওয়া হয়)
                         if(userMobile && userMobile.trim() !== '') {
                              setTimeout(() => { window.sendWhatsAppReceipt(newPaymentRef.id); }, 500);
                         }
-                        // ইমেইলে মানি রিসিট পাঠানো
                         setTimeout(() => { window.sendPaymentReceiptEmail(newPaymentRef.id); }, 500);
 
                         showToast('Sale added successfully!', 'success');
@@ -1896,7 +1973,6 @@
                     const mdDoc = await db.collection('site_settings').doc('macrodroid_webhook').get();
                     if (mdDoc.exists && mdDoc.data().url) { document.getElementById('macrodroid-webhook-url').value = mdDoc.data().url; }
 
-                    // Fetch EmailJS settings
                     const emailjsDoc = await db.collection('site_settings').doc('emailjs_settings').get();
                     if (emailjsDoc.exists) {
                         const emailData = emailjsDoc.data();
@@ -1956,12 +2032,12 @@
                     const serviceId = document.getElementById('emailjs-service-id').value.trim();
                     const templateService = document.getElementById('emailjs-template-service').value.trim();
                     const templateReceipt = document.getElementById('emailjs-template-receipt').value.trim();
-const templateOtp = document.getElementById('emailjs-template-otp').value.trim(); // নতুন লাইন
+                    const templateOtp = document.getElementById('emailjs-template-otp').value.trim(); 
 
-try {
-    await db.collection('site_settings').doc('emailjs_settings').set({
-        publicKey, serviceId, templateService, templateReceipt, templateOtp // templateOtp যুক্ত করা হয়েছে
-    }, { merge: true });
+                    try {
+                        await db.collection('site_settings').doc('emailjs_settings').set({
+                            publicKey, serviceId, templateService, templateReceipt, templateOtp 
+                        }, { merge: true });
                         showToast("EmailJS settings saved successfully!", "success");
                     } catch (error) { showToast("Failed to save EmailJS Settings.", "error"); }
                 });
@@ -2007,33 +2083,26 @@ try {
                             updateData.profit = Number(paymentData.amount) || 0;
                         }
 
-                        // ==========================================
-                        // NEW LOGIC: STOCK DEDUCTION & EMAIL SENDING
-                        // ==========================================
                         let deliveredServiceDetails = "";
                         let qtyToDeduct = paymentData.quantity || 1;
                         
-                        // ডাটাবেস থেকে স্টক চেক করা
                         const stockQuery = await db.collection('service_stock').where('serviceName', '==', baseName).get();
                         if (!stockQuery.empty) {
                             let stockDoc = stockQuery.docs[0];
                             let stockData = stockDoc.data();
                             
-                            // Top-up ID এর টেক্সটগুলোকে লাইন বাই লাইন ভাগ করা
                             let stockLines = stockData.topupId ? stockData.topupId.split('\n').filter(line => line.trim() !== '') : [];
                             let extractedLines = [];
                             
-                            // কাস্টমার যত পিস অর্ডার করেছে ততগুলো লাইন স্টক থেকে বের করা
                             for(let i=0; i<qtyToDeduct; i++) {
                                 if(stockLines.length > 0) {
-                                    extractedLines.push(stockLines.shift()); // প্রথম লাইন নিয়ে নেওয়া
+                                    extractedLines.push(stockLines.shift()); 
                                 }
                             }
                             
                             if (extractedLines.length > 0) {
                                 deliveredServiceDetails = extractedLines.join('\n');
                                 
-                                // বাকি থাকা স্টক আপডেট করা বা শেষ হয়ে গেলে মুছে ফেলা
                                 let remainingQty = (Number(stockData.quantity) || 0) - extractedLines.length;
                                 let remainingTopupId = stockLines.join('\n');
                                 
@@ -2046,7 +2115,6 @@ try {
                                     });
                                 }
                                 
-                                // EmailJS এর মাধ্যমে অটোমেটিক ইমেইল পাঠানো
                                 let userEmailToUse = paymentData.userEmail;
                                 if(userEmailToUse && userEmailToUse !== 'admin@manual.sale') {
                                     window.sendServiceEmail(userEmailToUse, paymentData.userName || 'Customer', baseName, deliveredServiceDetails);
@@ -2055,7 +2123,6 @@ try {
                                 showToast("Stock is empty for this service! Mail not sent.", "error");
                             }
                         }
-                        // ==========================================
 
                         if (paymentData.userId) {
                             await db.collection('notifications').add({
@@ -2266,12 +2333,10 @@ try {
                         const statusClass = hasPurchased ? 'student-active-indicator' : 'student-inactive-indicator';
                         const statusTitle = hasPurchased ? 'This student has purchased items.' : 'No purchases yet.';
                         
-                        // === OTP Verification Status Check ===
                         let verifyBadge = '';
-                        // যাদের email_verified ট্রু অথবা যাদের এই ফিল্ডটিই নেই (পুরনো স্টুডেন্ট), তাদের ভেরিফাইড দেখাবে
-if (user.email_verified === true || typeof user.email_verified === 'undefined') {
-    verifyBadge = '<span class="status-badge approved" style="background-color: #d1fae5; color: #047857;"><span class="material-symbols-outlined" style="font-size:12px; vertical-align:middle; margin-right:2px;">verified</span>Verified</span>';
-} else {
+                        if (user.email_verified === true || typeof user.email_verified === 'undefined') {
+                            verifyBadge = '<span class="status-badge approved" style="background-color: #d1fae5; color: #047857;"><span class="material-symbols-outlined" style="font-size:12px; vertical-align:middle; margin-right:2px;">verified</span>Verified</span>';
+                        } else {
                             verifyBadge = '<span class="status-badge rejected" style="background-color: #fee2e2; color: #b91c1c;"><span class="material-symbols-outlined" style="font-size:12px; vertical-align:middle; margin-right:2px;">warning</span>Unverified</span>';
                         }
 
@@ -2283,6 +2348,7 @@ if (user.email_verified === true || typeof user.email_verified === 'undefined') 
                                         <td data-label="Balance">৳ ${user.affiliateBalance || 0}</td>
                                         <td data-label="Status">${verifyBadge}</td>
                                         <td class="actions-cell" data-label="Action">
+                                            <button class="btn-edit" style="background:#f0fdf4 !important; color:#166534;" onclick="viewStudentProgress('${user.id}', '${user.name || 'Unknown'}')" title="View Progress"><span class="material-symbols-outlined">bar_chart</span></button>
                                             <button class="btn-whatsapp" onclick="openStudentWhatsappModal('${user.mobile}', '${user.name || ''}')" title="Send Follow-up Message"><span class="material-symbols-outlined">chat</span></button>
                                             <button class="btn-edit" onclick="openModalForEdit('users', '${user.id}')" title="Edit Student"><span class="material-symbols-outlined">edit</span></button>
                                             <button class="btn-delete" onclick="deleteItem('users', '${user.id}')" title="Delete Student"><span class="material-symbols-outlined">delete</span></button>
@@ -2291,6 +2357,30 @@ if (user.email_verified === true || typeof user.email_verified === 'undefined') 
                     });
                     tableBody.innerHTML = tableHTML;
                 } catch (error) { tableBody.innerHTML = `<tr><td colspan="7" style="color: red; text-align: center;">Error: ${error.message}</td></tr>`; }
+            }
+
+            // === User Notifications Render ===
+            const renderUserNotifications = () => renderGeneric('notifications', 'user-notifications-table-body', (notif) => {
+                const target = notif.targetUid === 'all' ? '<strong style="color:var(--primary-blue)">All Users</strong>' : (notif.targetUid || 'Unknown');
+                const date = notif.timestamp ? new Date(notif.timestamp.seconds * 1000).toLocaleString('en-US') : 'N/A';
+                return `<tr><td data-label="Date">${date}</td><td data-label="Target User">${target}</td><td data-label="Title">${notif.title}</td><td data-label="Message">${notif.message}</td><td data-label="Type"><span class="status-badge" style="background:#e0e7ff; color:#3730a3;">${notif.type || 'general'}</span></td><td class="actions-cell" data-label="Action"><button class="btn-delete" onclick="deleteItem('notifications', '${notif.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
+            });
+
+            // === Certificates Render ===
+            async function renderCertificates() {
+                const tableBody = document.getElementById('certificates-table-body');
+                tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">Loading certificates...</td></tr>`;
+                try {
+                    const snapshot = await db.collection('certificates').orderBy('issue_date', 'desc').get();
+                    if (snapshot.empty) { tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">No certificates generated yet.</td></tr>`; return; }
+                    let tableHTML = '';
+                    snapshot.forEach(doc => {
+                        const cert = { id: doc.id, ...doc.data() };
+                        const date = cert.issue_date ? new Date(cert.issue_date.seconds * 1000).toLocaleString('en-US') : 'N/A';
+                        tableHTML += `<tr><td data-label="Certificate ID" style="font-family:monospace; font-weight:bold; color:var(--primary-blue);">${cert.certificate_id || 'N/A'}</td><td data-label="Student Email">${cert.user_email || cert.user_id || 'N/A'}</td><td data-label="Course Name">${cert.course_name || 'N/A'}</td><td data-label="Issue Date">${date}</td><td class="actions-cell" data-label="Action"><button class="btn-edit" style="background:#fef3c7 !important; color:#d97706;" onclick="copyToClipboard('${cert.certificate_id}')" title="Copy Certificate ID"><span class="material-symbols-outlined">content_copy</span></button><button class="btn-delete" onclick="deleteItem('certificates', '${cert.id}')" title="Delete"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
+                    });
+                    tableBody.innerHTML = tableHTML;
+                } catch (error) { tableBody.innerHTML = `<tr><td colspan="5" style="color: red; text-align: center;">Failed to load certificates.</td></tr>`; }
             }
 
             window.updateServiceStatus = async (docId, isChecked) => {
@@ -2405,21 +2495,25 @@ if (user.email_verified === true || typeof user.email_verified === 'undefined') 
                 modalForm.reset();
                 modalTitle.textContent = `Add New ${getBengaliTypeName(collection)}`;
                 let formFieldsHTML = '', extra = {};
-                if (['enrollments', 'joinClass', 'curriculum'].includes(collection)) {
+                if (['enrollments', 'joinClass', 'curriculum', 'user_notifications'].includes(collection)) {
                     modalForm.innerHTML = `<p style="text-align:center; color: var(--text-muted);">Loading necessary data...</p>`;
                     adminModal.classList.remove('hidden');
                     try {
-                        const coursesSnapshot = await db.collection('courses').get();
-                        extra.courseOptions = coursesSnapshot.docs.map(doc => `<option value="${doc.data().name}">${doc.data().name}</option>`).join('');
-                        if (collection === 'enrollments') {
-    const usersSnapshot = await db.collection('users').get();
-    extra.userOptions = usersSnapshot.docs.map(doc => {
-        const d = doc.data();
-        // সার্চ করার সুবিধার জন্য নাম, ইমেইল এবং মোবাইল একসাথে করা হলো
-        const searchStr = `${d.name || ''} ${d.email || ''} ${d.mobile || ''}`.toLowerCase();
-        return `<option value="${doc.id}|${d.email}" data-search="${searchStr}">${d.name || 'N/A'} | ${d.email} | ${d.mobile || 'N/A'}</option>`;
-    }).join('');
-}
+                        if (collection !== 'user_notifications') {
+                            const coursesSnapshot = await db.collection('courses').get();
+                            extra.courseOptions = coursesSnapshot.docs.map(doc => `<option value="${doc.data().name}">${doc.data().name}</option>`).join('');
+                        }
+                        if (collection === 'enrollments' || collection === 'user_notifications') {
+                            const usersSnapshot = await db.collection('users').get();
+                            extra.userOptions = usersSnapshot.docs.map(doc => {
+                                const d = doc.data();
+                                const searchStr = `${d.name || ''} ${d.email || ''} ${d.mobile || ''}`.toLowerCase();
+                                if(collection === 'user_notifications') {
+                                    return `<option value="${doc.id}">${d.name || 'Unknown'} | ${d.email}</option>`;
+                                }
+                                return `<option value="${doc.id}|${d.email}" data-search="${searchStr}">${d.name || 'N/A'} | ${d.email} | ${d.mobile || 'N/A'}</option>`;
+                            }).join('');
+                        }
                     } catch (error) {
                         showToast(`Failed to load data.`, 'error');
                         adminModal.classList.add('hidden'); return;
@@ -2462,7 +2556,7 @@ if (user.email_verified === true || typeof user.email_verified === 'undefined') 
                         showToast('Deleted successfully.');
                         const activePage = document.querySelector('.page.active').id;
                         navigateTo(activePage); 
-                        if (collection !== 'service_stock' && collection !== 'follow_ups') renderDashboard();
+                        if (collection !== 'service_stock' && collection !== 'follow_ups' && collection !== 'notifications' && collection !== 'certificates') renderDashboard();
                     } catch (error) { showToast('Failed to delete item.', 'error'); }
                 }
             };
@@ -2535,16 +2629,30 @@ if (user.email_verified === true || typeof user.email_verified === 'undefined') 
                             newItem = { amount: Number(formData.get('amount')), method: formData.get('method'), accountNumber: formData.get('accountNumber') };
                             break;
                         case 'users':
-    newItem = { 
-        name: formData.get('name'), 
-        mobile: formData.get('mobile'), 
-        title: formData.get('title'), 
-        referralCode: formData.get('referralCode'), 
-        affiliateBalance: Number(formData.get('affiliateBalance')),
-        email_verified: formData.get('email_verified') === 'true' // ভেরিফিকেশন স্ট্যাটাস সেভ হবে
-    };
-    if (formData.get('password')) newItem.password = formData.get('password');
-    break;
+                            newItem = { 
+                                name: formData.get('name'), 
+                                mobile: formData.get('mobile'), 
+                                title: formData.get('title'), 
+                                referralCode: formData.get('referralCode'), 
+                                affiliateBalance: Number(formData.get('affiliateBalance')),
+                                email_verified: formData.get('email_verified') === 'true' 
+                            };
+                            if (formData.get('password')) newItem.password = formData.get('password');
+                            break;
+                        case 'user_notifications':
+                            newItem = { 
+                                targetUid: formData.get('targetUid'), 
+                                type: formData.get('type'), 
+                                title: formData.get('title'), 
+                                message: formData.get('message'), 
+                                read: false,
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp() 
+                            };
+                            await db.collection('notifications').add(newItem);
+                            adminModal.classList.add('hidden');
+                            navigateTo('user-notifications-page');
+                            showToast('Notification Sent successfully.');
+                            return; // Stop here for custom notifications
                         case 'trust_screenshots':
                             newItem = { title: formData.get('title'), imageUrl: formData.get('imageUrl'), timestamp: firebase.firestore.FieldValue.serverTimestamp() };
                             break;
@@ -2583,7 +2691,7 @@ if (user.email_verified === true || typeof user.email_verified === 'undefined') 
             closeModalBtn.addEventListener('click', () => adminModal.classList.add('hidden'));
 
             function getBengaliTypeName(collection) {
-                const names = { payments: 'Payment', services: 'Service', courses: 'Course', enrollments: 'Enrollment', joinClass: 'Class Link', online_classes: 'Online Class Batch', curriculum: 'Curriculum', users: 'Student', withdrawals: 'Withdrawal Request', trust_screenshots: 'Trust Screenshot', video_reviews: 'Video Review', payment_gateways: 'Payment Gateway', coupons: 'Coupon', follow_ups: 'Follow-up Record' };
+                const names = { payments: 'Payment', services: 'Service', courses: 'Course', enrollments: 'Enrollment', joinClass: 'Class Link', online_classes: 'Online Class Batch', curriculum: 'Curriculum', users: 'Student', withdrawals: 'Withdrawal Request', trust_screenshots: 'Trust Screenshot', video_reviews: 'Video Review', payment_gateways: 'Payment Gateway', coupons: 'Coupon', follow_ups: 'Follow-up Record', user_notifications: 'Push Notification', certificates: 'Certificate' };
                 return names[collection] || 'Notice';
             }
 
@@ -2622,6 +2730,28 @@ if (user.email_verified === true || typeof user.email_verified === 'undefined') 
                     case 'coupons': return `<div class="form-group"><label>Coupon Code</label><input type="text" name="code" value="${data.code || ''}" placeholder="e.g., MYSALES50" required style="text-transform: uppercase;"></div><div class="form-group"><label>Discount Type</label><select name="discountType" required><option value="percentage" ${data.discountType === 'percentage' ? 'selected' : ''}>Percentage (%)</option><option value="flat" ${data.discountType === 'flat' ? 'selected' : ''}>Flat Amount (৳)</option></select></div><div class="form-group"><label>Discount Value</label><input type="number" name="discountValue" value="${data.discountValue || ''}" placeholder="e.g., 50" required></div><div class="form-group"><label>Status</label><select name="active"><option value="true" ${data.active !== false ? 'selected' : ''}>Active</option><option value="false" ${data.active === false ? 'selected' : ''}>Inactive</option></select></div>`;
                     case 'courses': return `<div class="form-group"><label>Course Name</label><input type="text" name="name" value="${data.name || ''}" required></div><div class="form-group"><label>Instructor Name</label><input type="text" name="instructor" value="${data.instructor || ''}" required></div><div class="form-group"><label>Price (BDT)</label><input type="number" name="price" value="${data.price || 0}" required></div><div class="form-group"><label>Commission (BDT)</label><input type="number" name="commission" value="${data.commission || 0}"></div><div class="form-group"><label>Category</label><input type="text" name="category" value="${data.category || ''}" placeholder="e.g., FREELANCING"></div><div class="form-group"><label>Duration</label><input type="text" name="duration" value="${data.duration || ''}" placeholder="e.g., 24:00 Hours"></div><div class="form-group"><label>Total Lectures</label><input type="number" name="lectures" value="${data.lectures || 0}" placeholder="e.g., 40"></div><div class="form-group"><label>Image URL</label><input type="text" name="image" value="${data.image || ''}" placeholder="https://i.ibb.co/JqgWkCg/placeholder.png"></div>`;
                     case 'enrollments': return `<div class="form-group"><label>Search & Select Student</label><input type="text" placeholder="Type Name, Email or Mobile..." oninput="window.filterStudents(this.value)" style="margin-bottom: 8px; border: 2px solid var(--primary-blue);"><select name="student" id="student-select-box" required size="5" style="width:100%; padding:8px; border:1px solid var(--border-color); border-radius:8px; background:var(--background-light);">${extra.userOptions || ''}</select></div><div class="form-group"><label>Select Course</label><select name="courseName" required>${extra.courseOptions || ''}</select></div><div class="form-group"><label>Batch No.</label><input type="text" name="batch" value="${data.batch || ''}" placeholder="e.g., 122" required></div>`;
+                    case 'user_notifications': return `
+                        <div class="form-group">
+                            <label>Target User</label>
+                            <select name="targetUid" required>
+                                <option value="all">Send to All Users</option>
+                                ${extra.userOptions || ''}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Notification Type</label>
+                            <select name="type" required>
+                                <option value="general">General</option>
+                                <option value="new_course">New Course Added</option>
+                                <option value="live_class">Live Class Reminder</option>
+                                <option value="payment_success">Payment Approved</option>
+                                <option value="assignment">Assignment Available</option>
+                                <option value="certificate">Certificate Ready</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Notification Title</label><input type="text" name="title" placeholder="e.g., New Course Added!" required></div>
+                        <div class="form-group"><label>Notification Message</label><textarea name="message" rows="3" placeholder="Write your message here..." required></textarea></div>
+                    `;
                     case 'joinClass': const dt = data.dateTime ? new Date(data.dateTime.seconds * 1000).toISOString().slice(0, 16) : ''; return `<div class="form-group"><label>Select Course</label><select name="courseName" required>${extra.courseOptions || ''}</select></div><div class="form-group"><label>Batch No.</label><input type="text" name="batch" value="${data.batch || ''}" required></div><div class="form-group"><label>Class Topic</label><input type="text" name="topic" value="${data.topic || ''}" required></div><div class="form-group"><label>Class No.</label><input type="number" name="classNumber" value="${data.classNumber || ''}" required></div><div class="form-group"><label>Class Link</label><input type="text" name="link" value="${data.link || ''}" required></div><div class="form-group"><label>Class Date & Time</label><input type="datetime-local" name="dateTime" value="${dt}" required></div>`;
                     case 'online_classes': return `
                         <div class="form-group"><label>Batch Number</label><input type="text" name="batchNumber" value="${data.batchNumber || ''}" required></div>
@@ -2690,7 +2820,6 @@ if (user.email_verified === true || typeof user.email_verified === 'undefined') 
                     options[i].style.display = 'none';
                 }
             }
-            // সার্চ করলে যেটা প্রথমে মিলবে সেটা অটোমেটিক সিলেক্ট হয়ে যাবে
             if(firstVisible && term !== '') firstVisible.selected = true;
         }; 
     </script>
