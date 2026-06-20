@@ -1300,7 +1300,8 @@
         <a href="#video-reviews" class="mobile-nav-link"><span class="material-symbols-outlined">star</span><span>Reviews</span></a>
         <a href="#noticeboard" class="mobile-nav-link"><span class="material-symbols-outlined">campaign</span><span>Notice</span></a>
     </nav>
-
+<!-- EmailJS Script -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <!-- Firebase SDK Scripts -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -1487,16 +1488,32 @@
                         const expiry = new Date(Date.now() + 5 * 60 * 1000);
                         
                         return db.collection('users').doc(currentUnverifiedUid).set({ 
-                            name, email, mobile: whatsapp, dob: '', title: '', photoURL: '', 
-                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                            email_verified: false, otp_code: otp, otp_expiry: expiry
-                        }).then(() => {
-                            console.log("DEMO OTP FOR " + email + ": " + otp); // For Developer checking
-                            showToast("Account created! Check your email for OTP.", 'success');
-                            document.getElementById('signup-modal').classList.add('hidden');
-                            navigateTo('otp');
-                            signupForm.reset(); 
-                        });
+    name, email, mobile: whatsapp, dob: '', title: '', photoURL: '', 
+    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    email_verified: false, otp_code: otp, otp_expiry: expiry
+}).then(() => {
+    // === EmailJS দিয়ে OTP পাঠানোর কোড ===
+    db.collection('site_settings').doc('emailjs_settings').get().then(doc => {
+        if (doc.exists) {
+            const config = doc.data();
+            if (config.publicKey && config.serviceId && config.templateOtp) {
+                emailjs.init(config.publicKey);
+                emailjs.send(config.serviceId, config.templateOtp, {
+                    to_email: email,
+                    to_name: name,
+                    otp_code: otp
+                }).then(() => console.log("OTP Email Sent!"))
+                  .catch(err => console.log("OTP Email Error:", err));
+            }
+        }
+    });
+    // ===================================
+
+    showToast("Account created! Check your email for OTP.", 'success');
+    document.getElementById('signup-modal').classList.add('hidden');
+    navigateTo('otp');
+    signupForm.reset(); 
+});
                     }).catch((error) => { showToast(error.message, 'error'); });
             });
 
