@@ -756,6 +756,10 @@
                             <label for="emailjs-template-receipt">Payment Receipt Template ID (For Money Receipt)</label>
                             <input type="text" id="emailjs-template-receipt" placeholder="e.g., template_vz0zzih">
                         </div>
+                        <div class="form-group">
+    <label for="emailjs-template-otp">OTP Email Template ID (For Sign Up verification)</label>
+    <input type="text" id="emailjs-template-otp" placeholder="e.g., template_abc123">
+</div>
                         <button type="submit" class="btn btn-primary" style="width: auto;">Save EmailJS Settings</button>
                     </form>
 
@@ -1900,6 +1904,7 @@
                         document.getElementById('emailjs-service-id').value = emailData.serviceId || '';
                         document.getElementById('emailjs-template-service').value = emailData.templateService || '';
                         document.getElementById('emailjs-template-receipt').value = emailData.templateReceipt || '';
+                        document.getElementById('emailjs-template-otp').value = emailData.templateOtp || '';
                     }
 
                     const socialDoc = await db.collection('site_settings').doc('social_media').get();
@@ -1951,11 +1956,12 @@
                     const serviceId = document.getElementById('emailjs-service-id').value.trim();
                     const templateService = document.getElementById('emailjs-template-service').value.trim();
                     const templateReceipt = document.getElementById('emailjs-template-receipt').value.trim();
+const templateOtp = document.getElementById('emailjs-template-otp').value.trim(); // নতুন লাইন
 
-                    try {
-                        await db.collection('site_settings').doc('emailjs_settings').set({
-                            publicKey, serviceId, templateService, templateReceipt
-                        }, { merge: true });
+try {
+    await db.collection('site_settings').doc('emailjs_settings').set({
+        publicKey, serviceId, templateService, templateReceipt, templateOtp // templateOtp যুক্ত করা হয়েছে
+    }, { merge: true });
                         showToast("EmailJS settings saved successfully!", "success");
                     } catch (error) { showToast("Failed to save EmailJS Settings.", "error"); }
                 });
