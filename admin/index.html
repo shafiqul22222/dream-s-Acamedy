@@ -2268,9 +2268,10 @@ try {
                         
                         // === OTP Verification Status Check ===
                         let verifyBadge = '';
-                        if (user.email_verified === true) {
-                            verifyBadge = '<span class="status-badge approved" style="background-color: #d1fae5; color: #047857;"><span class="material-symbols-outlined" style="font-size:12px; vertical-align:middle; margin-right:2px;">verified</span>Verified</span>';
-                        } else {
+                        // যাদের email_verified ট্রু অথবা যাদের এই ফিল্ডটিই নেই (পুরনো স্টুডেন্ট), তাদের ভেরিফাইড দেখাবে
+if (user.email_verified === true || typeof user.email_verified === 'undefined') {
+    verifyBadge = '<span class="status-badge approved" style="background-color: #d1fae5; color: #047857;"><span class="material-symbols-outlined" style="font-size:12px; vertical-align:middle; margin-right:2px;">verified</span>Verified</span>';
+} else {
                             verifyBadge = '<span class="status-badge rejected" style="background-color: #fee2e2; color: #b91c1c;"><span class="material-symbols-outlined" style="font-size:12px; vertical-align:middle; margin-right:2px;">warning</span>Unverified</span>';
                         }
 
@@ -2529,9 +2530,16 @@ try {
                             newItem = { amount: Number(formData.get('amount')), method: formData.get('method'), accountNumber: formData.get('accountNumber') };
                             break;
                         case 'users':
-                            newItem = { name: formData.get('name'), mobile: formData.get('mobile'), title: formData.get('title'), referralCode: formData.get('referralCode'), affiliateBalance: Number(formData.get('affiliateBalance')) };
-                            if (formData.get('password')) newItem.password = formData.get('password');
-                            break;
+    newItem = { 
+        name: formData.get('name'), 
+        mobile: formData.get('mobile'), 
+        title: formData.get('title'), 
+        referralCode: formData.get('referralCode'), 
+        affiliateBalance: Number(formData.get('affiliateBalance')),
+        email_verified: formData.get('email_verified') === 'true' // ভেরিফিকেশন স্ট্যাটাস সেভ হবে
+    };
+    if (formData.get('password')) newItem.password = formData.get('password');
+    break;
                         case 'trust_screenshots':
                             newItem = { title: formData.get('title'), imageUrl: formData.get('imageUrl'), timestamp: firebase.firestore.FieldValue.serverTimestamp() };
                             break;
@@ -2623,8 +2631,7 @@ try {
                     `;
                     case 'curriculum': return `<div class="form-group"><label>Select Course</label><select name="courseName" required>${extra.courseOptions || ''}</select></div><div class="form-group"><label>Batch No.</label><input type="text" name="batch" value="${data.batch || ''}" required></div><hr style="margin: 24px 0; border:none; border-top:1px solid var(--border-color);"><div id="curriculum-modules-container">${(data.modules && data.modules.length > 0) ? data.modules.map(getModuleHTML).join('') : getModuleHTML()}</div><button type="button" id="add-module-btn" class="btn btn-add-small"><span class="material-symbols-outlined">add</span> Add New Module</button>`;
                     case 'withdrawals': return `<div class="form-group"><label>Student Email (readonly)</label><input type="email" name="userEmail" value="${data.userEmail || ''}" readonly></div><div class="form-group"><label>Amount (BDT)</label><input type="number" name="amount" value="${data.amount || 0}" required></div><div class="form-group"><label>Method</label><input type="text" name="method" value="${data.method || ''}" required></div><div class="form-group"><label>Account Number</label><input type="text" name="accountNumber" value="${data.accountNumber || ''}" required></div>`;
-                    case 'users': return `<div class="form-group"><label>Full Name</label><input type="text" name="name" value="${data.name || ''}" ></div><div class="form-group"><label>Email (readonly)</label><input type="email" name="email" value="${data.email || ''}" readonly></div><div class="form-group"><label>Mobile</label><input type="text" name="mobile" value="${data.mobile || ''}" ></div><div class="form-group"><label>Title</label><input type="text" name="title" value="${data.title || ''}" ></div><div class="form-group"><label>Referral Code</label><input type="text" name="referralCode" value="${data.referralCode || ''}" ></div><div class="form-group"><label>Affiliate Balance (BDT)</label><input type="number" name="affiliateBalance" value="${data.affiliateBalance || 0}" ></div><div class="form-group"><label>New Password</label><input type="text" name="password" placeholder="Leave blank to keep unchanged"></div>`;
-                    case 'trust_screenshots': return `<div class="form-group"><label>Title</label><input type="text" name="title" value="${data.title || ''}" required></div><div class="form-group"><label>Image URL</label><input type="text" name="imageUrl" value="${data.imageUrl || ''}" required></div>`;
+                    case 'users': return `<div class="form-group"><label>Full Name</label><input type="text" name="name" value="${data.name || ''}" ></div><div class="form-group"><label>Email (readonly)</label><input type="email" name="email" value="${data.email || ''}" readonly></div><div class="form-group"><label>Mobile</label><input type="text" name="mobile" value="${data.mobile || ''}" ></div><div class="form-group"><label>Title</label><input type="text" name="title" value="${data.title || ''}" ></div><div class="form-group"><label>Referral Code</label><input type="text" name="referralCode" value="${data.referralCode || ''}" ></div><div class="form-group"><label>Affiliate Balance (BDT)</label><input type="number" name="affiliateBalance" value="${data.affiliateBalance || 0}" ></div><div class="form-group"><label>Verification Status</label><select name="email_verified"><option value="true" ${(data.email_verified === true || typeof data.email_verified === 'undefined') ? 'selected' : ''}>Verified</option><option value="false" ${data.email_verified === false ? 'selected' : ''}>Unverified</option></select></div><div class="form-group"><label>New Password</label><input type="text" name="password" placeholder="Leave blank to keep unchanged"></div>`;
                     case 'video_reviews': 
                         return `<div class="form-group"><label>Title (e.g., Digital Marketing Success)</label><input type="text" name="title" value="${data.title || ''}" required></div>
                                 <div class="form-group"><label>Subtitle (e.g., Freelancer Rahim - Earning $500/mo)</label><input type="text" name="subtitle" value="${data.subtitle || ''}" required></div>
