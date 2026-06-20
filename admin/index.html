@@ -305,7 +305,6 @@
                 <li data-page="notices-page"><a href="#"><span class="material-symbols-outlined">campaign</span> Noticeboard</a></li>
                 
                 <li data-page="trust-screenshots-page"><a href="#"><span class="material-symbols-outlined">verified</span> Trust Screenshots</a></li>
-                <!-- NEW VIDEO REVIEWS LINK -->
                 <li data-page="video-reviews-page"><a href="#"><span class="material-symbols-outlined">video_library</span> Video Reviews</a></li>
 
                 <li data-page="join-class-page"><a href="#"><span class="material-symbols-outlined">video_call</span> Class Joining</a></li>
@@ -737,6 +736,29 @@
                         <button type="submit" class="btn btn-primary" style="width: auto;">Save Settings</button>
                     </form>
 
+                    <!-- EMAILJS SETTINGS -->
+                    <hr style="margin: 32px 0; border: none; border-top: 1px solid var(--border-color);">
+                    <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; font-weight: 600;">EmailJS Configuration (Auto Email)</h3>
+                    <form id="emailjs-settings-form">
+                        <div class="form-group">
+                            <label for="emailjs-public-key">Public Key</label>
+                            <input type="text" id="emailjs-public-key" placeholder="e.g., 2sllYqrmoE4ElloEP">
+                        </div>
+                        <div class="form-group">
+                            <label for="emailjs-service-id">Service ID</label>
+                            <input type="text" id="emailjs-service-id" placeholder="e.g., service_6y1h5ow">
+                        </div>
+                        <div class="form-group">
+                            <label for="emailjs-template-service">Service Email Template ID (For Service details delivery)</label>
+                            <input type="text" id="emailjs-template-service" placeholder="e.g., template_3dlgemn">
+                        </div>
+                        <div class="form-group">
+                            <label for="emailjs-template-receipt">Payment Receipt Template ID (For Money Receipt)</label>
+                            <input type="text" id="emailjs-template-receipt" placeholder="e.g., template_vz0zzih">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: auto;">Save EmailJS Settings</button>
+                    </form>
+
                     <hr style="margin: 32px 0; border: none; border-top: 1px solid var(--border-color);">
                     <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; font-weight: 600;">Social Media Links</h3>
                     <form id="social-media-form">
@@ -889,6 +911,7 @@
             const contactUsSettingsForm = document.getElementById('contact-us-settings-form');
             const chatIconSettingsForm = document.getElementById('chat-icon-settings-form'); 
             const macrodroidSettingsForm = document.getElementById('macrodroid-settings-form'); 
+            const emailjsSettingsForm = document.getElementById('emailjs-settings-form'); 
             
             const studentWhatsappModal = document.getElementById('student-whatsapp-modal'); 
             const closeWhatsappModalBtn = document.getElementById('close-whatsapp-modal'); 
@@ -937,27 +960,83 @@
                 }
             };
 
-            // === NEW: Email Sending Function ===
-            window.sendServiceEmail = function(userEmail, userName, serviceName, serviceDetails) {
-                // ১. নিচে আপনার EmailJS এর Public Key বসান
-                emailjs.init("2sllYqrmoE4ElloEP"); 
+            // === UPDATED: Email Sending Function ===
+            window.sendServiceEmail = async function(userEmail, userName, serviceName, serviceDetails) {
+                try {
+                    const doc = await db.collection('site_settings').doc('emailjs_settings').get();
+                    if (!doc.exists) { showToast("EmailJS settings not configured. Please set them in Website Settings.", "error"); return; }
+                    const config = doc.data();
+                    
+                    if (!config.publicKey || !config.serviceId || !config.templateService) {
+                        showToast("EmailJS configuration is incomplete.", "error"); return;
+                    }
 
-                var templateParams = {
-                    to_email: userEmail,
-                    to_name: userName,
-                    service_name: serviceName,
-                    service_details: serviceDetails
-                };
-                 
-                // ২. নিচে আপনার Service ID এবং Template ID বসান
-                emailjs.send('service_6y1h5ow', 'template_3dlgemn', templateParams)
-                    .then(function(response) {
-                       console.log('Email sent successfully!', response.status, response.text);
-                       showToast("Service details sent to customer's email!", "success");
-                    }, function(error) {
-                       console.log('Failed to send email...', error);
-                       showToast("Payment approved, but failed to send email. Check EmailJS setup.", "error");
-                    });
+                    emailjs.init(config.publicKey); 
+
+                    var templateParams = {
+                        to_email: userEmail,
+                        to_name: userName,
+                        service_name: serviceName,
+                        service_details: serviceDetails
+                    };
+                     
+                    emailjs.send(config.serviceId, config.templateService, templateParams)
+                        .then(function(response) {
+                           console.log('Email sent successfully!', response.status, response.text);
+                           showToast("Service details sent to customer's email!", "success");
+                        }, function(error) {
+                           console.log('Failed to send email...', error);
+                           showToast("Payment approved, but failed to send email. Check EmailJS setup.", "error");
+                        });
+                } catch(error) {
+                    console.error("Error setting up email:", error);
+                }
+            };
+
+            // === UPDATED: Payment Receipt Email Function ===
+            window.sendPaymentReceiptEmail = async (paymentId) => {
+                try {
+                    const paymentDoc = await db.collection('payments').doc(paymentId).get();
+                    if (!paymentDoc.exists) return;
+                    const paymentData = paymentDoc.data();
+                    
+                    let userEmail = paymentData.userEmail;
+                    let userName = paymentData.userName || 'Customer';
+                    
+                    // ইমেইল না থাকলে মেইল পাঠানো স্কিপ করবে
+                    if(!userEmail || userEmail === 'admin@manual.sale' || userEmail.trim() === '') return;
+
+                    const date = paymentData.timestamp ? new Date(paymentData.timestamp.seconds * 1000).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB');
+                    
+                    const docConfig = await db.collection('site_settings').doc('emailjs_settings').get();
+                    if (!docConfig.exists) { console.error("EmailJS settings missing"); return; }
+                    const config = docConfig.data();
+                    
+                    if (!config.publicKey || !config.serviceId || !config.templateReceipt) {
+                        console.error("EmailJS configuration is incomplete"); return;
+                    }
+
+                    emailjs.init(config.publicKey);
+
+                    var templateParams = {
+                        to_email: userEmail,
+                        to_name: userName,
+                        item_name: paymentData.itemName,
+                        amount: paymentData.amount,
+                        trx_id: paymentData.transactionId || 'N/A',
+                        date: date
+                    };
+                     
+                    emailjs.send(config.serviceId, config.templateReceipt, templateParams)
+                        .then(function(response) {
+                           console.log('Payment receipt email sent successfully!');
+                        }, function(error) {
+                           console.log('Failed to send receipt email...', error);
+                        });
+
+                } catch (error) {
+                    console.error("Failed to prepare email receipt.", error);
+                }
             };
 
             window.openStudentWhatsappModal = (mobile, name = 'N/A') => {
@@ -1813,6 +1892,16 @@
                     const mdDoc = await db.collection('site_settings').doc('macrodroid_webhook').get();
                     if (mdDoc.exists && mdDoc.data().url) { document.getElementById('macrodroid-webhook-url').value = mdDoc.data().url; }
 
+                    // Fetch EmailJS settings
+                    const emailjsDoc = await db.collection('site_settings').doc('emailjs_settings').get();
+                    if (emailjsDoc.exists) {
+                        const emailData = emailjsDoc.data();
+                        document.getElementById('emailjs-public-key').value = emailData.publicKey || '';
+                        document.getElementById('emailjs-service-id').value = emailData.serviceId || '';
+                        document.getElementById('emailjs-template-service').value = emailData.templateService || '';
+                        document.getElementById('emailjs-template-receipt').value = emailData.templateReceipt || '';
+                    }
+
                     const socialDoc = await db.collection('site_settings').doc('social_media').get();
                     socialLinksContainer.innerHTML = '';
                     if (socialDoc.exists && socialDoc.data().links) socialDoc.data().links.forEach(createSocialLinkInput);
@@ -1852,6 +1941,23 @@
                         await db.collection('site_settings').doc('macrodroid_webhook').set({ url: newUrl }, { merge: true });
                         showToast("MacroDroid URL saved successfully!");
                     } catch (error) { showToast("Failed to save MacroDroid Settings.", "error"); }
+                });
+            }
+
+            if(emailjsSettingsForm) {
+                emailjsSettingsForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const publicKey = document.getElementById('emailjs-public-key').value.trim();
+                    const serviceId = document.getElementById('emailjs-service-id').value.trim();
+                    const templateService = document.getElementById('emailjs-template-service').value.trim();
+                    const templateReceipt = document.getElementById('emailjs-template-receipt').value.trim();
+
+                    try {
+                        await db.collection('site_settings').doc('emailjs_settings').set({
+                            publicKey, serviceId, templateService, templateReceipt
+                        }, { merge: true });
+                        showToast("EmailJS settings saved successfully!", "success");
+                    } catch (error) { showToast("Failed to save EmailJS Settings.", "error"); }
                 });
             }
 
@@ -2001,44 +2107,6 @@
                     
                     window.sendViaMacroDroid(studentMobile, message);
                 } catch (error) { showToast("Failed to prepare WhatsApp receipt.", "error"); }
-            };
-            // === NEW: Payment Receipt Email Function ===
-            window.sendPaymentReceiptEmail = async (paymentId) => {
-                try {
-                    const paymentDoc = await db.collection('payments').doc(paymentId).get();
-                    if (!paymentDoc.exists) return;
-                    const paymentData = paymentDoc.data();
-                    
-                    let userEmail = paymentData.userEmail;
-                    let userName = paymentData.userName || 'Customer';
-                    
-                    // ইমেইল না থাকলে মেইল পাঠানো স্কিপ করবে
-                    if(!userEmail || userEmail === 'admin@manual.sale' || userEmail.trim() === '') return;
-
-                    const date = paymentData.timestamp ? new Date(paymentData.timestamp.seconds * 1000).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB');
-                    
-                    emailjs.init("2sllYqrmoE4ElloEP"); // আপনার Public Key বসান
-
-                    var templateParams = {
-                        to_email: userEmail,
-                        to_name: userName,
-                        item_name: paymentData.itemName,
-                        amount: paymentData.amount,
-                        trx_id: paymentData.transactionId || 'N/A',
-                        date: date
-                    };
-                     
-                    // এখানে Service ID এবং আপনার ২য় (নতুন) Template ID টি বসান
-                    emailjs.send('service_6y1h5ow', 'template_vz0zzih', templateParams)
-                        .then(function(response) {
-                           console.log('Payment receipt email sent successfully!');
-                        }, function(error) {
-                           console.log('Failed to send receipt email...', error);
-                        });
-
-                } catch (error) {
-                    console.error("Failed to prepare email receipt.", error);
-                }
             };
 
             window.printReceipt = async (paymentId) => {
