@@ -577,9 +577,23 @@
             .hero-image-wrapper { display: none; }
             .dashboard-container { flex-direction: column; }
             .dashboard-sidebar { width: 100%; position: static; }
-            .form-grid { grid-template-columns: 1fr; }
+            
+            /* --- ফর্মের ভেতরের ইনলাইন স্টাইল ওভাররাইড করা হলো --- */
+            .form-grid { grid-template-columns: 1fr !important; }
             .footer-grid { grid-template-columns: 1fr; text-align: left; gap: 40px; }
             .contact-grid { grid-template-columns: 1fr; text-align: center; }
+            
+            /* --- মোবাইল রেস্পন্সিভ করার জন্য নতুন যুক্ত করা কোডগুলো --- */
+            .about-grid, .about-features, .curriculum-layout { grid-template-columns: 1fr; gap: 30px; text-align: center; }
+            .feature-item { flex-direction: column; align-items: center; text-align: center; }
+            .service-grid, .course-grid, .video-grid { grid-template-columns: 1fr; }
+            .service-card, .course-card { max-width: 100%; }
+            .profile-summary { flex-direction: column; text-align: center; gap: 15px; }
+            .content-header { flex-direction: column; gap: 15px; text-align: center; }
+            .notice-item { flex-direction: column; align-items: center; text-align: center; }
+            .contact-info-row { justify-content: center; }
+            .otp-input-group input { width: 40px; height: 50px; font-size: 1.2rem; }
+            .modal-form-panel { padding: 30px 20px !important; }
         }
     </style>
 </head>
