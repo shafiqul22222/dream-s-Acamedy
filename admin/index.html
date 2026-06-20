@@ -523,7 +523,7 @@
                 <div class="search-bar-container"><input type="text" id="user-search-input" placeholder="Search students by name, email, or mobile..."></div>
                 <div class="content-box">
                     <table class="data-table">
-                        <thead><tr><th>Name</th><th>Email</th><th>Mobile</th><th>Referral Code</th><th>Balance</th><th>Action</th></tr></thead>
+                        <thead><tr><th>Name</th><th>Email</th><th>Mobile</th><th>Referral Code</th><th>Balance</th><th>Status</th><th>Action</th></tr></thead>
                         <tbody id="users-table-body"></tbody>
                     </table>
                 </div>
@@ -2245,12 +2245,13 @@ try {
 
             async function renderUsers() {
                 const tableBody = document.getElementById('users-table-body');
-                tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">Loading students...</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center;">Loading students...</td></tr>`;
                 try {
                     const paymentsSnapshot = await db.collection('payments').where('status', '==', 'approved').get();
                     const payingUserEmails = new Set(paymentsSnapshot.docs.map(doc => doc.data().userEmail));
                     const usersSnapshot = await db.collection('users').get();
-                    if (usersSnapshot.empty) { tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">No students found.</td></tr>`; return; }
+                    if (usersSnapshot.empty) { tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center;">No students found.</td></tr>`; return; }
+                    
                     let usersArray = [];
                     usersSnapshot.forEach(doc => usersArray.push({ id: doc.id, ...doc.data() }));
                     usersArray.sort((a, b) => {
@@ -2258,17 +2259,28 @@ try {
                         const timeB = b.timestamp ? (b.timestamp.seconds || 0) : 0;
                         return timeB - timeA; 
                     });
+                    
                     let tableHTML = '';
                     usersArray.forEach(user => {
                         const hasPurchased = payingUserEmails.has(user.email);
                         const statusClass = hasPurchased ? 'student-active-indicator' : 'student-inactive-indicator';
                         const statusTitle = hasPurchased ? 'This student has purchased items.' : 'No purchases yet.';
+                        
+                        // === OTP Verification Status Check ===
+                        let verifyBadge = '';
+                        if (user.email_verified === true) {
+                            verifyBadge = '<span class="status-badge approved" style="background-color: #d1fae5; color: #047857;"><span class="material-symbols-outlined" style="font-size:12px; vertical-align:middle; margin-right:2px;">verified</span>Verified</span>';
+                        } else {
+                            verifyBadge = '<span class="status-badge rejected" style="background-color: #fee2e2; color: #b91c1c;"><span class="material-symbols-outlined" style="font-size:12px; vertical-align:middle; margin-right:2px;">warning</span>Unverified</span>';
+                        }
+
                         tableHTML += `<tr>
                                         <td data-label="Name" class="${statusClass}" title="${statusTitle}">${user.name || 'N/A'}</td>
                                         <td data-label="Email">${user.email}</td>
                                         <td data-label="Mobile"><span class="copyable-mobile" onclick="copyToClipboard('${user.mobile || ''}')" title="Click to copy">${user.mobile || 'N/A'}</span></td>
                                         <td data-label="Referral Code">${user.referralCode || 'N/A'}</td>
                                         <td data-label="Balance">৳ ${user.affiliateBalance || 0}</td>
+                                        <td data-label="Status">${verifyBadge}</td>
                                         <td class="actions-cell" data-label="Action">
                                             <button class="btn-whatsapp" onclick="openStudentWhatsappModal('${user.mobile}', '${user.name || ''}')" title="Send Follow-up Message"><span class="material-symbols-outlined">chat</span></button>
                                             <button class="btn-edit" onclick="openModalForEdit('users', '${user.id}')" title="Edit Student"><span class="material-symbols-outlined">edit</span></button>
@@ -2277,7 +2289,7 @@ try {
                                     </tr>`;
                     });
                     tableBody.innerHTML = tableHTML;
-                } catch (error) { tableBody.innerHTML = `<tr><td colspan="6" style="color: red; text-align: center;">Error: ${error.message}</td></tr>`; }
+                } catch (error) { tableBody.innerHTML = `<tr><td colspan="7" style="color: red; text-align: center;">Error: ${error.message}</td></tr>`; }
             }
 
             window.updateServiceStatus = async (docId, isChecked) => {
