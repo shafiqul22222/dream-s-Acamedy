@@ -1230,26 +1230,30 @@
     </main>
 
     <!-- Hidden Template For Automatic PDF Certificate -->
-    <!-- Hidden Template For Automatic PDF Certificate --> <div id="certificate-wrapper" style="position: absolute; top: -9999px; left: -9999px; z-index: -1; width: 850px; height: 600px;">
-        <div id="certificate-template" style="width: 800px; height: 565px; padding: 30px; position: relative; background-color: #fff; text-align: center; font-family: 'Inter', sans-serif;">
-            <div style="border: 8px double #d4af37; height: 100%; padding: 30px; position: relative; background: #ffffff;">
-                <img src="https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png" style="height: 60px; margin-bottom: 20px;" alt="Dreams Academy">
-                <h1 style="font-size: 38px; font-weight: 800; color: #d4af37; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 10px; font-family: Georgia, serif;">Certificate of Completion</h1>
-                <p style="font-size: 16px; color: #475569; margin-top: 30px; margin-bottom: 10px;">This is to certify that</p>
-                <h2 id="cert-student-name" style="font-size: 42px; font-weight: 700; color: #020617; border-bottom: 2px solid #cbd5e1; display: inline-block; padding-bottom: 5px; margin-bottom: 20px; font-style: italic;">Student Name</h2>
-                <p style="font-size: 16px; color: #475569; margin-bottom: 15px;">has successfully completed the comprehensive program</p>
-                <h3 id="cert-course-name" style="font-size: 26px; font-weight: 800; color: #4f46e5; margin-bottom: 50px;">Advanced Survey Course</h3>
-                <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 0 40px; margin-top: 40px;">
+    <div id="certificate-wrapper" style="position: absolute; top: -9999px; left: -9999px; z-index: -999;">
+        <div id="certificate-template" style="width: 1056px; height: 816px; padding: 40px; position: relative; background-color: #fff; text-align: center; font-family: 'Inter', sans-serif; box-sizing: border-box;">
+            <div style="border: 10px double #d4af37; width: 100%; height: 100%; padding: 40px; position: relative; background: #ffffff; box-sizing: border-box;">
+                <img src="https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png" style="height: 70px; margin-bottom: 20px;" alt="Dreams Academy">
+                <h1 style="font-size: 52px; font-weight: 800; color: #d4af37; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 10px; font-family: Georgia, serif;">Certificate of Completion</h1>
+                <p style="font-size: 20px; color: #475569; margin-top: 30px; margin-bottom: 15px;">This is to certify that</p>
+                
+                <h2 id="cert-student-name" style="font-size: 56px; font-weight: 700; color: #020617; border-bottom: 2px solid #cbd5e1; display: inline-block; padding-bottom: 10px; margin-bottom: 25px; font-style: italic;">Student Name</h2>
+                
+                <p style="font-size: 20px; color: #475569; margin-bottom: 20px;">has successfully completed the comprehensive program</p>
+                <h3 id="cert-course-name" style="font-size: 34px; font-weight: 800; color: #4f46e5; margin-bottom: 50px;">Advanced Survey Course</h3>
+                
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; position: absolute; bottom: 40px; left: 40px; right: 40px;">
                     <div style="text-align: left;">
-                        <p id="cert-date" style="font-size: 15px; font-weight: 600; margin-bottom: 5px;">Date: 01 Jan 2026</p>
-                        <p id="cert-id" style="font-size: 13px; color: #64748b;">ID: DA-123456</p>
+                        <p id="cert-date" style="font-size: 18px; font-weight: 600; margin-bottom: 5px; color: #0f172a;">Date: 01 Jan 2026</p>
+                        <p id="cert-id" style="font-size: 16px; color: #64748b;">ID: DA-123456</p>
                     </div>
                     <div style="text-align: center;">
-                        <div style="width: 180px; height: 50px; border-bottom: 2px solid #020617; margin-bottom: 5px; position: relative;">
-                            <span style="font-family: 'Brush Script MT', cursive; font-size: 32px; color: #000; position: absolute; bottom: 5px; left: 20px;">Shofiqul Islam</span>
+                        <div style="width: 220px; height: 60px; border-bottom: 2px solid #020617; margin-bottom: 10px; position: relative;">
+                            <!-- সিগনেচার টেক্সট -->
+                            <span style="font-family: 'Brush Script MT', cursive; font-size: 38px; color: #000; position: absolute; bottom: 5px; width: 100%; left: 0; text-align: center;">Shofiqul Islam</span>
                         </div>
-                        <p style="font-size: 15px; font-weight: 700;">Authorized Director</p>
-                        <p style="font-size: 13px; color: #64748b;">Dreams Academy</p>
+                        <p style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">Authorized Director</p>
+                        <p style="font-size: 15px; color: #64748b; margin: 0;">Dreams Academy</p>
                     </div>
                 </div>
             </div>
@@ -1796,21 +1800,52 @@
             }
 
             // ================= Automatic Certificate Generator =================
+            // ================= Automatic Certificate Generator =================
             async function generateCertificatePDF(courseName) {
-                const user = auth.currentUser; if (!user) return; showToast("Generating your certificate... Please wait.", "info");
+                const user = auth.currentUser; if (!user) return; 
+                showToast("Generating your certificate... Please wait.", "info");
+                
                 try {
                     const userDoc = await db.collection('users').doc(user.uid).get();
                     const studentName = userDoc.data().name || user.email;
                     const certId = "DA-" + Math.floor(1000000 + Math.random() * 9000000);
                     const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-                    document.getElementById('cert-student-name').textContent = studentName; document.getElementById('cert-course-name').textContent = courseName; document.getElementById('cert-date').textContent = "Date: " + today; document.getElementById('cert-id').textContent = "ID: " + certId;
+                    
+                    document.getElementById('cert-student-name').textContent = studentName; 
+                    document.getElementById('cert-course-name').textContent = courseName; 
+                    document.getElementById('cert-date').textContent = "Date: " + today; 
+                    document.getElementById('cert-id').textContent = "ID: " + certId;
+                    
+                    const wrapper = document.getElementById('certificate-wrapper');
                     const element = document.getElementById('certificate-template');
-                    const opt = { margin: 0, filename: `${studentName.replace(/\s+/g, '_')}_Certificate.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' } };
+                    
+                    // পিডিএফ কাটার হাত থেকে বাঁচাতে সাময়িকভাবে ভিউপোর্টে আনা হলো (ইউজার বুঝবে না)
+                    wrapper.style.top = '0px';
+                    wrapper.style.left = '0px';
+                    
+                    // পেপার সাইজ এবং রেজ্যুলেশন একদম এক্যুরেট করা হলো
+                    const opt = { 
+                        margin: 0, 
+                        filename: `${studentName.replace(/\s+/g, '_')}_Certificate.pdf`, 
+                        image: { type: 'jpeg', quality: 1 }, 
+                        html2canvas: { scale: 2, useCORS: true, scrollY: 0 }, 
+                        jsPDF: { unit: 'px', format: [1056, 816], orientation: 'landscape' } 
+                    };
+                    
                     html2pdf().set(opt).from(element).save().then(() => {
+                        // পিডিএফ ডাউনলোড হওয়ার সাথে সাথে আবার লুকিয়ে ফেলা হলো
+                        wrapper.style.top = '-9999px';
+                        wrapper.style.left = '-9999px';
+                        
                         showToast("Certificate downloaded successfully!", "success");
                         db.collection('certificates').add({ certificate_id: certId, user_id: user.uid, student_name: studentName, course_name: courseName, issue_date: firebase.firestore.FieldValue.serverTimestamp() });
                     });
-                } catch (e) { showToast("Error generating certificate.", "error"); }
+                } catch (e) { 
+                    // কোনো এরর হলে সার্টিফিকেটটি আবার লুকিয়ে ফেলবে
+                    document.getElementById('certificate-wrapper').style.top = '-9999px';
+                    document.getElementById('certificate-wrapper').style.left = '-9999px';
+                    showToast("Error generating certificate.", "error"); 
+                }
             }
 
             // ================= User Data Display Functions =================
