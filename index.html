@@ -1229,37 +1229,50 @@
         </div>
     </main>
 
-    <!-- Hidden Template For Automatic PDF Certificate -->
+   <!-- Hidden Template For Automatic PDF Certificate -->
     <div id="certificate-wrapper" style="position: absolute; top: -9999px; left: -9999px; z-index: -999;">
+        <!-- আসল সিগনেচারের ফিল আনার জন্য স্পেশাল ফন্ট যুক্ত করা হলো -->
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+        </style>
+        
         <div id="certificate-template" style="width: 1056px; height: 816px; padding: 40px; position: relative; background-color: #fff; text-align: center; font-family: 'Inter', sans-serif; box-sizing: border-box;">
-            <div style="border: 10px double #d4af37; width: 100%; height: 100%; padding: 40px; position: relative; background: #ffffff; box-sizing: border-box;">
-                <img src="https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png" style="height: 70px; margin-bottom: 20px;" alt="Dreams Academy">
-                <h1 style="font-size: 52px; font-weight: 800; color: #d4af37; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 10px; font-family: Georgia, serif;">Certificate of Completion</h1>
-                <p style="font-size: 20px; color: #475569; margin-top: 30px; margin-bottom: 15px;">This is to certify that</p>
+            <!-- Flexbox ব্যবহার করা হয়েছে যাতে ওভারল্যাপ না হয় -->
+            <div style="border: 10px double #d4af37; width: 100%; height: 100%; padding: 40px 60px; position: relative; background: #ffffff; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
                 
-                <h2 id="cert-student-name" style="font-size: 56px; font-weight: 700; color: #020617; border-bottom: 2px solid #cbd5e1; display: inline-block; padding-bottom: 10px; margin-bottom: 25px; font-style: italic;">Student Name</h2>
-                
-                <p style="font-size: 20px; color: #475569; margin-bottom: 20px;">has successfully completed the comprehensive program</p>
-                <h3 id="cert-course-name" style="font-size: 34px; font-weight: 800; color: #4f46e5; margin-bottom: 50px;">Advanced Survey Course</h3>
-                
-                <div style="display: flex; justify-content: space-between; align-items: flex-end; position: absolute; bottom: 40px; left: 40px; right: 40px;">
+                <!-- উপরের অংশ (লোগো, স্টুডেন্ট নাম ও কোর্স) -->
+                <div style="width: 100%; padding-top: 20px;">
+                    <img src="https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png" style="height: 70px; margin-bottom: 20px;" alt="Dreams Academy">
+                    <h1 style="font-size: 52px; font-weight: 800; color: #d4af37; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 10px; font-family: Georgia, serif;">Certificate of Completion</h1>
+                    <p style="font-size: 20px; color: #475569; margin-top: 20px; margin-bottom: 15px;">This is to certify that</p>
+                    
+                    <h2 id="cert-student-name" style="font-size: 50px; font-weight: 700; color: #020617; border-bottom: 2px solid #cbd5e1; display: inline-block; padding-bottom: 5px; margin-bottom: 20px; font-style: italic;">Student Name</h2>
+                    
+                    <p style="font-size: 20px; color: #475569; margin-bottom: 15px;">has successfully completed the comprehensive program</p>
+                    <!-- কোর্সের নামের ম্যাক্স উইথ দেওয়া হয়েছে যাতে বেশি বড় হলেও সাইনের সাথে না লাগে -->
+                    <h3 id="cert-course-name" style="font-size: 32px; font-weight: 800; color: #4f46e5; margin: 0 auto; max-width: 800px; line-height: 1.4;">Advanced Survey Course</h3>
+                </div>
+
+                <!-- নিচের অংশ (তারিখ এবং ডিরেক্টরের সিগনেচার) -->
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%; padding-bottom: 20px;">
                     <div style="text-align: left;">
                         <p id="cert-date" style="font-size: 18px; font-weight: 600; margin-bottom: 5px; color: #0f172a;">Date: 01 Jan 2026</p>
-                        <p id="cert-id" style="font-size: 16px; color: #64748b;">ID: DA-123456</p>
+                        <p id="cert-id" style="font-size: 16px; color: #64748b; margin: 0;">ID: DA-123456</p>
                     </div>
                     <div style="text-align: center;">
-                        <div style="width: 220px; height: 60px; border-bottom: 2px solid #020617; margin-bottom: 10px; position: relative;">
-                            <!-- সিগনেচার টেক্সট -->
-                            <span style="font-family: 'Brush Script MT', cursive; font-size: 38px; color: #000; position: absolute; bottom: 5px; width: 100%; left: 0; text-align: center;">Shofiqul Islam</span>
+                        <!-- সিগনেচারের বক্স বড় করা হয়েছে -->
+                        <div style="min-width: 280px; border-bottom: 2px solid #020617; margin-bottom: 10px; padding-bottom: 5px; display: inline-block;">
+                            <!-- রিয়েল সিগনেচার ফন্ট (Great Vibes) -->
+                            <div style="font-family: 'Great Vibes', cursive; font-size: 48px; color: #0f172a; padding-top: 10px; line-height: 1;">Shofiqul Islam</div>
                         </div>
                         <p style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">Authorized Director</p>
                         <p style="font-size: 15px; color: #64748b; margin: 0;">Dreams Academy</p>
                     </div>
                 </div>
+                
             </div>
         </div>
     </div>
-
     <!-- ======================= Footer & Extras ======================= -->
     <footer class="main-footer">
         <div class="container">
