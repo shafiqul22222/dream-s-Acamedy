@@ -84,6 +84,7 @@
         @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.5); } 70% { box-shadow: 0 0 0 15px rgba(79, 70, 229, 0); } 100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); } }
         @keyframes slideInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* --- Buttons --- */
         .btn { padding: 14px 30px; border: none; border-radius: var(--btn-radius); cursor: pointer; font-weight: 600; font-size: 0.95rem; display: inline-flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; transition: var(--transition-bounce); outline: none; letter-spacing: 0.02em; position: relative; overflow: hidden; z-index: 1; }
@@ -567,6 +568,24 @@
         .mobile-nav-link .material-symbols-outlined { font-size: 26px; margin-bottom: 4px; transition: transform 0.3s;}
         .mobile-nav-link.active { color: var(--brand-secondary); }
 
+        /* --- NEW STYLES: Blog & Legal Pages --- */
+        .legal-section-card { max-width: 900px; margin: 0 auto; background: var(--background-card); padding: 50px; border-radius: 24px; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); }
+        .legal-section-card h3 { margin-top: 30px; margin-bottom: 15px; color: var(--brand-primary); font-size: 1.4rem; }
+        .legal-section-card p { margin-bottom: 20px; color: var(--text-muted); line-height: 1.8; font-size: 1.05rem; }
+        .legal-section-card ul { margin-left: 20px; margin-bottom: 20px; color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; }
+        .legal-section-card li { margin-bottom: 10px; }
+        
+        .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .blog-card { background: var(--background-card); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-md); transition: var(--transition-bounce); border: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        .blog-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-xl); border-color: var(--brand-secondary); }
+        .blog-thumbnail { width: 100%; height: 220px; object-fit: cover; border-bottom: 1px solid var(--border-color); }
+        .blog-content { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
+        .blog-date { font-size: 0.85rem; color: var(--brand-secondary); font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .blog-content h3 { font-size: 1.25rem; margin-bottom: 15px; line-height: 1.4; color: var(--brand-primary); }
+        .blog-content p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1; line-height: 1.7; }
+        .read-more-btn { color: var(--brand-secondary); font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: var(--transition-smooth); margin-top: auto; }
+        .read-more-btn:hover { color: var(--brand-primary); gap: 8px; }
+
         @media (max-width: 768px) {
             /* স্ক্রিনের বাইরে ডানে-বামে যাওয়া সম্পূর্ণ বন্ধ করার কমান্ড */
             html, body { overflow-x: hidden !important; width: 100%; position: relative; }
@@ -643,6 +662,7 @@
             .contact-info-row { justify-content: center; }
             .otp-input-group input { width: 40px; height: 50px; font-size: 1.2rem; }
             .modal-form-panel { padding: 30px 20px !important; }
+            .legal-section-card { padding: 30px 20px !important; }
             
             #ssn-output-area { padding: 20px !important; word-break: break-word; }
             #ssn-details-text { font-size: 0.95rem !important; }
@@ -718,6 +738,26 @@
     <main>
         <!-- ======================= MODALS ======================= -->
         
+        <!-- NEW: Course Preview Modal -->
+        <div class="login-modal hidden" id="course-preview-modal">
+            <div class="login-card" style="max-width: 800px; display: block; overflow-y: auto; max-height: 90vh;">
+                <div class="modal-form-panel" style="width: 100%; padding: 40px;">
+                    <button class="close-modal-btn" id="close-course-preview-btn" type="button" aria-label="Close">&times;</button>
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid var(--border-color);">
+                        <span class="material-symbols-outlined" style="font-size: 32px; color: var(--brand-secondary); background: var(--brand-light); padding: 10px; border-radius: 12px;">menu_book</span>
+                        <h2 style="margin-bottom: 0; font-size: 1.8rem; color: var(--brand-primary);" id="preview-course-title">Course Modules</h2>
+                    </div>
+                    
+                    <div class="curriculum-list-wrapper" style="max-height: none; overflow: visible; box-shadow: none; border: none; padding: 0;">
+                        <div id="preview-curriculum-container">
+                            <p style="text-align: center; color: var(--text-muted);">Loading curriculum...</p>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-gradient" id="preview-buy-btn" style="width: 100%; margin-top: 24px; padding: 18px; font-size: 1.1rem;">Enroll Now to Unlock All Classes <span class="material-symbols-outlined">shopping_cart_checkout</span></button>
+                </div>
+            </div>
+        </div>
+
         <!-- Login Modal -->
         <div class="login-modal hidden" id="login-modal">
             <div class="login-card">
@@ -1139,6 +1179,121 @@
                     </div>
                 </div>
             </section>
+            
+            <!-- ================= NEW SECTIONS: Blog & Legal ================= -->
+            
+            <!-- Blog Section -->
+            <section class="section page-section hidden" id="blog" style="background-color: var(--background-body);">
+                <div class="container">
+                    <h2 class="section-title">Our Latest Blog</h2>
+                    <div class="blog-grid">
+                        <div class="blog-card">
+                            <img src="https://i.postimg.cc/0Nyd3wCr/photo-6127637989216161105-y-removebg-preview.png" alt="Blog 1" class="blog-thumbnail" style="background: var(--brand-light);">
+                            <div class="blog-content">
+                                <span class="blog-date">21 Jun 2026</span>
+                                <h3>How to Start Earning with Online Surveys</h3>
+                                <p>Discover the secrets of earning money from the comfort of your home with zero investment using our expert guidelines and support.</p>
+                                <a href="javascript:void(0)" class="read-more-btn">Read More <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span></a>
+                            </div>
+                        </div>
+                        <div class="blog-card">
+                            <img src="https://i.postimg.cc/KvZtVNGT/Green-and-White-Modern-Digital-Marketing-Agency-Professional-Instagram-Post.png" alt="Blog 2" class="blog-thumbnail">
+                            <div class="blog-content">
+                                <span class="blog-date">15 Jun 2026</span>
+                                <h3>5 Skills You Need to Master in 2026</h3>
+                                <p>The digital landscape is changing rapidly. Stay ahead of the curve by mastering these 5 essential high-paying skills.</p>
+                                <a href="javascript:void(0)" class="read-more-btn">Read More <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span></a>
+                            </div>
+                        </div>
+                        <div class="blog-card">
+                            <img src="https://i.ibb.co/mcxJLzJ/portrait-happy-male-student-with-backpack-holding-mobile-phone.png" alt="Blog 3" class="blog-thumbnail" style="background: var(--brand-light);">
+                            <div class="blog-content">
+                                <span class="blog-date">10 Jun 2026</span>
+                                <h3>Why Live Classes are Better Than Pre-recorded Videos</h3>
+                                <p>Learn why interactive live classes provide better results, faster problem-solving, and a stronger community feeling for students.</p>
+                                <a href="javascript:void(0)" class="read-more-btn">Read More <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Terms & Conditions Section -->
+            <section class="section page-section hidden" id="terms" style="background-color: var(--background-card);">
+                <div class="container">
+                    <h2 class="section-title">Terms & Conditions</h2>
+                    <div class="legal-section-card">
+                        <h3 style="margin-top: 0;">1. Introduction</h3>
+                        <p>Welcome to Dream's Academy. By accessing and using our website and services, you agree to comply with the following Terms and Conditions. Please review them carefully.</p>
+                        
+                        <h3>2. Course Enrollment</h3>
+                        <p>When you enroll in a course, you get a license to view it via our platform. You are not allowed to download, share, or resell the course content in any form. Strict legal action will be taken against unauthorized sharing.</p>
+
+                        <h3>3. User Accounts</h3>
+                        <p>You must provide accurate information when creating your account. You are responsible for maintaining the confidentiality of your password and all activities that occur under your account.</p>
+
+                        <h3>4. Payment & Billing</h3>
+                        <p>All payments are securely processed through designated gateways (e.g., bKash, Cards). Prices are subject to change without prior notice, but any change will not affect already purchased courses.</p>
+                        
+                        <h3>5. Support & Mentorship</h3>
+                        <p>We provide lifetime support as stated in our course features. However, disrespectful behavior towards our mentors or support agents will result in immediate suspension of your account without any refund.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Refund Policy Section -->
+            <section class="section page-section hidden" id="refund" style="background-color: var(--background-body);">
+                <div class="container">
+                    <h2 class="section-title">Refund Policy</h2>
+                    <div class="legal-section-card">
+                        <h3 style="margin-top: 0;">1. General Policy</h3>
+                        <p>At Dream's Academy, we ensure the highest quality of education. We want our students to be fully satisfied. However, due to the digital nature of our courses and services, we have a strict policy regarding refunds.</p>
+                        
+                        <h3>2. Eligibility for Refund</h3>
+                        <p>Refunds will only be considered under the following circumstances:</p>
+                        <ul>
+                            <li>If you made duplicate payments accidentally for the exact same course.</li>
+                            <li>If the course content does not match the curriculum provided before enrollment.</li>
+                        </ul>
+
+                        <h3>3. Non-refundable Conditions</h3>
+                        <ul>
+                            <li>No refund will be issued if you change your mind after purchasing.</li>
+                            <li>No refund will be provided if you fail to complete the course or understand the topic due to a lack of effort.</li>
+                            <li>Digital services, tools, and proxies bought via our platform are completely non-refundable.</li>
+                        </ul>
+                        
+                        <h3>4. Processing Time</h3>
+                        <p>Approved refunds may take 7-10 working days to be reflected in your original payment method.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Privacy Policy Section -->
+            <section class="section page-section hidden" id="privacy" style="background-color: var(--background-card);">
+                <div class="container">
+                    <h2 class="section-title">Privacy Policy</h2>
+                    <div class="legal-section-card">
+                        <h3 style="margin-top: 0;">1. Information We Collect</h3>
+                        <p>We collect information you provide directly to us, such as your name, email address, phone number, and any other details you choose to provide when registering, buying a course, or contacting support.</p>
+                        
+                        <h3>2. How We Use Your Information</h3>
+                        <p>We use the information to:</p>
+                        <ul>
+                            <li>Provide, maintain, and improve our services.</li>
+                            <li>Process your transactions and send related information (e.g., invoices).</li>
+                            <li>Send you technical notices, updates, security alerts, and support messages.</li>
+                            <li>Communicate with you about products, services, offers, and events offered by Dream's Academy.</li>
+                        </ul>
+
+                        <h3>3. Data Protection</h3>
+                        <p>We take appropriate security measures to protect against unauthorized access, alteration, disclosure, or destruction of your personal data. We do not sell or share your personal information with third parties for their marketing purposes.</p>
+                        
+                        <h3>4. Cookies</h3>
+                        <p>Our site may use "cookies" to enhance user experience. You may choose to set your web browser to refuse cookies, but doing so may limit some functionalities of our site.</p>
+                    </div>
+                </div>
+            </section>
         </div>
 
         <!-- ======================= Dashboard Content ======================= -->
@@ -1350,11 +1505,16 @@
                 </div>
                 <div class="footer-col">
                     <h4>Helpful Links</h4>
-                    <ul><li><a href="#courses">All Courses</a></li><li><a href="#about">About Us</a></li><li><a href="#video-reviews">Student Reviews</a></li><li><a href="https://wa.me/8801701126965" target="_blank">Helpdesk</a></li></ul>
+                    <ul><li><a href="#courses" class="internal-link-btn">All Courses</a></li><li><a href="#about" class="internal-link-btn">About Us</a></li><li><a href="#video-reviews" class="internal-link-btn">Student Reviews</a></li><li><a href="https://wa.me/8801701126965" target="_blank">Helpdesk</a></li></ul>
                 </div>
                 <div class="footer-col">
                     <h4>Navigation</h4>
-                    <ul><li><a href="#">Our Blog</a></li><li><a href="#">Terms & Conditions</a></li><li><a href="#">Refund Policy</a></li><li><a href="#">Privacy Policy</a></li></ul>
+                    <ul>
+                        <li><a href="#blog" class="internal-link-btn">Our Blog</a></li>
+                        <li><a href="#terms" class="internal-link-btn">Terms & Conditions</a></li>
+                        <li><a href="#refund" class="internal-link-btn">Refund Policy</a></li>
+                        <li><a href="#privacy" class="internal-link-btn">Privacy Policy</a></li>
+                    </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Contact Info</h4>
@@ -1864,7 +2024,7 @@
                 try {
                     const q = await db.collection('curriculum').where('courseName','==',courseName).where('batch','==',batch).limit(1).get();
                     if(q.empty) { container.innerHTML='<p>No curriculum found.</p>'; return; }
-                    let html=''; (q.docs[0].data().modules||[]).forEach((m,i)=>{ html+=`<div class="curriculum-module"><div class="module-header" data-target="module-vids-${i}"><span>${m.title}</span><span class="material-symbols-outlined">expand_more</span></div><ul class="module-videos" id="module-vids-${i}">${(m.videos||[]).map(v=>`<li><a href="#" class="video-item-link" data-url="${v.youtubeLink}" data-note="${encodeURIComponent(v.classNote||'')}"><div class="video-title-wrapper"><span class="material-symbols-outlined">play_circle</span><span class="vid-title-text">${v.title}</span></div></a></li>`).join('')}</ul></div>`; }); container.innerHTML=html;
+                    let html=''; (q.docs[0].data().modules||[]).forEach((m,i)=>{ html+=`<div class="curriculum-module"><div class="module-header" data-target="module-vids-${i}"><span>${m.title}</span><span class="material-symbols-outlined">expand_more</span></div><ul class="module-videos" id="module-vids-${i}">${(m.videos||[]).map(v=>`<li><a href="#" class="video-item-link" data-url="${v.youtubeLink}" data-note="${encodeURIComponent(v.classNote||'')}"><div class="video-title-wrapper" style="display: flex; align-items: center; gap: 10px;"><span class="material-symbols-outlined">play_circle</span><span class="vid-title-text">${v.title}</span></div></a></li>`).join('')}</ul></div>`; }); container.innerHTML=html;
                     container.querySelectorAll('.module-header').forEach(h=>h.addEventListener('click', ()=>{h.classList.toggle('active'); document.getElementById(h.dataset.target).classList.toggle('show');}));
                     container.querySelectorAll('.video-item-link').forEach(l=>l.addEventListener('click', e=>{ 
                         e.preventDefault(); container.querySelectorAll('.video-item-link').forEach(al=>al.classList.remove('playing')); l.classList.add('playing'); 
@@ -1878,7 +2038,72 @@
                 }catch(e){}
             }
 
-            // ================= Automatic Certificate Generator =================
+            // ================= NEW: Public Course Preview Logic =================
+            window.openCoursePreviewModal = async function(courseName, price, imgUrl) {
+                document.getElementById('preview-course-title').textContent = courseName;
+                document.getElementById('course-preview-modal').classList.remove('hidden');
+                document.getElementById('preview-curriculum-container').innerHTML = '<div style="text-align:center; padding: 40px;"><span class="material-symbols-outlined" style="font-size: 40px; color: var(--brand-secondary); animation: spin 1.5s linear infinite;">autorenew</span><p style="margin-top: 15px; font-weight: 500;">Loading modules...</p></div>';
+
+                const enrollBtn = document.getElementById('preview-buy-btn');
+                enrollBtn.onclick = () => {
+                    document.getElementById('course-preview-modal').classList.add('hidden');
+                    if(auth.currentUser) {
+                        window.checkoutState = { courseName: courseName, originalPrice: parseFloat(price), discount: 0, finalPrice: parseFloat(price), image: imgUrl };
+                        document.getElementById('checkout-item-name').innerText = courseName;
+                        document.getElementById('checkout-item-price').innerText = `৳${price}`;
+                        document.getElementById('checkout-item-img').src = imgUrl;
+                        document.getElementById('checkout-original-price-display').innerText = `৳${price}`;
+                        document.getElementById('checkout-discount-display').innerText = `-৳0.00`;
+                        document.getElementById('checkout-total-display').innerText = `৳${price}`;
+                        navigateTo('checkout');
+                    } else {
+                        navigateTo('login');
+                    }
+                };
+
+                try {
+                    const q = await db.collection('curriculum').where('courseName', '==', courseName).get();
+                    if(q.empty) {
+                        document.getElementById('preview-curriculum-container').innerHTML = '<p style="text-align:center; padding:30px; color:var(--text-muted);">No curriculum available for this course yet.</p>';
+                        return;
+                    }
+                    const data = q.docs[0].data();
+                    let html = '';
+                    (data.modules || []).forEach((m, i) => {
+                        html += `<div class="curriculum-module" style="margin-bottom: 12px; border-radius: 14px; overflow: hidden; border: 1px solid var(--border-color); background: var(--background-body);">
+                            <div class="module-header" data-target="preview-module-vids-${i}" style="background: var(--background-body); padding: 16px 20px; font-weight: 700; color: var(--brand-primary); cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                                <span>${m.title}</span><span class="material-symbols-outlined">expand_more</span>
+                            </div>
+                            <ul class="module-videos" id="preview-module-vids-${i}" style="list-style: none; padding: 0; margin: 0; max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: var(--background-card);">
+                                ${(m.videos || []).map(v => `
+                                    <li style="padding: 14px 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; color: var(--text-muted); font-weight: 600;">
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <span class="material-symbols-outlined" style="color: var(--brand-secondary); font-size: 22px;">play_circle</span>
+                                            <span style="font-size: 0.95rem;">${v.title}</span>
+                                        </div>
+                                        <span class="material-symbols-outlined" style="font-size: 18px; color: #f59e0b;">lock</span>
+                                    </li>`).join('')}
+                            </ul>
+                        </div>`;
+                    });
+                    document.getElementById('preview-curriculum-container').innerHTML = html;
+
+                    document.querySelectorAll('#preview-curriculum-container .module-header').forEach(h => {
+                        h.addEventListener('click', () => {
+                            h.classList.toggle('active');
+                            document.getElementById(h.dataset.target).classList.toggle('show');
+                        });
+                    });
+                } catch(e) {
+                    document.getElementById('preview-curriculum-container').innerHTML = '<p style="color:red; text-align:center; padding:30px;">Failed to load modules.</p>';
+                }
+            };
+            
+            document.getElementById('close-course-preview-btn').addEventListener('click', () => {
+                document.getElementById('course-preview-modal').classList.add('hidden');
+            });
+
+
             // ================= Automatic Certificate Generator =================
             async function generateCertificatePDF(courseName) {
                 const user = auth.currentUser; if (!user) return; 
@@ -1967,7 +2192,44 @@
                 } else navigateTo('login');
             }
             async function displayServices() { const c = document.getElementById('services-container'); const iconMap = n => { const x=n.toLowerCase(); return x.includes('ip')||x.includes('proxy')?'dns':x.includes('number')||x.includes('otp')?'sms':x.includes('server')||x.includes('vps')?'router':x.includes('bank')||x.includes('card')?'credit_card':x.includes('id')||x.includes('verify')?'verified_user':'workspace_premium'; }; try { const s = await db.collection('services').get(); let h = ''; s.forEach(d => { const v = d.data(); if(v.status===false) return; const sv = Math.round(((v.oldPrice-v.currentPrice)/v.oldPrice)*100); const m = v.imageUrl ? `<img src="${v.imageUrl}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 24px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">` : `<div class="service-icon-box"><span class="material-symbols-outlined">${iconMap(v.name)}</span></div>`; h += `<div class="service-card"><div class="service-header">${m}<h3>${v.name}</h3><p class="plan-description">${v.description}</p></div><div class="pricing-area"><div class="pricing-info"><span class="old-price">৳ ${v.oldPrice}</span>${sv>0?`<span class="save-badge">Save ${sv}%</span>`:''}</div><div class="current-price"><span class="price-amount">৳ ${v.currentPrice}</span></div></div><div class="service-body"><ul class="service-features">${(v.features||[]).map(f=>`<li><span class="material-symbols-outlined">check_circle</span><span>${f}</span></li>`).join('')}</ul><a href="#" class="btn-service-action buy-now-btn" data-name="${v.name}" data-price="${v.currentPrice}">Order Now <span class="material-symbols-outlined">shopping_cart_checkout</span></a></div></div>`; }); c.innerHTML = h; document.querySelectorAll('.buy-now-btn').forEach(b => b.addEventListener('click', handleBuyNowClick)); } catch(e) {} }
-            async function displayCourses() { const c = document.getElementById('courses-container'); try { const s = await db.collection('courses').get(); let h = ''; s.forEach(d => { const v = d.data(); h += `<div class="course-card"><div class="card-thumbnail"><img src="${v.image}"><span class="top-course-tag">Top Rated</span></div><div class="card-content"><div class="card-meta"><span class="category-tag">${v.category}</span><div class="rating">★★★★★</div></div><h3>${v.name}</h3><div class="instructor"><span class="material-symbols-outlined">person</span><span>${v.instructor}</span></div><div class="course-info"><div class="course-info-item"><span class="material-symbols-outlined">schedule</span><span>${v.duration}</span></div><div class="course-info-item"><span class="material-symbols-outlined">receipt_long</span><span>${v.lectures} Lectures</span></div></div><div class="card-footer"><span class="price">৳ ${v.price}</span><a href="#" class="btn btn-outline buy-now-btn" data-name="${v.name}" data-price="${v.price}">Buy Course</a></div></div></div>`; }); c.innerHTML = h; document.querySelectorAll('.buy-now-btn').forEach(b => b.addEventListener('click', handleBuyNowClick)); } catch(e){} }
+            
+            // MODIFIED displayCourses to include Clickable Title for preview
+            async function displayCourses() { 
+                const c = document.getElementById('courses-container'); 
+                try { 
+                    const s = await db.collection('courses').get(); 
+                    let h = ''; 
+                    s.forEach(d => { 
+                        const v = d.data(); 
+                        h += `<div class="course-card">
+                            <div class="card-thumbnail"><img src="${v.image}"><span class="top-course-tag">Top Rated</span></div>
+                            <div class="card-content">
+                                <div class="card-meta"><span class="category-tag">${v.category}</span><div class="rating">★★★★★</div></div>
+                                <h3 style="height: 56px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; margin-bottom: 16px;">
+                                    <a href="javascript:void(0)" class="course-title-click" data-name="${v.name}" data-price="${v.price}" data-img="${v.image}" style="text-decoration: none; color: var(--brand-primary); transition: color 0.3s ease;" onmouseover="this.style.color='var(--brand-secondary)'" onmouseout="this.style.color='var(--brand-primary)'" title="Click to view modules">${v.name}</a>
+                                </h3>
+                                <div class="instructor"><span class="material-symbols-outlined">person</span><span>${v.instructor}</span></div>
+                                <div class="course-info"><div class="course-info-item"><span class="material-symbols-outlined">schedule</span><span>${v.duration}</span></div><div class="course-info-item"><span class="material-symbols-outlined">receipt_long</span><span>${v.lectures} Lectures</span></div></div>
+                                <div class="card-footer"><span class="price">৳ ${v.price}</span><a href="#" class="btn btn-outline buy-now-btn" data-name="${v.name}" data-price="${v.price}">Buy Course</a></div>
+                            </div>
+                        </div>`; 
+                    }); 
+                    c.innerHTML = h; 
+                    document.querySelectorAll('.buy-now-btn').forEach(b => b.addEventListener('click', handleBuyNowClick)); 
+                    
+                    // Add listener to open preview modal
+                    document.querySelectorAll('.course-title-click').forEach(title => {
+                        title.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const name = e.currentTarget.dataset.name;
+                            const price = e.currentTarget.dataset.price;
+                            const img = e.currentTarget.dataset.img;
+                            openCoursePreviewModal(name, price, img);
+                        });
+                    });
+                } catch(e){} 
+            }
+            
             async function displayNotices() { const c = document.getElementById('notice-board'); try { const s = await db.collection('notices').orderBy('timestamp','desc').get(); let h=''; s.forEach(d=>{ const n=d.data(); h+=`<div class="notice-item"><span class="material-symbols-outlined">campaign</span><div class="notice-details"><h4>${n.title}</h4><p>${n.description}</p></div></div>`;}); c.innerHTML = h||'<p>No notices available.</p>'; }catch(e){} }
             function initTrustSlider() { const c = document.querySelector('#screenshot-container'); const s = document.querySelectorAll('.screenshot-item'); let curr = 0; let i; function go(x) { if (x < 0) x = s.length - 1; else if (x >= s.length) x = 0; c.style.transform = `translateX(-${x * 100}%)`; curr = x; } function run() { clearInterval(i); i = setInterval(()=>go(curr+1), 3000); } document.querySelector('.next-btn').addEventListener('click', () => { go(curr+1); run(); }); document.querySelector('.prev-btn').addEventListener('click', () => { go(curr-1); run(); }); run(); }
             async function displayTrustScreenshots() { const c = document.getElementById('screenshot-container'); try { const s = await db.collection('trust_screenshots').orderBy('timestamp', 'desc').get(); let h=''; s.forEach(d=>h+=`<div class="screenshot-item"><img src="${d.data().imageUrl}"></div>`); c.innerHTML = h; initTrustSlider(); } catch(e){} }
@@ -1981,7 +2243,6 @@
                 const d5 = await db.collection('site_settings').doc('floating_chat').get(); if (d5.exists && d5.data().imageUrl) document.getElementById('floating-chat-icon-img').src = d5.data().imageUrl;
                 const d6 = await db.collection('site_settings').doc('social_media').get(); const c = document.getElementById('social-icons-container'); const iconMap = { facebook: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/2048px-2021_Facebook_icon.svg.png">`, youtube: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/2560px-YouTube_full-color_icon_%282017%29.svg.png">`, whatsapp: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/2044px-WhatsApp.svg.png">`, instagram: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/2048px-Instagram_icon.png">`, twitter: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Logo_of_Twitter.svg/2491px-Logo_of_Twitter.svg.png">`, linkedin: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/LinkedIn_logo_initials.png/800px-LinkedIn_logo_initials.png">` }; c.innerHTML = ''; if (d6.exists && d6.data().links) d6.data().links.forEach(l => { if (l.platform && l.link && iconMap[l.platform.toLowerCase()]) { const el = document.createElement('a'); el.href = l.link; el.className = 'social-icon'; el.innerHTML = iconMap[l.platform.toLowerCase()]; el.target = '_blank'; c.appendChild(el); } });
             }
-
             // ================= Checkout & Bkash Handling =================
             async function loadPaymentGateways() { try { const snap = await db.collection('payment_gateways').where('status','==',true).get(); availableGateways = snap.docs.map(d=>({id:d.id, ...d.data()})); const b = availableGateways.find(g => g.name.toLowerCase().includes('bkash') || g.name.toLowerCase().includes('বিকাশ')); if (b && b.accountNumber) document.getElementById('bkash-admin-number').innerText = b.accountNumber; } catch(e){} }
             document.querySelectorAll('input[name="payment_method"]').forEach(r => r.addEventListener('change', function() { document.querySelectorAll('.payment-method-label').forEach(l => l.classList.remove('active')); this.closest('.payment-method-label').classList.add('active'); }));
