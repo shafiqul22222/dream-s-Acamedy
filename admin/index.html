@@ -287,14 +287,16 @@
             <ul class="sidebar-nav">
                 <li class="active" data-page="dashboard-page"><a href="#"><span class="material-symbols-outlined">dashboard</span> Dashboard</a></li>
                 <li data-page="reports-page"><a href="#"><span class="material-symbols-outlined">analytics</span> Reports</a></li>
+                <li data-page="expenses-page"><a href="#"><span class="material-symbols-outlined">account_balance_wallet</span> Expense Manager</a></li> <!-- NEW: EXPENSE MANAGER -->
                 <li data-page="payments-page"><a href="#"><span class="material-symbols-outlined">receipt_long</span> Payment Management</a></li>
+                <li data-page="installments-page"><a href="#"><span class="material-symbols-outlined">payments</span> Due / Installments</a></li> <!-- NEW: INSTALLMENTS -->
                 <li data-page="payment-gateways-page"><a href="#"><span class="material-symbols-outlined">payment</span> Payment Gateways</a></li>
                 <li data-page="coupons-page"><a href="#"><span class="material-symbols-outlined">local_offer</span> Coupon Management</a></li>
                 <li data-page="manual-sale-page"><a href="#"><span class="material-symbols-outlined">add_shopping_cart</span> Manual Sales</a></li>
+                <li data-page="abandoned-carts-page"><a href="#"><span class="material-symbols-outlined">remove_shopping_cart</span> Abandoned Carts</a></li> <!-- NEW: ABANDONED CARTS -->
                 <li data-page="dollar-exchange-page"><a href="#"><span class="material-symbols-outlined">currency_exchange</span> Dollar Exchange</a></li>
                 <li data-page="users-page"><a href="#"><span class="material-symbols-outlined">group</span> Student Management</a></li>
                 
-                <!-- NEW FEATURES -->
                 <li data-page="user-notifications-page"><a href="#"><span class="material-symbols-outlined">notifications_active</span> Push Notifications</a></li>
                 <li data-page="certificates-page"><a href="#"><span class="material-symbols-outlined">workspace_premium</span> Certificates</a></li>
 
@@ -336,7 +338,7 @@
                     </div>
                     <div class="stat-card sales-card">
                         <div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">payments</span></div></div>
-                        <div><h3 id="total-sales">৳0</h3><p>Total Sales Value</p></div>
+                        <div><h3 id="total-sales">৳0</h3><p>Total Gross Sales</p></div>
                     </div>
                     <div class="stat-card sales-card">
                         <div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">today</span></div></div>
@@ -344,12 +346,18 @@
                     </div>
                     <div class="stat-card sales-card">
                         <div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">trending_up</span></div></div>
-                        <div><h3 id="total-profit">৳0</h3><p>Total Profit</p></div>
+                        <div><h3 id="total-profit">৳0</h3><p>Gross Profit (Without Exp)</p></div>
                     </div>
-                    <div class="stat-card sales-card">
-                        <div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">show_chart</span></div></div>
-                        <div><h3 id="current-month-profit">৳0</h3><p>Current Month Profit</p></div>
+                    <!-- NEW: Expense and True Net Profit -->
+                    <div class="stat-card" style="border-bottom: 4px solid var(--accent-red);">
+                        <div class="header-row"><div class="icon-wrapper" style="background:#ffe4e6; color:var(--accent-red);"><span class="material-symbols-outlined icon">receipt_long</span></div></div>
+                        <div><h3 id="total-expenses">৳0</h3><p>Total Expenses</p></div>
                     </div>
+                    <div class="stat-card" style="border-bottom: 4px solid var(--accent-green);">
+                        <div class="header-row"><div class="icon-wrapper" style="background:#d1fae5; color:var(--accent-green);"><span class="material-symbols-outlined icon">account_balance</span></div></div>
+                        <div><h3 id="true-net-profit">৳0</h3><p>True Net Profit (In Hand)</p></div>
+                    </div>
+                    
                     <div id="total-students-card" class="stat-card" style="cursor: pointer;">
                         <div class="header-row"><div class="icon-wrapper" style="background:#f3e8ff; color:#9333ea;"><span class="material-symbols-outlined icon">group</span></div></div>
                         <div><h3 id="total-students">0</h3><p>Total Students</p></div>
@@ -370,10 +378,49 @@
                         <div class="header-row"><div class="icon-wrapper" style="background:#fce7f3; color:#db2777;"><span class="material-symbols-outlined icon">campaign</span></div></div>
                         <div><h3 id="total-notices">0</h3><p>Total Notices</p></div>
                     </div>
-                    <div class="stat-card">
-                        <div class="header-row"><div class="icon-wrapper" style="background:#ecfeff; color:#0891b2;"><span class="material-symbols-outlined icon">verified</span></div></div>
-                        <div><h3 id="total-screenshots">0</h3><p>Total Screenshots</p></div>
-                    </div>
+                </div>
+            </div>
+
+            <!-- NEW: Expenses Page -->
+            <div id="expenses-page" class="page">
+                <div class="page-header">
+                    <h1>Expense Manager (আসল হিসাব)</h1>
+                    <button class="btn btn-add" onclick="openModalForAdd('expenses')"><span class="material-symbols-outlined">add</span> Record New Expense</button>
+                </div>
+                <div class="content-box">
+                    <p style="margin-bottom: 24px; font-size: 0.9em; color: var(--text-muted);">Track your Facebook Ads, Salary, Server Costs, etc. here. This will be deducted from your Gross Profit to show True Net Profit.</p>
+                    <table class="data-table">
+                        <thead><tr><th>Date</th><th>Category</th><th>Note / Reason</th><th>Amount</th><th>Action</th></tr></thead>
+                        <tbody id="expenses-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- NEW: Installments Page -->
+            <div id="installments-page" class="page">
+                <div class="page-header">
+                    <h1>Due & Installment Tracking (কিস্তি)</h1>
+                    <button class="btn btn-add" onclick="openModalForAdd('installments')"><span class="material-symbols-outlined">add</span> Add Installment Record</button>
+                </div>
+                <div class="content-box">
+                    <table class="data-table">
+                        <thead><tr><th>User Info</th><th>Course/Service</th><th>Total Amount</th><th>Paid Amount</th><th>Due Amount</th><th>Next Due Date</th><th>Status</th><th>Action</th></tr></thead>
+                        <tbody id="installments-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- NEW: Abandoned Carts Page -->
+            <div id="abandoned-carts-page" class="page">
+                <div class="page-header">
+                    <h1>Abandoned Carts (ছেড়ে যাওয়া কাস্টমার)</h1>
+                </div>
+                <div class="content-box">
+                    <p style="margin-bottom: 24px; font-size: 0.9em; color: var(--text-muted);">List of users who started the checkout process but left without paying. Click the WhatsApp icon to send them a reminder instantly.</p>
+                    <table class="data-table">
+                        <thead><tr><th>User Info</th><th>Item (Course/Service)</th><th>Amount</th><th>Last Active Time</th><th>Action</th></tr></thead>
+                        <tbody id="abandoned-carts-table-body"></tbody>
+                    </table>
                 </div>
             </div>
 
@@ -533,7 +580,7 @@
                 </div>
             </div>
 
-            <!-- NEW: User Notifications Page -->
+            <!-- User Notifications Page -->
             <div id="user-notifications-page" class="page">
                 <div class="page-header">
                     <h1>Push Notifications Management</h1>
@@ -547,7 +594,7 @@
                 </div>
             </div>
 
-            <!-- NEW: Certificates Page -->
+            <!-- Certificates Page -->
             <div id="certificates-page" class="page">
                 <div class="page-header">
                     <h1>Certificate Management</h1>
@@ -1075,7 +1122,7 @@
                 }
             };
 
-            // === Student Progress Modal Logic (NEW) ===
+            // === Student Progress Modal Logic ===
             window.viewStudentProgress = async (userId, userName) => {
                 modalTitle.textContent = `Progress: ${userName}`;
                 modalForm.innerHTML = `<p style="text-align:center; margin: 30px 0;">Loading progress...</p>`;
@@ -1113,11 +1160,12 @@
                 }
             };
 
-            window.openStudentWhatsappModal = (mobile, name = 'N/A') => {
+            // NEW Parameter: defaultMessage
+            window.openStudentWhatsappModal = (mobile, name = 'N/A', defaultMessage = '') => {
                 document.getElementById('wa-recipient-number').value = mobile || 'N/A';
                 document.getElementById('wa-student-name').value = name;
                 document.getElementById('wa-course-name').value = '';
-                document.getElementById('wa-message-text').value = '';
+                document.getElementById('wa-message-text').value = defaultMessage;
                 document.getElementById('wa-send-all').checked = false;
                 studentWhatsappModal.classList.remove('hidden');
             };
@@ -1368,14 +1416,17 @@
                 switch (pageId) {
                     case 'dashboard-page': renderDashboard(); break;
                     case 'reports-page': renderReportsPage(); break;
+                    case 'expenses-page': renderExpenses(); break; // NEW
                     case 'payments-page': renderPayments(options.filter || null); break;
+                    case 'installments-page': renderInstallments(); break; // NEW
                     case 'payment-gateways-page': renderPaymentGateways(); break;
                     case 'coupons-page': renderCoupons(); break;
                     case 'manual-sale-page': renderManualSalePage(); break;
+                    case 'abandoned-carts-page': renderAbandonedCarts(); break; // NEW
                     case 'dollar-exchange-page': renderDollarRatesSettings(); renderDollarSellRequests(); break;
                     case 'users-page': renderUsers(); break;
-                    case 'user-notifications-page': renderUserNotifications(); break; // NEW
-                    case 'certificates-page': renderCertificates(); break; // NEW
+                    case 'user-notifications-page': renderUserNotifications(); break; 
+                    case 'certificates-page': renderCertificates(); break; 
                     case 'follow-up-page': renderFollowUps(); break;
                     case 'services-page': renderServices(); break;
                     case 'service-stock-page': renderServiceStock(); break;
@@ -1412,6 +1463,13 @@
                     const dollarExchangeSnapshot = await db.collection('dollar_exchange').get();
                     const dollarRequestsSnapshot = await db.collection('dollar_sells').where('status', '==', 'pending').get();
                     const followupsSnapshot = await db.collection('follow_ups').get();
+                    
+                    // NEW: Fetch Expenses
+                    const expensesSnapshot = await db.collection('expenses').get();
+                    let totalExpenses = 0;
+                    expensesSnapshot.forEach(doc => {
+                        totalExpenses += (Number(doc.data().amount) || 0);
+                    });
 
                     let totalSales = 0, currentMonthSales = 0, totalProfit = 0, currentMonthProfit = 0, pendingPaymentsCount = 0;
                     const now = new Date(), currentMonth = now.getMonth(), currentYear = now.getFullYear();
@@ -1444,10 +1502,15 @@
                         }
                     });
 
+                    let trueNetProfit = totalProfit - totalExpenses;
+
                     document.getElementById('total-sales').textContent = `৳${totalSales.toLocaleString('en-US')}`;
                     document.getElementById('current-month-sales').textContent = `৳${currentMonthSales.toLocaleString('en-US')}`;
                     document.getElementById('total-profit').textContent = `৳${totalProfit.toLocaleString('en-US')}`;
-                    document.getElementById('current-month-profit').textContent = `৳${currentMonthProfit.toLocaleString('en-US')}`;
+                    // NEW Update
+                    document.getElementById('total-expenses').textContent = `৳${totalExpenses.toLocaleString('en-US')}`;
+                    document.getElementById('true-net-profit').textContent = `৳${trueNetProfit.toLocaleString('en-US')}`;
+
                     document.getElementById('pending-payments').textContent = pendingPaymentsCount;
                     document.getElementById('pending-dollar-requests').textContent = dollarRequestsSnapshot.size;
                     document.getElementById('total-students').textContent = usersSnapshot.size;
@@ -2253,6 +2316,90 @@
                 } catch (error) { tableBody.innerHTML = `<tr><td colspan="10" style="color: red; text-align: center;">Error: ${error.message}</td></tr>`; }
             }
 
+            // NEW: Render Abandoned Carts
+            async function renderAbandonedCarts() {
+                const tableBody = document.getElementById('abandoned-carts-table-body');
+                tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">Loading...</td></tr>`;
+                try {
+                    const snapshot = await db.collection('abandoned_carts').orderBy('timestamp', 'desc').get();
+                    if(snapshot.empty) { tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">No abandoned carts found.</td></tr>`; return; }
+                    let html = '';
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        const date = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString('en-US') : 'N/A';
+                        const msg = `Hi ${data.userName || ''}, we noticed you left something in your cart (${data.itemName}). Complete your purchase now and get a special discount!`;
+                        html += `<tr>
+                            <td data-label="User Info">${data.userName || 'N/A'} <br><small style="color:var(--text-muted);">${data.userMobile || data.userEmail}</small></td>
+                            <td data-label="Item">${data.itemName}</td>
+                            <td data-label="Amount">৳ ${data.amount}</td>
+                            <td data-label="Time">${date}</td>
+                            <td class="actions-cell" data-label="Action">
+                                <button class="btn-whatsapp" onclick="openStudentWhatsappModal('${data.userMobile}', '${data.userName}', '${msg}')" title="Send WhatsApp Reminder"><span class="material-symbols-outlined">chat</span></button>
+                                <button class="btn-delete" onclick="deleteItem('abandoned_carts', '${doc.id}')" title="Delete"><span class="material-symbols-outlined">delete</span></button>
+                            </td>
+                        </tr>`;
+                    });
+                    tableBody.innerHTML = html;
+                } catch(e) { tableBody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Error: ${e.message}</td></tr>`; }
+            }
+
+            // NEW: Render Installments
+            async function renderInstallments() {
+                const tableBody = document.getElementById('installments-table-body');
+                tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center;">Loading...</td></tr>`;
+                try {
+                    const snapshot = await db.collection('installments').orderBy('timestamp', 'desc').get();
+                    if(snapshot.empty) { tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center;">No installments found.</td></tr>`; return; }
+                    let html = '';
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        const due = (Number(data.totalAmount) || 0) - (Number(data.paidAmount) || 0);
+                        const msg = `Hi ${data.userName || ''}, your payment of ৳${due} for ${data.itemName} is due on ${data.nextDueDate}. Please clear the due to continue.`;
+                        html += `<tr>
+                            <td data-label="User Info">${data.userName || 'N/A'} <br><small style="color:var(--text-muted);">${data.userMobile || ''}</small></td>
+                            <td data-label="Course/Service">${data.itemName}</td>
+                            <td data-label="Total Amount">৳ ${data.totalAmount}</td>
+                            <td data-label="Paid Amount" style="color:var(--accent-green);font-weight:bold;">৳ ${data.paidAmount}</td>
+                            <td data-label="Due Amount" style="color:var(--accent-red);font-weight:bold;">৳ ${due}</td>
+                            <td data-label="Next Due Date">${data.nextDueDate || 'N/A'}</td>
+                            <td data-label="Status"><span class="status-badge ${due > 0 ? 'pending' : 'approved'}">${due > 0 ? 'Pending' : 'Completed'}</span></td>
+                            <td class="actions-cell" data-label="Action">
+                                <button class="btn-whatsapp" onclick="openStudentWhatsappModal('${data.userMobile}', '${data.userName}', '${msg}')" title="Send Reminder"><span class="material-symbols-outlined">notifications_active</span></button>
+                                <button class="btn-edit" onclick="openModalForEdit('installments', '${doc.id}')" title="Update Payment"><span class="material-symbols-outlined">edit</span></button>
+                                <button class="btn-delete" onclick="deleteItem('installments', '${doc.id}')" title="Delete"><span class="material-symbols-outlined">delete</span></button>
+                            </td>
+                        </tr>`;
+                    });
+                    tableBody.innerHTML = html;
+                } catch(e) { tableBody.innerHTML = `<tr><td colspan="8" style="color:red; text-align:center;">Error: ${e.message}</td></tr>`; }
+            }
+
+            // NEW: Render Expenses
+            async function renderExpenses() {
+                const tableBody = document.getElementById('expenses-table-body');
+                tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">Loading...</td></tr>`;
+                try {
+                    const snapshot = await db.collection('expenses').orderBy('timestamp', 'desc').get();
+                    if(snapshot.empty) { tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">No expenses recorded yet.</td></tr>`; return; }
+                    let html = '';
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        const date = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleDateString('en-GB') : 'N/A';
+                        html += `<tr>
+                            <td data-label="Date">${date}</td>
+                            <td data-label="Category">${data.category}</td>
+                            <td data-label="Note / Reason">${data.note || 'N/A'}</td>
+                            <td data-label="Amount" style="color:var(--accent-red);font-weight:bold;">৳ ${data.amount}</td>
+                            <td class="actions-cell" data-label="Action">
+                                <button class="btn-edit" onclick="openModalForEdit('expenses', '${doc.id}')"><span class="material-symbols-outlined">edit</span></button>
+                                <button class="btn-delete" onclick="deleteItem('expenses', '${doc.id}')"><span class="material-symbols-outlined">delete</span></button>
+                            </td>
+                        </tr>`;
+                    });
+                    tableBody.innerHTML = html;
+                } catch(e) { tableBody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Error: ${e.message}</td></tr>`; }
+            }
+
             async function renderPayments(statusFilter = null) {
                 const tableBody = document.getElementById('payments-table-body');
                 tableBody.innerHTML = `<tr><td colspan="10" style="text-align: center;">Loading data...</td></tr>`;
@@ -2359,14 +2506,12 @@
                 } catch (error) { tableBody.innerHTML = `<tr><td colspan="7" style="color: red; text-align: center;">Error: ${error.message}</td></tr>`; }
             }
 
-            // === User Notifications Render ===
             const renderUserNotifications = () => renderGeneric('notifications', 'user-notifications-table-body', (notif) => {
                 const target = notif.targetUid === 'all' ? '<strong style="color:var(--primary-blue)">All Users</strong>' : (notif.targetUid || 'Unknown');
                 const date = notif.timestamp ? new Date(notif.timestamp.seconds * 1000).toLocaleString('en-US') : 'N/A';
                 return `<tr><td data-label="Date">${date}</td><td data-label="Target User">${target}</td><td data-label="Title">${notif.title}</td><td data-label="Message">${notif.message}</td><td data-label="Type"><span class="status-badge" style="background:#e0e7ff; color:#3730a3;">${notif.type || 'general'}</span></td><td class="actions-cell" data-label="Action"><button class="btn-delete" onclick="deleteItem('notifications', '${notif.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
             });
 
-            // === Certificates Render ===
             async function renderCertificates() {
                 const tableBody = document.getElementById('certificates-table-body');
                 tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">Loading certificates...</td></tr>`;
@@ -2652,7 +2797,7 @@
                             adminModal.classList.add('hidden');
                             navigateTo('user-notifications-page');
                             showToast('Notification Sent successfully.');
-                            return; // Stop here for custom notifications
+                            return; 
                         case 'trust_screenshots':
                             newItem = { title: formData.get('title'), imageUrl: formData.get('imageUrl'), timestamp: firebase.firestore.FieldValue.serverTimestamp() };
                             break;
@@ -2668,6 +2813,26 @@
                                 followUpResult: formData.get('followUpResult'),
                                 adminNote: formData.get('adminNote'),
                                 nextFollowUpDate: formData.get('nextFollowUpDate')
+                            };
+                            break;
+                        // NEW CASES ADDED HERE
+                        case 'expenses':
+                            newItem = {
+                                category: formData.get('category'),
+                                amount: Number(formData.get('amount')),
+                                note: formData.get('note'),
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                            };
+                            break;
+                        case 'installments':
+                            newItem = {
+                                userName: formData.get('userName'),
+                                userMobile: formData.get('userMobile'),
+                                itemName: formData.get('itemName'),
+                                totalAmount: Number(formData.get('totalAmount')),
+                                paidAmount: Number(formData.get('paidAmount')),
+                                nextDueDate: formData.get('nextDueDate'),
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp()
                             };
                             break;
                         default:
@@ -2691,7 +2856,7 @@
             closeModalBtn.addEventListener('click', () => adminModal.classList.add('hidden'));
 
             function getBengaliTypeName(collection) {
-                const names = { payments: 'Payment', services: 'Service', courses: 'Course', enrollments: 'Enrollment', joinClass: 'Class Link', online_classes: 'Online Class Batch', curriculum: 'Curriculum', users: 'Student', withdrawals: 'Withdrawal Request', trust_screenshots: 'Trust Screenshot', video_reviews: 'Video Review', payment_gateways: 'Payment Gateway', coupons: 'Coupon', follow_ups: 'Follow-up Record', user_notifications: 'Push Notification', certificates: 'Certificate' };
+                const names = { payments: 'Payment', services: 'Service', courses: 'Course', enrollments: 'Enrollment', joinClass: 'Class Link', online_classes: 'Online Class Batch', curriculum: 'Curriculum', users: 'Student', withdrawals: 'Withdrawal Request', trust_screenshots: 'Trust Screenshot', video_reviews: 'Video Review', payment_gateways: 'Payment Gateway', coupons: 'Coupon', follow_ups: 'Follow-up Record', user_notifications: 'Push Notification', certificates: 'Certificate', expenses: 'Expense', installments: 'Installment', abandoned_carts: 'Abandoned Cart' };
                 return names[collection] || 'Notice';
             }
 
@@ -2796,6 +2961,27 @@
                             <div class="form-group"><label>Admin Note</label><textarea name="adminNote" rows="3" placeholder="e.g. Student will join next week">${data.adminNote || ''}</textarea></div>
                             <div class="form-group"><label>Next Follow-up Date</label><input type="date" name="nextFollowUpDate" value="${data.nextFollowUpDate || ''}"></div>
                         `;
+                    case 'installments': return `
+                        <div class="form-group"><label>Student Name</label><input type="text" name="userName" value="${data.userName || ''}" required></div>
+                        <div class="form-group"><label>Student Mobile</label><input type="text" name="userMobile" value="${data.userMobile || ''}" required></div>
+                        <div class="form-group"><label>Course/Item Name</label><input type="text" name="itemName" value="${data.itemName || ''}" required></div>
+                        <div class="form-group"><label>Total Amount (BDT)</label><input type="number" name="totalAmount" value="${data.totalAmount || ''}" required></div>
+                        <div class="form-group"><label>Paid Amount (BDT)</label><input type="number" name="paidAmount" value="${data.paidAmount || ''}" required></div>
+                        <div class="form-group"><label>Next Due Date</label><input type="date" name="nextDueDate" value="${data.nextDueDate || ''}" required></div>
+                    `;
+                    case 'expenses': return `
+                        <div class="form-group"><label>Expense Category</label>
+                            <select name="category" required>
+                                <option value="Facebook Ads" ${data.category === 'Facebook Ads' ? 'selected' : ''}>Facebook Ads</option>
+                                <option value="Server/Domain" ${data.category === 'Server/Domain' ? 'selected' : ''}>Server/Domain</option>
+                                <option value="Salary" ${data.category === 'Salary' ? 'selected' : ''}>Salary</option>
+                                <option value="Tools/Software" ${data.category === 'Tools/Software' ? 'selected' : ''}>Tools/Software</option>
+                                <option value="Others" ${data.category === 'Others' ? 'selected' : ''}>Others</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Amount (BDT)</label><input type="number" name="amount" value="${data.amount || ''}" required></div>
+                        <div class="form-group"><label>Note / Reason</label><textarea name="note" rows="3">${data.note || ''}</textarea></div>
+                    `;
 
                     default: return `<div class="form-group"><label>Title</label><input type="text" name="title" value="${data.title || ''}" required></div><div class="form-group"><label>Description</label><textarea name="description" rows="4" required>${data.description || ''}</textarea></div>`;
                 }
