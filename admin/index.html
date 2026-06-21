@@ -328,6 +328,7 @@
             <div id="dashboard-page" class="page active">
                 <div class="page-header"><h1>Overview Dashboard</h1></div>
                 <div class="stats-grid">
+                    <!-- Pending Cards -->
                     <div id="pending-payments-card" class="stat-card pending-card" style="cursor: pointer;">
                         <div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">pending_actions</span></div></div>
                         <div><h3 id="pending-payments">0</h3><p>Pending Payments</p></div>
@@ -336,18 +337,65 @@
                         <div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">currency_exchange</span></div></div>
                         <div><h3 id="pending-dollar-requests">0</h3><p>Pending Dollar Requests</p></div>
                     </div>
-                    <div class="stat-card sales-card">
-                        <div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">payments</span></div></div>
-                        <div><h3 id="total-sales">৳0</h3><p>Total Gross Sales</p></div>
-                    </div>
+
+                    <!-- Current Month Data (সবচেয়ে গুরুত্বপূর্ণ) -->
                     <div class="stat-card sales-card">
                         <div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">today</span></div></div>
                         <div><h3 id="current-month-sales">৳0</h3><p>Current Month Sales</p></div>
                     </div>
                     <div class="stat-card sales-card">
-                        <div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">trending_up</span></div></div>
-                        <div><h3 id="total-profit">৳0</h3><p>Gross Profit (Without Exp)</p></div>
+                        <div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">show_chart</span></div></div>
+                        <div><h3 id="current-month-profit">৳0</h3><p>Current Month Gross Profit</p></div>
                     </div>
+                    <div class="stat-card" style="border-left: 4px solid var(--accent-red);">
+                        <div class="header-row"><div class="icon-wrapper" style="background:#ffe4e6; color:var(--accent-red);"><span class="material-symbols-outlined icon">receipt_long</span></div></div>
+                        <div><h3 id="current-month-expenses">৳0</h3><p>Current Month Expenses</p></div>
+                    </div>
+                    <div class="stat-card" style="border-left: 4px solid var(--accent-green); background: #f0fdf4;">
+                        <div class="header-row"><div class="icon-wrapper" style="background:#d1fae5; color:var(--accent-green);"><span class="material-symbols-outlined icon">account_balance</span></div></div>
+                        <div><h3 id="current-month-net-profit">৳0</h3><p>Current Month Net Profit</p></div>
+                    </div>
+
+                    <!-- Lifetime / Total Data -->
+                    <div class="stat-card sales-card">
+                        <div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">payments</span></div></div>
+                        <div><h3 id="total-sales">৳0</h3><p>Total Gross Sales</p></div>
+                    </div>
+                    <div class="stat-card sales-card">
+                        <div class="header-row"><div class="icon-wrapper"><span class="material-symbols-outlined icon">trending_up</span></div></div>
+                        <div><h3 id="total-profit">৳0</h3><p>Total Gross Profit</p></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="header-row"><div class="icon-wrapper" style="background:#ffe4e6; color:var(--accent-red);"><span class="material-symbols-outlined icon">receipt_long</span></div></div>
+                        <div><h3 id="total-expenses">৳0</h3><p>Total Expenses</p></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="header-row"><div class="icon-wrapper" style="background:#d1fae5; color:var(--accent-green);"><span class="material-symbols-outlined icon">account_balance</span></div></div>
+                        <div><h3 id="true-net-profit">৳0</h3><p>Total Net Profit</p></div>
+                    </div>
+                    
+                    <!-- Counts Data -->
+                    <div id="total-students-card" class="stat-card" style="cursor: pointer;">
+                        <div class="header-row"><div class="icon-wrapper" style="background:#f3e8ff; color:#9333ea;"><span class="material-symbols-outlined icon">group</span></div></div>
+                        <div><h3 id="total-students">0</h3><p>Total Students</p></div>
+                    </div>
+                    <div id="total-followups-card" class="stat-card" style="cursor: pointer;">
+                        <div class="header-row"><div class="icon-wrapper" style="background:#e0f2fe; color:#0284c7;"><span class="material-symbols-outlined icon">forum</span></div></div>
+                        <div><h3 id="main-total-followups">0</h3><p>Total Follow-up Messages</p></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="header-row"><div class="icon-wrapper" style="background:#e0f2fe; color:#0284c7;"><span class="material-symbols-outlined icon">construction</span></div></div>
+                        <div><h3 id="total-services">0</h3><p>Total Services</p></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="header-row"><div class="icon-wrapper" style="background:#ffedd5; color:#ea580c;"><span class="material-symbols-outlined icon">school</span></div></div>
+                        <div><h3 id="total-courses">0</h3><p>Total Courses</p></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="header-row"><div class="icon-wrapper" style="background:#fce7f3; color:#db2777;"><span class="material-symbols-outlined icon">campaign</span></div></div>
+                        <div><h3 id="total-notices">0</h3><p>Total Notices</p></div>
+                    </div>
+                </div>
                     <!-- NEW: Expense and True Net Profit -->
                     <div class="stat-card" style="border-bottom: 4px solid var(--accent-red);">
                         <div class="header-row"><div class="icon-wrapper" style="background:#ffe4e6; color:var(--accent-red);"><span class="material-symbols-outlined icon">receipt_long</span></div></div>
@@ -1464,16 +1512,29 @@
                     const dollarRequestsSnapshot = await db.collection('dollar_sells').where('status', '==', 'pending').get();
                     const followupsSnapshot = await db.collection('follow_ups').get();
                     
-                    // NEW: Fetch Expenses
+                    const now = new Date();
+                    const currentMonth = now.getMonth();
+                    const currentYear = now.getFullYear();
+
+                    // Expenses Calculation
                     const expensesSnapshot = await db.collection('expenses').get();
                     let totalExpenses = 0;
+                    let currentMonthExpenses = 0;
+                    
                     expensesSnapshot.forEach(doc => {
-                        totalExpenses += (Number(doc.data().amount) || 0);
+                        const amt = Number(doc.data().amount) || 0;
+                        totalExpenses += amt;
+                        if(doc.data().timestamp) {
+                            const date = new Date(doc.data().timestamp.seconds * 1000);
+                            if(date.getMonth() === currentMonth && date.getFullYear() === currentYear) {
+                                currentMonthExpenses += amt;
+                            }
+                        }
                     });
 
                     let totalSales = 0, currentMonthSales = 0, totalProfit = 0, currentMonthProfit = 0, pendingPaymentsCount = 0;
-                    const now = new Date(), currentMonth = now.getMonth(), currentYear = now.getFullYear();
 
+                    // Payments Calculation
                     paymentsSnapshot.forEach(doc => {
                         const payment = doc.data();
                         if (payment.status === 'approved') {
@@ -1491,6 +1552,7 @@
                         }
                     });
 
+                    // Dollar Exchange Calculation
                     dollarExchangeSnapshot.forEach(doc => {
                         const exchange = doc.data();
                         totalProfit += exchange.profit || 0;
@@ -1502,14 +1564,22 @@
                         }
                     });
 
+                    // True Net Profit (আসল লাভ)
                     let trueNetProfit = totalProfit - totalExpenses;
+                    let currentMonthNetProfit = currentMonthProfit - currentMonthExpenses;
 
+                    // Update UI Cards
                     document.getElementById('total-sales').textContent = `৳${totalSales.toLocaleString('en-US')}`;
                     document.getElementById('current-month-sales').textContent = `৳${currentMonthSales.toLocaleString('en-US')}`;
+                    
                     document.getElementById('total-profit').textContent = `৳${totalProfit.toLocaleString('en-US')}`;
-                    // NEW Update
+                    document.getElementById('current-month-profit').textContent = `৳${currentMonthProfit.toLocaleString('en-US')}`;
+                    
                     document.getElementById('total-expenses').textContent = `৳${totalExpenses.toLocaleString('en-US')}`;
+                    document.getElementById('current-month-expenses').textContent = `৳${currentMonthExpenses.toLocaleString('en-US')}`;
+                    
                     document.getElementById('true-net-profit').textContent = `৳${trueNetProfit.toLocaleString('en-US')}`;
+                    document.getElementById('current-month-net-profit').textContent = `৳${currentMonthNetProfit.toLocaleString('en-US')}`;
 
                     document.getElementById('pending-payments').textContent = pendingPaymentsCount;
                     document.getElementById('pending-dollar-requests').textContent = dollarRequestsSnapshot.size;
