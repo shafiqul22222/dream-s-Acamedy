@@ -1575,7 +1575,7 @@
 
         window.checkoutState = { courseName: "", originalPrice: 0, discount: 0, finalPrice: 0, image: "" };
 
-            document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
             // === NEW: Abandoned Cart Logic ===
             async function saveToAbandonedCart(itemName, amount) {
                 const user = auth.currentUser;
@@ -1613,6 +1613,7 @@
                 }
             }
             // ==================================
+            
             // General UI Setup
             const loginSignupBtn = document.getElementById('login-signup-btn');
             const loggedOutView = document.getElementById('logged-out-view');
@@ -1749,7 +1750,7 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
-            // ================= NEW: Email OTP System =================
+            // ================= Email OTP System =================
             const signupForm = document.getElementById('signup-form');
             signupForm.addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -1758,7 +1759,9 @@
                 const whatsapp = document.getElementById('signup-whatsapp').value;
                 const password = document.getElementById('signup-password').value;
 
-                if (password !== document.getElementById('signup-confirm-password').value) { showToast("Passwords do not match.", 'error'); return; }
+                if (password !== document.getElementById('signup-confirm-password').value) { 
+                    showToast("Passwords do not match.", 'error'); return; 
+                }
 
                 auth.createUserWithEmailAndPassword(email, password)
                     .then((userCredential) => {
@@ -1768,32 +1771,29 @@
                         const expiry = new Date(Date.now() + 5 * 60 * 1000);
                         
                         return db.collection('users').doc(currentUnverifiedUid).set({ 
-    name, email, mobile: whatsapp, dob: '', title: '', photoURL: '', 
-    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    email_verified: false, otp_code: otp, otp_expiry: expiry
-}).then(() => {
-    // === EmailJS দিয়ে OTP পাঠানোর কোড ===
-    db.collection('site_settings').doc('emailjs_settings').get().then(doc => {
-        if (doc.exists) {
-            const config = doc.data();
-            if (config.publicKey && config.serviceId && config.templateOtp) {
-                emailjs.init(config.publicKey);
-                emailjs.send(config.serviceId, config.templateOtp, {
-                    to_email: email,
-                    to_name: name,
-                    otp_code: otp
-                }).then(() => console.log("OTP Email Sent!"))
-                  .catch(err => console.log("OTP Email Error:", err));
-            }
-        }
-    });
-    // ===================================
-
-    showToast("Account created! Check your email for OTP.", 'success');
-    document.getElementById('signup-modal').classList.add('hidden');
-    navigateTo('otp');
-    signupForm.reset(); 
-});
+                            name, email, mobile: whatsapp, dob: '', title: '', photoURL: '', 
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                            email_verified: false, otp_code: otp, otp_expiry: expiry
+                        }).then(() => {
+                            db.collection('site_settings').doc('emailjs_settings').get().then(doc => {
+                                if (doc.exists) {
+                                    const config = doc.data();
+                                    if (config.publicKey && config.serviceId && config.templateOtp) {
+                                        emailjs.init(config.publicKey);
+                                        emailjs.send(config.serviceId, config.templateOtp, {
+                                            to_email: email,
+                                            to_name: name,
+                                            otp_code: otp
+                                        }).then(() => console.log("OTP Email Sent!"))
+                                          .catch(err => console.log("OTP Email Error:", err));
+                                    }
+                                }
+                            });
+                            showToast("Account created! Check your email for OTP.", 'success');
+                            document.getElementById('signup-modal').classList.add('hidden');
+                            navigateTo('otp');
+                            signupForm.reset(); 
+                        });
                     }).catch((error) => { showToast(error.message, 'error'); });
             });
 
@@ -1811,7 +1811,6 @@
                                 const otp = Math.floor(100000 + Math.random() * 900000).toString();
                                 const expiry = new Date(Date.now() + 5 * 60 * 1000);
                                 db.collection('users').doc(currentUnverifiedUid).update({ otp_code: otp, otp_expiry: expiry }).then(() => {
-                                    console.log("RESENT OTP: " + otp);
                                     showToast("Email not verified. We sent a new OTP.", 'info');
                                     document.getElementById('login-modal').classList.add('hidden');
                                     navigateTo('otp');
@@ -1860,7 +1859,7 @@
                 const otp = Math.floor(100000 + Math.random() * 900000).toString();
                 const expiry = new Date(Date.now() + 5 * 60 * 1000);
                 db.collection('users').doc(currentUnverifiedUid).update({ otp_code: otp, otp_expiry: expiry }).then(() => {
-                    console.log("NEW OTP: " + otp); showToast("A new OTP has been sent to your email.", "info");
+                    showToast("A new OTP has been sent to your email.", "info");
                 });
             });
 
@@ -1901,7 +1900,6 @@
                 }).catch(() => showToast("Account not found.", 'error')).finally(() => { btn.disabled=false; btn.innerHTML='Submit <span class="material-symbols-outlined">send</span>'; });
             });
 
-
             // ================= Advanced Notifications =================
             function formatNotificationTime(t) { 
                 if(!t) return 'Just now'; 
@@ -1931,7 +1929,6 @@
                 if(!user) return; if(notificationListener) notificationListener();
                 notificationListener = db.collection('notifications').where('targetUid','==',user.uid).orderBy('timestamp','desc').limit(20).onSnapshot(s => updateNotificationUI(s.docs));
             }
-
 
             // Auth State Change Logic
             function populateUI(userData) {
@@ -2017,7 +2014,6 @@
             document.querySelectorAll('.logo').forEach(l => l.addEventListener('click', function(e) { if(this.getAttribute('href')==='#home') { e.preventDefault(); navigateTo('home'); } }));
             scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-
             // ================= Progress Tracking & Course View =================
             async function displayMyCourses() {
                 const grid = document.getElementById('my-courses-grid'); const user = auth.currentUser; if(!user || !grid) return;
@@ -2068,14 +2064,13 @@
                         const embed=getYouTubeEmbedUrl(l.dataset.url); if(embed){placeholder.classList.add('hidden'); player.src=embed;} 
                         const note=decodeURIComponent(l.dataset.note); if(note){noteC.innerHTML=`<h4>Notes</h4><div class="note-content">${note}</div>`; noteC.classList.remove('hidden');}else noteC.classList.add('hidden');
                         
-                        // Update Progress Tracking
                         const videoTitle = l.querySelector('.vid-title-text').textContent;
                         if (window.currentEnrollmentDocId) db.collection('enrollments').doc(window.currentEnrollmentDocId).update({ completed_lessons: firebase.firestore.FieldValue.arrayUnion(videoTitle) }).catch(err => {});
                     }));
                 }catch(e){}
             }
 
-            // ================= NEW: Public Course Preview Logic =================
+            // ================= Public Course Preview Logic =================
             window.openCoursePreviewModal = async function(courseName, price, imgUrl) {
                 document.getElementById('preview-course-title').textContent = courseName;
                 document.getElementById('course-preview-modal').classList.remove('hidden');
@@ -2140,7 +2135,6 @@
                 document.getElementById('course-preview-modal').classList.add('hidden');
             });
 
-
             // ================= Automatic Certificate Generator =================
             async function generateCertificatePDF(courseName) {
                 const user = auth.currentUser; if (!user) return; 
@@ -2160,11 +2154,9 @@
                     const wrapper = document.getElementById('certificate-wrapper');
                     const element = document.getElementById('certificate-template');
                     
-                    // পিডিএফ কাটার হাত থেকে বাঁচাতে সাময়িকভাবে ভিউপোর্টে আনা হলো (ইউজার বুঝবে না)
                     wrapper.style.top = '0px';
                     wrapper.style.left = '0px';
                     
-                    // পেপার সাইজ এবং রেজ্যুলেশন একদম এক্যুরেট করা হলো
                     const opt = { 
                         margin: 0, 
                         filename: `${studentName.replace(/\s+/g, '_')}_Certificate.pdf`, 
@@ -2174,7 +2166,6 @@
                     };
                     
                     html2pdf().set(opt).from(element).save().then(() => {
-                        // পিডিএফ ডাউনলোড হওয়ার সাথে সাথে আবার লুকিয়ে ফেলা হলো
                         wrapper.style.top = '-9999px';
                         wrapper.style.left = '-9999px';
                         
@@ -2182,7 +2173,6 @@
                         db.collection('certificates').add({ certificate_id: certId, user_id: user.uid, student_name: studentName, course_name: courseName, issue_date: firebase.firestore.FieldValue.serverTimestamp() });
                     });
                 } catch (e) { 
-                    // কোনো এরর হলে সার্টিফিকেটটি আবার লুকিয়ে ফেলবে
                     document.getElementById('certificate-wrapper').style.top = '-9999px';
                     document.getElementById('certificate-wrapper').style.left = '-9999px';
                     showToast("Error generating certificate.", "error"); 
@@ -2218,8 +2208,9 @@
                 try { const snap = await db.collection('payments').where('userId', '==', u.uid).orderBy('timestamp', 'desc').get(); if (snap.empty) { b.innerHTML = '<tr><td colspan="4" style="text-align: center;">No services purchased yet.</td></tr>'; return; } let html = ''; snap.forEach(d => { const v = d.data(), date = v.timestamp ? v.timestamp.toDate().toLocaleDateString() : 'N/A'; html += `<tr><td>${date}</td><td style="font-weight: 700; color: var(--brand-primary);">${v.itemName}</td><td style="font-weight: 600;">৳${v.amount}</td><td><span class="status-tag status-completed">${v.status || 'Success'}</span></td></tr>`; }); b.innerHTML = html; } catch (e) { b.innerHTML = '<tr><td colspan="4" style="text-align: center;">Error loading services.</td></tr>'; }
             }
 
-            // ================= Dynamic Public Data (Services, Courses, Reviews, Trust, Notices) =================
+            // ================= Dynamic Public Data =================
             const searchInput = document.getElementById('course-search-input'); searchInput.addEventListener('input', () => { navigateTo('courses'); const t = searchInput.value.toLowerCase().trim(); let f = false; document.querySelectorAll('#courses-container .course-card').forEach(c => { const h = c.querySelector('h3'); if (h && h.textContent.toLowerCase().includes(t)) { c.style.display = ''; f = true; } else c.style.display = 'none'; }); const g = document.querySelector('#courses-container'); let m = g.querySelector('.no-results'); if (!f && t) { if (!m) { m = document.createElement('p'); m.className = 'no-results'; m.textContent = 'No courses found.'; m.style.textAlign = 'center'; m.style.gridColumn = '1 / -1'; g.appendChild(m); } } else if (m) m.remove(); });
+            
             function handleBuyNowClick(e) {
                 e.preventDefault(); 
                 if(auth.currentUser) {
@@ -2229,10 +2220,7 @@
                     if (c) { const i = c.querySelector('img'); if (i) img = i.src; }
                     
                     window.checkoutState = { courseName: name, originalPrice: price, discount: 0, finalPrice: price, image: img };
-                    
-                    // --- NEW: সেভ টু অ্যাবানডনড কার্ট ---
                     saveToAbandonedCart(name, price);
-                    // ------------------------------------
 
                     document.getElementById('checkout-item-name').innerText = name; 
                     document.getElementById('checkout-item-price').innerText = `৳${price}`; 
@@ -2249,9 +2237,9 @@
                     navigateTo('checkout'); 
                 } else navigateTo('login');
             }
+            
             async function displayServices() { const c = document.getElementById('services-container'); const iconMap = n => { const x=n.toLowerCase(); return x.includes('ip')||x.includes('proxy')?'dns':x.includes('number')||x.includes('otp')?'sms':x.includes('server')||x.includes('vps')?'router':x.includes('bank')||x.includes('card')?'credit_card':x.includes('id')||x.includes('verify')?'verified_user':'workspace_premium'; }; try { const s = await db.collection('services').get(); let h = ''; s.forEach(d => { const v = d.data(); if(v.status===false) return; const sv = Math.round(((v.oldPrice-v.currentPrice)/v.oldPrice)*100); const m = v.imageUrl ? `<img src="${v.imageUrl}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 24px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">` : `<div class="service-icon-box"><span class="material-symbols-outlined">${iconMap(v.name)}</span></div>`; h += `<div class="service-card"><div class="service-header">${m}<h3>${v.name}</h3><p class="plan-description">${v.description}</p></div><div class="pricing-area"><div class="pricing-info"><span class="old-price">৳ ${v.oldPrice}</span>${sv>0?`<span class="save-badge">Save ${sv}%</span>`:''}</div><div class="current-price"><span class="price-amount">৳ ${v.currentPrice}</span></div></div><div class="service-body"><ul class="service-features">${(v.features||[]).map(f=>`<li><span class="material-symbols-outlined">check_circle</span><span>${f}</span></li>`).join('')}</ul><a href="#" class="btn-service-action buy-now-btn" data-name="${v.name}" data-price="${v.currentPrice}">Order Now <span class="material-symbols-outlined">shopping_cart_checkout</span></a></div></div>`; }); c.innerHTML = h; document.querySelectorAll('.buy-now-btn').forEach(b => b.addEventListener('click', handleBuyNowClick)); } catch(e) {} }
             
-            // MODIFIED displayCourses to include Clickable Title for preview
             async function displayCourses() { 
                 const c = document.getElementById('courses-container'); 
                 try { 
@@ -2275,7 +2263,6 @@
                     c.innerHTML = h; 
                     document.querySelectorAll('.buy-now-btn').forEach(b => b.addEventListener('click', handleBuyNowClick)); 
                     
-                    // Add listener to open preview modal
                     document.querySelectorAll('.course-title-click').forEach(title => {
                         title.addEventListener('click', (e) => {
                             e.preventDefault();
@@ -2301,15 +2288,142 @@
                 const d5 = await db.collection('site_settings').doc('floating_chat').get(); if (d5.exists && d5.data().imageUrl) document.getElementById('floating-chat-icon-img').src = d5.data().imageUrl;
                 const d6 = await db.collection('site_settings').doc('social_media').get(); const c = document.getElementById('social-icons-container'); const iconMap = { facebook: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/2048px-2021_Facebook_icon.svg.png">`, youtube: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/2560px-YouTube_full-color_icon_%282017%29.svg.png">`, whatsapp: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/2044px-WhatsApp.svg.png">`, instagram: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/2048px-Instagram_icon.png">`, twitter: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Logo_of_Twitter.svg/2491px-Logo_of_Twitter.svg.png">`, linkedin: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/LinkedIn_logo_initials.png/800px-LinkedIn_logo_initials.png">` }; c.innerHTML = ''; if (d6.exists && d6.data().links) d6.data().links.forEach(l => { if (l.platform && l.link && iconMap[l.platform.toLowerCase()]) { const el = document.createElement('a'); el.href = l.link; el.className = 'social-icon'; el.innerHTML = iconMap[l.platform.toLowerCase()]; el.target = '_blank'; c.appendChild(el); } });
             }
+
             // ================= Checkout & Bkash Handling =================
             async function loadPaymentGateways() { try { const snap = await db.collection('payment_gateways').where('status','==',true).get(); availableGateways = snap.docs.map(d=>({id:d.id, ...d.data()})); const b = availableGateways.find(g => g.name.toLowerCase().includes('bkash') || g.name.toLowerCase().includes('বিকাশ')); if (b && b.accountNumber) document.getElementById('bkash-admin-number').innerText = b.accountNumber; } catch(e){} }
+            
             document.querySelectorAll('input[name="payment_method"]').forEach(r => r.addEventListener('change', function() { document.querySelectorAll('.payment-method-label').forEach(l => l.classList.remove('active')); this.closest('.payment-method-label').classList.add('active'); }));
-            document.getElementById('checkout-apply-coupon-btn').addEventListener('click', async () => { const c = document.getElementById('checkout-coupon-input').value.trim(); if (!c) return showToast("দয়া করে একটি কুপন কোড লিখুন", "error"); document.getElementById('checkout-apply-coupon-btn').innerText = "..."; document.getElementById('checkout-apply-coupon-btn').disabled = true; try { const snap = await db.collection('coupons').where('code', '==', c).where('active', '==', true).get(); if (snap.empty) { showToast("কুপন কোডটি সঠিক নয় অথবা মেয়াদ উত্তীর্ণ!", "error"); window.checkoutState.discount = 0; window.checkoutState.finalPrice = window.checkoutState.originalPrice; } else { const cp = snap.docs[0].data(); let d = cp.discountType === 'percentage' ? (window.checkoutState.originalPrice * cp.discountValue) / 100 : cp.discountValue; if (d > window.checkoutState.originalPrice) d = window.checkoutState.originalPrice; window.checkoutState.discount = d; window.checkoutState.finalPrice = window.checkoutState.originalPrice - d; showToast("কুপন সফলভাবে যুক্ত হয়েছে!", "success"); } document.getElementById('checkout-discount-display').innerText = `-৳${window.checkoutState.discount.toFixed(2)}`; document.getElementById('checkout-total-display').innerText = `৳${window.checkoutState.finalPrice.toFixed(2)}`; } catch(e) { showToast("সমস্যা হয়েছে, আবার চেষ্টা করুন।", "error"); } document.getElementById('checkout-apply-coupon-btn').innerText = "সাবমিট করুন"; document.getElementById('checkout-apply-coupon-btn').disabled = false; });
-            document.getElementById('checkout-pay-btn').addEventListener('click', () => { const sm = document.querySelector('input[name="payment_method"]:checked').value; if (sm === 'bkash') { const ri = "Inv No: DA-" + Math.floor(10000000 + Math.random() * 90000000); const fp = window.checkoutState.finalPrice.toString(); document.getElementById('bkash-invoice-no').innerText = ri; document.getElementById('bkash-invoice-no-2').innerText = ri; document.getElementById('bkash-step1-amount').innerText = `৳${fp}`; document.getElementById('bkash-step2-amount').innerText = `৳${fp}`; document.getElementById('bkash-step2-course').innerText = window.checkoutState.courseName; document.getElementById('payment-course-name').value = window.checkoutState.courseName; document.getElementById('payment-amount').value = fp; document.getElementById('bkash-phone-input').value = ''; document.getElementById('payment-trx-id').value = ''; document.getElementById('bkash-confirm-btn').disabled = true; document.getElementById('bkash-confirm-btn').classList.remove('active'); document.getElementById('bkash-step-1').classList.remove('hidden'); document.getElementById('bkash-step-2').classList.add('hidden'); document.getElementById('checkout-modal').classList.add('hidden'); document.getElementById('payment-modal').classList.remove('hidden'); } else showToast("দুঃখিত, এই মাধ্যমটি বর্তমানে এভেইলেবল নয়। দয়া করে বিকাশ সিলেক্ট করুন।", "info"); });
-            document.getElementById('bkash-phone-input').addEventListener('input', function() { if (this.value.length >= 11) { document.getElementById('bkash-confirm-btn').disabled = false; document.getElementById('bkash-confirm-btn').classList.add('active'); } else { document.getElementById('bkash-confirm-btn').disabled = true; document.getElementById('bkash-confirm-btn').classList.remove('active'); } });
-            document.getElementById('bkash-confirm-btn').addEventListener('click', function() { document.getElementById('payment-user-phone').value = document.getElementById('bkash-phone-input').value; document.getElementById('bkash-step-1').classList.add('hidden'); document.getElementById('bkash-step-2').classList.remove('hidden'); });
-            document.getElementById('bkash-close-btn').addEventListener('click', () => { document.getElementById('payment-modal').classList.add('hidden'); navigateTo(getUnderlyingPage()); });
-            document.getElementById('payment-form').addEventListener('submit', async e => {                  e.preventDefault();                  const u = auth.currentUser;                  const t = document.getElementById('payment-trx-id').value.trim().toUpperCase();                  const sn = document.getElementById('payment-user-phone').value.trim();                  const am = parseFloat(document.getElementById('payment-amount').value);                  const cn = document.getElementById('payment-course-name').value;                                   if(!u || !t || !sn) return;                                   document.getElementById('payment-submit-btn').disabled = true;                  document.getElementById('payment-submit-btn').innerText = 'VERIFYING...';                                   try {                      const ts = await db.collection('automated_bkash_trx').where('trxId', '==', t).get();                      if (ts.empty) {                          document.getElementById('payment-submit-btn').disabled = false;                          document.getElementById('payment-submit-btn').innerText = 'VERIFY PAYMENT';                          document.getElementById('payment-modal').classList.add('hidden');                          document.getElementById('custom-error-modal').classList.remove('hidden');                          return;                      }                                           const td = ts.docs[0];                      const tv = td.data();                                           if (tv.isUsed === true) {                          showToast('This TrxID has already been used!', 'error');                          document.getElementById('payment-submit-btn').disabled = false;                          document.getElementById('payment-submit-btn').innerText = 'VERIFY PAYMENT';                          return;                      }                                           const dba = parseFloat(String(tv.amount).replace(/,/g, ''));                      if (dba < am) {                          showToast(`Insufficient balance. Required: ৳${am}, Found: ৳${dba}`, 'error');                          document.getElementById('payment-submit-btn').disabled = false;                          document.getElementById('payment-submit-btn').innerText = 'VERIFY PAYMENT';                          return;                      }                                           await db.collection('automated_bkash_trx').doc(td.id).update({ isUsed: true, usedBy: u.uid, usedFor: cn, usedAt: firebase.firestore.FieldValue.serverTimestamp() });                      await db.collection('payments').add({ userId: u.uid, userEmail: u.email, itemName: cn, amount: am, paymentMethod: 'bKash', senderNumber: sn, transactionId: t, status: 'approved', timestamp: firebase.firestore.FieldValue.serverTimestamp() });                                           const cs = await db.collection('courses').where('name', '==', cn).get();                      let img = '', cat = '', batch = '1';                      if(!cs.empty){                          img = cs.docs[0].data().image;                          cat = cs.docs[0].data().category;                          batch = cs.docs[0].data().batch || '1';                      }                      await db.collection('enrollments').add({ studentUid: u.uid, studentEmail: u.email, courseName: cn, courseImage: img, courseCategory: cat, batch: batch, enrollmentDate: firebase.firestore.FieldValue.serverTimestamp() });                                           // ==========================================================                     // --- NEW: পেমেন্ট সফল হলে কার্ট থেকে মুছে ফেলার ফাংশন ---                     removeAbandonedCartIfPaid();                     // ==========================================================                      document.getElementById('payment-modal').classList.add('hidden');                      document.getElementById('payment-success-modal').classList.remove('hidden');                      document.getElementById('payment-submit-btn').disabled = false;                      document.getElementById('payment-submit-btn').innerText = 'VERIFY PAYMENT';                      displayMyCourses();                  } catch (e) {                      showToast('Server error! Please try again later.', 'error');                      document.getElementById('payment-submit-btn').disabled = false;                      document.getElementById('payment-submit-btn').innerText = 'VERIFY PAYMENT';                  }              });
+            
+            document.getElementById('checkout-apply-coupon-btn').addEventListener('click', async () => { 
+                const c = document.getElementById('checkout-coupon-input').value.trim(); 
+                if (!c) return showToast("দয়া করে একটি কুপন কোড লিখুন", "error"); 
+                document.getElementById('checkout-apply-coupon-btn').innerText = "..."; 
+                document.getElementById('checkout-apply-coupon-btn').disabled = true; 
+                try { 
+                    const snap = await db.collection('coupons').where('code', '==', c).where('active', '==', true).get(); 
+                    if (snap.empty) { 
+                        showToast("কুপন কোডটি সঠিক নয় অথবা মেয়াদ উত্তীর্ণ!", "error"); 
+                        window.checkoutState.discount = 0; 
+                        window.checkoutState.finalPrice = window.checkoutState.originalPrice; 
+                    } else { 
+                        const cp = snap.docs[0].data(); 
+                        let d = cp.discountType === 'percentage' ? (window.checkoutState.originalPrice * cp.discountValue) / 100 : cp.discountValue; 
+                        if (d > window.checkoutState.originalPrice) d = window.checkoutState.originalPrice; 
+                        window.checkoutState.discount = d; 
+                        window.checkoutState.finalPrice = window.checkoutState.originalPrice - d; 
+                        showToast("কুপন সফলভাবে যুক্ত হয়েছে!", "success"); 
+                    } 
+                    document.getElementById('checkout-discount-display').innerText = `-৳${window.checkoutState.discount.toFixed(2)}`; 
+                    document.getElementById('checkout-total-display').innerText = `৳${window.checkoutState.finalPrice.toFixed(2)}`; 
+                } catch(e) { 
+                    showToast("সমস্যা হয়েছে, আবার চেষ্টা করুন।", "error"); 
+                } 
+                document.getElementById('checkout-apply-coupon-btn').innerText = "সাবমিট করুন"; 
+                document.getElementById('checkout-apply-coupon-btn').disabled = false; 
+            });
+
+            document.getElementById('checkout-pay-btn').addEventListener('click', () => { 
+                const sm = document.querySelector('input[name="payment_method"]:checked').value; 
+                if (sm === 'bkash') { 
+                    const ri = "Inv No: DA-" + Math.floor(10000000 + Math.random() * 90000000); 
+                    const fp = window.checkoutState.finalPrice.toString(); 
+                    document.getElementById('bkash-invoice-no').innerText = ri; 
+                    document.getElementById('bkash-invoice-no-2').innerText = ri; 
+                    document.getElementById('bkash-step1-amount').innerText = `৳${fp}`; 
+                    document.getElementById('bkash-step2-amount').innerText = `৳${fp}`; 
+                    document.getElementById('bkash-step2-course').innerText = window.checkoutState.courseName; 
+                    document.getElementById('payment-course-name').value = window.checkoutState.courseName; 
+                    document.getElementById('payment-amount').value = fp; 
+                    document.getElementById('bkash-phone-input').value = ''; 
+                    document.getElementById('payment-trx-id').value = ''; 
+                    document.getElementById('bkash-confirm-btn').disabled = true; 
+                    document.getElementById('bkash-confirm-btn').classList.remove('active'); 
+                    document.getElementById('bkash-step-1').classList.remove('hidden'); 
+                    document.getElementById('bkash-step-2').classList.add('hidden'); 
+                    document.getElementById('checkout-modal').classList.add('hidden'); 
+                    document.getElementById('payment-modal').classList.remove('hidden'); 
+                } else showToast("দুঃখিত, এই মাধ্যমটি বর্তমানে এভেইলেবল নয়। দয়া করে বিকাশ সিলেক্ট করুন।", "info"); 
+            });
+
+            document.getElementById('bkash-phone-input').addEventListener('input', function() { 
+                if (this.value.length >= 11) { 
+                    document.getElementById('bkash-confirm-btn').disabled = false; 
+                    document.getElementById('bkash-confirm-btn').classList.add('active'); 
+                } else { 
+                    document.getElementById('bkash-confirm-btn').disabled = true; 
+                    document.getElementById('bkash-confirm-btn').classList.remove('active'); 
+                } 
+            });
+            document.getElementById('bkash-confirm-btn').addEventListener('click', function() { 
+                document.getElementById('payment-user-phone').value = document.getElementById('bkash-phone-input').value; 
+                document.getElementById('bkash-step-1').classList.add('hidden'); 
+                document.getElementById('bkash-step-2').classList.remove('hidden'); 
+            });
+            document.getElementById('bkash-close-btn').addEventListener('click', () => { 
+                document.getElementById('payment-modal').classList.add('hidden'); 
+                navigateTo(getUnderlyingPage()); 
+            });
+
+            document.getElementById('payment-form').addEventListener('submit', async e => {
+                e.preventDefault();
+                const u = auth.currentUser;
+                const t = document.getElementById('payment-trx-id').value.trim().toUpperCase();
+                const sn = document.getElementById('payment-user-phone').value.trim();
+                const am = parseFloat(document.getElementById('payment-amount').value);
+                const cn = document.getElementById('payment-course-name').value;
+                if(!u || !t || !sn) return;
+                document.getElementById('payment-submit-btn').disabled = true;
+                document.getElementById('payment-submit-btn').innerText = 'VERIFYING...';
+                try {
+                    const ts = await db.collection('automated_bkash_trx').where('trxId', '==', t).get();
+                    if (ts.empty) {
+                        document.getElementById('payment-submit-btn').disabled = false;
+                        document.getElementById('payment-submit-btn').innerText = 'VERIFY PAYMENT';
+                        document.getElementById('payment-modal').classList.add('hidden');
+                        document.getElementById('custom-error-modal').classList.remove('hidden');
+                        return;
+                    }
+                    const td = ts.docs[0];
+                    const tv = td.data();
+                    if (tv.isUsed === true) {
+                        showToast('This TrxID has already been used!', 'error');
+                        document.getElementById('payment-submit-btn').disabled = false;
+                        document.getElementById('payment-submit-btn').innerText = 'VERIFY PAYMENT';
+                        return;
+                    }
+                    const dba = parseFloat(String(tv.amount).replace(/,/g, ''));
+                    if (dba < am) {
+                        showToast(`Insufficient balance. Required: ৳${am}, Found: ৳${dba}`, 'error');
+                        document.getElementById('payment-submit-btn').disabled = false;
+                        document.getElementById('payment-submit-btn').innerText = 'VERIFY PAYMENT';
+                        return;
+                    }
+                    await db.collection('automated_bkash_trx').doc(td.id).update({ isUsed: true, usedBy: u.uid, usedFor: cn, usedAt: firebase.firestore.FieldValue.serverTimestamp() });
+                    await db.collection('payments').add({ userId: u.uid, userEmail: u.email, itemName: cn, amount: am, paymentMethod: 'bKash', senderNumber: sn, transactionId: t, status: 'approved', timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+                    
+                    const cs = await db.collection('courses').where('name', '==', cn).get();
+                    let img = '', cat = '', batch = '1';
+                    if(!cs.empty){
+                        img = cs.docs[0].data().image;
+                        cat = cs.docs[0].data().category;
+                        batch = cs.docs[0].data().batch || '1';
+                    }
+                    await db.collection('enrollments').add({ studentUid: u.uid, studentEmail: u.email, courseName: cn, courseImage: img, courseCategory: cat, batch: batch, enrollmentDate: firebase.firestore.FieldValue.serverTimestamp() });
+                    
+                    removeAbandonedCartIfPaid();
+                    
+                    document.getElementById('payment-modal').classList.add('hidden');
+                    document.getElementById('payment-success-modal').classList.remove('hidden');
+                    document.getElementById('payment-submit-btn').disabled = false;
+                    document.getElementById('payment-submit-btn').innerText = 'VERIFY PAYMENT';
+                    displayMyCourses();
+                } catch (e) {
+                    showToast('Server error! Please try again later.', 'error');
+                    document.getElementById('payment-submit-btn').disabled = false;
+                    document.getElementById('payment-submit-btn').innerText = 'VERIFY PAYMENT';
+                }
+            });
+
             document.getElementById('close-success-modal-btn').addEventListener('click', () => { document.getElementById('payment-success-modal').classList.add('hidden'); navigateTo('my-courses-page'); });
             document.getElementById('continue-shopping-btn').addEventListener('click', () => { document.getElementById('payment-success-modal').classList.add('hidden'); navigateTo('my-courses-page'); });
             document.getElementById('close-custom-error-btn').addEventListener('click', () => { document.getElementById('custom-error-modal').classList.add('hidden'); document.getElementById('payment-modal').classList.remove('hidden'); });
@@ -2343,16 +2457,52 @@
                 const b = document.getElementById('ssn-list-table-body'); const u = auth.currentUser; if (!u || !b) return;
                 try { const s = await db.collection('ssn_list').where('userId', '==', u.uid).orderBy('timestamp', 'desc').get(); if (s.empty) { b.innerHTML = '<tr><td colspan="6" style="text-align: center;">No generated SSN found.</td></tr>'; return; } window.ssnDataCache = {}; let h = ''; s.forEach(d => { const v = d.data(); window.ssnDataCache[d.id] = v; const date = v.timestamp ? v.timestamp.toDate().toLocaleDateString() : 'N/A'; h += `<tr><td>${date}</td><td style="font-weight: 600;">${v.name}</td><td style="font-family: monospace; font-weight: bold; font-size: 1.05rem; color: var(--brand-secondary);">${v.number}</td><td>${v.country}</td><td>${v.state}</td><td><button onclick="openSSNModal('${d.id}')" title="View / Edit" style="background:none; border:none; color:var(--brand-secondary); cursor:pointer; margin-right:12px; transition: transform 0.2s;"><span class="material-symbols-outlined" style="font-size: 22px;">visibility</span></button><button onclick="deleteSSN('${d.id}')" title="Delete" style="background:none; border:none; color:#ef4444; cursor:pointer; transition: transform 0.2s;"><span class="material-symbols-outlined" style="font-size: 22px;">delete</span></button></td></tr>`; }); b.innerHTML = h; } catch (e) { b.innerHTML = '<tr><td colspan="6" style="text-align: center;">Error loading data.</td></tr>'; }
             }
+            
             window.deleteSSN = async function(docId) { if(confirm("Are you sure you want to delete this SSN?")) { try { await db.collection('ssn_list').doc(docId).delete(); showToast("SSN deleted successfully!", "success"); displaySSNList(); } catch(e) { showToast("Error deleting SSN.", "error"); } } };
             window.openSSNModal = function(docId) { const d = window.ssnDataCache[docId]; if(!d) return showToast("Data not found!", "error"); document.getElementById('edit-ssn-id').value = docId; document.getElementById('edit-ssn-name').value = d.name || ''; document.getElementById('edit-ssn-dob').value = d.dob || ''; document.getElementById('edit-ssn-number').value = d.number || ''; document.getElementById('edit-ssn-country').value = d.country || ''; document.getElementById('edit-ssn-state').value = d.state || ''; document.getElementById('edit-ssn-county').value = d.county || ''; document.getElementById('edit-ssn-city').value = d.city || ''; document.getElementById('edit-ssn-zip').value = d.zip || ''; document.getElementById('ssn-view-edit-modal').classList.remove('hidden'); };
             if(document.getElementById('close-ssn-modal-btn')) document.getElementById('close-ssn-modal-btn').addEventListener('click', () => document.getElementById('ssn-view-edit-modal').classList.add('hidden'));
-            if(document.getElementById('ssn-edit-form')) document.getElementById('ssn-edit-form').addEventListener('submit', async (e) => { e.preventDefault(); const id = document.getElementById('edit-ssn-id').value; const data = { name: document.getElementById('edit-ssn-name').value, dob: document.getElementById('edit-ssn-dob').value, number: document.getElementById('edit-ssn-number').value, country: document.getElementById('edit-ssn-country').value, state: document.getElementById('edit-ssn-state').value, county: document.getElementById('edit-ssn-county').value, city: document.getElementById('edit-ssn-city').value, zip: document.getElementById('edit-ssn-zip').value }; const b = e.target.querySelector('button'); b.disabled = true; b.innerHTML = 'Updating... <span class="material-symbols-outlined">hourglass_empty</span>'; try { await db.collection('ssn_list').doc(id).update(data); showToast("SSN details updated successfully!", "success"); document.getElementById('ssn-view-edit-modal').classList.add('hidden'); displaySSNList(); } catch(error) { showToast("Error updating SSN details.", "error"); } finally { b.disabled = false; b.innerHTML = 'Update & Save <span class="material-symbols-outlined">save</span>'; } });
+            
+            if(document.getElementById('ssn-edit-form')) {
+                document.getElementById('ssn-edit-form').addEventListener('submit', async (e) => { 
+                    e.preventDefault(); 
+                    const id = document.getElementById('edit-ssn-id').value; 
+                    const data = { name: document.getElementById('edit-ssn-name').value, dob: document.getElementById('edit-ssn-dob').value, number: document.getElementById('edit-ssn-number').value, country: document.getElementById('edit-ssn-country').value, state: document.getElementById('edit-ssn-state').value, county: document.getElementById('edit-ssn-county').value, city: document.getElementById('edit-ssn-city').value, zip: document.getElementById('edit-ssn-zip').value }; 
+                    const b = e.target.querySelector('button'); 
+                    b.disabled = true; 
+                    b.innerHTML = 'Updating... <span class="material-symbols-outlined">hourglass_empty</span>'; 
+                    try { 
+                        await db.collection('ssn_list').doc(id).update(data); 
+                        showToast("SSN details updated successfully!", "success"); 
+                        document.getElementById('ssn-view-edit-modal').classList.add('hidden'); 
+                        displaySSNList(); 
+                    } catch(error) { 
+                        showToast("Error updating SSN details.", "error"); 
+                    } finally { 
+                        b.disabled = false; 
+                        b.innerHTML = 'Update & Save <span class="material-symbols-outlined">save</span>'; 
+                    } 
+                });
+            }
 
             // Timer
-            setInterval(function() { const d = (new Date().getTime() + 2*86400000) - new Date().getTime(); document.getElementById('days').innerHTML = `${Math.floor(d/86400000).toString().padStart(2,'0')}<span>Days</span>`; document.getElementById('hours').innerHTML = `${Math.floor((d%86400000)/3600000).toString().padStart(2,'0')}<span>Hours</span>`; document.getElementById('minutes').innerHTML = `${Math.floor((d%3600000)/60000).toString().padStart(2,'0')}<span>Mins</span>`; document.getElementById('seconds').innerHTML = `${Math.floor((d%60000)/1000).toString().padStart(2,'0')}<span>Secs</span>`; }, 1000);
+            setInterval(function() { 
+                const targetTime = new Date().getTime() + 2*86400000; 
+                const d = targetTime - new Date().getTime(); 
+                document.getElementById('days').innerHTML = `${Math.floor(d/86400000).toString().padStart(2,'0')}<span>Days</span>`; 
+                document.getElementById('hours').innerHTML = `${Math.floor((d%86400000)/3600000).toString().padStart(2,'0')}<span>Hours</span>`; 
+                document.getElementById('minutes').innerHTML = `${Math.floor((d%3600000)/60000).toString().padStart(2,'0')}<span>Mins</span>`; 
+                document.getElementById('seconds').innerHTML = `${Math.floor((d%60000)/1000).toString().padStart(2,'0')}<span>Secs</span>`; 
+            }, 1000);
 
             // Execute on load
-            fetchLiveDollarRates(); loadPaymentGateways(); displayServices(); displayCourses(); displayNotices(); displayTrustScreenshots(); displayVideoReviews(); loadSettings();
+            fetchLiveDollarRates(); 
+            loadPaymentGateways(); 
+            displayServices(); 
+            displayCourses(); 
+            displayNotices(); 
+            displayTrustScreenshots(); 
+            displayVideoReviews(); 
+            loadSettings();
         });
     </script>
 </body>
