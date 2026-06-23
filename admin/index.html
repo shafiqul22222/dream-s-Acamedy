@@ -901,9 +901,22 @@
                     <label>Course Related to Follow-up (Optional)</label>
                     <input type="text" id="wa-course-name" placeholder="e.g. Freelancing Batch 12">
                 </div>
+                
+                <!-- NEW: TEMPLATE DROPDOWN ADDED HERE -->
+                <div class="form-group">
+                    <label style="color: var(--primary-blue); font-weight: 600;">Select Sales Message Template (Optional)</label>
+                    <select id="wa-template-select" style="border: 1px solid var(--primary-blue); background-color: #eef2ff;">
+                        <option value="">-- Custom Message / Write Manually --</option>
+                        <option value="course_discount">🎁 Special Course Discount Offer</option>
+                        <option value="service_discount">🚀 Exclusive Service/Product Offer</option>
+                        <option value="abandoned">🛒 Pending Checkout/Cart Reminder</option>
+                        <option value="follow_up">👋 General Follow-up & Support</option>
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <label>Message</label>
-                    <textarea id="wa-message-text" rows="5" required placeholder="Type your message here..."></textarea>
+                    <textarea id="wa-message-text" rows="8" required placeholder="Type your message here..."></textarea>
                 </div>
                 <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-top: 15px; padding: 12px; background: #eef2ff; border-radius: 8px; border: 1px solid #c7d2fe;">
                     <input type="checkbox" id="wa-send-all" style="width: 18px; height: 18px; cursor: pointer;">
@@ -1185,8 +1198,48 @@
                 document.getElementById('wa-course-name').value = '';
                 document.getElementById('wa-message-text').value = defaultMessage;
                 document.getElementById('wa-send-all').checked = false;
+                
+                // Reset template selection
+                if(document.getElementById('wa-template-select')) {
+                    document.getElementById('wa-template-select').value = '';
+                }
+
                 studentWhatsappModal.classList.remove('hidden');
             };
+
+            // ====== NEW: WhatsApp Message Template Logic ======
+            const waTemplateSelect = document.getElementById('wa-template-select');
+            if (waTemplateSelect) {
+                waTemplateSelect.addEventListener('change', function() {
+                    const template = this.value;
+                    let studentName = document.getElementById('wa-student-name').value || 'Student';
+                    if (studentName === 'N/A') studentName = 'Student';
+                    
+                    let courseName = document.getElementById('wa-course-name').value || '[Course/Service Name]';
+                    let message = '';
+
+                    if (template === 'course_discount') {
+                        message = `🎉 *Special Discount for You, ${studentName}!* 🎉\n\nHello ${studentName},\nWe noticed you're interested in upgrading your skills. For a limited time, we're offering an exclusive *[Discount]% OFF* on our *${courseName}* course! 🚀\n\nMaster new skills and advance your career with Dream's Academy.\n\n👉 *Claim your discount now:* [Insert Link Here]\n💬 Reply to this message if you need help enrolling.\n\nBest wishes,\n*Dream's Academy*`;
+                    } else if (template === 'service_discount') {
+                        message = `🎁 *Exclusive Offer Unlocked!* 🎁\n\nHi ${studentName},\nLooking for reliable *${courseName}*? We've got you covered!\nGet it today at a special discounted price of just *[Discounted Price]* (Usually [Old Price]).\n\n✅ Premium Quality\n✅ Instant Delivery/Support\n✅ Trusted by 1000+ Customers\n\nHurry, this offer expires soon! ⏱️\n👉 *Order here:* [Insert Link Here]\n\nNeed assistance? Just drop a message here!\n*Dream's Academy*`;
+                    } else if (template === 'follow_up') {
+                        message = `👋 *Hello ${studentName}!*\n\nThis is a quick follow-up from *Dream's Academy*. We are committed to your success and wanted to check if you need any guidance regarding *${courseName}*.\n\nLet us know how we can help you achieve your goals today! 🌟\n\nBest regards,\n*Dream's Academy Support Team*`;
+                    } else if (template === 'abandoned') {
+                        message = `🛒 *You left something behind, ${studentName}!*\n\nHi ${studentName},\nWe noticed you were checking out *${courseName}* but didn't complete the process. \n\nGood news! We've saved your progress. If you complete your order today, we'll give you an extra *[Discount]% OFF*! 🎁\n\n👉 *Complete your order here:* [Insert Link Here]\n\nLet us know if you faced any issues during checkout.\n*Dream's Academy*`;
+                    }
+                    
+                    if(message !== '') {
+                        document.getElementById('wa-message-text').value = message;
+                    }
+                });
+                
+                // Update message dynamically if course name is typed after selecting template
+                document.getElementById('wa-course-name').addEventListener('input', function() {
+                    if(waTemplateSelect.value !== '') {
+                        waTemplateSelect.dispatchEvent(new Event('change'));
+                    }
+                });
+            }
 
             closeWhatsappModalBtn.addEventListener('click', () => studentWhatsappModal.classList.add('hidden'));
             cancelWhatsappModalBtn.addEventListener('click', () => studentWhatsappModal.classList.add('hidden'));
