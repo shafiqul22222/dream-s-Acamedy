@@ -1703,7 +1703,6 @@
                 const allSections = document.querySelectorAll('#main-content .page-section');
                 
                 if (targetId === 'home') {
-                    // Home এ গেলে ব্লগ এবং লিগ্যাল পেইজ বাদে বাকি সব সেকশন একসাথে দেখাবে
                     const hiddenOnHome = ['blog', 'terms', 'refund', 'privacy'];
                     allSections.forEach(s => {
                         if (hiddenOnHome.includes(s.getAttribute('id'))) {
@@ -1714,7 +1713,6 @@
                     });
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
-                    // অন্য কোনো সেকশনে গেলে শুধু সেই নির্দিষ্ট সেকশন দেখাবে, বাকি সব লুকিয়ে ফেলবে
                     allSections.forEach(s => {
                         if (s.getAttribute('id') === targetId) {
                             s.classList.remove('hidden');
@@ -1725,7 +1723,6 @@
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
 
-                // মেনুর Active কালার আপডেট করা
                 document.querySelectorAll('.main-nav ul > li').forEach(li => li.classList.remove('active'));
                 const activeNavLink = document.querySelector(`.main-nav a[href="#${targetId}"]`);
                 if (activeNavLink) { 
@@ -1738,7 +1735,6 @@
                 if(!mainContent.classList.contains('hidden')) {
                     let current = '';
                     document.querySelectorAll('#main-content .page-section').forEach(section => {
-                        // শুধুমাত্র যেসব সেকশন hidden নয়, সেগুলোর জন্যই স্ক্রল পজিশন চেক করবে
                         if (!section.classList.contains('hidden') && pageYOffset >= section.offsetTop - 120) {
                             current = section.getAttribute('id');
                         }
@@ -1775,7 +1771,6 @@
                 if (targetPageId === 'ssn-list-page') displaySSNList();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
-
             // ================= Email OTP System =================
             const signupForm = document.getElementById('signup-form');
             signupForm.addEventListener('submit', (e) => {
