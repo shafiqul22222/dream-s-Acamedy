@@ -1187,6 +1187,7 @@
                 studentWhatsappModal.classList.remove('hidden');
             };
 
+            // NEW BANGLA TEMPLATES SECTION 
             const waTemplateSelect = document.getElementById('wa-template-select');
             if (waTemplateSelect) {
                 waTemplateSelect.addEventListener('change', function() {
@@ -1195,10 +1196,19 @@
                     if (studentName === 'N/A') studentName = 'Student';
                     let courseName = document.getElementById('wa-course-name').value || '[Course/Service Name]';
                     let message = '';
-                    if (template === 'course_discount') { message = `🎉 *Special Discount for You, ${studentName}!* 🎉\n\nHello ${studentName},\nWe noticed you're interested in upgrading your skills. For a limited time, we're offering an exclusive *[Discount]% OFF* on our *${courseName}* course! 🚀\n\nMaster new skills and advance your career with Dream's Academy.\n\n👉 *Claim your discount now:* [Insert Link Here]\n💬 Reply to this message if you need help enrolling.\n\nBest wishes,\n*Dream's Academy*`; } 
-                    else if (template === 'service_discount') { message = `🎁 *Exclusive Offer Unlocked!* 🎁\n\nHi ${studentName},\nLooking for reliable *${courseName}*? We've got you covered!\nGet it today at a special discounted price of just *[Discounted Price]* (Usually [Old Price]).\n\n✅ Premium Quality\n✅ Instant Delivery/Support\n✅ Trusted by 1000+ Customers\n\nHurry, this offer expires soon! ⏱️\n👉 *Order here:* [Insert Link Here]\n\nNeed assistance? Just drop a message here!\n*Dream's Academy*`; } 
-                    else if (template === 'follow_up') { message = `👋 *Hello ${studentName}!*\n\nThis is a quick follow-up from *Dream's Academy*. We are committed to your success and wanted to check if you need any guidance regarding *${courseName}*.\n\nLet us know how we can help you achieve your goals today! 🌟\n\nBest regards,\n*Dream's Academy Support Team*`; } 
-                    else if (template === 'abandoned') { message = `🛒 *You left something behind, ${studentName}!*\n\nHi ${studentName},\nWe noticed you were checking out *${courseName}* but didn't complete the process. \n\nGood news! We've saved your progress. If you complete your order today, we'll give you an extra *[Discount]% OFF*! 🎁\n\n👉 *Complete your order here:* [Insert Link Here]\n\nLet us know if you faced any issues during checkout.\n*Dream's Academy*`; }
+                    
+                    if (template === 'course_discount') { 
+                        message = `🎉✨ *বিশেষ অফার শুধুমাত্র আপনার জন্য, ${studentName}!* ✨🎉\n\nআসসালামু আলাইকুম ${studentName}, 👋\n\nআপনি আমাদের *Dream's Academy*-এর কোর্স সম্পর্কে আগ্রহ দেখিয়েছেন, এজন্য আপনার জন্য থাকছে একটি *বিশেষ ডিসকাউন্ট অফার!* 🎁\n\n🔥 *Limited Time Offer চলছে!*\nআপনি এখন আমাদের জনপ্রিয়\n🎓 *${courseName}*\nমাত্র *[Discount Price] টাকায়* ভর্তি হতে পারবেন।\n\nএই কোর্সের মাধ্যমে শিখুন:\n✅ Online Survey Skill\n✅ Professional Account Setup\n✅ কাজের সঠিক পদ্ধতি\n✅ নতুন স্কিল দিয়ে আয়ের সুযোগ\n\n⏳ অফারটি সীমিত সময়ের জন্য প্রযোজ্য।\n\n👉 *এখনই ভর্তি হতে ক্লিক করুন:*\n[Insert Link Here]\n\n💬 কোনো প্রশ্ন থাকলে এই মেসেজের রিপ্লাই করুন, আমাদের টিম আপনাকে সহযোগিতা করবে।\n\nশুভকামনায়,\n💙 *Dream's Academy Team*\n"Learn Skills • Build Your Future"`; 
+                    } 
+                    else if (template === 'service_discount') { 
+                        message = `🎁✨ *এক্সক্লুসিভ অফার আনলক হয়েছে!* ✨🎁\n\nআসসালামু আলাইকুম ${studentName}, 👋\n\nআপনি কি সেরা মানের *${courseName}* খুঁজছেন? আমরা আপনার জন্যই নিয়ে এসেছি এক দারুণ সুযোগ!\nএখনই স্পেশাল ডিসকাউন্ট প্রাইসে আমাদের সার্ভিসটি উপভোগ করুন।\n\nকেন আমাদের সার্ভিসটি নিবেন?\n✅ প্রিমিয়াম কোয়ালিটি\n✅ দ্রুত ডেলিভারি ও সাপোর্ট\n✅ ১০০০+ সন্তুষ্ট গ্রাহক\n\n⏳ অফারটি খুব শীঘ্রই শেষ হয়ে যাবে!\n\n👉 *এখনই অর্ডার করতে ক্লিক করুন:*\n[Insert Link Here]\n\n💬 কোনো সাহায্য প্রয়োজন হলে নির্দ্বিধায় মেসেজ করুন।\n\nশুভকামনায়,\n💙 *Dream's Academy Team*\n"Learn Skills • Build Your Future"`; 
+                    } 
+                    else if (template === 'follow_up') { 
+                        message = `👋 *কেমন আছেন, ${studentName}?*\n\nআসসালামু আলাইকুম, *Dream's Academy* থেকে আমরা আপনার খোঁজ নিতে মেসেজ দিয়েছি। 🌟\n\nআমরা আপনার সফলতার ব্যাপারে অত্যন্ত আন্তরিক। *${courseName}* নিয়ে আপনার কি কোনো সাহায্য বা দিকনির্দেশনা প্রয়োজন?\n\nআপনার লক্ষ্য অর্জনে আমরা কীভাবে সাহায্য করতে পারি তা আমাদের জানান। আমরা সবসময় আপনার পাশে আছি! 🤝\n\nশুভকামনায়,\n💙 *Dream's Academy Support Team*\n"Learn Skills • Build Your Future"`; 
+                    } 
+                    else if (template === 'abandoned') { 
+                        message = `🛒 *আপনি কিছু ফেলে এসেছেন, ${studentName}!* 🏃‍♂️💨\n\nআসসালামু আলাইকুম ${studentName}, 👋\n\nআমরা লক্ষ্য করেছি আপনি আমাদের *${courseName}* অর্ডার করার প্রক্রিয়া শুরু করেছিলেন, কিন্তু সেটি সম্পন্ন করেননি।\n\nখুশির খবর হলো, আমরা আপনার প্রোগ্রেস সেভ করে রেখেছি! 🤩\nআজই আপনার অর্ডারটি সম্পন্ন করলে আপনি পাবেন অতিরিক্ত *[Discount]% এক্সট্রা ছাড়!* 🎁\n\n👉 *আপনার অর্ডারটি সম্পন্ন করতে ক্লিক করুন:*\n[Insert Link Here]\n\n💳 পেমেন্ট বা চেকআউট নিয়ে কোনো সমস্যা হলে আমাদের জানান, আমরা সাহায্য করতে প্রস্তুত আছি।\n\nশুভকামনায়,\n💙 *Dream's Academy Team*\n"Learn Skills • Build Your Future"`; 
+                    }
                     if(message !== '') document.getElementById('wa-message-text').value = message;
                 });
                 document.getElementById('wa-course-name').addEventListener('input', function() { if(waTemplateSelect.value !== '') waTemplateSelect.dispatchEvent(new Event('change')); });
@@ -1690,7 +1700,6 @@
                 tableBody.innerHTML = tableHTML;
             }
 
-            // ... (Dollar Rates & Sell Requests code remains untouched) ...
             async function renderDollarRatesSettings() {
                 try {
                     const doc = await db.collection('site_settings').doc('dollar_rates').get();
@@ -1764,7 +1773,6 @@
                 } catch (error) { showToast("Failed to update status.", "error"); }
             };
 
-            // ... (Manual Sale page unchanged) ...
             async function renderManualSalePage() {
                 const itemSelect = document.getElementById('manual-item-selection');
                 const quantityInput = document.getElementById('manual-quantity');
@@ -1843,7 +1851,6 @@
                 });
             }
 
-            // (Service Stock etc code intact)
             async function renderServiceStock() {
                 const selectionDropdown = document.getElementById('stock-service-selection');
                 selectionDropdown.innerHTML = '<option value="">Loading...</option>';
