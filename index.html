@@ -1700,34 +1700,60 @@
             }
 
             function showPageSection(targetId) {
-                document.querySelectorAll('#main-content .page-section').forEach(s => s.classList.remove('hidden'));
-                const targetSection = document.getElementById(targetId);
-                if (targetSection) {
-                    if (targetId === 'home') window.scrollTo({ top: 0, behavior: 'smooth' });
-                    else {
-                        const offsetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - 90;
-                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-                    }
+                const allSections = document.querySelectorAll('#main-content .page-section');
+                
+                if (targetId === 'home') {
+                    // Home এ গেলে ব্লগ এবং লিগ্যাল পেইজ বাদে বাকি সব সেকশন একসাথে দেখাবে
+                    const hiddenOnHome = ['blog', 'terms', 'refund', 'privacy'];
+                    allSections.forEach(s => {
+                        if (hiddenOnHome.includes(s.getAttribute('id'))) {
+                            s.classList.add('hidden');
+                        } else {
+                            s.classList.remove('hidden');
+                        }
+                    });
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    // অন্য কোনো সেকশনে গেলে শুধু সেই নির্দিষ্ট সেকশন দেখাবে, বাকি সব লুকিয়ে ফেলবে
+                    allSections.forEach(s => {
+                        if (s.getAttribute('id') === targetId) {
+                            s.classList.remove('hidden');
+                        } else {
+                            s.classList.add('hidden');
+                        }
+                    });
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
+
+                // মেনুর Active কালার আপডেট করা
                 document.querySelectorAll('.main-nav ul > li').forEach(li => li.classList.remove('active'));
                 const activeNavLink = document.querySelector(`.main-nav a[href="#${targetId}"]`);
-                if (activeNavLink) { const parentLi = activeNavLink.closest('li'); if(parentLi) parentLi.classList.add('active'); }
+                if (activeNavLink) { 
+                    const parentLi = activeNavLink.closest('li'); 
+                    if(parentLi) parentLi.classList.add('active'); 
+                }
             }
 
             window.addEventListener('scroll', () => {
                 if(!mainContent.classList.contains('hidden')) {
                     let current = '';
                     document.querySelectorAll('#main-content .page-section').forEach(section => {
-                        if (pageYOffset >= section.offsetTop - 120) current = section.getAttribute('id');
+                        // শুধুমাত্র যেসব সেকশন hidden নয়, সেগুলোর জন্যই স্ক্রল পজিশন চেক করবে
+                        if (!section.classList.contains('hidden') && pageYOffset >= section.offsetTop - 120) {
+                            current = section.getAttribute('id');
+                        }
                     });
-                    document.querySelectorAll('.main-nav ul > li').forEach(li => {
-                        li.classList.remove('active');
-                        if(li.querySelector(`a[href="#${current}"]`)) li.classList.add('active');
-                    });
-                    document.querySelectorAll('.mobile-nav-link').forEach(link => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
-                    });
+                    
+                    if(current) {
+                        document.querySelectorAll('.main-nav ul > li').forEach(li => {
+                            li.classList.remove('active');
+                            if(li.querySelector(`a[href="#${current}"]`)) li.classList.add('active');
+                        });
+                        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
+                        });
+                    }
                 }
                 if(window.scrollY > 300) scrollTopBtn.classList.add('show'); else scrollTopBtn.classList.remove('show');
             });
