@@ -919,11 +919,6 @@
                     <input type="hidden" id="wa-student-name">
                 </div>
                 <div class="form-group">
-                    <label>Course Related to Follow-up (Optional)</label>
-                    <input type="text" id="wa-course-name" placeholder="e.g. Freelancing Batch 12">
-                </div>
-                
-                <div class="form-group">
                     <label style="color: var(--primary-blue); font-weight: 600;">Select Sales Message Template (Optional)</label>
                     <select id="wa-template-select" style="border: 1px solid var(--primary-blue); background-color: #eef2ff;">
                         <option value="">-- Custom Message / Write Manually --</option>
@@ -932,6 +927,26 @@
                         <option value="abandoned">🛒 Pending Checkout/Cart Reminder</option>
                         <option value="follow_up">👋 General Follow-up & Support</option>
                     </select>
+                </div>
+
+                <!-- নতুন যুক্ত করা অংশ: ডাইনামিক কোর্স/সার্ভিস এবং প্রাইজ সিলেকশন -->
+                <div id="wa-dynamic-fields" class="hidden">
+                    <div class="form-group">
+                        <label>Select Item (Course or Service)</label>
+                        <select id="wa-item-select" style="border: 1px solid var(--border-color); background-color: var(--background-light);">
+                            <option value="">Loading...</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div>
+                            <label>Original Price (BDT)</label>
+                            <input type="number" id="wa-original-price" readonly style="background: #f1f5f9; cursor: not-allowed;">
+                        </div>
+                        <div>
+                            <label>Discount Price (BDT)</label>
+                            <input type="number" id="wa-discount-price" placeholder="e.g. 500">
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -1177,41 +1192,101 @@
                 } catch (error) { modalForm.innerHTML = `<p style="color:red; text-align:center; padding:20px;">Error loading progress data.</p>`; }
             };
 
-            window.openStudentWhatsappModal = (mobile, name = 'N/A', defaultMessage = '') => {
+            window.openStudentWhatsappModal = async (mobile, name = 'N/A', defaultMessage = '') => {
                 document.getElementById('wa-recipient-number').value = mobile || 'N/A';
                 document.getElementById('wa-student-name').value = name;
-                document.getElementById('wa-course-name').value = '';
+                
+                // Reset new fields
                 document.getElementById('wa-message-text').value = defaultMessage;
                 document.getElementById('wa-send-all').checked = false;
+                document.getElementById('wa-dynamic-fields').classList.add('hidden');
+                document.getElementById('wa-original-price').value = '';
+                document.getElementById('wa-discount-price').value = '';
+                
                 if(document.getElementById('wa-template-select')) document.getElementById('wa-template-select').value = '';
+                
                 studentWhatsappModal.classList.remove('hidden');
+
+                // Load Courses & Services from Database
+                const itemSelect = document.getElementById('wa-item-select');
+                itemSelect.innerHTML = '<option value="">Loading...</option>';
+                try {
+                    const servicesSnapshot = await db.collection('services').get(); 
+                    const coursesSnapshot = await db.collection('courses').get();
+                    let optionsHTML = '<option value="" data-price="" disabled selected>Select an item</option><optgroup label="Services">';
+                    
+                    servicesSnapshot.forEach(doc => { 
+                        const data = doc.data(); 
+                        optionsHTML += `<option value="${data.name}" data-price="${data.currentPrice || data.purchasePrice || 0}">${data.name}</option>`; 
+                    });
+                    optionsHTML += '</optgroup><optgroup label="Courses">';
+                    coursesSnapshot.forEach(doc => { 
+                        const data = doc.data(); 
+                        optionsHTML += `<option value="${data.name}" data-price="${data.price || 0}">${data.name}</option>`; 
+                    });
+                    optionsHTML += '</optgroup>'; 
+                    itemSelect.innerHTML = optionsHTML;
+                } catch (error) { 
+                    itemSelect.innerHTML = '<option value="">Failed to load items</option>'; 
+                }
             };
 
-            // NEW BANGLA TEMPLATES SECTION 
+            // NEW BANGLA TEMPLATES SECTION (UPDATED)
             const waTemplateSelect = document.getElementById('wa-template-select');
+            const waItemSelect = document.getElementById('wa-item-select');
+            const waOriginalPrice = document.getElementById('wa-original-price');
+            const waDiscountPrice = document.getElementById('wa-discount-price');
+            const waDynamicFields = document.getElementById('wa-dynamic-fields');
+
+            const generateTemplateMessage = () => {
+                if(!waTemplateSelect) return;
+                const template = waTemplateSelect.value;
+                
+                // Show/Hide dynamic item selection fields based on template
+                if (template === 'course_discount' || template === 'service_discount' || template === 'abandoned' || template === 'follow_up') {
+                    waDynamicFields.classList.remove('hidden');
+                } else {
+                    waDynamicFields.classList.add('hidden');
+                }
+
+                let studentName = document.getElementById('wa-student-name').value || 'Student';
+                if (studentName === 'N/A') studentName = 'Student';
+                
+                let selectedOption = waItemSelect.options[waItemSelect.selectedIndex];
+                let itemName = (selectedOption && selectedOption.value) ? selectedOption.value : '[Course/Service Name]';
+                
+                let originalPrice = waOriginalPrice.value || '0';
+                let discountPrice = waDiscountPrice.value || '[Discount Price]';
+                let message = '';
+                
+                if (template === 'course_discount') { 
+                    message = `🎉✨ *বিশেষ অফার শুধুমাত্র আপনার জন্য, ${studentName}!* ✨🎉\n\nআসসালামু আলাইকুম ${studentName}, 👋\n\nআপনি আমাদের *Dream's Academy*-এর কোর্স সম্পর্কে আগ্রহ দেখিয়েছেন, এজন্য আপনার জন্য থাকছে একটি *বিশেষ ডিসকাউন্ট অফার!* 🎁\n\n🔥 *Limited Time Offer চলছে!*\nআপনি এখন আমাদের জনপ্রিয়\n🎓 *${itemName}*\nমাত্র *${discountPrice} টাকায়* ভর্তি হতে পারবেন। (রেগুলার প্রাইজ: ${originalPrice} টাকা)\n\nএই কোর্সের মাধ্যমে শিখুন:\n✅ Online Survey Skill\n✅ Professional Account Setup\n✅ কাজের সঠিক পদ্ধতি\n✅ নতুন স্কিল দিয়ে আয়ের সুযোগ\n\n⏳ অফারটি সীমিত সময়ের জন্য প্রযোজ্য।\n\n👉 *এখনই ভর্তি হতে ক্লিক করুন:*\n[Insert Link Here]\n\n💬 কোনো প্রশ্ন থাকলে এই মেসেজের রিপ্লাই করুন, আমাদের টিম আপনাকে সহযোগিতা করবে।\n\nশুভকামনায়,\n💙 *Dream's Academy Team*\n"Learn Skills • Build Your Future"`; 
+                } 
+                else if (template === 'service_discount') { 
+                    message = `🎁✨ *এক্সক্লুসিভ অফার আনলক হয়েছে!* ✨🎁\n\nআসসালামু আলাইকুম ${studentName}, 👋\n\nআপনি কি সেরা মানের *${itemName}* খুঁজছেন? আমরা আপনার জন্যই নিয়ে এসেছি এক দারুণ সুযোগ!\n\nএখনই স্পেশাল ডিসকাউন্ট প্রাইসে আমাদের সার্ভিসটি উপভোগ করুন।\nঅফার প্রাইজ: *${discountPrice} টাকা* (আগের প্রাইজ: ${originalPrice} টাকা)\n\nকেন আমাদের সার্ভিসটি নিবেন?\n✅ প্রিমিয়াম কোয়ালিটি\n✅ দ্রুত ডেলিভারি ও সাপোর্ট\n✅ ১০০০+ সন্তুষ্ট গ্রাহক\n\n⏳ অফারটি খুব শীঘ্রই শেষ হয়ে যাবে!\n\n👉 *এখনই অর্ডার করতে ক্লিক করুন:*\n[Insert Link Here]\n\n💬 কোনো সাহায্য প্রয়োজন হলে নির্দ্বিধায় মেসেজ করুন।\n\nশুভকামনায়,\n💙 *Dream's Academy Team*\n"Learn Skills • Build Your Future"`; 
+                } 
+                else if (template === 'follow_up') { 
+                    message = `👋 *কেমন আছেন, ${studentName}?*\n\nআসসালামু আলাইকুম, *Dream's Academy* থেকে আমরা আপনার খোঁজ নিতে মেসেজ দিয়েছি। 🌟\n\nআমরা আপনার সফলতার ব্যাপারে অত্যন্ত আন্তরিক। *${itemName}* নিয়ে আপনার কি কোনো সাহায্য বা দিকনির্দেশনা প্রয়োজন?\n\nআপনার লক্ষ্য অর্জনে আমরা কীভাবে সাহায্য করতে পারি তা আমাদের জানান। আমরা সবসময় আপনার পাশে আছি! 🤝\n\nশুভকামনায়,\n💙 *Dream's Academy Support Team*\n"Learn Skills • Build Your Future"`; 
+                } 
+                else if (template === 'abandoned') { 
+                    message = `🛒 *আপনি কিছু ফেলে এসেছেন, ${studentName}!* 🏃‍♂️💨\n\nআসসালামু আলাইকুম ${studentName}, 👋\n\nআমরা লক্ষ্য করেছি আপনি আমাদের *${itemName}* অর্ডার করার প্রক্রিয়া শুরু করেছিলেন, কিন্তু সেটি সম্পন্ন করেননি।\n\nখুশির খবর হলো, আমরা আপনার প্রোগ্রেস সেভ করে রেখেছি! 🤩\nআজই আপনার অর্ডারটি সম্পন্ন করলে আপনি পাবেন স্পেশাল ডিসকাউন্ট!\nঅফার প্রাইজ: *${discountPrice} টাকা*\n\n👉 *আপনার অর্ডারটি সম্পন্ন করতে ক্লিক করুন:*\n[Insert Link Here]\n\n💳 পেমেন্ট বা চেকআউট নিয়ে কোনো সমস্যা হলে আমাদের জানান, আমরা সাহায্য করতে প্রস্তুত আছি।\n\nশুভকামনায়,\n💙 *Dream's Academy Team*\n"Learn Skills • Build Your Future"`; 
+                }
+                
+                if(message !== '') document.getElementById('wa-message-text').value = message;
+            };
+
             if (waTemplateSelect) {
-                waTemplateSelect.addEventListener('change', function() {
-                    const template = this.value;
-                    let studentName = document.getElementById('wa-student-name').value || 'Student';
-                    if (studentName === 'N/A') studentName = 'Student';
-                    let courseName = document.getElementById('wa-course-name').value || '[Course/Service Name]';
-                    let message = '';
-                    
-                    if (template === 'course_discount') { 
-                        message = `🎉✨ *বিশেষ অফার শুধুমাত্র আপনার জন্য, ${studentName}!* ✨🎉\n\nআসসালামু আলাইকুম ${studentName}, 👋\n\nআপনি আমাদের *Dream's Academy*-এর কোর্স সম্পর্কে আগ্রহ দেখিয়েছেন, এজন্য আপনার জন্য থাকছে একটি *বিশেষ ডিসকাউন্ট অফার!* 🎁\n\n🔥 *Limited Time Offer চলছে!*\nআপনি এখন আমাদের জনপ্রিয়\n🎓 *${courseName}*\nমাত্র *[Discount Price] টাকায়* ভর্তি হতে পারবেন।\n\nএই কোর্সের মাধ্যমে শিখুন:\n✅ Online Survey Skill\n✅ Professional Account Setup\n✅ কাজের সঠিক পদ্ধতি\n✅ নতুন স্কিল দিয়ে আয়ের সুযোগ\n\n⏳ অফারটি সীমিত সময়ের জন্য প্রযোজ্য।\n\n👉 *এখনই ভর্তি হতে ক্লিক করুন:*\n[Insert Link Here]\n\n💬 কোনো প্রশ্ন থাকলে এই মেসেজের রিপ্লাই করুন, আমাদের টিম আপনাকে সহযোগিতা করবে।\n\nশুভকামনায়,\n💙 *Dream's Academy Team*\n"Learn Skills • Build Your Future"`; 
-                    } 
-                    else if (template === 'service_discount') { 
-                        message = `🎁✨ *এক্সক্লুসিভ অফার আনলক হয়েছে!* ✨🎁\n\nআসসালামু আলাইকুম ${studentName}, 👋\n\nআপনি কি সেরা মানের *${courseName}* খুঁজছেন? আমরা আপনার জন্যই নিয়ে এসেছি এক দারুণ সুযোগ!\nএখনই স্পেশাল ডিসকাউন্ট প্রাইসে আমাদের সার্ভিসটি উপভোগ করুন।\n\nকেন আমাদের সার্ভিসটি নিবেন?\n✅ প্রিমিয়াম কোয়ালিটি\n✅ দ্রুত ডেলিভারি ও সাপোর্ট\n✅ ১০০০+ সন্তুষ্ট গ্রাহক\n\n⏳ অফারটি খুব শীঘ্রই শেষ হয়ে যাবে!\n\n👉 *এখনই অর্ডার করতে ক্লিক করুন:*\n[Insert Link Here]\n\n💬 কোনো সাহায্য প্রয়োজন হলে নির্দ্বিধায় মেসেজ করুন।\n\nশুভকামনায়,\n💙 *Dream's Academy Team*\n"Learn Skills • Build Your Future"`; 
-                    } 
-                    else if (template === 'follow_up') { 
-                        message = `👋 *কেমন আছেন, ${studentName}?*\n\nআসসালামু আলাইকুম, *Dream's Academy* থেকে আমরা আপনার খোঁজ নিতে মেসেজ দিয়েছি। 🌟\n\nআমরা আপনার সফলতার ব্যাপারে অত্যন্ত আন্তরিক। *${courseName}* নিয়ে আপনার কি কোনো সাহায্য বা দিকনির্দেশনা প্রয়োজন?\n\nআপনার লক্ষ্য অর্জনে আমরা কীভাবে সাহায্য করতে পারি তা আমাদের জানান। আমরা সবসময় আপনার পাশে আছি! 🤝\n\nশুভকামনায়,\n💙 *Dream's Academy Support Team*\n"Learn Skills • Build Your Future"`; 
-                    } 
-                    else if (template === 'abandoned') { 
-                        message = `🛒 *আপনি কিছু ফেলে এসেছেন, ${studentName}!* 🏃‍♂️💨\n\nআসসালামু আলাইকুম ${studentName}, 👋\n\nআমরা লক্ষ্য করেছি আপনি আমাদের *${courseName}* অর্ডার করার প্রক্রিয়া শুরু করেছিলেন, কিন্তু সেটি সম্পন্ন করেননি।\n\nখুশির খবর হলো, আমরা আপনার প্রোগ্রেস সেভ করে রেখেছি! 🤩\nআজই আপনার অর্ডারটি সম্পন্ন করলে আপনি পাবেন অতিরিক্ত *[Discount]% এক্সট্রা ছাড়!* 🎁\n\n👉 *আপনার অর্ডারটি সম্পন্ন করতে ক্লিক করুন:*\n[Insert Link Here]\n\n💳 পেমেন্ট বা চেকআউট নিয়ে কোনো সমস্যা হলে আমাদের জানান, আমরা সাহায্য করতে প্রস্তুত আছি।\n\nশুভকামনায়,\n💙 *Dream's Academy Team*\n"Learn Skills • Build Your Future"`; 
+                waTemplateSelect.addEventListener('change', generateTemplateMessage);
+                waItemSelect.addEventListener('change', function() {
+                    let selectedOption = waItemSelect.options[waItemSelect.selectedIndex];
+                    if(selectedOption && selectedOption.dataset.price) {
+                        waOriginalPrice.value = selectedOption.dataset.price;
+                    } else {
+                        waOriginalPrice.value = '';
                     }
-                    if(message !== '') document.getElementById('wa-message-text').value = message;
+                    generateTemplateMessage();
                 });
-                document.getElementById('wa-course-name').addEventListener('input', function() { if(waTemplateSelect.value !== '') waTemplateSelect.dispatchEvent(new Event('change')); });
+                waDiscountPrice.addEventListener('input', generateTemplateMessage);
             }
 
             closeWhatsappModalBtn.addEventListener('click', () => studentWhatsappModal.classList.add('hidden'));
@@ -1223,8 +1298,10 @@
                 const sendAll = document.getElementById('wa-send-all').checked;
                 const singleMobile = document.getElementById('wa-recipient-number').value;
                 const studentName = document.getElementById('wa-student-name').value || 'N/A';
-                const courseName = document.getElementById('wa-course-name').value.trim() || 'N/A';
-
+                
+                // Get the text of the selected course/service
+                const itemSelectDropdown = document.getElementById('wa-item-select');
+                const courseName = (itemSelectDropdown.selectedIndex > 0) ? itemSelectDropdown.options[itemSelectDropdown.selectedIndex].text : 'N/A';
                 if (!message) { showToast('Message is empty', 'error'); return; }
 
                 const submitBtn = studentWhatsappForm.querySelector('button[type="submit"]');
