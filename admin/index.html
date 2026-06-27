@@ -929,7 +929,7 @@
                     </select>
                 </div>
 
-                <!-- নতুন যুক্ত করা অংশ: ডাইনামিক কোর্স/সার্ভিস এবং প্রাইজ সিলেকশন -->
+                <!-- নতুন যুক্ত করা অংশ: ডাইনামিক কোর্স/সার্ভিস, প্রাইজ এবং কুপন সিলেকশন -->
                 <div id="wa-dynamic-fields" class="hidden">
                     <div class="form-group">
                         <label>Select Item (Course or Service)</label>
@@ -946,6 +946,10 @@
                             <label>Discount Price (BDT)</label>
                             <input type="number" id="wa-discount-price" placeholder="e.g. 500">
                         </div>
+                    </div>
+                    <div class="form-group" style="margin-top: 12px;">
+                        <label>Coupon Code (Optional)</label>
+                        <input type="text" id="wa-coupon-code" placeholder="e.g. MYSALES50" style="text-transform: uppercase;">
                     </div>
                 </div>
 
@@ -1202,6 +1206,7 @@
                 document.getElementById('wa-dynamic-fields').classList.add('hidden');
                 document.getElementById('wa-original-price').value = '';
                 document.getElementById('wa-discount-price').value = '';
+                document.getElementById('wa-coupon-code').value = '';
                 
                 if(document.getElementById('wa-template-select')) document.getElementById('wa-template-select').value = '';
                 
@@ -1231,11 +1236,12 @@
                 }
             };
 
-            // NEW BANGLA TEMPLATES SECTION (UPDATED)
+            // NEW BANGLA TEMPLATES SECTION (UPDATED WITH COUPON)
             const waTemplateSelect = document.getElementById('wa-template-select');
             const waItemSelect = document.getElementById('wa-item-select');
             const waOriginalPrice = document.getElementById('wa-original-price');
             const waDiscountPrice = document.getElementById('wa-discount-price');
+            const waCouponCode = document.getElementById('wa-coupon-code');
             const waDynamicFields = document.getElementById('wa-dynamic-fields');
 
             const generateTemplateMessage = () => {
@@ -1257,19 +1263,24 @@
                 
                 let originalPrice = waOriginalPrice.value || '0';
                 let discountPrice = waDiscountPrice.value || '[Discount Price]';
+                let couponInput = waCouponCode.value.trim().toUpperCase();
+                
+                // কুপন কোড থাকলে মেসেজে দেখানোর ফরম্যাট
+                let couponText = couponInput ? `\n🎟️ *কুপন কোড:* ${couponInput}\n(অফারটি পেতে চেকআউটের সময় অবশ্যই এই কুপন কোডটি ব্যবহার করুন)` : '';
+                
                 let message = '';
                 
                 if (template === 'course_discount') { 
-                    message = `🎉✨ *বিশেষ অফার শুধুমাত্র আপনার জন্য, ${studentName}!* ✨🎉\n\nআসসালামু আলাইকুম ${studentName}, 👋\n\nআপনি আমাদের *Dream's Academy*-এর কোর্স সম্পর্কে আগ্রহ দেখিয়েছেন, এজন্য আপনার জন্য থাকছে একটি *বিশেষ ডিসকাউন্ট অফার!* 🎁\n\n🔥 *Limited Time Offer চলছে!*\nআপনি এখন আমাদের জনপ্রিয়\n🎓 *${itemName}*\nমাত্র *${discountPrice} টাকায়* ভর্তি হতে পারবেন। (রেগুলার প্রাইজ: ${originalPrice} টাকা)\n\nএই কোর্সের মাধ্যমে শিখুন:\n✅ Online Survey Skill\n✅ Professional Account Setup\n✅ কাজের সঠিক পদ্ধতি\n✅ নতুন স্কিল দিয়ে আয়ের সুযোগ\n\n⏳ অফারটি সীমিত সময়ের জন্য প্রযোজ্য।\n\n👉 *এখনই ভর্তি হতে ক্লিক করুন:*\n[Insert Link Here]\n\n💬 কোনো প্রশ্ন থাকলে এই মেসেজের রিপ্লাই করুন, আমাদের টিম আপনাকে সহযোগিতা করবে।\n\nশুভকামনায়,\n💙 *Dream's Academy Team*\n"Learn Skills • Build Your Future"`; 
+                    message = `🎉✨ *বিশেষ অফার শুধুমাত্র আপনার জন্য, ${studentName}!* ✨🎉\n\nআসসালামু আলাইকুম ${studentName}, 👋\n\nআপনি আমাদের *Dream's Academy*-এর কোর্স সম্পর্কে আগ্রহ দেখিয়েছেন, এজন্য আপনার জন্য থাকছে একটি *বিশেষ ডিসকাউন্ট অফার!* 🎁\n\n🔥 *Limited Time Offer চলছে!*\nআপনি এখন আমাদের জনপ্রিয়\n🎓 *${itemName}*\nমাত্র *${discountPrice} টাকায়* ভর্তি হতে পারবেন। (রেগুলার প্রাইজ: ${originalPrice} টাকা)\n${couponText}\n\nএই কোর্সের মাধ্যমে শিখুন:\n✅ Online Survey Skill\n✅ Professional Account Setup\n✅ কাজের সঠিক পদ্ধতি\n✅ নতুন স্কিল দিয়ে আয়ের সুযোগ\n\n⏳ অফারটি সীমিত সময়ের জন্য প্রযোজ্য।\n\n👉 *এখনই ভর্তি হতে ক্লিক করুন:*\n[Insert Link Here]\n\n💬 কোনো প্রশ্ন থাকলে এই মেসেজের রিপ্লাই করুন, আমাদের টিম আপনাকে সহযোগিতা করবে।\n\nশুভকামনায়,\n💙 *Dream's Academy Team*\n"Learn Skills • Build Your Future"`; 
                 } 
                 else if (template === 'service_discount') { 
-                    message = `🎁✨ *এক্সক্লুসিভ অফার আনলক হয়েছে!* ✨🎁\n\nআসসালামু আলাইকুম ${studentName}, 👋\n\nআপনি কি সেরা মানের *${itemName}* খুঁজছেন? আমরা আপনার জন্যই নিয়ে এসেছি এক দারুণ সুযোগ!\n\nএখনই স্পেশাল ডিসকাউন্ট প্রাইসে আমাদের সার্ভিসটি উপভোগ করুন।\nঅফার প্রাইজ: *${discountPrice} টাকা* (আগের প্রাইজ: ${originalPrice} টাকা)\n\nকেন আমাদের সার্ভিসটি নিবেন?\n✅ প্রিমিয়াম কোয়ালিটি\n✅ দ্রুত ডেলিভারি ও সাপোর্ট\n✅ ১০০০+ সন্তুষ্ট গ্রাহক\n\n⏳ অফারটি খুব শীঘ্রই শেষ হয়ে যাবে!\n\n👉 *এখনই অর্ডার করতে ক্লিক করুন:*\n[Insert Link Here]\n\n💬 কোনো সাহায্য প্রয়োজন হলে নির্দ্বিধায় মেসেজ করুন।\n\nশুভকামনায়,\n💙 *Dream's Academy Team*\n"Learn Skills • Build Your Future"`; 
+                    message = `🎁✨ *এক্সক্লুসিভ অফার আনলক হয়েছে!* ✨🎁\n\nআসসালামু আলাইকুম ${studentName}, 👋\n\nআপনি কি সেরা মানের *${itemName}* খুঁজছেন? আমরা আপনার জন্যই নিয়ে এসেছি এক দারুণ সুযোগ!\n\nএখনই স্পেশাল ডিসকাউন্ট প্রাইসে আমাদের সার্ভিসটি উপভোগ করুন।\nঅফার প্রাইজ: *${discountPrice} টাকা* (আগের প্রাইজ: ${originalPrice} টাকা)\n${couponText}\n\nকেন আমাদের সার্ভিসটি নিবেন?\n✅ প্রিমিয়াম কোয়ালিটি\n✅ দ্রুত ডেলিভারি ও সাপোর্ট\n✅ ১০০০+ সন্তুষ্ট গ্রাহক\n\n⏳ অফারটি খুব শীঘ্রই শেষ হয়ে যাবে!\n\n👉 *এখনই অর্ডার করতে ক্লিক করুন:*\n[Insert Link Here]\n\n💬 কোনো সাহায্য প্রয়োজন হলে নির্দ্বিধায় মেসেজ করুন।\n\nশুভকামনায়,\n💙 *Dream's Academy Team*\n"Learn Skills • Build Your Future"`; 
                 } 
                 else if (template === 'follow_up') { 
                     message = `👋 *কেমন আছেন, ${studentName}?*\n\nআসসালামু আলাইকুম, *Dream's Academy* থেকে আমরা আপনার খোঁজ নিতে মেসেজ দিয়েছি। 🌟\n\nআমরা আপনার সফলতার ব্যাপারে অত্যন্ত আন্তরিক। *${itemName}* নিয়ে আপনার কি কোনো সাহায্য বা দিকনির্দেশনা প্রয়োজন?\n\nআপনার লক্ষ্য অর্জনে আমরা কীভাবে সাহায্য করতে পারি তা আমাদের জানান। আমরা সবসময় আপনার পাশে আছি! 🤝\n\nশুভকামনায়,\n💙 *Dream's Academy Support Team*\n"Learn Skills • Build Your Future"`; 
                 } 
                 else if (template === 'abandoned') { 
-                    message = `🛒 *আপনি কিছু ফেলে এসেছেন, ${studentName}!* 🏃‍♂️💨\n\nআসসালামু আলাইকুম ${studentName}, 👋\n\nআমরা লক্ষ্য করেছি আপনি আমাদের *${itemName}* অর্ডার করার প্রক্রিয়া শুরু করেছিলেন, কিন্তু সেটি সম্পন্ন করেননি।\n\nখুশির খবর হলো, আমরা আপনার প্রোগ্রেস সেভ করে রেখেছি! 🤩\nআজই আপনার অর্ডারটি সম্পন্ন করলে আপনি পাবেন স্পেশাল ডিসকাউন্ট!\nঅফার প্রাইজ: *${discountPrice} টাকা*\n\n👉 *আপনার অর্ডারটি সম্পন্ন করতে ক্লিক করুন:*\n[Insert Link Here]\n\n💳 পেমেন্ট বা চেকআউট নিয়ে কোনো সমস্যা হলে আমাদের জানান, আমরা সাহায্য করতে প্রস্তুত আছি।\n\nশুভকামনায়,\n💙 *Dream's Academy Team*\n"Learn Skills • Build Your Future"`; 
+                    message = `🛒 *আপনি কিছু ফেলে এসেছেন, ${studentName}!* 🏃‍♂️💨\n\nআসসালামু আলাইকুম ${studentName}, 👋\n\nআমরা লক্ষ্য করেছি আপনি আমাদের *${itemName}* অর্ডার করার প্রক্রিয়া শুরু করেছিলেন, কিন্তু সেটি সম্পন্ন করেননি।\n\nখুশির খবর হলো, আমরা আপনার প্রোগ্রেস সেভ করে রেখেছি! 🤩\nআজই আপনার অর্ডারটি সম্পন্ন করলে আপনি পাবেন স্পেশাল ডিসকাউন্ট!\nঅফার প্রাইজ: *${discountPrice} টাকা*\n${couponText}\n\n👉 *আপনার অর্ডারটি সম্পন্ন করতে ক্লিক করুন:*\n[Insert Link Here]\n\n💳 পেমেন্ট বা চেকআউট নিয়ে কোনো সমস্যা হলে আমাদের জানান, আমরা সাহায্য করতে প্রস্তুত আছি।\n\nশুভকামনায়,\n💙 *Dream's Academy Team*\n"Learn Skills • Build Your Future"`; 
                 }
                 
                 if(message !== '') document.getElementById('wa-message-text').value = message;
@@ -1287,8 +1298,8 @@
                     generateTemplateMessage();
                 });
                 waDiscountPrice.addEventListener('input', generateTemplateMessage);
+                waCouponCode.addEventListener('input', generateTemplateMessage); // কুপন কোড টাইপ করলে মেসেজ আপডেট হবে
             }
-
             closeWhatsappModalBtn.addEventListener('click', () => studentWhatsappModal.classList.add('hidden'));
             cancelWhatsappModalBtn.addEventListener('click', () => studentWhatsappModal.classList.add('hidden'));
 
