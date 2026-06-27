@@ -1114,19 +1114,22 @@
                 }
 
                 try {
-                    // বড় বাংলা মেসেজ পাঠানোর জন্য POST মেথড ব্যবহার করা হলো
-                    await fetch(baseUrl, { 
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: `number=${encodeURIComponent(formattedMobile)}&message=${encodeURIComponent(message)}`
+                    // URLSearchParams ব্যবহার করে অত্যন্ত নিখুঁতভাবে লিংক তৈরি করা হলো
+                    // এটি ইমোজি, স্পেস এবং বড় টেক্সটকে ভাঙতে দেবে না
+                    const urlObj = new URL(baseUrl);
+                    urlObj.searchParams.append("number", formattedMobile);
+                    urlObj.searchParams.append("message", message);
+
+                    // GET মেথডেই পাঠানো হচ্ছে যাতে MacroDroid সহজেই ভেরিয়েবলগুলো ধরতে পারে
+                    await fetch(urlObj.toString(), { 
+                        method: 'GET',
+                        mode: 'no-cors'
                     }); 
                     
                     if(showToastMsg) showToast("Triggered MacroDroid to send message silently!", "success");
                     return true;
                 } catch (error) {
+                    console.error("Webhook Error:", error);
                     if(showToastMsg) showToast("Failed to trigger MacroDroid.", "error");
                     return false;
                 }
