@@ -587,7 +587,6 @@
         .read-more-btn:hover { color: var(--brand-primary); gap: 8px; }
 
         @media (max-width: 768px) {
-            /* স্ক্রিনের বাইরে ডানে-বামে যাওয়া সম্পূর্ণ বন্ধ করার কমান্ড */
             html, body { overflow-x: hidden !important; width: 100%; position: relative; }
             body { padding-bottom: 70px; }
             
@@ -599,55 +598,18 @@
             .hero-content h1 { font-size: 2.8rem; }
             .hero-image-wrapper { display: none; }
             
-            /* --- ড্যাশবোর্ডের লেআউট ভাঙা ঠিক করার জন্য ব্লক লেআউট ব্যবহার --- */
-            .dashboard-container { 
-                display: block !important; /* ফ্লেক্সবক্সের কারণে স্ক্রিন বড় হওয়া আটকাতে */
-                width: 100% !important; 
-            }
+            .dashboard-container { display: block !important; width: 100% !important; }
             .dashboard-sidebar { width: 100%; position: static; margin-bottom: 20px; }
             
-            main.dashboard-content { 
-                display: block !important;
-                width: 100% !important; 
-                max-width: 100vw !important;
-                overflow: hidden !important; 
-            }
+            main.dashboard-content { display: block !important; width: 100% !important; max-width: 100vw !important; overflow: hidden !important; }
+            .dashboard-page { width: 100% !important; max-width: 100% !important; overflow: hidden !important; }
             
-            .dashboard-page { 
-                width: 100% !important; 
-                max-width: 100% !important; 
-                overflow: hidden !important; 
-            }
+            .content-card { padding: 15px !important; width: 100% !important; max-width: 100% !important; overflow: hidden !important; box-sizing: border-box; }
+            .content-card > div { width: 100% !important; max-width: 100% !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
             
-            /* --- টেবিলের চারপাশের কার্ড এবং স্ক্রলবার ফিক্স --- */
-            .content-card { 
-                padding: 15px !important; 
-                width: 100% !important; 
-                max-width: 100% !important; 
-                overflow: hidden !important; /* টেবিলকে বাইরে যেতে বাধা দেবে */
-                box-sizing: border-box;
-            }
+            .class-schedule-table { width: 100% !important; min-width: 600px !important; }
+            .class-schedule-table th, .class-schedule-table td { white-space: nowrap !important; padding: 12px 10px !important; font-size: 0.85rem; }
             
-            /* টেবিলটিকে ডানে-বামে স্ক্রল করার ব্যবস্থা */
-            .content-card > div { 
-                width: 100% !important;
-                max-width: 100% !important;
-                overflow-x: auto !important; 
-                -webkit-overflow-scrolling: touch; 
-            }
-            
-            .class-schedule-table { 
-                width: 100% !important; 
-                min-width: 600px !important; /* স্ক্রলবার চালু করার জন্য ফিক্সড উইথ */
-            }
-            
-            .class-schedule-table th, .class-schedule-table td { 
-                white-space: nowrap !important; /* লাইন ভেঙে নিচে নামা বন্ধ করতে */
-                padding: 12px 10px !important; 
-                font-size: 0.85rem; 
-            }
-            
-            /* --- অন্যান্য রেস্পন্সিভ ডিজাইন --- */
             .form-grid { grid-template-columns: 1fr !important; }
             .footer-grid { grid-template-columns: 1fr; text-align: left; gap: 40px; }
             .contact-grid { grid-template-columns: 1fr; text-align: center; }
@@ -696,7 +658,6 @@
                     <button class="btn btn-gradient" id="login-signup-btn">Login / Sign Up <span class="material-symbols-outlined">arrow_forward</span></button>
                 </div>
                 <div id="logged-in-view" class="header-icons hidden">
-                    <!-- Advanced Notification Icon -->
                     <div class="notification-icon-wrapper">
                         <span class="material-symbols-outlined" id="notification-icon">notifications</span>
                         <span id="notification-badge" class="notification-badge hidden">0</span>
@@ -737,8 +698,6 @@
 
     <main>
         <!-- ======================= MODALS ======================= -->
-        
-        <!-- NEW: Course Preview Modal -->
         <div class="login-modal hidden" id="course-preview-modal">
             <div class="login-card" style="max-width: 800px; display: block; overflow-y: auto; max-height: 90vh;">
                 <div class="modal-form-panel" style="width: 100%; padding: 40px;">
@@ -758,7 +717,6 @@
             </div>
         </div>
 
-        <!-- Login Modal -->
         <div class="login-modal hidden" id="login-modal">
             <div class="login-card">
                 <button class="close-modal-btn" aria-label="Close">&times;</button>
@@ -789,7 +747,6 @@
             </div>
         </div>
 
-        <!-- Signup Modal -->
         <div class="login-modal hidden" id="signup-modal">
             <div class="login-card">
                 <button class="close-modal-btn" aria-label="Close">&times;</button>
@@ -813,7 +770,6 @@
             </div>
         </div>
 
-        <!-- NEW: Email OTP Verification Modal -->
         <div class="login-modal hidden" id="otp-modal">
             <div class="login-card" style="max-width: 450px; display: block; text-align: center; padding: 40px;">
                 <button class="close-modal-btn" aria-label="Close" id="close-otp-modal">&times;</button>
@@ -839,7 +795,6 @@
             </div>
         </div>
 
-        <!-- Forgot Password Modal -->
         <div class="login-modal hidden" id="forgot-password-modal">
             <div class="login-card" style="max-width: 500px; display: block; text-align: center;">
                 <div class="modal-form-panel" style="width: 100%;">
@@ -859,7 +814,6 @@
             </div>
         </div>
         
-        <!-- Set New Password Modal -->
         <div class="login-modal hidden" id="set-new-password-modal">
             <div class="login-card" style="max-width: 500px; display: block; text-align: center;">
                 <div class="modal-form-panel" style="width: 100%;">
@@ -882,7 +836,6 @@
             </div>
         </div>
 
-        <!-- Checkout, bKash, Success, Error Modals -->
         <div class="login-modal hidden" id="checkout-modal">
             <div class="checkout-card">
                 <button class="close-modal-btn" id="close-checkout-modal-btn" aria-label="Close">&times;</button>
@@ -1452,45 +1405,33 @@
 
    <!-- Hidden Template For Automatic PDF Certificate -->
     <div id="certificate-wrapper" style="position: absolute; top: -9999px; left: -9999px; z-index: -999;">
-        <!-- আসল সিগনেচারের ফিল আনার জন্য স্পেশাল ফন্ট যুক্ত করা হলো -->
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
         </style>
         
         <div id="certificate-template" style="width: 1056px; height: 816px; padding: 40px; position: relative; background-color: #fff; text-align: center; font-family: 'Inter', sans-serif; box-sizing: border-box;">
-            <!-- Flexbox ব্যবহার করা হয়েছে যাতে ওভারল্যাপ না হয় -->
             <div style="border: 10px double #d4af37; width: 100%; height: 100%; padding: 40px 60px; position: relative; background: #ffffff; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
-                
-                <!-- উপরের অংশ (লোগো, স্টুডেন্ট নাম ও কোর্স) -->
                 <div style="width: 100%; padding-top: 20px;">
                     <img src="https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png" style="height: 70px; margin-bottom: 20px;" alt="Dreams Academy">
                     <h1 style="font-size: 52px; font-weight: 800; color: #d4af37; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 10px; font-family: Georgia, serif;">Certificate of Completion</h1>
                     <p style="font-size: 20px; color: #475569; margin-top: 20px; margin-bottom: 15px;">This is to certify that</p>
-                    
                     <h2 id="cert-student-name" style="font-size: 50px; font-weight: 700; color: #020617; border-bottom: 2px solid #cbd5e1; display: inline-block; padding-bottom: 5px; margin-bottom: 20px; font-style: italic;">Student Name</h2>
-                    
                     <p style="font-size: 20px; color: #475569; margin-bottom: 15px;">has successfully completed the comprehensive program</p>
-                    <!-- কোর্সের নামের ম্যাক্স উইথ দেওয়া হয়েছে যাতে বেশি বড় হলেও সাইনের সাথে না লাগে -->
                     <h3 id="cert-course-name" style="font-size: 32px; font-weight: 800; color: #4f46e5; margin: 0 auto; max-width: 800px; line-height: 1.4;">Advanced Survey Course</h3>
                 </div>
-
-                <!-- নিচের অংশ (তারিখ এবং ডিরেক্টরের সিগনেচার) -->
                 <div style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%; padding-bottom: 20px;">
                     <div style="text-align: left;">
                         <p id="cert-date" style="font-size: 18px; font-weight: 600; margin-bottom: 5px; color: #0f172a;">Date: 01 Jan 2026</p>
                         <p id="cert-id" style="font-size: 16px; color: #64748b; margin: 0;">ID: DA-123456</p>
                     </div>
                     <div style="text-align: center;">
-                        <!-- সিগনেচারের বক্স বড় করা হয়েছে -->
                         <div style="min-width: 280px; border-bottom: 2px solid #020617; margin-bottom: 10px; padding-bottom: 5px; display: inline-block;">
-                            <!-- রিয়েল সিগনেচার ফন্ট (Great Vibes) -->
                             <div style="font-family: 'Great Vibes', cursive; font-size: 48px; color: #0f172a; padding-top: 10px; line-height: 1;">Shofiqul Islam</div>
                         </div>
                         <p style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">Authorized Director</p>
                         <p style="font-size: 15px; color: #64748b; margin: 0;">Dreams Academy</p>
                     </div>
                 </div>
-                
             </div>
         </div>
     </div>
@@ -1543,8 +1484,9 @@
         <a href="#video-reviews" class="mobile-nav-link"><span class="material-symbols-outlined">star</span><span>Reviews</span></a>
         <a href="#noticeboard" class="mobile-nav-link"><span class="material-symbols-outlined">campaign</span><span>Notice</span></a>
     </nav>
-<!-- EmailJS Script -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <!-- EmailJS Script -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <!-- Firebase SDK Scripts -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -1576,7 +1518,7 @@
         window.checkoutState = { courseName: "", originalPrice: 0, discount: 0, finalPrice: 0, image: "" };
 
         document.addEventListener('DOMContentLoaded', function() {
-            // === NEW: Abandoned Cart Logic ===
+            // === Abandoned Cart Logic ===
             async function saveToAbandonedCart(itemName, amount) {
                 const user = auth.currentUser;
                 if (!user) return;
@@ -1612,7 +1554,6 @@
                     }
                 }
             }
-            // ==================================
             
             // General UI Setup
             const loginSignupBtn = document.getElementById('login-signup-btn');
@@ -1633,7 +1574,7 @@
                 setTimeout(() => toast.remove(), 4000);
             }
 
-            // SPA Routing System
+            // SPA Routing System Updates for Hash Links
             function getUnderlyingPage() {
                 if (auth.currentUser && !dashboardContent.classList.contains('hidden')) {
                     const activeDash = document.querySelector('.dashboard-page:not(.hidden)');
@@ -1641,8 +1582,94 @@
                 } else return 'home';
             }
 
+            function handleInitialRoute(addToHistory = true) {
+                let targetId = 'home';
+                
+                // প্রথমে হ্যাশ চেক করবে যাতে কপি করা লিংক কাজ করে
+                if (window.location.hash && window.location.hash.length > 1) {
+                    targetId = window.location.hash.substring(1);
+                } else {
+                    const path = window.location.pathname;
+                    if (path !== '/' && path !== '/index.html') {
+                        targetId = path.substring(1).replace(/\/$/, "");
+                    }
+                }
+                
+                navigateTo(targetId, addToHistory);
+            }
+
+            async function handleDeepLink(type, name) {
+                if (type === 'course') {
+                    showPageSection('courses');
+                    document.querySelectorAll('.login-modal').forEach(m => m.classList.add('hidden'));
+                    try {
+                        const q = await db.collection('courses').where('name', '==', name).get();
+                        if (!q.empty) {
+                            const v = q.docs[0].data();
+                            openCoursePreviewModal(v.name, v.price, v.image); 
+                        } else {
+                            showToast("Course not found", "error");
+                            navigateTo('courses');
+                        }
+                    } catch(e) { console.error(e); }
+                } else if (type === 'service') {
+                    showPageSection('services');
+                    try {
+                        const q = await db.collection('services').where('name', '==', name).get();
+                        if (!q.empty) {
+                            const v = q.docs[0].data();
+                            if(auth.currentUser) {
+                                window.checkoutState = { courseName: v.name, originalPrice: v.currentPrice, discount: 0, finalPrice: v.currentPrice, image: v.imageUrl || 'https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png' };
+                                saveToAbandonedCart(v.name, v.currentPrice);
+                                document.getElementById('checkout-item-name').innerText = v.name; 
+                                document.getElementById('checkout-item-price').innerText = `৳${v.currentPrice}`; 
+                                document.getElementById('checkout-item-img').src = window.checkoutState.image; 
+                                document.getElementById('checkout-original-price-display').innerText = `৳${v.currentPrice}`; 
+                                document.getElementById('checkout-discount-display').innerText = `-৳0.00`; 
+                                document.getElementById('checkout-total-display').innerText = `৳${v.currentPrice}`; 
+                                document.getElementById('checkout-coupon-input').value = '';
+                                document.querySelectorAll('.payment-method-label').forEach(l => l.classList.remove('active')); 
+                                const bk = document.querySelector('input[value="bkash"]').closest('.payment-method-label'); 
+                                bk.classList.add('active'); 
+                                document.querySelector('input[value="bkash"]').checked = true;
+                                
+                                document.querySelectorAll('.login-modal').forEach(m => m.classList.add('hidden'));
+                                document.getElementById('checkout-modal').classList.remove('hidden');
+                            } else {
+                                navigateTo('login', true);
+                                showToast('Please login to order this service.', 'info');
+                            }
+                        } else {
+                            showToast("Service not found", "error");
+                            navigateTo('services');
+                        }
+                    } catch(e) {}
+                }
+            }
+
             function navigateTo(targetId, addToHistory = true) {
                 if(!targetId) return;
+
+                // --- Handle Custom Deep Links (Course / Service) ---
+                if (targetId.startsWith('course/')) {
+                    const courseName = decodeURIComponent(targetId.substring(7));
+                    handleDeepLink('course', courseName);
+                    if(addToHistory) {
+                        const newUrl = `#${targetId}`;
+                        if (window.location.hash !== newUrl) window.history.pushState({ section: targetId }, '', newUrl);
+                    }
+                    return;
+                }
+                if (targetId.startsWith('service/')) {
+                    const serviceName = decodeURIComponent(targetId.substring(8));
+                    handleDeepLink('service', serviceName);
+                    if(addToHistory) {
+                        const newUrl = `#${targetId}`;
+                        if (window.location.hash !== newUrl) window.history.pushState({ section: targetId }, '', newUrl);
+                    }
+                    return;
+                }
+
                 const modalRoutes = ['login', 'signup', 'forgot-password', 'dollarsell', 'checkout', 'otp'];
                 const isModal = modalRoutes.includes(targetId);
                 const el = document.getElementById(targetId);
@@ -1655,11 +1682,14 @@
                 else if (!isDashboardPage && !isMainPage && !isModal) effectiveTargetId = 'home';
 
                 if (addToHistory) {
-                    const path = effectiveTargetId === 'home' ? '/' : `/${effectiveTargetId}`;
-                    if (window.location.pathname !== path) {
+                    const newUrl = effectiveTargetId === 'home' ? window.location.pathname : `#${effectiveTargetId}`;
+                    const currentHash = window.location.hash;
+                    const targetHash = effectiveTargetId === 'home' ? '' : `#${effectiveTargetId}`;
+                    
+                    if (currentHash !== targetHash) {
                         try {
-                            if (effectiveTargetId !== targetId) window.history.replaceState({ section: effectiveTargetId }, '', path);
-                            else window.history.pushState({ section: effectiveTargetId }, '', path);
+                            if (effectiveTargetId !== targetId) window.history.replaceState({ section: effectiveTargetId }, '', newUrl);
+                            else window.history.pushState({ section: effectiveTargetId }, '', newUrl);
                         } catch(e) {}
                     }
                 }
@@ -1692,12 +1722,6 @@
                 if (e.state && e.state.section) navigateTo(e.state.section, false);
                 else handleInitialRoute(false);
             });
-
-            function handleInitialRoute(addToHistory = true) {
-                const path = window.location.pathname;
-                let targetId = path === '/' ? 'home' : path.substring(1).replace(/\/$/, "");
-                navigateTo(targetId, addToHistory);
-            }
 
             function showPageSection(targetId) {
                 const allSections = document.querySelectorAll('#main-content .page-section');
@@ -1771,6 +1795,7 @@
                 if (targetPageId === 'ssn-list-page') displaySSNList();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
+            
             // ================= Email OTP System =================
             const signupForm = document.getElementById('signup-form');
             signupForm.addEventListener('submit', (e) => {
@@ -1984,8 +2009,13 @@
                                 populateUI(data); displayMyCourses(); initializeNotifications(user);
                                 if (!initialRouteHandled) {
                                     const p = window.location.pathname;
-                                    if (['/', '/home', '/index.html', '/login', '/signup'].includes(p)) navigateTo('my-courses-page', false);
-                                    else handleInitialRoute(false);
+                                    const h = window.location.hash;
+                                    
+                                    if (['/', '/home', '/index.html', '/login', '/signup'].includes(p) && (!h || ['#home', '#login', '#signup'].includes(h))) {
+                                        navigateTo('my-courses-page', false);
+                                    } else {
+                                        handleInitialRoute(false);
+                                    }
                                     initialRouteHandled = true;
                                 }
                             }
@@ -2004,7 +2034,12 @@
 
             // General Modals & Clicks
             loginSignupBtn.addEventListener('click', () => navigateTo('login'));
-            document.querySelectorAll('.close-modal-btn').forEach(btn => btn.addEventListener('click', () => { btn.closest('.login-modal').classList.add('hidden'); navigateTo(getUnderlyingPage()); }));
+            document.querySelectorAll('.close-modal-btn').forEach(btn => btn.addEventListener('click', (e) => { 
+                if (e.currentTarget.id !== 'close-course-preview-btn' && e.currentTarget.id !== 'close-checkout-modal-btn') {
+                    btn.closest('.login-modal').classList.add('hidden'); 
+                    navigateTo(getUnderlyingPage()); 
+                }
+            }));
             document.getElementById('show-signup-modal-btn').addEventListener('click', (e) => { e.preventDefault(); navigateTo('signup'); });
             document.getElementById('show-login-modal-btn').addEventListener('click', (e) => { e.preventDefault(); navigateTo('login'); });
             document.getElementById('forgot-password-link').addEventListener('click', (e) => { e.preventDefault(); navigateTo('forgot-password'); });
@@ -2154,6 +2189,7 @@
             
             document.getElementById('close-course-preview-btn').addEventListener('click', () => {
                 document.getElementById('course-preview-modal').classList.add('hidden');
+                navigateTo('courses'); 
             });
 
             // ================= Automatic Certificate Generator =================
@@ -2234,8 +2270,17 @@
             
             function handleBuyNowClick(e) {
                 e.preventDefault(); 
+                const b = e.currentTarget, name = b.dataset.name, price = parseFloat(b.dataset.price); 
+                
+                // যদি সার্ভিস হয় তবে সরাসরি ডিপ লিংক দিয়ে অর্ডার শুরু করবে
+                const isService = b.classList.contains('btn-service-action');
+                if (isService) {
+                    navigateTo('service/' + encodeURIComponent(name));
+                    return;
+                }
+
+                // যদি কোর্স হয় তবে সরাসরি চেকআউট প্যানেলে যাবে
                 if(auth.currentUser) {
-                    const b = e.currentTarget, name = b.dataset.name, price = parseFloat(b.dataset.price); 
                     let img = 'https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png'; 
                     const c = b.closest('.course-card') || b.closest('.service-card'); 
                     if (c) { const i = c.querySelector('img'); if (i) img = i.src; }
@@ -2256,7 +2301,9 @@
                     bk.classList.add('active'); 
                     document.querySelector('input[value="bkash"]').checked = true; 
                     navigateTo('checkout'); 
-                } else navigateTo('login');
+                } else {
+                    navigateTo('login');
+                }
             }
             
             async function displayServices() { const c = document.getElementById('services-container'); const iconMap = n => { const x=n.toLowerCase(); return x.includes('ip')||x.includes('proxy')?'dns':x.includes('number')||x.includes('otp')?'sms':x.includes('server')||x.includes('vps')?'router':x.includes('bank')||x.includes('card')?'credit_card':x.includes('id')||x.includes('verify')?'verified_user':'workspace_premium'; }; try { const s = await db.collection('services').get(); let h = ''; s.forEach(d => { const v = d.data(); if(v.status===false) return; const sv = Math.round(((v.oldPrice-v.currentPrice)/v.oldPrice)*100); const m = v.imageUrl ? `<img src="${v.imageUrl}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 24px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">` : `<div class="service-icon-box"><span class="material-symbols-outlined">${iconMap(v.name)}</span></div>`; h += `<div class="service-card"><div class="service-header">${m}<h3>${v.name}</h3><p class="plan-description">${v.description}</p></div><div class="pricing-area"><div class="pricing-info"><span class="old-price">৳ ${v.oldPrice}</span>${sv>0?`<span class="save-badge">Save ${sv}%</span>`:''}</div><div class="current-price"><span class="price-amount">৳ ${v.currentPrice}</span></div></div><div class="service-body"><ul class="service-features">${(v.features||[]).map(f=>`<li><span class="material-symbols-outlined">check_circle</span><span>${f}</span></li>`).join('')}</ul><a href="#" class="btn-service-action buy-now-btn" data-name="${v.name}" data-price="${v.currentPrice}">Order Now <span class="material-symbols-outlined">shopping_cart_checkout</span></a></div></div>`; }); c.innerHTML = h; document.querySelectorAll('.buy-now-btn').forEach(b => b.addEventListener('click', handleBuyNowClick)); } catch(e) {} }
@@ -2288,9 +2335,7 @@
                         title.addEventListener('click', (e) => {
                             e.preventDefault();
                             const name = e.currentTarget.dataset.name;
-                            const price = e.currentTarget.dataset.price;
-                            const img = e.currentTarget.dataset.img;
-                            openCoursePreviewModal(name, price, img);
+                            navigateTo('course/' + encodeURIComponent(name));
                         });
                     });
                 } catch(e){} 
