@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1114,19 +1113,14 @@
                 }
 
                 try {
-                    // URL-এর লিমিটেশন এড়াতে GET এর পরিবর্তে POST মেথড এবং x-www-form-urlencoded বডি ব্যবহার করা হলো
-                    // এতে করে MacroDroid খুব সহজেই আগের মতই ভেরিয়েবলগুলো ক্যাচ করতে পারবে
-                    const params = new URLSearchParams();
-                    params.append("number", formattedMobile);
-                    params.append("message", message);
+                    // আগের GET মেথডেই পাঠানো হচ্ছে
+                    const urlObj = new URL(baseUrl);
+                    urlObj.searchParams.append("number", formattedMobile);
+                    urlObj.searchParams.append("message", message);
 
-                    await fetch(baseUrl, { 
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: params.toString()
+                    await fetch(urlObj.toString(), { 
+                        method: 'GET',
+                        mode: 'no-cors'
                     }); 
                     
                     if(showToastMsg) showToast("Triggered MacroDroid to send message silently!", "success");
@@ -1262,7 +1256,6 @@
                 if(!waTemplateSelect) return;
                 const template = waTemplateSelect.value;
                 
-                // Show/Hide dynamic item selection fields based on template
                 if (template === 'course_discount' || template === 'service_discount' || template === 'abandoned' || template === 'follow_up') {
                     waDynamicFields.classList.remove('hidden');
                 } else {
@@ -1279,22 +1272,22 @@
                 let discountPrice = waDiscountPrice.value || '[Discount Price]';
                 let couponInput = waCouponCode.value.trim().toUpperCase();
                 
-                // কুপন কোড থাকলে মেসেজে দেখানোর ফরম্যাট
-                let couponText = couponInput ? `\n🎟️ *কুপন কোড:* ${couponInput}\n(অফারটি পেতে চেকআউটের সময় অবশ্যই এই কুপন কোডটি ব্যবহার করুন)` : '';
+                // কুপনের টেক্সটটি ছোট করা হয়েছে যেন সার্ভার লিমিট ক্রস না করে
+                let couponText = couponInput ? `\n🎟️ *কুপন কোড:* ${couponInput} (চেকআউটে ব্যবহার করুন)` : '';
                 
                 let message = '';
                 
                 if (template === 'course_discount') { 
-                    message = `🎉✨ *বিশেষ অফার শুধুমাত্র আপনার জন্য, ${studentName}!* ✨🎉\n\nআসসালামু আলাইকুম ${studentName}, 👋\n\nআপনি আমাদের *Dream's Academy*-এর কোর্স সম্পর্কে আগ্রহ দেখিয়েছেন, এজন্য আপনার জন্য থাকছে একটি *বিশেষ ডিসকাউন্ট অফার!* 🎁\n\n🔥 *Limited Time Offer চলছে!*\nআপনি এখন আমাদের জনপ্রিয়\n🎓 *${itemName}*\nমাত্র *${discountPrice} টাকায়* ভর্তি হতে পারবেন। (রেগুলার প্রাইজ: ${originalPrice} টাকা)\n${couponText}\n\nএই কোর্সের মাধ্যমে শিখুন:\n✅ Online Survey Skill\n✅ Professional Account Setup\n✅ কাজের সঠিক পদ্ধতি\n✅ নতুন স্কিল দিয়ে আয়ের সুযোগ\n\n⏳ অফারটি সীমিত সময়ের জন্য প্রযোজ্য।\n\n👉 *এখনই ভর্তি হতে ক্লিক করুন:*\n[Insert Link Here]\n\n💬 কোনো প্রশ্ন থাকলে এই মেসেজের রিপ্লাই করুন, আমাদের টিম আপনাকে সহযোগিতা করবে।\n\nশুভকামনায়,\n💙 *Dream's Academy Team*\n"Learn Skills • Build Your Future"`; 
+                    message = `🎉 *আপনার জন্য বিশেষ অফার, ${studentName}!*\n\nআসসালামু আলাইকুম 👋\nআপনি আমাদের কোর্সে আগ্রহ দেখিয়েছেন, তাই আপনার জন্য স্পেশাল ডিসকাউন্ট! 🎁\n\n🎓 *${itemName}*\n🔥 অফার প্রাইজ: *${discountPrice} টাকা* (রেগুলার: ${originalPrice} টাকা)\n${couponText}\n\n✅ অনলাইন সার্ভে\n✅ প্রফেশনাল একাউন্ট\n✅ আয়ের সুযোগ\n\n⏳ অফারটি সীমিত সময়ের জন্য!\n👉 *ভর্তি হতে ক্লিক করুন:*\n[Insert Link]\n\n💬 কোনো প্রশ্ন থাকলে রিপ্লাই করুন।\n\n💙 *Dream's Academy*`; 
                 } 
                 else if (template === 'service_discount') { 
-                    message = `🎁✨ *এক্সক্লুসিভ অফার আনলক হয়েছে!* ✨🎁\n\nআসসালামু আলাইকুম ${studentName}, 👋\n\nআপনি কি সেরা মানের *${itemName}* খুঁজছেন? আমরা আপনার জন্যই নিয়ে এসেছি এক দারুণ সুযোগ!\n\nএখনই স্পেশাল ডিসকাউন্ট প্রাইসে আমাদের সার্ভিসটি উপভোগ করুন।\nঅফার প্রাইজ: *${discountPrice} টাকা* (আগের প্রাইজ: ${originalPrice} টাকা)\n${couponText}\n\nকেন আমাদের সার্ভিসটি নিবেন?\n✅ প্রিমিয়াম কোয়ালিটি\n✅ দ্রুত ডেলিভারি ও সাপোর্ট\n✅ ১০০০+ সন্তুষ্ট গ্রাহক\n\n⏳ অফারটি খুব শীঘ্রই শেষ হয়ে যাবে!\n\n👉 *এখনই অর্ডার করতে ক্লিক করুন:*\n[Insert Link Here]\n\n💬 কোনো সাহায্য প্রয়োজন হলে নির্দ্বিধায় মেসেজ করুন।\n\nশুভকামনায়,\n💙 *Dream's Academy Team*\n"Learn Skills • Build Your Future"`; 
+                    message = `🎁 *এক্সক্লুসিভ অফার, ${studentName}!*\n\nআসসালামু আলাইকুম 👋\nসেরা মানের *${itemName}* খুঁজছেন? আপনার জন্য দারুণ সুযোগ!\n\n🔥 অফার প্রাইজ: *${discountPrice} টাকা* (রেগুলার: ${originalPrice} টাকা)\n${couponText}\n\n✅ প্রিমিয়াম কোয়ালিটি\n✅ দ্রুত ডেলিভারি ও সাপোর্ট\n✅ ১০০০+ সন্তুষ্ট গ্রাহক\n\n⏳ অফারটি শীঘ্রই শেষ হবে!\n👉 *অর্ডার করতে ক্লিক করুন:*\n[Insert Link]\n\n💬 প্রয়োজনে মেসেজ করুন।\n\n💙 *Dream's Academy*`; 
                 } 
                 else if (template === 'follow_up') { 
-                    message = `👋 *কেমন আছেন, ${studentName}?*\n\nআসসালামু আলাইকুম, *Dream's Academy* থেকে আমরা আপনার খোঁজ নিতে মেসেজ দিয়েছি। 🌟\n\nআমরা আপনার সফলতার ব্যাপারে অত্যন্ত আন্তরিক। *${itemName}* নিয়ে আপনার কি কোনো সাহায্য বা দিকনির্দেশনা প্রয়োজন?\n\nআপনার লক্ষ্য অর্জনে আমরা কীভাবে সাহায্য করতে পারি তা আমাদের জানান। আমরা সবসময় আপনার পাশে আছি! 🤝\n\nশুভকামনায়,\n💙 *Dream's Academy Support Team*\n"Learn Skills • Build Your Future"`; 
+                    message = `👋 *কেমন আছেন, ${studentName}?*\n\nআসসালামু আলাইকুম, *Dream's Academy* থেকে মেসেজ দিয়েছি। 🌟\n\nআমরা আপনার সফলতার ব্যাপারে আন্তরিক। *${itemName}* নিয়ে আপনার কি কোনো সাহায্য বা দিকনির্দেশনা প্রয়োজন?\n\nআপনার লক্ষ্য অর্জনে আমরা কীভাবে সাহায্য করতে পারি তা আমাদের জানান। 🤝\n\nশুভকামনায়,\n💙 *Dream's Academy Support Team*`; 
                 } 
                 else if (template === 'abandoned') { 
-                    message = `🛒 *আপনি কিছু ফেলে এসেছেন, ${studentName}!* 🏃‍♂️💨\n\nআসসালামু আলাইকুম ${studentName}, 👋\n\nআমরা লক্ষ্য করেছি আপনি আমাদের *${itemName}* অর্ডার করার প্রক্রিয়া শুরু করেছিলেন, কিন্তু সেটি সম্পন্ন করেননি।\n\nখুশির খবর হলো, আমরা আপনার প্রোগ্রেস সেভ করে রেখেছি! 🤩\nআজই আপনার অর্ডারটি সম্পন্ন করলে আপনি পাবেন স্পেশাল ডিসকাউন্ট!\nঅফার প্রাইজ: *${discountPrice} টাকা*\n${couponText}\n\n👉 *আপনার অর্ডারটি সম্পন্ন করতে ক্লিক করুন:*\n[Insert Link Here]\n\n💳 পেমেন্ট বা চেকআউট নিয়ে কোনো সমস্যা হলে আমাদের জানান, আমরা সাহায্য করতে প্রস্তুত আছি।\n\nশুভকামনায়,\n💙 *Dream's Academy Team*\n"Learn Skills • Build Your Future"`; 
+                    message = `🛒 *আপনি কিছু ফেলে এসেছেন, ${studentName}!*\n\nআসসালামু আলাইকুম 👋\nআপনি *${itemName}* অর্ডার শুরু করেও সম্পন্ন করেননি।\nআপনার প্রোগ্রেস সেভ করা আছে! আজই অর্ডার করলে পাচ্ছেন স্পেশাল ডিসকাউন্ট 🤩\n\n🔥 অফার প্রাইজ: *${discountPrice} টাকা*\n${couponText}\n\n👉 *অর্ডার সম্পন্ন করতে ক্লিক করুন:*\n[Insert Link]\n\n💳 পেমেন্টে সমস্যা হলে জানান।\n\n💙 *Dream's Academy*`; 
                 }
                 
                 if(message !== '') document.getElementById('wa-message-text').value = message;
