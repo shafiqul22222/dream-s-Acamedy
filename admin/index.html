@@ -1095,6 +1095,7 @@
                 });
             }
 
+            // ১. MacroDroid Trigger ফাংশন (Length Checker সহ)
             window.sendViaMacroDroid = async (number, message, showToastMsg = true) => {
                 const doc = await db.collection('site_settings').doc('macrodroid_webhook').get();
                 let baseUrl = "";
@@ -1113,10 +1114,15 @@
                 }
 
                 try {
-                    // আগের GET মেথডেই পাঠানো হচ্ছে
                     const urlObj = new URL(baseUrl);
                     urlObj.searchParams.append("number", formattedMobile);
                     urlObj.searchParams.append("message", message);
+                    
+                    // সার্ভার লিমিট পার হয়ে গেলে সতর্ক করার জন্য Length Checker
+                    if (urlObj.toString().length > 3500) {
+                        if(showToastMsg) showToast("মেসেজটি অনেক বড়! দয়া করে কিছু লাইন মুছে ছোট করুন।", "error");
+                        return false;
+                    }
 
                     await fetch(urlObj.toString(), { 
                         method: 'GET',
@@ -1252,6 +1258,7 @@
             const waCouponCode = document.getElementById('wa-coupon-code');
             const waDynamicFields = document.getElementById('wa-dynamic-fields');
 
+           // ২. শর্ট ও অপটিমাইজ করা মেসেজ টেমপ্লেট
             const generateTemplateMessage = () => {
                 if(!waTemplateSelect) return;
                 const template = waTemplateSelect.value;
@@ -1273,26 +1280,25 @@
                 let couponInput = waCouponCode.value.trim().toUpperCase();
                 
                 // কুপনের টেক্সটটি ছোট করা হয়েছে যেন সার্ভার লিমিট ক্রস না করে
-                let couponText = couponInput ? `\n🎟️ *কুপন কোড:* ${couponInput} (চেকআউটে ব্যবহার করুন)` : '';
+                let couponText = couponInput ? `🎟️ *কুপন:* ${couponInput} (চেকআউটে দিন)` : '';
                 
                 let message = '';
                 
                 if (template === 'course_discount') { 
-                    message = `🎉 *আপনার জন্য বিশেষ অফার, ${studentName}!*\n\nআসসালামু আলাইকুম 👋\nআপনি আমাদের কোর্সে আগ্রহ দেখিয়েছেন, তাই আপনার জন্য স্পেশাল ডিসকাউন্ট! 🎁\n\n🎓 *${itemName}*\n🔥 অফার প্রাইজ: *${discountPrice} টাকা* (রেগুলার: ${originalPrice} টাকা)\n${couponText}\n\n✅ অনলাইন সার্ভে\n✅ প্রফেশনাল একাউন্ট\n✅ আয়ের সুযোগ\n\n⏳ অফারটি সীমিত সময়ের জন্য!\n👉 *ভর্তি হতে ক্লিক করুন:*\n[Insert Link]\n\n💬 কোনো প্রশ্ন থাকলে রিপ্লাই করুন।\n\n💙 *Dream's Academy*`; 
+                    message = `🎉 *বিশেষ অফার, ${studentName}!* 🎁\n\nআসসালামু আলাইকুম। কোর্সে আগ্রহ দেখানোর জন্য আপনার জন্য ডিসকাউন্ট!\n\n🎓 *${itemName}*\n🔥 অফার প্রাইজ: *${discountPrice} ৳* (রেগুলার: ${originalPrice} ৳)\n${couponText}\n\n✅ অনলাইন সার্ভে ও স্কিল ডেভেলপমেন্ট\n✅ প্রফেশনাল গাইডলাইন ও ইনকাম\n\n⏳ সীমিত সময়ের অফার!\n👉 *ভর্তি লিংক:* [Insert Link]\n\n💬 প্রয়োজনে রিপ্লাই দিন।\n💙 *Dream's Academy*`; 
                 } 
                 else if (template === 'service_discount') { 
-                    message = `🎁 *এক্সক্লুসিভ অফার, ${studentName}!*\n\nআসসালামু আলাইকুম 👋\nসেরা মানের *${itemName}* খুঁজছেন? আপনার জন্য দারুণ সুযোগ!\n\n🔥 অফার প্রাইজ: *${discountPrice} টাকা* (রেগুলার: ${originalPrice} টাকা)\n${couponText}\n\n✅ প্রিমিয়াম কোয়ালিটি\n✅ দ্রুত ডেলিভারি ও সাপোর্ট\n✅ ১০০০+ সন্তুষ্ট গ্রাহক\n\n⏳ অফারটি শীঘ্রই শেষ হবে!\n👉 *অর্ডার করতে ক্লিক করুন:*\n[Insert Link]\n\n💬 প্রয়োজনে মেসেজ করুন।\n\n💙 *Dream's Academy*`; 
+                    message = `🎁 *এক্সক্লুসিভ অফার, ${studentName}!*\n\nআসসালামু আলাইকুম। আপনার জন্য সেরা সার্ভিসটি এখন ডিসকাউন্টে!\n\n🔹 *${itemName}*\n🔥 অফার প্রাইজ: *${discountPrice} ৳* (রেগুলার: ${originalPrice} ৳)\n${couponText}\n\n✅ প্রিমিয়াম কোয়ালিটি ও ফাস্ট ডেলিভারি\n✅ সেরা কাস্টমার সাপোর্ট\n\n⏳ অফারটি শীঘ্রই শেষ হবে!\n👉 *অর্ডার লিংক:* [Insert Link]\n\n💬 প্রয়োজনে মেসেজ করুন।\n💙 *Dream's Academy*`; 
                 } 
                 else if (template === 'follow_up') { 
-                    message = `👋 *কেমন আছেন, ${studentName}?*\n\nআসসালামু আলাইকুম, *Dream's Academy* থেকে মেসেজ দিয়েছি। 🌟\n\nআমরা আপনার সফলতার ব্যাপারে আন্তরিক। *${itemName}* নিয়ে আপনার কি কোনো সাহায্য বা দিকনির্দেশনা প্রয়োজন?\n\nআপনার লক্ষ্য অর্জনে আমরা কীভাবে সাহায্য করতে পারি তা আমাদের জানান। 🤝\n\nশুভকামনায়,\n💙 *Dream's Academy Support Team*`; 
+                    message = `👋 *কেমন আছেন, ${studentName}?*\n\nআসসালামু আলাইকুম, *Dream's Academy* থেকে মেসেজ দিয়েছি। 🌟\n\nআমরা আপনার সফলতার ব্যাপারে আন্তরিক। *${itemName}* নিয়ে আপনার কোনো গাইডলাইন প্রয়োজন হলে আমাদের নির্দ্বিধায় জানান। 🤝\n\nশুভকামনায়,\n💙 *Support Team*`; 
                 } 
                 else if (template === 'abandoned') { 
-                    message = `🛒 *আপনি কিছু ফেলে এসেছেন, ${studentName}!*\n\nআসসালামু আলাইকুম 👋\nআপনি *${itemName}* অর্ডার শুরু করেও সম্পন্ন করেননি।\nআপনার প্রোগ্রেস সেভ করা আছে! আজই অর্ডার করলে পাচ্ছেন স্পেশাল ডিসকাউন্ট 🤩\n\n🔥 অফার প্রাইজ: *${discountPrice} টাকা*\n${couponText}\n\n👉 *অর্ডার সম্পন্ন করতে ক্লিক করুন:*\n[Insert Link]\n\n💳 পেমেন্টে সমস্যা হলে জানান।\n\n💙 *Dream's Academy*`; 
+                    message = `🛒 *আপনার অর্ডারটি অসম্পূর্ণ, ${studentName}!*\n\nআসসালামু আলাইকুম। আপনি *${itemName}* অর্ডার শুরু করেও সম্পন্ন করেননি।\nআজই অর্ডার করলে পাচ্ছেন বিশেষ ডিসকাউন্ট 🤩\n\n🔥 অফার প্রাইজ: *${discountPrice} ৳*\n${couponText}\n\n👉 *অর্ডার সম্পন্ন করুন:* [Insert Link]\n\n💳 কোনো সমস্যা হলে জানান।\n💙 *Dream's Academy*`; 
                 }
                 
                 if(message !== '') document.getElementById('wa-message-text').value = message;
             };
-
             if (waTemplateSelect) {
                 waTemplateSelect.addEventListener('change', generateTemplateMessage);
                 waItemSelect.addEventListener('change', function() {
