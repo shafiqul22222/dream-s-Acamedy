@@ -550,7 +550,7 @@
                 <div class="page-header"><h1>Coupon Management</h1><button class="btn btn-add" onclick="openModalForAdd('coupons')"><span class="material-symbols-outlined">add</span> New Coupon</button></div>
                 <div class="content-box">
                     <table class="data-table">
-                        <thead><tr><th>Coupon Code</th><th>Discount Type</th><th>Discount Value</th><th>Status</th><th>Action</th></tr></thead>
+                        <thead><tr><th>Coupon Code</th><th>Applicable Item</th><th>Discount Type</th><th>Discount Value</th><th>Status</th><th>Action</th></tr></thead>
                         <tbody id="coupons-table-body"></tbody>
                     </table>
                 </div>
@@ -2261,7 +2261,7 @@
             window.updateCouponStatus = async (docId, isChecked) => { try { await db.collection('coupons').doc(docId).update({ active: isChecked }); if (isChecked) showToast('Coupon is now Active.', 'success'); else showToast('Coupon is now Inactive.', 'success'); } catch (error) { showToast('Failed to update status.', 'error'); renderCoupons(); } };
             const renderCoupons = () => renderGeneric('coupons', 'coupons-table-body', (coupon) => {
                 const isActive = coupon.active !== false; 
-                return `<tr><td data-label="Coupon Code"><strong>${coupon.code}</strong></td><td data-label="Discount Type">${coupon.discountType === 'percentage' ? 'Percentage (%)' : 'Flat Amount (৳)'}</td><td data-label="Discount Value">${coupon.discountType === 'percentage' ? coupon.discountValue + '%' : '৳ ' + coupon.discountValue}</td><td data-label="Status"><label class="switch"><input type="checkbox" onchange="updateCouponStatus('${coupon.id}', this.checked)" ${isActive ? 'checked' : ''}><span class="slider"></span></label></td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('coupons', '${coupon.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('coupons', '${coupon.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
+                return `<tr><td data-label="Coupon Code"><strong>${coupon.code}</strong></td><td data-label="Applicable Item">${coupon.applicableItem || 'All (Global)'}</td><td data-label="Discount Type">${coupon.discountType === 'percentage' ? 'Percentage (%)' : 'Flat Amount (৳)'}</td><td data-label="Discount Value">${coupon.discountType === 'percentage' ? coupon.discountValue + '%' : '৳ ' + coupon.discountValue}</td><td data-label="Status"><label class="switch"><input type="checkbox" onchange="updateCouponStatus('${coupon.id}', this.checked)" ${isActive ? 'checked' : ''}><span class="slider"></span></label></td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('coupons', '${coupon.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('coupons', '${coupon.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
             });
 
             window.updateWithdrawalStatus = async (docId, userId, amount) => {
@@ -2298,12 +2298,22 @@
 
             window.openModalForAdd = async (collection) => {
                 modalForm.reset(); modalTitle.textContent = `Add New ${getBengaliTypeName(collection)}`; let formFieldsHTML = '', extra = {};
-                if (['enrollments', 'joinClass', 'curriculum', 'user_notifications', 'installments'].includes(collection)) {
+                if (['enrollments', 'joinClass', 'curriculum', 'user_notifications', 'installments', 'coupons'].includes(collection)) {
                     modalForm.innerHTML = `<p style="text-align:center; color: var(--text-muted);">Loading necessary data...</p>`; adminModal.classList.remove('hidden');
                     try {
-                        if (collection !== 'user_notifications' && collection !== 'installments') {
+                        if (['enrollments', 'joinClass', 'curriculum'].includes(collection)) {
                             const coursesSnapshot = await db.collection('courses').get();
                             extra.courseOptions = coursesSnapshot.docs.map(doc => `<option value="${doc.data().name}">${doc.data().name}</option>`).join('');
+                        }
+                        if (collection === 'coupons') {
+                            const coursesSnapshot = await db.collection('courses').get();
+                            const servicesSnapshot = await db.collection('services').get();
+                            let opts = '<option value="All">All Items (Global)</option><optgroup label="Services">';
+                            servicesSnapshot.forEach(doc => { opts += `<option value="${doc.data().name}">${doc.data().name}</option>`; });
+                            opts += '</optgroup><optgroup label="Courses">';
+                            coursesSnapshot.forEach(doc => { opts += `<option value="${doc.data().name}">${doc.data().name}</option>`; });
+                            opts += '</optgroup>';
+                            extra.itemOptions = opts;
                         }
                         if (collection === 'enrollments' || collection === 'user_notifications') {
                             const usersSnapshot = await db.collection('users').get();
@@ -2335,9 +2345,20 @@
                 try {
                     const doc = await db.collection(collection).doc(id).get(); if (!doc.exists) { console.error("No such document!"); return; }
                     const itemData = doc.data(); let formFieldsHTML = '', extra = {};
-                    if (['joinClass', 'curriculum'].includes(collection)) {
-                        modalForm.innerHTML = `<p style="text-align:center; color: var(--text-muted);">Loading course list...</p>`; adminModal.classList.remove('hidden');
-                        const coursesSnapshot = await db.collection('courses').get(); extra.courseOptions = coursesSnapshot.docs.map(courseDoc => `<option value="${courseDoc.data().name}" ${courseDoc.data().name === itemData.courseName ? 'selected' : ''}>${courseDoc.data().name}</option>`).join('');
+                    if (['joinClass', 'curriculum', 'coupons'].includes(collection)) {
+                        modalForm.innerHTML = `<p style="text-align:center; color: var(--text-muted);">Loading data...</p>`; adminModal.classList.remove('hidden');
+                        if (collection === 'coupons') {
+                            const coursesSnapshot = await db.collection('courses').get();
+                            const servicesSnapshot = await db.collection('services').get();
+                            let opts = `<option value="All" ${itemData.applicableItem === 'All' ? 'selected' : ''}>All Items (Global)</option><optgroup label="Services">`;
+                            servicesSnapshot.forEach(doc => { opts += `<option value="${doc.data().name}" ${doc.data().name === itemData.applicableItem ? 'selected' : ''}>${doc.data().name}</option>`; });
+                            opts += '</optgroup><optgroup label="Courses">';
+                            coursesSnapshot.forEach(doc => { opts += `<option value="${doc.data().name}" ${doc.data().name === itemData.applicableItem ? 'selected' : ''}>${doc.data().name}</option>`; });
+                            opts += '</optgroup>';
+                            extra.itemOptions = opts;
+                        } else {
+                            const coursesSnapshot = await db.collection('courses').get(); extra.courseOptions = coursesSnapshot.docs.map(courseDoc => `<option value="${courseDoc.data().name}" ${courseDoc.data().name === itemData.courseName ? 'selected' : ''}>${courseDoc.data().name}</option>`).join('');
+                        }
                     }
                     if (collection === 'installments') {
                         extra.installmentUserOptions = ''; // Hide Search when editing
@@ -2366,7 +2387,7 @@
                         case 'services':
                             newItem = { name: formData.get('name'), imageUrl: formData.get('imageUrl'), description: formData.get('description'), purchasePrice: Number(formData.get('purchasePrice')), oldPrice: Number(formData.get('oldPrice')), currentPrice: Number(formData.get('currentPrice')), commission: Number(formData.get('commission')), features: formData.get('features').split(',').map(f => f.trim()) }; break;
                         case 'coupons':
-                            newItem = { code: formData.get('code').toUpperCase(), discountType: formData.get('discountType'), discountValue: Number(formData.get('discountValue')), active: formData.get('active') === 'true', timestamp: firebase.firestore.FieldValue.serverTimestamp() }; break;
+                            newItem = { code: formData.get('code').toUpperCase(), applicableItem: formData.get('applicableItem') || 'All', discountType: formData.get('discountType'), discountValue: Number(formData.get('discountValue')), active: formData.get('active') === 'true', timestamp: firebase.firestore.FieldValue.serverTimestamp() }; break;
                         case 'courses':
                             newItem = { name: formData.get('name'), instructor: formData.get('instructor'), price: Number(formData.get('price')), commission: Number(formData.get('commission')), category: formData.get('category'), duration: formData.get('duration'), lectures: Number(formData.get('lectures')), image: formData.get('image') }; break;
                         case 'enrollments':
@@ -2437,7 +2458,7 @@
                         <div class="form-group"><label>Profit (BDT)</label><input type="number" name="profit" value="${data.profit || 0}" required></div>
                         <div class="form-group"><label>Transaction ID</label><input type="text" name="transactionId" value="${data.transactionId || ''}"></div>`;
                     case 'services': return `<div class="form-group"><label>Service Image URL</label><input type="text" name="imageUrl" value="${data.imageUrl || ''}" placeholder="https://example.com/image.png"></div><div class="form-group"><label>Service Name</label><input type="text" name="name" value="${data.name || ''}" required></div><div class="form-group"><label>Short Description</label><textarea name="description" rows="3">${data.description || ''}</textarea></div><div class="form-group"><label>Purchase Price (BDT)</label><input type="number" name="purchasePrice" value="${data.purchasePrice || 0}" required></div><div class="form-group"><label>Selling Price (BDT)</label><input type="number" name="currentPrice" value="${data.currentPrice || 0}" required></div><div class="form-group"><label>Commission (BDT)</label><input type="number" name="commission" value="${data.commission || 0}"></div><div class="form-group"><label>Old Price (BDT)</label><input type="number" name="oldPrice" value="${data.oldPrice || 0}"></div><div class="form-group"><label>Features (Comma Separated)</label><input type="text" name="features" value="${(data.features || []).join(', ')}"></div>`;
-                    case 'coupons': return `<div class="form-group"><label>Coupon Code</label><input type="text" name="code" value="${data.code || ''}" placeholder="e.g., MYSALES50" required style="text-transform: uppercase;"></div><div class="form-group"><label>Discount Type</label><select name="discountType" required><option value="percentage" ${data.discountType === 'percentage' ? 'selected' : ''}>Percentage (%)</option><option value="flat" ${data.discountType === 'flat' ? 'selected' : ''}>Flat Amount (৳)</option></select></div><div class="form-group"><label>Discount Value</label><input type="number" name="discountValue" value="${data.discountValue || ''}" placeholder="e.g., 50" required></div><div class="form-group"><label>Status</label><select name="active"><option value="true" ${data.active !== false ? 'selected' : ''}>Active</option><option value="false" ${data.active === false ? 'selected' : ''}>Inactive</option></select></div>`;
+                    case 'coupons': return `<div class="form-group"><label>Applicable Item (Course/Service)</label><select name="applicableItem" required>${extra.itemOptions || '<option value="All">All Items (Global)</option>'}</select></div><div class="form-group"><label>Coupon Code</label><input type="text" name="code" value="${data.code || ''}" placeholder="e.g., MYSALES50" required style="text-transform: uppercase;"></div><div class="form-group"><label>Discount Type</label><select name="discountType" required><option value="percentage" ${data.discountType === 'percentage' ? 'selected' : ''}>Percentage (%)</option><option value="flat" ${data.discountType === 'flat' ? 'selected' : ''}>Flat Amount (৳)</option></select></div><div class="form-group"><label>Discount Value</label><input type="number" name="discountValue" value="${data.discountValue || ''}" placeholder="e.g., 50" required></div><div class="form-group"><label>Status</label><select name="active"><option value="true" ${data.active !== false ? 'selected' : ''}>Active</option><option value="false" ${data.active === false ? 'selected' : ''}>Inactive</option></select></div>`;
                     case 'courses': return `<div class="form-group"><label>Course Name</label><input type="text" name="name" value="${data.name || ''}" required></div><div class="form-group"><label>Instructor Name</label><input type="text" name="instructor" value="${data.instructor || ''}" required></div><div class="form-group"><label>Price (BDT)</label><input type="number" name="price" value="${data.price || 0}" required></div><div class="form-group"><label>Commission (BDT)</label><input type="number" name="commission" value="${data.commission || 0}"></div><div class="form-group"><label>Category</label><input type="text" name="category" value="${data.category || ''}" placeholder="e.g., FREELANCING"></div><div class="form-group"><label>Duration</label><input type="text" name="duration" value="${data.duration || ''}" placeholder="e.g., 24:00 Hours"></div><div class="form-group"><label>Total Lectures</label><input type="number" name="lectures" value="${data.lectures || 0}" placeholder="e.g., 40"></div><div class="form-group"><label>Image URL</label><input type="text" name="image" value="${data.image || ''}" placeholder="https://i.ibb.co/JqgWkCg/placeholder.png"></div>`;
                     case 'enrollments': return `<div class="form-group"><label>Search & Select Student</label><input type="text" placeholder="Type Name, Email or Mobile..." oninput="window.filterStudents(this.value)" style="margin-bottom: 8px; border: 2px solid var(--primary-blue);"><select name="student" id="student-select-box" required size="5" style="width:100%; padding:8px; border:1px solid var(--border-color); border-radius:8px; background:var(--background-light);">${extra.userOptions || ''}</select></div><div class="form-group"><label>Select Course</label><select name="courseName" required>${extra.courseOptions || ''}</select></div><div class="form-group"><label>Batch No.</label><input type="text" name="batch" value="${data.batch || ''}" placeholder="e.g., 122" required></div>`;
                     case 'user_notifications': return `
