@@ -23,7 +23,7 @@
     <meta property="og:url" content="https://dreamsedu.publicvm.com/">
     <meta property="og:type" content="website">
 
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/KzHvk0wq/Black-White-Modern_Initial_Logo-250-x-110-px.png">
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/JhGSwr4J/Untitled-design-(1).png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -587,6 +587,7 @@
         .read-more-btn:hover { color: var(--brand-primary); gap: 8px; }
 
         @media (max-width: 768px) {
+            /* স্ক্রিনের বাইরে ডানে-বামে যাওয়া সম্পূর্ণ বন্ধ করার কমান্ড */
             html, body { overflow-x: hidden !important; width: 100%; position: relative; }
             body { padding-bottom: 70px; }
             
@@ -598,21 +599,55 @@
             .hero-content h1 { font-size: 2.8rem; }
             .hero-image-wrapper { display: none; }
             
-            .dashboard-container { display: block !important; width: 100% !important; }
+            /* --- ড্যাশবোর্ডের লেআউট ভাঙা ঠিক করার জন্য ব্লক লেআউট ব্যবহার --- */
+            .dashboard-container { 
+                display: block !important; /* ফ্লেক্সবক্সের কারণে স্ক্রিন বড় হওয়া আটকাতে */
+                width: 100% !important; 
+            }
             .dashboard-sidebar { width: 100%; position: static; margin-bottom: 20px; }
             
-            main.dashboard-content { display: block !important; width: 100% !important; max-width: 100vw !important; overflow: hidden !important; }
+            main.dashboard-content { 
+                display: block !important;
+                width: 100% !important; 
+                max-width: 100vw !important;
+                overflow: hidden !important; 
+            }
             
-            .dashboard-page { width: 100% !important; max-width: 100% !important; overflow: hidden !important; }
+            .dashboard-page { 
+                width: 100% !important; 
+                max-width: 100% !important; 
+                overflow: hidden !important; 
+            }
             
-            .content-card { padding: 15px !important; width: 100% !important; max-width: 100% !important; overflow: hidden !important; box-sizing: border-box; }
+            /* --- টেবিলের চারপাশের কার্ড এবং স্ক্রলবার ফিক্স --- */
+            .content-card { 
+                padding: 15px !important; 
+                width: 100% !important; 
+                max-width: 100% !important; 
+                overflow: hidden !important; /* টেবিলকে বাইরে যেতে বাধা দেবে */
+                box-sizing: border-box;
+            }
             
-            .content-card > div { width: 100% !important; max-width: 100% !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+            /* টেবিলটিকে ডানে-বামে স্ক্রল করার ব্যবস্থা */
+            .content-card > div { 
+                width: 100% !important;
+                max-width: 100% !important;
+                overflow-x: auto !important; 
+                -webkit-overflow-scrolling: touch; 
+            }
             
-            .class-schedule-table { width: 100% !important; min-width: 600px !important; }
+            .class-schedule-table { 
+                width: 100% !important; 
+                min-width: 600px !important; /* স্ক্রলবার চালু করার জন্য ফিক্সড উইথ */
+            }
             
-            .class-schedule-table th, .class-schedule-table td { white-space: nowrap !important; padding: 12px 10px !important; font-size: 0.85rem; }
+            .class-schedule-table th, .class-schedule-table td { 
+                white-space: nowrap !important; /* লাইন ভেঙে নিচে নামা বন্ধ করতে */
+                padding: 12px 10px !important; 
+                font-size: 0.85rem; 
+            }
             
+            /* --- অন্যান্য রেস্পন্সিভ ডিজাইন --- */
             .form-grid { grid-template-columns: 1fr !important; }
             .footer-grid { grid-template-columns: 1fr; text-align: left; gap: 40px; }
             .contact-grid { grid-template-columns: 1fr; text-align: center; }
@@ -661,6 +696,7 @@
                     <button class="btn btn-gradient" id="login-signup-btn">Login / Sign Up <span class="material-symbols-outlined">arrow_forward</span></button>
                 </div>
                 <div id="logged-in-view" class="header-icons hidden">
+                    <!-- Advanced Notification Icon -->
                     <div class="notification-icon-wrapper">
                         <span class="material-symbols-outlined" id="notification-icon">notifications</span>
                         <span id="notification-badge" class="notification-badge hidden">0</span>
@@ -1416,13 +1452,16 @@
 
    <!-- Hidden Template For Automatic PDF Certificate -->
     <div id="certificate-wrapper" style="position: absolute; top: -9999px; left: -9999px; z-index: -999;">
+        <!-- আসল সিগনেচারের ফিল আনার জন্য স্পেশাল ফন্ট যুক্ত করা হলো -->
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
         </style>
         
         <div id="certificate-template" style="width: 1056px; height: 816px; padding: 40px; position: relative; background-color: #fff; text-align: center; font-family: 'Inter', sans-serif; box-sizing: border-box;">
+            <!-- Flexbox ব্যবহার করা হয়েছে যাতে ওভারল্যাপ না হয় -->
             <div style="border: 10px double #d4af37; width: 100%; height: 100%; padding: 40px 60px; position: relative; background: #ffffff; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
                 
+                <!-- উপরের অংশ (লোগো, স্টুডেন্ট নাম ও কোর্স) -->
                 <div style="width: 100%; padding-top: 20px;">
                     <img src="https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png" style="height: 70px; margin-bottom: 20px;" alt="Dreams Academy">
                     <h1 style="font-size: 52px; font-weight: 800; color: #d4af37; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 10px; font-family: Georgia, serif;">Certificate of Completion</h1>
@@ -1431,16 +1470,20 @@
                     <h2 id="cert-student-name" style="font-size: 50px; font-weight: 700; color: #020617; border-bottom: 2px solid #cbd5e1; display: inline-block; padding-bottom: 5px; margin-bottom: 20px; font-style: italic;">Student Name</h2>
                     
                     <p style="font-size: 20px; color: #475569; margin-bottom: 15px;">has successfully completed the comprehensive program</p>
+                    <!-- কোর্সের নামের ম্যাক্স উইথ দেওয়া হয়েছে যাতে বেশি বড় হলেও সাইনের সাথে না লাগে -->
                     <h3 id="cert-course-name" style="font-size: 32px; font-weight: 800; color: #4f46e5; margin: 0 auto; max-width: 800px; line-height: 1.4;">Advanced Survey Course</h3>
                 </div>
 
+                <!-- নিচের অংশ (তারিখ এবং ডিরেক্টরের সিগনেচার) -->
                 <div style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%; padding-bottom: 20px;">
                     <div style="text-align: left;">
                         <p id="cert-date" style="font-size: 18px; font-weight: 600; margin-bottom: 5px; color: #0f172a;">Date: 01 Jan 2026</p>
                         <p id="cert-id" style="font-size: 16px; color: #64748b; margin: 0;">ID: DA-123456</p>
                     </div>
                     <div style="text-align: center;">
+                        <!-- সিগনেচারের বক্স বড় করা হয়েছে -->
                         <div style="min-width: 280px; border-bottom: 2px solid #020617; margin-bottom: 10px; padding-bottom: 5px; display: inline-block;">
+                            <!-- রিয়েল সিগনেচার ফন্ট (Great Vibes) -->
                             <div style="font-family: 'Great Vibes', cursive; font-size: 48px; color: #0f172a; padding-top: 10px; line-height: 1;">Shofiqul Islam</div>
                         </div>
                         <p style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">Authorized Director</p>
@@ -1590,7 +1633,7 @@
                 setTimeout(() => toast.remove(), 4000);
             }
 
-            // SPA Routing System Fixed
+            // SPA Routing System
             function getUnderlyingPage() {
                 if (auth.currentUser && !dashboardContent.classList.contains('hidden')) {
                     const activeDash = document.querySelector('.dashboard-page:not(.hidden)');
@@ -1651,49 +1694,25 @@
             });
 
             function handleInitialRoute(addToHistory = true) {
-                let targetId = 'home';
-                if (window.location.hash) {
-                    targetId = window.location.hash.substring(1);
-                } else {
-                    const path = window.location.pathname;
-                    const parts = path.split('/').filter(p => p.length > 0 && p !== 'index.html');
-                    if (parts.length > 0) {
-                        targetId = parts[parts.length - 1]; // Sub-folder বা সঠিক রাউট ফিক্স করা হয়েছে
-                    }
-                }
-                
-                targetId = targetId.replace('.html', '');
+                const path = window.location.pathname;
+                let targetId = path === '/' ? 'home' : path.substring(1).replace(/\/$/, "");
                 navigateTo(targetId, addToHistory);
             }
 
             function showPageSection(targetId) {
                 const allSections = document.querySelectorAll('#main-content .page-section');
-                const scrollableSections = ['home', 'stats', 'about', 'courses', 'services', 'video-reviews', 'trust', 'noticeboard', 'contact-us'];
-                const isolatedPages = ['blog', 'terms', 'refund', 'privacy'];
                 
-                if (scrollableSections.includes(targetId)) {
-                    // মেইন পেজের স্ক্রলেবল সেকশনগুলো হাইড হবে না
+                if (targetId === 'home') {
+                    const hiddenOnHome = ['blog', 'terms', 'refund', 'privacy'];
                     allSections.forEach(s => {
-                        if (isolatedPages.includes(s.getAttribute('id'))) {
+                        if (hiddenOnHome.includes(s.getAttribute('id'))) {
                             s.classList.add('hidden');
                         } else {
                             s.classList.remove('hidden');
                         }
                     });
-
-                    // সঠিক সেকশনে স্ক্রল করবে
-                    if (targetId === 'home') {
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    } else {
-                        const targetEl = document.getElementById(targetId);
-                        if (targetEl) {
-                            setTimeout(() => {
-                                window.scrollTo({ top: targetEl.offsetTop - 80, behavior: 'smooth' });
-                            }, 50);
-                        }
-                    }
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
-                    // শুধু ব্লগ বা লিগ্যাল পেজগুলো ওপেন হলে বাকিগুলো হাইড হবে
                     allSections.forEach(s => {
                         if (s.getAttribute('id') === targetId) {
                             s.classList.remove('hidden');
@@ -1704,26 +1723,19 @@
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
 
-                // Desktop Nav Active State
                 document.querySelectorAll('.main-nav ul > li').forEach(li => li.classList.remove('active'));
                 const activeNavLink = document.querySelector(`.main-nav a[href="#${targetId}"]`);
                 if (activeNavLink) { 
                     const parentLi = activeNavLink.closest('li'); 
                     if(parentLi) parentLi.classList.add('active'); 
                 }
-                
-                // Mobile Nav Active State
-                document.querySelectorAll('.mobile-nav-link').forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${targetId}`) link.classList.add('active');
-                });
             }
 
             window.addEventListener('scroll', () => {
                 if(!mainContent.classList.contains('hidden')) {
                     let current = '';
                     document.querySelectorAll('#main-content .page-section').forEach(section => {
-                        if (!section.classList.contains('hidden') && window.scrollY >= section.offsetTop - 120) {
+                        if (!section.classList.contains('hidden') && pageYOffset >= section.offsetTop - 120) {
                             current = section.getAttribute('id');
                         }
                     });
@@ -1972,12 +1984,8 @@
                                 populateUI(data); displayMyCourses(); initializeNotifications(user);
                                 if (!initialRouteHandled) {
                                     const p = window.location.pathname;
-                                    const h = window.location.hash;
-                                    if (['/', '/home', '/index.html'].includes(p) && !h) {
-                                        navigateTo('my-courses-page', false);
-                                    } else {
-                                        handleInitialRoute(false);
-                                    }
+                                    if (['/', '/home', '/index.html', '/login', '/signup'].includes(p)) navigateTo('my-courses-page', false);
+                                    else handleInitialRoute(false);
                                     initialRouteHandled = true;
                                 }
                             }
