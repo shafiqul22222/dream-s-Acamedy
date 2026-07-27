@@ -33,7 +33,7 @@
             --text-light: #ffffff;
             --border-color: #e2e8f0; 
             
-            /* 4D Smooth Shadows (Fast to render) */
+            /* 4D Smooth Shadows */
             --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
             --shadow-4d: 0 10px 30px -10px rgba(79, 70, 229, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             --shadow-hover: 0 20px 40px -10px rgba(79, 70, 229, 0.3), 0 8px 16px -4px rgba(0, 0, 0, 0.1);
@@ -48,7 +48,6 @@
         html, body { 
             height: 100%; 
             background-color: #f1f5f9;
-            /* Static, fast 4D gradient background instead of heavy blur animations */
             background-image: 
                 radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.1) 0px, transparent 40%),
                 radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 40%);
@@ -59,7 +58,6 @@
             overflow-x: hidden;
         }
         
-        /* Modern Scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
@@ -67,7 +65,7 @@
 
         .hidden { display: none !important; }
 
-        /* --- LOGIN PAGE (Light 4D) --- */
+        /* --- LOGIN PAGE --- */
         #login-page {
             display: flex; align-items: center; justify-content: center; height: 100vh;
             background-color: #f8fafc;
@@ -104,7 +102,6 @@
             top: -10px; left: 12px; font-size: 0.8em; color: var(--primary-blue); background: #ffffff; padding: 0 8px; border-radius: 4px;
         }
 
-        /* 4D Hover Buttons */
         .btn { 
             padding: 12px 24px; border: none; border-radius: var(--btn-radius); cursor: pointer; font-weight: 600; 
             display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); font-size: 0.95em; 
@@ -155,7 +152,6 @@
 
         .main-content { margin-left: 280px; width: calc(100% - 280px); padding: 40px; max-width: 1600px; }
         
-        /* Sidebar Toggle Desktop */
         @media (min-width: 769px) {
             .sidebar { transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
             .sidebar.collapsed { left: -280px; }
@@ -181,7 +177,6 @@
         .btn-add { background: linear-gradient(135deg, var(--primary-blue), #3b82f6); color: #fff; box-shadow: 0 4px 10px rgba(59,130,246,0.3); }
         .btn-add:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(59,130,246,0.4); }
 
-        /* --- 4D CARDS & TABLES (Fast Render) --- */
         .content-box { 
             background: var(--surface); padding: 24px; border-radius: var(--card-radius); 
             box-shadow: var(--shadow-4d); border: 1px solid #ffffff; overflow-x: auto; margin-bottom: 24px;
@@ -204,7 +199,6 @@
         .data-table th:last-child { border-top-right-radius: 12px; }
         .data-table tr:last-child td { border-bottom: none; }
         
-        /* 4D Table Hover */
         .data-table tbody tr { transition: all 0.2s ease; cursor: default; }
         .data-table tbody tr:hover { 
             background: #ffffff; 
@@ -225,7 +219,6 @@
         .btn-delete:hover { background: var(--accent-red) !important; color: #fff !important; transform: translateY(-3px) scale(1.1); box-shadow: 0 4px 10px rgba(244,63,94,0.3); }
         .btn-whatsapp { background: #ecfdf5 !important; color: var(--accent-green); }
         .btn-whatsapp:hover { background: var(--accent-green) !important; color: #fff !important; transform: translateY(-3px) scale(1.1); box-shadow: 0 4px 10px rgba(16,185,129,0.3); }
-        .actions-cell .material-symbols-outlined { font-size: 18px; }
 
         .status-select { 
             padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.85em; 
@@ -233,21 +226,17 @@
         }
         .status-select:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
 
-        /* Badges */
         .status-badge { 
             padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 0.75em; letter-spacing: 0.02em; 
             display: inline-block; text-transform: capitalize; border: 1px solid transparent; 
         }
         .status-badge.pending { background-color: #fffbeb !important; color: #b45309 !important; border-color: #fde68a !important; }
-        .status-badge.approved, .status-badge.paid, .student-active-indicator { background-color: #ecfdf5 !important; color: #047857 !important; border-color: #a7f3d0 !important; }
-        .status-badge.rejected { background-color: #fff1f2 !important; color: #be123c !important; border-color: #fecdd3 !important; }
-        .student-inactive-indicator { color: var(--text-muted); }
+        .status-badge.approved, .status-badge.paid, .status-badge.active, .student-active-indicator { background-color: #ecfdf5 !important; color: #047857 !important; border-color: #a7f3d0 !important; }
+        .status-badge.rejected, .status-badge.expired { background-color: #fff1f2 !important; color: #be123c !important; border-color: #fecdd3 !important; }
+        .status-badge.expiring-soon { background-color: #fffbeb !important; color: #d97706 !important; border-color: #fde68a !important; animation: pulseWarning 1.5s infinite; }
 
-        .btn-save-status { background: var(--background-light); color: var(--text-dark); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 8px; font-size: 0.85em; margin-left: 8px; transition: 0.2s; }
-        .btn-save-status:hover { background: var(--border-color); }
-        .table-image-preview { max-width: 120px; max-height: 60px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border-color); }
+        @keyframes pulseWarning { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
 
-        /* --- STATS GRID (Fast 4D Float Hover) --- */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; perspective: 1000px; }
         
         .stat-card { 
@@ -258,7 +247,6 @@
         .stat-card h3 { font-size: 1.4em; font-weight: 700; color: var(--text-dark); margin-top: 4px; }
         .stat-card p { color: var(--text-muted); font-size: 0.85em; font-weight: 500; line-height: 1.3; }
         
-        /* 4D Hover Pop Effect */
         .stat-card:hover { 
             transform: translateY(-8px) scale(1.02); 
             box-shadow: var(--shadow-hover); 
@@ -273,19 +261,7 @@
         .stat-card:hover .icon-wrapper { transform: scale(1.1) translateZ(10px); }
         .stat-card .icon { font-size: 22px; }
 
-        /* Icon Colors */
-        .stat-card[style*="border-bottom: 4px solid var(--accent-red)"] { border-bottom: none !important; border-top: 4px solid var(--accent-red) !important; }
-        .stat-card[style*="border-bottom: 4px solid var(--accent-green)"], .stat-card[style*="background: #f0fdf4;"] { background: var(--surface) !important; border-bottom: none !important; border-top: 4px solid var(--accent-green) !important; }
-        
-        .icon-wrapper[style*="color:var(--accent-red)"] { background: #fff1f2 !important; color: var(--accent-red) !important; }
-        .icon-wrapper[style*="color:var(--accent-green)"], .icon-wrapper[style*="color:#059669;"] { background: #ecfdf5 !important; color: #059669 !important; }
-        .icon-wrapper[style*="color:#d97706;"] { background: #fffbeb !important; color: #d97706 !important; }
-        .icon-wrapper[style*="color:#9333ea;"] { background: #f3e8ff !important; color: #9333ea !important; }
-        .icon-wrapper[style*="color:#0284c7;"] { background: #e0f2fe !important; color: #0284c7 !important; }
-        .icon-wrapper[style*="color:#ea580c;"] { background: #ffedd5 !important; color: #ea580c !important; }
-        .icon-wrapper[style*="color:#db2777;"] { background: #fce7f3 !important; color: #db2777 !important; }
-
-        /* --- MODALS (Fast Slide In) --- */
+        /* MODALS */
         .modal { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); 
@@ -318,29 +294,15 @@
         
         .modal-footer { margin-top: 32px; display: flex; justify-content: flex-end; gap: 12px; }
         .btn-cancel { background: var(--background-light); color: var(--text-dark); border: 1px solid var(--border-color); }
-        .btn-cancel:hover { background: var(--border-color); }
         
-        /* Filters */
         .filter-btn-group { display: flex; gap: 10px; flex-wrap: wrap;}
         .filter-btn { 
             background: var(--surface); border: 1px solid var(--border-color); color: var(--text-muted); 
             padding: 10px 20px; border-radius: 20px; cursor: pointer; font-size: 0.85em; font-weight: 500; 
             transition: all 0.2s ease; box-shadow: var(--shadow-sm);
         }
-        .filter-btn:hover { color: var(--primary-blue); border-color: var(--primary-blue); transform: translateY(-2px); }
         .filter-btn.active { background: var(--primary-blue); color: #fff; border-color: var(--primary-blue); box-shadow: 0 4px 10px rgba(79,70,229,0.3); }
 
-        /* Dynamic Forms & Modules */
-        .module-container { border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; margin-bottom: 20px; background: var(--background-light); }
-        .module-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;}
-        .btn-add-small { background: #eef2ff; color: var(--primary-blue); padding: 10px 18px; font-size: 0.85em; margin-top: 10px; border-radius: 10px; border: 1px solid #c7d2fe; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; transition: all 0.2s;}
-        .btn-add-small:hover { background: var(--primary-blue); color: #fff; box-shadow: 0 4px 10px rgba(79,70,229,0.3); transform: translateY(-2px); }
-        .video-entry { display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: 16px; }
-        .video-entry:first-child { border-top: none; padding-top: 0; margin-top: 0; }
-        .video-entry-inputs { display: grid; grid-template-columns: 1fr 1fr 100px auto; gap: 12px; align-items: center; }
-        .social-link-entry { display: grid; grid-template-columns: 1fr 2fr auto; gap: 12px; align-items: center; padding: 16px; border: 1px solid var(--border-color); border-radius: 14px; margin-bottom: 12px; background: var(--background-light); }
-        
-        /* Fast Switch */
         .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #cbd5e1; transition: .3s; border-radius: 34px; }
@@ -348,63 +310,37 @@
         input:checked + .slider { background-color: var(--accent-green); }
         input:checked + .slider:before { transform: translateX(24px); }
 
-        /* --- RESPONSIVE MOBILE --- */
         .mobile-header { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; 
             background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); 
             z-index: 90; padding: 16px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); align-items: center; gap: 16px; border-bottom: 1px solid var(--border-color);
         }
         #mobile-menu-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-dark); }
-        #mobile-page-title { font-size: 1.2em; font-weight: 700; color: var(--text-dark); }
         #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(2px); z-index: 98; }
 
-        @media (max-width: 1024px) {
-            .sidebar { width: 250px; }
-            .main-content { margin-left: 250px; width: calc(100% - 250px); }
-        }
         @media (max-width: 768px) {
             .mobile-header { display: flex; }
             .main-content { margin-left: 0; width: 100%; padding: 100px 16px 30px; }
-            .sidebar { left: -280px; z-index: 99; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--shadow-hover); }
+            .sidebar { left: -280px; z-index: 99; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
             .sidebar.open { left: 0; }
-            .data-table thead { display: none; }
-            .data-table tr { display: block; margin-bottom: 16px; border: 1px solid var(--border-color); border-radius: 16px; background: var(--surface); box-shadow: var(--shadow-sm); overflow: hidden; }
-            .data-table td { display: block; text-align: right; padding: 16px; border-bottom: 1px solid #f1f5f9; position: relative; word-break: break-word; min-height: 48px; }
-            .data-table tr td:last-child { border-bottom: none; }
-            .data-table td::before { content: attr(data-label); font-weight: 600; font-size: 0.85em; color: var(--text-muted); text-align: left; text-transform: uppercase; position: absolute; left: 16px; top: 16px; width: 45%; white-space: normal; }
-            .data-table .actions-cell { display: flex !important; flex-wrap: wrap !important; justify-content: center !important; align-items: center !important; gap: 12px !important; padding: 20px 16px !important; border-top: 1px dashed var(--border-color); background: var(--background-light); }
-            .data-table .actions-cell::before { position: static !important; width: 100% !important; text-align: center !important; margin-right: 0 !important; margin-bottom: 12px !important; }
-            .actions-cell .status-select { width: 100% !important; max-width: 250px !important; margin: 0 auto 12px auto !important; text-align: center; }
         }
 
-        /* --- TOAST STYLES --- */
         #toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; flex-direction: column; gap: 16px; pointer-events: none; }
         .toast-card { 
             background: var(--text-dark); color: #fff; padding: 16px 24px; border-radius: 16px; 
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-            display: flex; align-items: center; gap: 16px; 
-            min-width: 300px; max-width: 400px; opacity: 0; 
-            transform: translateY(50px) scale(0.9); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); 
-            pointer-events: auto; font-size: 0.95em; font-weight: 500; 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 16px; 
+            min-width: 300px; max-width: 400px; opacity: 0; transform: translateY(50px) scale(0.9); 
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); pointer-events: auto; 
         }
         .toast-card.show { transform: translateY(0) scale(1); opacity: 1; }
-        .toast-card .icon { font-size: 24px; }
         .toast-card.success { border-left: 4px solid var(--accent-green); }
-        .toast-card.success .icon { color: var(--accent-green); }
         .toast-card.error { border-left: 4px solid var(--accent-red); }
-        .toast-card.error .icon { color: var(--accent-red); }
 
-        /* Report & Print */
-        #reports-page .date-range-selector { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 24px; background: var(--background-light); padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); }
-        #reports-page .chart-container { margin-bottom: 32px; padding: 20px; background: var(--surface); border: 1px solid var(--border-color); border-radius: 20px; box-shadow: var(--shadow-sm); }
-        
         .hidden-print { display: none; }
         @media print {
             body * { visibility: hidden; }
-            html, body { background: none; color: #000; }
             #print-section, #print-section * { visibility: visible; }
-            #print-section { position: absolute; left: 0; top: 0; width: 300px; font-family: 'Courier New', Courier, monospace; font-size: 12px; color: #000; padding: 10px; background: #fff;}
-            @page { margin: 0; }
+            #print-section { position: absolute; left: 0; top: 0; width: 300px; font-family: monospace; font-size: 12px; color: #000; padding: 10px; background: #fff;}
             .hidden-print { display: block !important; }
         }
     </style>
@@ -436,7 +372,6 @@
 
     <!-- ADMIN PANEL -->
     <div id="admin-panel" class="hidden">
-        <!-- Desktop Sidebar Toggle -->
         <div id="desktop-sidebar-toggle">
             <span class="material-symbols-outlined">menu_open</span>
         </div>
@@ -448,11 +383,12 @@
 
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div style="width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary-blue), #3b82f6); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px; box-shadow: 0 4px 10px rgba(79,70,229,0.3);">D</div>
+                <div style="width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary-blue), #3b82f6); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">D</div>
                 Dream's Academy
             </div>
             <ul class="sidebar-nav">
                 <li class="active" data-page="dashboard-page"><a href="#"><span class="material-symbols-outlined">dashboard</span> Dashboard</a></li>
+                <li data-page="subscriptions-page"><a href="#"><span class="material-symbols-outlined">timer</span> Subscriptions / IP</a></li>
                 <li data-page="reports-page"><a href="#"><span class="material-symbols-outlined">analytics</span> Reports</a></li>
                 <li data-page="expenses-page"><a href="#"><span class="material-symbols-outlined">account_balance_wallet</span> Expense Manager</a></li>
                 <li data-page="payments-page"><a href="#"><span class="material-symbols-outlined">receipt_long</span> Payments </a></li>
@@ -495,7 +431,6 @@
                 <div class="page-header"><h1>Overview Dashboard</h1></div>
                 <div class="stats-grid">
                     
-                    <!-- Pending Cards -->
                     <div id="pending-payments-card" class="stat-card pending-card" style="cursor: pointer;">
                         <div class="header-row"><div class="icon-wrapper" style="background:#fef3c7; color:#d97706;"><span class="material-symbols-outlined icon">pending_actions</span></div></div>
                         <div><h3 id="pending-payments">0</h3><p>Pending Payments</p></div>
@@ -504,8 +439,13 @@
                         <div class="header-row"><div class="icon-wrapper" style="background:#fef3c7; color:#d97706;"><span class="material-symbols-outlined icon">currency_exchange</span></div></div>
                         <div><h3 id="pending-dollar-requests">0</h3><p>Pending Dollar Requests</p></div>
                     </div>
+
+                    <!-- NEW: Subscription Expiry Card -->
+                    <div id="expiring-subscriptions-card" class="stat-card" style="cursor: pointer; border-top: 4px solid var(--accent-yellow);">
+                        <div class="header-row"><div class="icon-wrapper" style="background:#fffbeb; color:#d97706;"><span class="material-symbols-outlined icon">alarm_on</span></div></div>
+                        <div><h3 id="expiring-subscriptions-count">0</h3><p>Expiring IP/Subscriptions (Soon)</p></div>
+                    </div>
                     
-                    <!-- Current Month Data -->
                     <div class="stat-card sales-card">
                         <div class="header-row"><div class="icon-wrapper" style="background:#ecfdf5; color:#059669;"><span class="material-symbols-outlined icon">today</span></div></div>
                         <div><h3 id="current-month-sales">৳0</h3><p>Current Month Sales</p></div>
@@ -523,7 +463,6 @@
                         <div><h3 id="current-month-net-profit">৳0</h3><p>Current Month Net Profit</p></div>
                     </div>
 
-                    <!-- Lifetime / Total Data -->
                     <div class="stat-card sales-card">
                         <div class="header-row"><div class="icon-wrapper" style="background:#ecfdf5; color:#059669;"><span class="material-symbols-outlined icon">payments</span></div></div>
                         <div><h3 id="total-sales">৳0</h3><p>Total Gross Sales</p></div>
@@ -541,7 +480,6 @@
                         <div><h3 id="true-net-profit">৳0</h3><p>Total Net Profit</p></div>
                     </div>
 
-                    <!-- Counts Data -->
                     <div id="total-students-card" class="stat-card" style="cursor: pointer;">
                         <div class="header-row"><div class="icon-wrapper" style="background:#f3e8ff; color:#9333ea;"><span class="material-symbols-outlined icon">group</span></div></div>
                         <div><h3 id="total-students">0</h3><p>Total Students</p></div>
@@ -562,6 +500,35 @@
                         <div class="header-row"><div class="icon-wrapper" style="background:#fce7f3; color:#db2777;"><span class="material-symbols-outlined icon">campaign</span></div></div>
                         <div><h3 id="total-notices">0</h3><p>Total Notices</p></div>
                     </div>
+                </div>
+            </div>
+
+            <!-- NEW PAGE: Subscriptions & Timed IP Packages -->
+            <div id="subscriptions-page" class="page">
+                <div class="page-header">
+                    <h1>Subscription & Monthly IP Manager</h1>
+                    <button class="btn btn-add" onclick="openModalForAdd('subscriptions')"><span class="material-symbols-outlined">add</span> New Subscription / IP Package</button>
+                </div>
+                <div class="search-bar-container">
+                    <input type="text" id="sub-search-input" placeholder="Search by Student Name, Mobile, or IP Details...">
+                </div>
+                <div class="content-box">
+                    <p style="margin-bottom: 24px; font-size: 0.9em; color: var(--text-muted);">Manage timed IP packages (1 Day, 10 Days, 15 Days, 30 Days). Packages expiring in less than 3 days will automatically show warning alerts.</p>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Student Info</th>
+                                <th>Package / IP Name</th>
+                                <th>Duration</th>
+                                <th>Start Date</th>
+                                <th>Expiry Date</th>
+                                <th>Days Left</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subscriptions-table-body"></tbody>
+                    </table>
                 </div>
             </div>
 
@@ -586,7 +553,6 @@
                     <h1>Due & Installment Tracking (কিস্তি)</h1>
                     <button class="btn btn-add" onclick="openModalForAdd('installments')"><span class="material-symbols-outlined">add</span> Add Installment Record</button>
                 </div>
-                
                 <div class="content-box" style="margin-bottom: 24px;">
                     <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px;">
                         <div class="search-bar-container" style="margin-bottom:0; flex-grow:1; max-width:400px;">
@@ -957,7 +923,7 @@
                     <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; font-weight: 600;">Hero Section</h3>
                     <form id="hero-settings-form">
                         <div class="form-group"><label for="hero-image-url">Hero Image URL</label><input type="text" id="hero-image-url" placeholder="Enter image URL"></div>
-                        <div class="form-group"><label>Current Image Preview</label><img id="hero-image-preview" src="https://i.ibb.co/JqgWkCg/placeholder.png" alt="Hero Image Preview" style="max-width: 100%; max-height: 250px; border: 1px solid var(--border-color); border-radius: 12px; object-fit: cover; box-shadow: var(--shadow-sm);"></div>
+                        <div class="form-group"><label>Current Image Preview</label><img id="hero-image-preview" src="https://i.ibb.co/JqgWkCg/placeholder.png" alt="Hero Image Preview" style="max-width: 100%; max-height: 250px; border: 1px solid var(--border-color); border-radius: 12px; object-fit: cover;"></div>
                         <button type="submit" class="btn btn-primary" style="width: auto;">Save Settings</button>
                     </form>
                     <hr style="margin: 32px 0; border: none; border-top: 1px solid var(--border-color);">
@@ -985,7 +951,7 @@
                     <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; font-weight: 600;">Floating Chat Button</h3>
                     <form id="chat-icon-settings-form">
                         <div class="form-group"><label for="chat-icon-image-url">Chat Icon Image URL</label><input type="text" id="chat-icon-image-url" placeholder="Enter icon URL"></div>
-                        <div class="form-group"><label>Current Icon Preview</label><img id="chat-icon-image-preview" src="https://i.ibb.co/hC68Fj8/man-in-suit.png" alt="Chat Icon Preview" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--border-color); object-fit: cover; background: #fff; box-shadow: var(--shadow-sm);"></div>
+                        <div class="form-group"><label>Current Icon Preview</label><img id="chat-icon-image-preview" src="https://i.ibb.co/hC68Fj8/man-in-suit.png" alt="Chat Icon Preview" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--border-color); object-fit: cover; background: #fff;"></div>
                         <button type="submit" class="btn btn-primary" style="width: auto;">Save Icon</button>
                     </form>
 
@@ -996,7 +962,6 @@
                         <div class="form-group">
                             <label for="macrodroid-webhook-url">Webhook URL</label>
                             <input type="text" id="macrodroid-webhook-url" placeholder="https://trigger.macrodroid.com/YOUR_DEVICE_ID/EVENT_NAME">
-                            <small style="color: var(--text-muted); display: block; margin-top: 4px;">For silent sending via mobile app. MacroDroid will automatically receive the variables `number` and `message` when configured correctly.</small>
                         </div>
                         <button type="submit" class="btn btn-primary" style="width: auto;">Save Settings</button>
                     </form>
@@ -1005,26 +970,11 @@
                     <hr style="margin: 32px 0; border: none; border-top: 1px solid var(--border-color);">
                     <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; font-weight: 600;">EmailJS Configuration (Auto Email)</h3>
                     <form id="emailjs-settings-form">
-                        <div class="form-group">
-                            <label for="emailjs-public-key">Public Key</label>
-                            <input type="text" id="emailjs-public-key" placeholder="e.g., 2sllYqrmoE4ElloEP">
-                        </div>
-                        <div class="form-group">
-                            <label for="emailjs-service-id">Service ID</label>
-                            <input type="text" id="emailjs-service-id" placeholder="e.g., service_6y1h5ow">
-                        </div>
-                        <div class="form-group">
-                            <label for="emailjs-template-service">Service Email Template ID (For Service details delivery)</label>
-                            <input type="text" id="emailjs-template-service" placeholder="e.g., template_3dlgemn">
-                        </div>
-                        <div class="form-group">
-                            <label for="emailjs-template-receipt">Payment Receipt Template ID (For Money Receipt)</label>
-                            <input type="text" id="emailjs-template-receipt" placeholder="e.g., template_vz0zzih">
-                        </div>
-                        <div class="form-group">
-                            <label for="emailjs-template-otp">OTP Email Template ID (For Sign Up verification)</label>
-                            <input type="text" id="emailjs-template-otp" placeholder="e.g., template_abc123">
-                        </div>
+                        <div class="form-group"><label for="emailjs-public-key">Public Key</label><input type="text" id="emailjs-public-key" placeholder="e.g., 2sllYqrmoE4ElloEP"></div>
+                        <div class="form-group"><label for="emailjs-service-id">Service ID</label><input type="text" id="emailjs-service-id" placeholder="e.g., service_6y1h5ow"></div>
+                        <div class="form-group"><label for="emailjs-template-service">Service Email Template ID</label><input type="text" id="emailjs-template-service" placeholder="e.g., template_3dlgemn"></div>
+                        <div class="form-group"><label for="emailjs-template-receipt">Payment Receipt Template ID</label><input type="text" id="emailjs-template-receipt" placeholder="e.g., template_vz0zzih"></div>
+                        <div class="form-group"><label for="emailjs-template-otp">OTP Email Template ID</label><input type="text" id="emailjs-template-otp" placeholder="e.g., template_abc123"></div>
                         <button type="submit" class="btn btn-primary" style="width: auto;">Save EmailJS Settings</button>
                     </form>
 
@@ -1109,7 +1059,7 @@
                 </div>
                 <div class="modal-footer" style="margin-top: 24px;">
                     <button type="button" class="btn btn-cancel" id="cancel-whatsapp-modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, var(--accent-green), #059669); box-shadow: 0 4px 10px rgba(16,185,129,0.3);">
+                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, var(--accent-green), #059669);">
                         <span class="material-symbols-outlined" style="font-size: 20px;">send</span> Send Silently
                     </button>
                 </div>
@@ -1121,7 +1071,7 @@
     <div id="print-section" class="hidden-print">
         <div style="text-align: center; margin-bottom: 10px;">
             <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
-                <img id="receipt-logo" src="https://i.ibb.co/JqgWkCg/placeholder.png" alt="Logo" style="width: 35px; height: 35px; border-radius: 50%; margin-right: 8px; filter: grayscale(100%);">
+                <img id="receipt-logo" src="https://i.ibb.co/JqgWkCg/placeholder.png" alt="Logo" style="width: 35px; height: 35px; border-radius: 50%; margin-right: 8px;">
                 <h2 style="margin:0; font-size: 18px; font-weight:bold;">Dream's Academy</h2>
             </div>
             <p style="margin:2px 0; font-size: 11px;">Your Success, Our Priority</p>
@@ -1148,8 +1098,7 @@
                     <th style="text-align:right; border-bottom:1px dashed #000; padding:4px 0;">Dis</th>
                 </tr>
             </thead>
-            <tbody id="receipt-items">
-            </tbody>
+            <tbody id="receipt-items"></tbody>
         </table>
         
         <div style="margin-left: auto; width: 65%; margin-bottom: 15px; font-size: 11px;">
@@ -1166,7 +1115,7 @@
         </div>
     </div>
 
-    <!-- Scripts (All functionalities left completely unchanged) -->
+    <!-- Scripts -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
@@ -1185,6 +1134,11 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
+
+        // ENABLE INSTANT DATA LOADING VIA PERSISTENCE CACHING
+        db.enablePersistence({ synchronizeTabs: true }).catch(err => {
+            console.log("Persistence error or already enabled: ", err.code);
+        });
 
         const ADMIN_EMAIL = "arafatislamshofiqul@gmail.com".toLowerCase();
 
@@ -1277,19 +1231,18 @@
                     return false;
                 }
             };
-            
+
             window.sendServiceEmail = async function(userEmail, userName, serviceName, serviceDetails) {
                 try {
                     const doc = await db.collection('site_settings').doc('emailjs_settings').get();
-                    if (!doc.exists) { showToast("EmailJS settings not configured. Please set them in Website Settings.", "error"); return; }
+                    if (!doc.exists) { showToast("EmailJS settings not configured.", "error"); return; }
                     const config = doc.data();
-                    if (!config.publicKey || !config.serviceId || !config.templateService) {
-                        showToast("EmailJS configuration is incomplete.", "error"); return;
-                    }
+                    if (!config.publicKey || !config.serviceId || !config.templateService) return;
                     emailjs.init(config.publicKey); 
                     var templateParams = { to_email: userEmail, to_name: userName, service_name: serviceName, service_details: serviceDetails };
                     emailjs.send(config.serviceId, config.templateService, templateParams)
-                        .then(function(response) { showToast("Service details sent to customer's email!", "success"); }, function(error) { showToast("Payment approved, but failed to send email. Check EmailJS setup.", "error"); });
+                        .then(() => showToast("Service details sent to email!", "success"))
+                        .catch(() => showToast("Failed to send email.", "error"));
                 } catch(error) { console.error("Error setting up email:", error); }
             };
 
@@ -1305,9 +1258,9 @@
                     const date = paymentData.timestamp ? new Date(paymentData.timestamp.seconds * 1000).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB');
                     
                     const docConfig = await db.collection('site_settings').doc('emailjs_settings').get();
-                    if (!docConfig.exists) { return; }
+                    if (!docConfig.exists) return;
                     const config = docConfig.data();
-                    if (!config.publicKey || !config.serviceId || !config.templateReceipt) { return; }
+                    if (!config.publicKey || !config.serviceId || !config.templateReceipt) return;
 
                     emailjs.init(config.publicKey);
                     var templateParams = { to_email: userEmail, to_name: userName, item_name: paymentData.itemName, amount: paymentData.amount, trx_id: paymentData.transactionId || 'N/A', date: date };
@@ -1353,16 +1306,11 @@
             window.openStudentWhatsappModal = async (mobile, name = 'N/A', defaultMessage = '') => {
                 document.getElementById('wa-recipient-number').value = mobile || 'N/A';
                 document.getElementById('wa-student-name').value = name;
-                
                 document.getElementById('wa-message-text').value = defaultMessage;
                 document.getElementById('wa-send-all').checked = false;
                 document.getElementById('wa-dynamic-fields').classList.add('hidden');
-                document.getElementById('wa-original-price').value = '';
-                document.getElementById('wa-discount-price').value = '';
-                document.getElementById('wa-coupon-code').value = '';
                 
                 if(document.getElementById('wa-template-select')) document.getElementById('wa-template-select').value = '';
-                
                 studentWhatsappModal.classList.remove('hidden');
 
                 const itemSelect = document.getElementById('wa-item-select');
@@ -1383,120 +1331,12 @@
                     });
                     optionsHTML += '</optgroup>'; 
                     itemSelect.innerHTML = optionsHTML;
-                } catch (error) { 
-                    itemSelect.innerHTML = '<option value="">Failed to load items</option>'; 
-                }
+                } catch (error) { itemSelect.innerHTML = '<option value="">Failed to load items</option>'; }
             };
 
-            const waTemplateSelect = document.getElementById('wa-template-select');
-            const waItemSelect = document.getElementById('wa-item-select');
-            const waOriginalPrice = document.getElementById('wa-original-price');
-            const waDiscountPrice = document.getElementById('wa-discount-price');
-            const waCouponCode = document.getElementById('wa-coupon-code');
-            const waDynamicFields = document.getElementById('wa-dynamic-fields');
+            const expiringSubscriptionsCard = document.getElementById('expiring-subscriptions-card');
+            if(expiringSubscriptionsCard) expiringSubscriptionsCard.addEventListener('click', () => navigateTo('subscriptions-page'));
 
-            const generateTemplateMessage = () => {
-                if(!waTemplateSelect) return;
-                const template = waTemplateSelect.value;
-                
-                if (template === 'course_discount' || template === 'service_discount' || template === 'abandoned' || template === 'follow_up') {
-                    waDynamicFields.classList.remove('hidden');
-                } else {
-                    waDynamicFields.classList.add('hidden');
-                }
-
-                let studentName = document.getElementById('wa-student-name').value || 'Student';
-                if (studentName === 'N/A') studentName = 'Student';
-                
-                let selectedOption = waItemSelect.options[waItemSelect.selectedIndex];
-                let itemName = (selectedOption && selectedOption.value) ? selectedOption.value : '[Course/Service Name]';
-                
-                let originalPrice = waOriginalPrice.value || '0';
-                let discountPrice = waDiscountPrice.value || '[Discount Price]';
-                let couponInput = waCouponCode.value.trim().toUpperCase();
-                
-                let couponText = couponInput ? `🎟️ *কুপন:* ${couponInput} (চেকআউটে দিন)` : '';
-                
-                let message = '';
-                
-                if (template === 'course_discount') { 
-                    message = `🎉 *বিশেষ অফার, ${studentName}!* 🎁\n\nআসসালামু আলাইকুম। কোর্সে আগ্রহ দেখানোর জন্য আপনার জন্য ডিসকাউন্ট!\n\n🎓 *${itemName}*\n🔥 অফার প্রাইজ: *${discountPrice} ৳* (রেগুলার: ${originalPrice} ৳)\n${couponText}\n\n✅ অনলাইন সার্ভে ও স্কিল ডেভেলপমেন্ট\n✅ প্রফেশনাল গাইডলাইন ও ইনকাম\n\n⏳ সীমিত সময়ের অফার!\n👉 *ভর্তি লিংক:* [Insert Link]\n\n💬 প্রয়োজনে রিপ্লাই দিন।\n💙 *Dream's Academy*`; 
-                } 
-                else if (template === 'service_discount') { 
-                    message = `🎁 *এক্সক্লুসিভ অফার, ${studentName}!*\n\nআসসালামু আলাইকুম। আপনার জন্য সেরা সার্ভিসটি এখন ডিসকাউন্টে!\n\n🔹 *${itemName}*\n🔥 অফার প্রাইজ: *${discountPrice} ৳* (রেগুলার: ${originalPrice} ৳)\n${couponText}\n\n✅ প্রিমিয়াম কোয়ালিটি ও ফাস্ট ডেলিভারি\n✅ সেরা কাস্টমার সাপোর্ট\n\n⏳ অফারটি শীঘ্রই শেষ হবে!\n👉 *অর্ডার লিংক:* [Insert Link]\n\n💬 প্রয়োজনে মেসেজ করুন।\n💙 *Dream's Academy*`; 
-                } 
-                else if (template === 'follow_up') { 
-                    message = `👋 *কেমন আছেন, ${studentName}?*\n\nআসসালামু আলাইকুম, *Dream's Academy* থেকে মেসেজ দিয়েছি। 🌟\n\nআমরা আপনার সফলতার ব্যাপারে আন্তরিক। *${itemName}* নিয়ে আপনার কোনো গাইডলাইন প্রয়োজন হলে আমাদের নির্দ্বিধায় জানান। 🤝\n\nশুভকামনায়,\n💙 *Support Team*`; 
-                } 
-                else if (template === 'abandoned') { 
-                    message = `🛒 *আপনার অর্ডারটি অসম্পূর্ণ, ${studentName}!*\n\nআসসালামু আলাইকুম। আপনি *${itemName}* অর্ডার শুরু করেও সম্পন্ন করেননি।\nআজই অর্ডার করলে পাচ্ছেন বিশেষ ডিসকাউন্ট 🤩\n\n🔥 অফার প্রাইজ: *${discountPrice} ৳*\n${couponText}\n\n👉 *অর্ডার সম্পন্ন করুন:* [Insert Link]\n\n💳 কোনো সমস্যা হলে জানান।\n💙 *Dream's Academy*`; 
-                }
-                
-                if(message !== '') document.getElementById('wa-message-text').value = message;
-            };
-            if (waTemplateSelect) {
-                waTemplateSelect.addEventListener('change', generateTemplateMessage);
-                waItemSelect.addEventListener('change', function() {
-                    let selectedOption = waItemSelect.options[waItemSelect.selectedIndex];
-                    if(selectedOption && selectedOption.dataset.price) {
-                        waOriginalPrice.value = selectedOption.dataset.price;
-                    } else {
-                        waOriginalPrice.value = '';
-                    }
-                    generateTemplateMessage();
-                });
-                waDiscountPrice.addEventListener('input', generateTemplateMessage);
-                waCouponCode.addEventListener('input', generateTemplateMessage);
-            }
-            closeWhatsappModalBtn.addEventListener('click', () => studentWhatsappModal.classList.add('hidden'));
-            cancelWhatsappModalBtn.addEventListener('click', () => studentWhatsappModal.classList.add('hidden'));
-
-            studentWhatsappForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const message = document.getElementById('wa-message-text').value.trim();
-                const sendAll = document.getElementById('wa-send-all').checked;
-                const singleMobile = document.getElementById('wa-recipient-number').value;
-                const studentName = document.getElementById('wa-student-name').value || 'N/A';
-                
-                const itemSelectDropdown = document.getElementById('wa-item-select');
-                const courseName = (itemSelectDropdown.selectedIndex > 0) ? itemSelectDropdown.options[itemSelectDropdown.selectedIndex].text : 'N/A';
-                if (!message) { showToast('Message is empty', 'error'); return; }
-
-                const submitBtn = studentWhatsappForm.querySelector('button[type="submit"]');
-                const originalBtnText = submitBtn.innerHTML;
-                submitBtn.disabled = true; submitBtn.innerHTML = "Sending & Tracking...";
-
-                if (sendAll) {
-                    try {
-                        const usersSnapshot = await db.collection('users').get();
-                        let count = 0;
-                        const trackingPromises = [];
-                        usersSnapshot.forEach(doc => {
-                            const data = doc.data();
-                            if (data.mobile) {
-                                window.sendViaMacroDroid(data.mobile, message, false); 
-                                trackingPromises.push(db.collection('follow_ups').add({ studentName: data.name || 'N/A', phoneNumber: data.mobile, courseName: courseName, messageContent: message, status: 'sent', followUpResult: 'Pending', adminNote: '', nextFollowUpDate: '', timestamp: firebase.firestore.FieldValue.serverTimestamp() }));
-                                count++;
-                            }
-                        });
-                        await Promise.all(trackingPromises);
-                        showToast(`Triggered MacroDroid for ${count} students & Saved!`, 'success');
-                    } catch (error) { showToast('Failed to retrieve students from database.', 'error'); }
-                } else {
-                    if (!singleMobile || singleMobile === 'N/A') {
-                        showToast('No mobile number found for this student.', 'error');
-                        await db.collection('follow_ups').add({ studentName: studentName, phoneNumber: singleMobile || 'N/A', courseName: courseName, messageContent: message, status: 'failed', followUpResult: 'No Response', adminNote: 'No mobile number found.', nextFollowUpDate: '', timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-                    } else {
-                        await window.sendViaMacroDroid(singleMobile, message, false);
-                        await db.collection('follow_ups').add({ studentName: studentName, phoneNumber: singleMobile, courseName: courseName, messageContent: message, status: 'sent', followUpResult: 'Pending', adminNote: '', nextFollowUpDate: '', timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-                        showToast('Triggered MacroDroid & Follow-up Saved!', 'success');
-                    }
-                }
-                submitBtn.disabled = false; submitBtn.innerHTML = originalBtnText; studentWhatsappModal.classList.add('hidden');
-                if(document.getElementById('follow-up-page').classList.contains('active')) renderFollowUps();
-            });
-
-            // Dash Clicks
             const totalFollowupsCard = document.getElementById('total-followups-card');
             if (totalFollowupsCard) totalFollowupsCard.addEventListener('click', () => navigateTo('follow-up-page'));
             const pendingPaymentsCard = document.getElementById('pending-payments-card');
@@ -1514,12 +1354,12 @@
             const totalStudentsCard = document.getElementById('total-students-card');
             if (totalStudentsCard) totalStudentsCard.addEventListener('click', () => navigateTo('users-page'));
 
-            // Search Handlers
             const searchInputs = [
                 {id: 'user-search-input', tbody: 'users-table-body'},
                 {id: 'payment-search-input', tbody: 'payments-table-body'},
                 {id: 'cert-search-input', tbody: 'certificates-table-body'},
-                {id: 'installment-search-input', tbody: 'installments-table-body'}
+                {id: 'installment-search-input', tbody: 'installments-table-body'},
+                {id: 'sub-search-input', tbody: 'subscriptions-table-body'}
             ];
             searchInputs.forEach(item => {
                 const el = document.getElementById(item.id);
@@ -1535,17 +1375,6 @@
                     });
                 }
             });
-            
-            if (paymentFilterButtons) {
-                paymentFilterButtons.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('filter-btn')) {
-                        const filterValue = e.target.dataset.filter;
-                        paymentFilterButtons.querySelector('.filter-btn.active').classList.remove('active');
-                        e.target.classList.add('active');
-                        renderPayments(filterValue === 'all' ? null : filterValue);
-                    }
-                });
-            }
 
             function showToast(message, type = 'success', duration = 4000) {
                 const container = document.getElementById('toast-container');
@@ -1592,7 +1421,7 @@
 
             window.copyToClipboard = function(text) {
                 if (!text || text.trim() === 'N/A' || text.trim() === '') { showToast("No text found.", "error"); return; }
-                navigator.clipboard.writeText(text).then(function() { showToast(`Copied to clipboard.`); }, function(err) { showToast('Sorry, could not copy text.', "error"); });
+                navigator.clipboard.writeText(text).then(function() { showToast(`Copied to clipboard.`); });
             }
 
             function navigateTo(pageId, options = {}) {
@@ -1613,6 +1442,7 @@
 
                 switch (pageId) {
                     case 'dashboard-page': renderDashboard(); break;
+                    case 'subscriptions-page': renderSubscriptions(); break;
                     case 'reports-page': renderReportsPage(); break;
                     case 'expenses-page': renderExpenses(); break; 
                     case 'payments-page': renderPayments(options.filter || null); break;
@@ -1655,15 +1485,27 @@
                     const coursesSnapshot = await db.collection('courses').get();
                     const noticesSnapshot = await db.collection('notices').get();
                     const usersSnapshot = await db.collection('users').get();
-                    const screenshotsSnapshot = await db.collection('trust_screenshots').get();
                     const paymentsSnapshot = await db.collection('payments').get();
                     const dollarExchangeSnapshot = await db.collection('dollar_exchange').get();
                     const dollarRequestsSnapshot = await db.collection('dollar_sells').where('status', '==', 'pending').get();
                     const followupsSnapshot = await db.collection('follow_ups').get();
+                    const subscriptionsSnapshot = await db.collection('subscriptions').get();
                     
                     const now = new Date();
                     const currentMonth = now.getMonth();
                     const currentYear = now.getFullYear();
+
+                    let expiringSubsCount = 0;
+                    subscriptionsSnapshot.forEach(doc => {
+                        const sub = doc.data();
+                        if (sub.expiryDate) {
+                            const expDate = new Date(sub.expiryDate);
+                            const diffDays = Math.ceil((expDate - now) / (1000 * 60 * 60 * 24));
+                            if (diffDays <= 3 && diffDays >= 0) {
+                                expiringSubsCount++;
+                            }
+                        }
+                    });
 
                     const expensesSnapshot = await db.collection('expenses').get();
                     let totalExpenses = 0, currentMonthExpenses = 0;
@@ -1718,6 +1560,7 @@
                     document.getElementById('current-month-net-profit').textContent = `৳${currentMonthNetProfit.toLocaleString('en-US')}`;
                     document.getElementById('pending-payments').textContent = pendingPaymentsCount;
                     document.getElementById('pending-dollar-requests').textContent = dollarRequestsSnapshot.size;
+                    document.getElementById('expiring-subscriptions-count').textContent = expiringSubsCount;
                     document.getElementById('total-students').textContent = usersSnapshot.size;
                     document.getElementById('main-total-followups').textContent = followupsSnapshot.size;
                     document.getElementById('total-services').textContent = servicesSnapshot.size;
@@ -1725,6 +1568,59 @@
                     document.getElementById('total-notices').textContent = noticesSnapshot.size;
                     
                 } catch (error) { console.error("Error loading dashboard data:", error); }
+            }
+
+            // NEW: Subscriptions Page Render
+            async function renderSubscriptions() {
+                const tableBody = document.getElementById('subscriptions-table-body');
+                tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center;">Loading Subscriptions...</td></tr>`;
+                try {
+                    const snapshot = await db.collection('subscriptions').orderBy('timestamp', 'desc').get();
+                    if(snapshot.empty) {
+                        tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center;">No active subscriptions found.</td></tr>`;
+                        return;
+                    }
+                    let html = '';
+                    const now = new Date();
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        const startDate = data.startDate || 'N/A';
+                        const expiryDate = data.expiryDate ? new Date(data.expiryDate) : null;
+                        const formattedExpiry = expiryDate ? expiryDate.toLocaleDateString('en-GB') : 'N/A';
+                        
+                        let daysLeft = 0;
+                        let statusBadge = '<span class="status-badge approved">Active</span>';
+                        if (expiryDate) {
+                            const diffTime = expiryDate - now;
+                            daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                            
+                            if (daysLeft < 0) {
+                                daysLeft = 0;
+                                statusBadge = '<span class="status-badge expired">Expired</span>';
+                            } else if (daysLeft <= 3) {
+                                statusBadge = '<span class="status-badge expiring-soon">Expiring Soon</span>';
+                            }
+                        }
+
+                        const msg = `Hi ${data.userName || ''}, your subscription/IP package for (${data.packageName || ''}) will expire in ${daysLeft} days on ${formattedExpiry}. Please renew in time.`;
+
+                        html += `<tr>
+                            <td data-label="Student Info">${data.userName || 'N/A'} <br><small style="color:var(--text-muted);">${data.userMobile || ''}</small></td>
+                            <td data-label="Package/IP">${data.packageName || 'Monthly IP'}</td>
+                            <td data-label="Duration">${data.durationDays || '30'} Days</td>
+                            <td data-label="Start Date">${startDate}</td>
+                            <td data-label="Expiry Date" style="font-weight:600;">${formattedExpiry}</td>
+                            <td data-label="Days Left"><strong style="color:${daysLeft <= 3 ? 'var(--accent-red)' : 'var(--accent-green)'}">${daysLeft} Days</strong></td>
+                            <td data-label="Status">${statusBadge}</td>
+                            <td class="actions-cell" data-label="Action">
+                                <button class="btn-whatsapp" onclick="openStudentWhatsappModal('${data.userMobile}', '${data.userName}', '${msg}')" title="Send Expiry Reminder"><span class="material-symbols-outlined">notifications_active</span></button>
+                                <button class="btn-edit" onclick="openModalForEdit('subscriptions', '${doc.id}')" title="Edit Subscription"><span class="material-symbols-outlined">edit</span></button>
+                                <button class="btn-delete" onclick="deleteItem('subscriptions', '${doc.id}')" title="Delete"><span class="material-symbols-outlined">delete</span></button>
+                            </td>
+                        </tr>`;
+                    });
+                    tableBody.innerHTML = html;
+                } catch(e) { tableBody.innerHTML = `<tr><td colspan="8" style="color:red; text-align:center;">Error: ${e.message}</td></tr>`; }
             }
 
             async function renderFollowUps() {
@@ -1800,23 +1696,6 @@
                 document.getElementById('fu-status-filter').addEventListener('change', applyFollowUpFilters);
                 document.getElementById('fu-result-filter').addEventListener('change', applyFollowUpFilters);
                 document.getElementById('fu-date-filter').addEventListener('change', applyFollowUpFilters);
-                
-                document.getElementById('export-followup-btn').addEventListener('click', () => {
-                    if (!window.allFollowUpsData || window.allFollowUpsData.length === 0) { showToast("No data to export", "error"); return; }
-                    let csv = 'Serial,Student Name,Phone Number,Course Name,Message Date,Status,Result,Next Follow-up,Admin Note\n';
-                    window.allFollowUpsData.forEach((row, i) => {
-                        const date = row.timestamp ? new Date(row.timestamp.seconds * 1000).toLocaleString('en-US').replace(/,/g, '') : 'N/A';
-                        const name = (row.studentName || '').replace(/,/g, ' ');
-                        const course = (row.courseName || 'N/A').replace(/,/g, ' ');
-                        const note = (row.adminNote || '').replace(/,/g, ' ');
-                        csv += `${i+1},${name},${row.phoneNumber},${course},${date},${row.status},${row.followUpResult},${row.nextFollowUpDate},${note}\n`;
-                    });
-                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.setAttribute('hidden', ''); a.setAttribute('href', url); a.setAttribute('download', 'follow_up_history.csv');
-                    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-                });
             }
 
             let reportChartInstance = null;
@@ -1829,24 +1708,6 @@
                 startDateInput.valueAsDate = firstDayOfMonth;
                 endDateInput.valueAsDate = today;
                 generateBtn.addEventListener('click', generateReport);
-                
-                document.getElementById('download-report-btn').addEventListener('click', () => {
-                    if (!window.reportTransactions || window.reportTransactions.length === 0) {
-                        showToast("No data to export", "error"); return;
-                    }
-                    let csv = 'Date,Item Name,Total Sales (BDT),Total Profit (BDT)\n';
-                    window.reportTransactions.forEach(t => {
-                        const d = t.date.toLocaleDateString('en-US');
-                        const i = `"${t.itemName.replace(/"/g, '""')}"`;
-                        csv += `${d},${i},${t.sales},${t.profit}\n`;
-                    });
-                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.setAttribute('href', url);
-                    a.setAttribute('download', 'sales_profit_report.csv');
-                    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-                });
             }
 
             async function generateReport() {
@@ -1857,15 +1718,12 @@
                 if (!startDateValue || !endDateValue) { showToast('Please select start and end dates.', 'error'); return; }
                 const startDate = new Date(startDateValue + 'T00:00:00');
                 const endDate = new Date(endDateValue + 'T23:59:59');
-                if (isNaN(startDate) || isNaN(endDate)) { showToast('Please select valid dates.', 'error'); return; }
                 
                 generateBtn.disabled = true;
                 generateBtn.innerHTML = '<span class="material-symbols-outlined">sync</span> Loading...';
                 try {
                     const paymentsQuery = db.collection('payments').where('timestamp', '>=', startDate).where('timestamp', '<=', endDate).where('status', '==', 'approved');
                     const paymentsSnapshot = await paymentsQuery.get();
-                    const dollarExchangesQuery = db.collection('dollar_exchange').where('timestamp', '>=', startDate).where('timestamp', '<=', endDate);
-                    const dollarExchangesSnapshot = await dollarExchangesQuery.get();
                     
                     const dailyData = {};
                     const transactions = [];
@@ -1877,23 +1735,9 @@
                         if (!dailyData[date]) dailyData[date] = { sales: 0, profit: 0 };
                         dailyData[date].sales += data.amount || 0;
                         dailyData[date].profit += data.profit || 0;
-                        
                         transactions.push({ date: dt, itemName: data.itemName || 'N/A', sales: data.amount || 0, profit: data.profit || 0 });
                     });
                     
-                    dollarExchangesSnapshot.forEach(doc => {
-                        const data = doc.data();
-                        const dt = new Date(data.timestamp.seconds * 1000);
-                        const date = dt.toISOString().split('T')[0];
-                        if (!dailyData[date]) dailyData[date] = { sales: 0, profit: 0 };
-                        dailyData[date].profit += data.profit || 0;
-                        
-                        transactions.push({ date: dt, itemName: `Dollar Exchange (${data.type})`, sales: data.sellAmount || 0, profit: data.profit || 0 });
-                    });
-                    
-                    transactions.sort((a,b) => b.date - a.date);
-                    window.reportTransactions = transactions;
-
                     const sortedDates = Object.keys(dailyData).sort();
                     const labels = sortedDates.map(date => new Date(date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' }));
                     const salesData = sortedDates.map(date => dailyData[date].sales);
@@ -1914,13 +1758,13 @@
                         labels: labels,
                         datasets: [{ label: 'Total Sales', data: salesData, borderColor: 'rgba(79, 70, 229, 1)', backgroundColor: 'rgba(79, 70, 229, 0.1)', borderWidth: 2, fill: true, tension: 0.4 }, { label: 'Total Profit', data: profitData, borderColor: 'rgba(16, 185, 129, 1)', backgroundColor: 'rgba(16, 185, 129, 0.1)', borderWidth: 2, fill: true, tension: 0.4 }]
                     },
-                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { callback: value => `৳${value}` } } }, plugins: { tooltip: { callbacks: { label: context => `${context.dataset.label}: ৳${context.parsed.y.toLocaleString('en-US')}` } } } }
+                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { callback: value => `৳${value}` } } } }
                 });
             }
 
             function updateReportTable(transactions) {
                 const tableBody = document.getElementById('report-table-body');
-                if (transactions.length === 0) { tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No data found for the selected dates.</td></tr>`; return; }
+                if (transactions.length === 0) { tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No data found.</td></tr>`; return; }
                 let tableHTML = '';
                 let totalSales = 0, totalProfit = 0;
                 transactions.forEach(t => {
@@ -1944,21 +1788,6 @@
                 } catch (error) { showToast("Failed to load rates.", "error"); }
             }
 
-            const dollarRateSettingsForm = document.getElementById('dollar-rate-settings-form');
-            if (dollarRateSettingsForm) {
-                dollarRateSettingsForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const btn = dollarRateSettingsForm.querySelector('button[type="submit"]');
-                    const oldText = btn.innerHTML;
-                    btn.disabled = true; btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Updating...`;
-
-                    const rates = { ACH: Number(document.getElementById('rate-ach').value), VISA: Number(document.getElementById('rate-visa').value), APPLE: Number(document.getElementById('rate-apple').value) };
-                    try { await db.collection('site_settings').doc('dollar_rates').set(rates, { merge: true }); showToast("Dollar rates updated successfully!", "success"); } 
-                    catch (error) { showToast("Failed to save rates.", "error"); } 
-                    finally { btn.disabled = false; btn.innerHTML = oldText; }
-                });
-            }
-
             async function renderDollarSellRequests() {
                 const tableBody = document.getElementById('dollar-sell-requests-body');
                 if (!tableBody) return;
@@ -1970,262 +1799,30 @@
                     snapshot.forEach(doc => {
                         const data = doc.data();
                         const id = doc.id;
-                        const statusClass = (data.status || 'pending').toLowerCase();
-                        let cardLinkDisplay = 'N/A';
-                        if (data.cardLink) {
-                            cardLinkDisplay = `<div style="display:flex; align-items:center; gap:8px;"><a href="${data.cardLink}" target="_blank" style="color:var(--primary-blue); font-weight:500; text-decoration:none;">View</a><span class="material-symbols-outlined" style="cursor:pointer; font-size:16px; color:var(--text-muted);" onclick="copyToClipboard('${data.cardLink}')" title="Click to copy link">content_copy</span></div>`;
-                        }
                         html += `<tr>
                             <td data-label="Name & Email"><div style="font-weight: 500;">${data.userName || 'N/A'}</div><small style="color:var(--text-muted);">${data.userEmail || ''}</small></td>
-                            <td data-label="Card Type">${data.cardType || 'N/A'}</td><td data-label="Card Link">${cardLinkDisplay}</td><td data-label="Payment Method">${data.paymentMethod || 'N/A'}</td>
-                            <td data-label="Mobile"><span class="copyable-mobile" style="cursor:pointer;" onclick="copyToClipboard('${data.phoneNumber || ''}')" title="Click to copy">${data.phoneNumber || 'N/A'}</span></td>
-                            <td data-label="Status"><span class="status-badge ${statusClass}">${data.status || 'pending'}</span></td>
-                            <td class="actions-cell" data-label="Action"><select class="status-select" onchange="updateDollarSellStatus('${id}', this.value)"><option value="pending" ${data.status === 'pending' ? 'selected' : ''}>Pending</option><option value="approved" ${data.status === 'approved' ? 'selected' : ''}>Approved</option><option value="rejected" ${data.status === 'rejected' ? 'selected' : ''}>Rejected</option></select><button class="btn-delete" onclick="deleteItem('dollar_sells', '${id}')"><span class="material-symbols-outlined">delete</span></button></td>
+                            <td data-label="Card Type">${data.cardType || 'N/A'}</td><td data-label="Card Link">${data.cardLink ? `<a href="${data.cardLink}" target="_blank">View Link</a>` : 'N/A'}</td><td data-label="Payment Method">${data.paymentMethod || 'N/A'}</td>
+                            <td data-label="Mobile">${data.phoneNumber || 'N/A'}</td>
+                            <td data-label="Status"><span class="status-badge ${data.status}">${data.status || 'pending'}</span></td>
+                            <td class="actions-cell" data-label="Action"><select class="status-select" onchange="updateDollarSellStatus('${id}', this.value)"><option value="pending" ${data.status === 'pending' ? 'selected' : ''}>Pending</option><option value="approved" ${data.status === 'approved' ? 'selected' : ''}>Approved</option><option value="rejected" ${data.status === 'rejected' ? 'selected' : ''}>Rejected</option></select></td>
                         </tr>`;
                     });
                     tableBody.innerHTML = html;
                 } catch (error) { tableBody.innerHTML = `<tr><td colspan="7" style="color:red; text-align:center;">Error: ${error.message}</td></tr>`; }
             }
-            window.updateDollarSellStatus = async (id, newStatus) => {
-                try {
-                    const docRef = db.collection('dollar_sells').doc(id);
-                    const docSnap = await docRef.get();
-                    if(!docSnap.exists) throw new Error("Document not found");
-                    const data = docSnap.data();
-                    await docRef.update({ status: newStatus });
-                    if(data.userId) {
-                        let title = 'Dollar Sell Update', msg = '';
-                        if(newStatus === 'approved') { title = 'Dollar Sell Successful'; msg = `Your ${data.cardType} dollar sell request is approved. You will receive payment soon.`; } 
-                        else if (newStatus === 'rejected') { title = 'Dollar Sell Rejected'; msg = `Your dollar sell request has been rejected.`; }
-                        if(newStatus !== 'pending') {
-                            await db.collection('notifications').add({ targetUid: data.userId, title: title, message: msg, timestamp: firebase.firestore.FieldValue.serverTimestamp(), type: 'dollar_sell_update', read: false });
-                        }
-                    }
-                    showToast("Status updated successfully!", "success"); renderDollarSellRequests();
-                } catch (error) { showToast("Failed to update status.", "error"); }
-            };
 
             async function renderManualSalePage() {
                 const itemSelect = document.getElementById('manual-item-selection');
-                const quantityInput = document.getElementById('manual-quantity');
-                const saleInput = document.getElementById('manual-sale-amount');
-                const discountInput = document.getElementById('manual-discount-amount');
-                const profitInput = document.getElementById('manual-profit-amount');
-                let debugInfo = document.getElementById('calc-debug-info');
-                if (!debugInfo) {
-                    debugInfo = document.createElement('div'); debugInfo.id = 'calc-debug-info'; debugInfo.style.marginTop = '15px'; debugInfo.style.padding = '12px 16px'; debugInfo.style.backgroundColor = '#eff6ff'; debugInfo.style.border = '1px solid #bfdbfe'; debugInfo.style.borderRadius = '8px'; debugInfo.style.fontSize = '0.9em'; debugInfo.style.color = '#1e40af'; debugInfo.style.display = 'none'; document.getElementById('manual-sale-form').appendChild(debugInfo);
-                }
-                itemSelect.innerHTML = '<option value="">Loading...</option>'; quantityInput.value = 1; saleInput.value = ''; profitInput.value = ''; discountInput.value = '0';
+                itemSelect.innerHTML = '<option value="">Loading...</option>';
                 try {
                     const servicesSnapshot = await db.collection('services').get(); const coursesSnapshot = await db.collection('courses').get();
                     let optionsHTML = '<option value="" disabled selected>Select an item</option><optgroup label="Services">';
-                    servicesSnapshot.forEach(doc => { const data = doc.data(); const price = data.purchasePrice ? parseFloat(data.purchasePrice) : 0; optionsHTML += `<option value="${data.name}" data-price="${price}">${data.name}</option>`; });
+                    servicesSnapshot.forEach(doc => { const data = doc.data(); optionsHTML += `<option value="${data.name}">${data.name}</option>`; });
                     optionsHTML += '</optgroup><optgroup label="Courses">';
-                    coursesSnapshot.forEach(doc => { const data = doc.data(); optionsHTML += `<option value="${data.name}" data-price="0">${data.name}</option>`; });
+                    coursesSnapshot.forEach(doc => { const data = doc.data(); optionsHTML += `<option value="${data.name}">${data.name}</option>`; });
                     optionsHTML += '</optgroup>'; itemSelect.innerHTML = optionsHTML;
-                    function calculateProfit() {
-                        const selectedOption = itemSelect.options[itemSelect.selectedIndex]; if (!selectedOption || selectedOption.disabled) return;
-                        const unitBuyPrice = parseFloat(selectedOption.getAttribute('data-price')) || 0; const quantity = parseFloat(quantityInput.value) || 0; const netSales = parseFloat(saleInput.value) || 0; const discount = parseFloat(discountInput.value) || 0; const totalCost = unitBuyPrice * quantity;
-                        if (saleInput.value.trim() !== "") { profitInput.value = netSales - totalCost; } else { profitInput.value = ''; }
-                        debugInfo.style.display = 'block'; debugInfo.innerHTML = `<strong>Calculation:</strong><br>Unit Cost: ৳ ${unitBuyPrice} | Qty: ${quantity}<br>Gross Sale: ৳ ${netSales + discount} | Discount: ৳ ${discount}<br>Total Cost: ৳ ${totalCost} | Net Sales: ৳ ${netSales}`;
-                    }
-                    itemSelect.onchange = calculateProfit; quantityInput.oninput = calculateProfit; saleInput.oninput = calculateProfit; discountInput.oninput = calculateProfit;
                 } catch (error) { itemSelect.innerHTML = '<option value="">Failed to load items</option>'; }
             }
-            const manualSaleForm = document.getElementById('manual-sale-form');
-            if (manualSaleForm) {
-                manualSaleForm.onsubmit = async (e) => {
-                    e.preventDefault(); const btn = manualSaleForm.querySelector('button[type="submit"]');
-                    const userName = document.getElementById('manual-user-name').value; const userMobile = document.getElementById('manual-user-mobile').value;
-                    let userEmail = document.getElementById('manual-user-email') ? document.getElementById('manual-user-email').value.trim() : ''; if(!userEmail) userEmail = 'admin@manual.sale'; 
-                    const itemSelect = document.getElementById('manual-item-selection'); const itemName = itemSelect.value;
-                    const quantity = Number(document.getElementById('manual-quantity').value); const saleAmount = Number(document.getElementById('manual-sale-amount').value);
-                    const discountAmount = Number(document.getElementById('manual-discount-amount').value) || 0; const profitAmount = Number(document.getElementById('manual-profit-amount').value);
-                    if (!itemName || quantity <= 0 || document.getElementById('manual-sale-amount').value.trim() === '') { showToast("Please fill in item, quantity and amounts correctly.", "error"); return; }
-                    const originalBtnText = btn.innerHTML; btn.disabled = true; btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Saving...`;
-                    const trxId = 'MANUAL-' + Date.now().toString().slice(-6);
-                    try {
-                        const newPaymentRef = await db.collection('payments').add({ userName: userName, userMobile: userMobile, userEmail: userEmail, itemName: itemName, quantity: quantity, amount: saleAmount, discountAmount: discountAmount, profit: profitAmount, status: 'approved', timestamp: firebase.firestore.FieldValue.serverTimestamp(), transactionId: trxId });
-                        let baseName = itemName; if(baseName.includes('(x')) { baseName = baseName.replace(/\(x\d+\)$/, '').trim(); }
-                        const stockQuery = await db.collection('service_stock').where('serviceName', '==', baseName).get();
-                        if (!stockQuery.empty) {
-                            let stockDoc = stockQuery.docs[0]; let stockData = stockDoc.data();
-                            let stockLines = stockData.topupId ? stockData.topupId.split('\n').filter(line => line.trim() !== '') : []; let extractedLines = [];
-                            for(let i=0; i<quantity; i++) { if(stockLines.length > 0) { extractedLines.push(stockLines.shift()); } }
-                            if (extractedLines.length > 0) {
-                                let deliveredServiceDetails = extractedLines.join('\n');
-                                let remainingQty = (Number(stockData.quantity) || 0) - extractedLines.length; let remainingTopupId = stockLines.join('\n');
-                                if (remainingQty <= 0 && stockLines.length === 0) { await db.collection('service_stock').doc(stockDoc.id).delete(); } else { await db.collection('service_stock').doc(stockDoc.id).update({ quantity: remainingQty, topupId: remainingTopupId }); }
-                                if(userEmail !== 'admin@manual.sale') { window.sendServiceEmail(userEmail, userName || 'Customer', baseName, deliveredServiceDetails); }
-                            } else { showToast("Stock is empty for this service! Mail not sent.", "error"); }
-                        }
-                        if(userMobile && userMobile.trim() !== '') { setTimeout(() => { window.sendWhatsAppReceipt(newPaymentRef.id); }, 500); }
-                        setTimeout(() => { window.sendPaymentReceiptEmail(newPaymentRef.id); }, 500);
-                        showToast('Sale added successfully!', 'success'); manualSaleForm.reset(); if(document.getElementById('manual-user-email')) document.getElementById('manual-user-email').value = ""; document.getElementById('manual-item-selection').value = ""; document.getElementById('calc-debug-info').style.display = 'none'; renderDashboard();
-                    } catch (error) { showToast(`Error: ${error.message}`, "error"); } finally { btn.disabled = false; btn.innerHTML = originalBtnText; }
-                };
-            }
-
-            const dollarExchangeForm = document.getElementById('dollar-exchange-form');
-            if (dollarExchangeForm) {
-                const buyInput = document.getElementById('dollar-buy-amount'), sellInput = document.getElementById('dollar-sell-amount'), profitInput = document.getElementById('dollar-profit-amount');
-                const autoCalcProfit = () => { if (parseFloat(buyInput.value) > 0) profitInput.value = (parseFloat(sellInput.value) || 0) - (parseFloat(buyInput.value) || 0); };
-                buyInput.addEventListener('input', autoCalcProfit); sellInput.addEventListener('input', autoCalcProfit);
-                dollarExchangeForm.addEventListener('submit', async (e) => {
-                    e.preventDefault(); const btn = dollarExchangeForm.querySelector('button[type="submit"]');
-                    const exchangeType = document.getElementById('exchange-type').value, buyAmount = Number(buyInput.value), sellAmount = Number(sellInput.value), profitAmount = Number(profitInput.value);
-                    if (buyAmount <= 0 || sellAmount < 0 || profitAmount === null) { showToast("Please fill amounts properly.", "error"); return; }
-                    btn.disabled = true; btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Adding...`;
-                    try {
-                        await db.collection('dollar_exchange').add({ type: exchangeType, buyAmount: buyAmount, sellAmount: sellAmount, profit: profitAmount, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-                        showToast('Transaction added successfully!'); dollarExchangeForm.reset(); renderDashboard();
-                    } catch (error) { showToast(`Failed to add: ${error.message}`, "error"); } finally { btn.disabled = false; btn.innerHTML = `<span class="material-symbols-outlined">save</span> Add Transaction`; }
-                });
-            }
-
-            async function renderServiceStock() {
-                const selectionDropdown = document.getElementById('stock-service-selection');
-                selectionDropdown.innerHTML = '<option value="">Loading...</option>';
-                try {
-                    const servicesSnapshot = await db.collection('services').get();
-                    if (servicesSnapshot.empty) { selectionDropdown.innerHTML = '<option value="">No services found</option>'; } 
-                    else {
-                        let optionsHTML = '<option value="" disabled selected>Select a Service</option>';
-                        servicesSnapshot.forEach(doc => { optionsHTML += `<option value="${doc.data().name}">${doc.data().name}</option>`; });
-                        selectionDropdown.innerHTML = optionsHTML;
-                    }
-                } catch (error) { selectionDropdown.innerHTML = '<option value="">Failed to load</option>'; }
-                await renderGeneric('service_stock', 'service-stock-table-body', (stockItem) => `<tr><td data-label="Service Name">${stockItem.serviceName}</td><td data-label="Quantity">${stockItem.quantity}</td><td data-label="Topup ID" style="white-space: pre-wrap; word-break: break-all;">${stockItem.topupId}</td><td class="actions-cell" data-label="Action"><button class="btn-delete" onclick="deleteItem('service_stock', '${stockItem.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
-            }
-            const serviceStockForm = document.getElementById('service-stock-form');
-            if (serviceStockForm) {
-                serviceStockForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const btn = serviceStockForm.querySelector('button[type="submit"]');
-                    const serviceName = document.getElementById('stock-service-selection').value; const quantity = document.getElementById('stock-quantity').value; const topupId = document.getElementById('stock-topup-id').value;
-                    if (!serviceName || !quantity || !topupId) { showToast("Please fill all fields.", "error"); return; }
-                    btn.disabled = true; btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Adding...`;
-                    try { await db.collection('service_stock').add({ serviceName, quantity, topupId, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); showToast('Stock added successfully!'); serviceStockForm.reset(); renderServiceStock(); } catch (error) { showToast(`Failed: ${error.message}`, "error"); } finally { btn.disabled = false; btn.innerHTML = `<span class="material-symbols-outlined">inventory_2</span> Add Stock`; }
-                });
-            }
-
-            async function renderSendServicePage() {
-                serviceSelection.innerHTML = '<option value="">Loading...</option>';
-                try {
-                    const servicesSnapshot = await db.collection('services').get(); const coursesSnapshot = await db.collection('courses').get();
-                    if (servicesSnapshot.empty && coursesSnapshot.empty) { serviceSelection.innerHTML = '<option value="">No services or courses found</option>'; return; }
-                    let optionsHTML = '<option value="" disabled selected>Select a Service/Course</option><optgroup label="Services">';
-                    servicesSnapshot.forEach(doc => { optionsHTML += `<option value="${doc.data().name}" data-type="service">${doc.data().name}</option>`; });
-                    optionsHTML += '</optgroup><optgroup label="Courses">';
-                    coursesSnapshot.forEach(doc => { optionsHTML += `<option value="${doc.data().name}" data-type="course" data-price="${doc.data().price}" data-duration="${doc.data().duration}">${doc.data().name}</option>`; });
-                    optionsHTML += '</optgroup>'; serviceSelection.innerHTML = optionsHTML;
-                } catch (error) { serviceSelection.innerHTML = '<option value="">Failed to load</option>'; }
-            }
-            function updateServiceInfoTemplate() {
-                const selectedOption = serviceSelection.options[serviceSelection.selectedIndex], selectedValue = selectedOption.value, type = selectedOption.dataset.type, today = new Date().toLocaleDateString('en-GB');
-                let template = '';
-                if (type === 'service') {
-                    const lowerCaseValue = selectedValue.toLowerCase();
-                    if (lowerCaseValue.includes('ip service')) { let ipAmount = ''; if (lowerCaseValue.includes('premium')) ipAmount = '200 Pis'; else if (lowerCaseValue.includes('standard')) ipAmount = '100 Pis'; else if (lowerCaseValue.includes('basic')) ipAmount = '50 Pis'; template = `Date: ${today}\nService Name: ${selectedValue}\nTop up ID: \nIP Amount: ${ipAmount}\nStatus: Order Complete`; } else if (lowerCaseValue.includes('vps')) { template = `Date: ${today}\nService Name: ${selectedValue}\nAddress: \nUser ID: \nPassword: \nStatus: Order Complete`; } else { template = `Date: ${today}\nService Name: ${selectedValue}\n\nDetails:\n\nStatus: Order Complete`; }
-                } else if (type === 'course') {
-                    const price = selectedOption.dataset.price || 'N/A', duration = selectedOption.dataset.duration || 'N/A'; template = `Date: ${today}\nCourse Name: ${selectedValue}\nCourse Price: ${price} BDT\nDuration: ${duration}\nStatus: Enrollment Complete`;
-                }
-                serviceInfoTextarea.value = template;
-            }
-            if (serviceSelection) serviceSelection.addEventListener('change', updateServiceInfoTemplate);
-            if (sendServiceForm) sendServiceForm.addEventListener('submit', function(e) { e.preventDefault(); let recipientNumber = document.getElementById('whatsapp-number').value.trim(); const serviceInfo = serviceInfoTextarea.value.trim(); if (!recipientNumber || !serviceInfo) { showToast("Fill all details.", "error"); return; } window.sendViaMacroDroid(recipientNumber, serviceInfo); });
-
-            async function renderSettings() {
-                try {
-                    const heroDoc = await db.collection('site_settings').doc('hero_section').get(); if (heroDoc.exists && heroDoc.data().imageUrl) { document.getElementById('hero-image-url').value = heroDoc.data().imageUrl; document.getElementById('hero-image-preview').src = heroDoc.data().imageUrl; }
-                    const logoDoc = await db.collection('site_settings').doc('header_settings').get(); if (logoDoc.exists && logoDoc.data().logoImageUrl) { document.getElementById('logo-image-url').value = logoDoc.data().logoImageUrl; document.getElementById('logo-image-preview').src = logoDoc.data().logoImageUrl; }
-                    const aboutUsDoc = await db.collection('site_settings').doc('about_us_section').get(); if (aboutUsDoc.exists && aboutUsDoc.data().imageUrl) { document.getElementById('about-us-image-url').value = aboutUsDoc.data().imageUrl; document.getElementById('about-us-image-preview').src = aboutUsDoc.data().imageUrl; }
-                    const contactUsDoc = await db.collection('site_settings').doc('contact_section').get(); if (contactUsDoc.exists && contactUsDoc.data().imageUrl) { document.getElementById('contact-us-image-url').value = contactUsDoc.data().imageUrl; document.getElementById('contact-us-image-preview').src = contactUsDoc.data().imageUrl; }
-                    const chatDoc = await db.collection('site_settings').doc('floating_chat').get(); if (chatDoc.exists && chatDoc.data().imageUrl) { document.getElementById('chat-icon-image-url').value = chatDoc.data().imageUrl; document.getElementById('chat-icon-image-preview').src = chatDoc.data().imageUrl; }
-                    const mdDoc = await db.collection('site_settings').doc('macrodroid_webhook').get(); if (mdDoc.exists && mdDoc.data().url) { document.getElementById('macrodroid-webhook-url').value = mdDoc.data().url; }
-                    const emailjsDoc = await db.collection('site_settings').doc('emailjs_settings').get();
-                    if (emailjsDoc.exists) { const emailData = emailjsDoc.data(); document.getElementById('emailjs-public-key').value = emailData.publicKey || ''; document.getElementById('emailjs-service-id').value = emailData.serviceId || ''; document.getElementById('emailjs-template-service').value = emailData.templateService || ''; document.getElementById('emailjs-template-receipt').value = emailData.templateReceipt || ''; document.getElementById('emailjs-template-otp').value = emailData.templateOtp || ''; }
-                    const socialDoc = await db.collection('site_settings').doc('social_media').get(); socialLinksContainer.innerHTML = ''; if (socialDoc.exists && socialDoc.data().links) socialDoc.data().links.forEach(createSocialLinkInput);
-                } catch (error) { showToast("Failed to load settings.", "error"); }
-            }
-            heroSettingsForm.addEventListener('submit', async (e) => { e.preventDefault(); const newUrl = document.getElementById('hero-image-url').value; if (!newUrl) { showToast("Provide an image URL.", "error"); return; } try { await db.collection('site_settings').doc('hero_section').set({ imageUrl: newUrl }, { merge: true }); showToast("Hero image updated!"); renderSettings(); } catch (error) { showToast("Failed to save.", "error"); } });
-            logoSettingsForm.addEventListener('submit', async (e) => { e.preventDefault(); const newLogoUrl = document.getElementById('logo-image-url').value; if (!newLogoUrl.trim()) { showToast("Provide a logo URL.", "error"); return; } try { await db.collection('site_settings').doc('header_settings').set({ logoImageUrl: newLogoUrl }, { merge: true }); showToast("Logo saved!"); renderSettings(); } catch (error) { showToast("Failed to save.", "error"); } });
-            aboutUsSettingsForm.addEventListener('submit', async (e) => { e.preventDefault(); const newUrl = document.getElementById('about-us-image-url').value; if (!newUrl) { showToast("Provide an image URL.", "error"); return; } try { await db.collection('site_settings').doc('about_us_section').set({ imageUrl: newUrl }, { merge: true }); showToast("About Us image updated!"); renderSettings(); } catch (error) { showToast("Failed to save.", "error"); } });
-            contactUsSettingsForm.addEventListener('submit', async (e) => { e.preventDefault(); const newUrl = document.getElementById('contact-us-image-url').value; if (!newUrl) { showToast("Provide an image URL.", "error"); return; } try { await db.collection('site_settings').doc('contact_section').set({ imageUrl: newUrl }, { merge: true }); showToast("Contact image updated!"); renderSettings(); } catch (error) { showToast("Failed to save.", "error"); } });
-            chatIconSettingsForm.addEventListener('submit', async (e) => { e.preventDefault(); const newUrl = document.getElementById('chat-icon-image-url').value; if (!newUrl) { showToast("Provide an icon URL.", "error"); return; } try { await db.collection('site_settings').doc('floating_chat').set({ imageUrl: newUrl }, { merge: true }); showToast("Chat icon updated!"); renderSettings(); } catch (error) { showToast("Failed to save.", "error"); } });
-            
-            if(macrodroidSettingsForm) { macrodroidSettingsForm.addEventListener('submit', async (e) => { e.preventDefault(); const newUrl = document.getElementById('macrodroid-webhook-url').value; try { await db.collection('site_settings').doc('macrodroid_webhook').set({ url: newUrl }, { merge: true }); showToast("MacroDroid URL saved successfully!"); } catch (error) { showToast("Failed to save MacroDroid Settings.", "error"); } }); }
-            if(emailjsSettingsForm) { emailjsSettingsForm.addEventListener('submit', async (e) => { e.preventDefault(); const publicKey = document.getElementById('emailjs-public-key').value.trim(); const serviceId = document.getElementById('emailjs-service-id').value.trim(); const templateService = document.getElementById('emailjs-template-service').value.trim(); const templateReceipt = document.getElementById('emailjs-template-receipt').value.trim(); const templateOtp = document.getElementById('emailjs-template-otp').value.trim(); try { await db.collection('site_settings').doc('emailjs_settings').set({ publicKey, serviceId, templateService, templateReceipt, templateOtp }, { merge: true }); showToast("EmailJS settings saved successfully!", "success"); } catch (error) { showToast("Failed to save EmailJS Settings.", "error"); } }); }
-            function createSocialLinkInput(link = { platform: 'facebook', link: '' }) { const entryDiv = document.createElement('div'); entryDiv.className = 'social-link-entry'; entryDiv.innerHTML = `<select class="social-platform-select" required><option value="facebook" ${link.platform === 'facebook' ? 'selected' : ''}>Facebook</option><option value="youtube" ${link.platform === 'youtube' ? 'selected' : ''}>YouTube</option><option value="whatsapp" ${link.platform === 'whatsapp' ? 'selected' : ''}>WhatsApp</option><option value="instagram" ${link.platform === 'instagram' ? 'selected' : ''}>Instagram</option><option value="twitter" ${link.platform === 'twitter' ? 'selected' : ''}>Twitter / X</option><option value="linkedin" ${link.platform === 'linkedin' ? 'selected' : ''}>LinkedIn</option></select><input type="url" class="social-link-url" placeholder="Full Link (https://...)" value="${link.link || ''}" required><button type="button" class="btn btn-remove remove-social-link-btn"><span class="material-symbols-outlined">delete</span></button>`; socialLinksContainer.appendChild(entryDiv); }
-            addSocialLinkBtn.addEventListener('click', () => createSocialLinkInput());
-            socialLinksContainer.addEventListener('click', (e) => { if (e.target.closest('.remove-social-link-btn')) e.target.closest('.social-link-entry').remove(); });
-            socialMediaForm.addEventListener('submit', async (e) => { e.preventDefault(); const links = []; let hasError = false; socialLinksContainer.querySelectorAll('.social-link-entry').forEach(entry => { const platform = entry.querySelector('.social-platform-select').value, link = entry.querySelector('.social-link-url').value.trim(); if (link) links.push({ platform, link }); else { showToast("Fill all link inputs.", "error"); hasError = true; } }); if (hasError) return; try { await db.collection('site_settings').doc('social_media').set({ links }); showToast("Social links saved!"); } catch (error) { showToast("Failed to save links.", "error"); } });
-
-            window.updatePaymentStatus = async (docId, newStatus) => {
-                try {
-                    const paymentDocRef = db.collection('payments').doc(docId); const paymentDoc = await paymentDocRef.get();
-                    if (!paymentDoc.exists) throw new Error("Payment document not found.");
-                    const paymentData = paymentDoc.data(); let updateData = { status: newStatus };
-                    if (newStatus === 'approved') {
-                        let baseName = paymentData.itemName; if(baseName.includes('(x')) { baseName = baseName.replace(/\(x\d+\)$/, '').trim(); }
-                        const serviceQuery = await db.collection('services').where('name', '==', baseName).limit(1).get();
-                        if (!serviceQuery.empty) { const serviceData = serviceQuery.docs[0].data(); let qty = paymentData.quantity || 1; updateData.profit = (Number(paymentData.amount) || 0) - ((Number(serviceData.purchasePrice) || 0) * qty); } else { updateData.profit = Number(paymentData.amount) || 0; }
-                        let deliveredServiceDetails = ""; let qtyToDeduct = paymentData.quantity || 1;
-                        const stockQuery = await db.collection('service_stock').where('serviceName', '==', baseName).get();
-                        if (!stockQuery.empty) {
-                            let stockDoc = stockQuery.docs[0]; let stockData = stockDoc.data();
-                            let stockLines = stockData.topupId ? stockData.topupId.split('\n').filter(line => line.trim() !== '') : []; let extractedLines = [];
-                            for(let i=0; i<qtyToDeduct; i++) { if(stockLines.length > 0) { extractedLines.push(stockLines.shift()); } }
-                            if (extractedLines.length > 0) {
-                                deliveredServiceDetails = extractedLines.join('\n');
-                                let remainingQty = (Number(stockData.quantity) || 0) - extractedLines.length; let remainingTopupId = stockLines.join('\n');
-                                if (remainingQty <= 0 && stockLines.length === 0) { await db.collection('service_stock').doc(stockDoc.id).delete(); } else { await db.collection('service_stock').doc(stockDoc.id).update({ quantity: remainingQty, topupId: remainingTopupId }); }
-                                let userEmailToUse = paymentData.userEmail; if(userEmailToUse && userEmailToUse !== 'admin@manual.sale') { window.sendServiceEmail(userEmailToUse, paymentData.userName || 'Customer', baseName, deliveredServiceDetails); }
-                            } else { showToast("Stock is empty for this service! Mail not sent.", "error"); }
-                        }
-                        if (paymentData.userId) { await db.collection('notifications').add({ targetUid: paymentData.userId, title: 'Payment Approved', message: `Your payment of ৳${paymentData.amount} for ${paymentData.itemName} has been verified successfully.`, timestamp: firebase.firestore.FieldValue.serverTimestamp(), type: 'payment_success', read: false }); }
-                    } else if (newStatus === 'rejected') {
-                         updateData.profit = firebase.firestore.FieldValue.delete();
-                         if (paymentData.userId) { await db.collection('notifications').add({ targetUid: paymentData.userId, title: 'Payment Rejected', message: `Your payment for ${paymentData.itemName} was rejected. Please contact support.`, timestamp: firebase.firestore.FieldValue.serverTimestamp(), type: 'payment_failed', read: false }); }
-                    }
-                    await paymentDocRef.update(updateData); showToast('Status updated successfully!');
-                    if (newStatus === 'approved') { setTimeout(() => { window.sendWhatsAppReceipt(docId); window.sendPaymentReceiptEmail(docId); }, 500); }
-                    const activeFilter = document.querySelector('#payment-filter-buttons .filter-btn.active').dataset.filter; renderPayments(activeFilter === 'all' ? null : activeFilter); renderDashboard();
-                } catch (error) { showToast(`Failed to update status: ${error.message}`, 'error'); }
-            };
-
-            window.sendWhatsAppReceipt = async (paymentId) => {
-                try {
-                    const paymentDoc = await db.collection('payments').doc(paymentId).get();
-                    if (!paymentDoc.exists) { showToast('Payment not found!', 'error'); return; }
-                    const paymentData = paymentDoc.data(); let studentMobile = paymentData.userMobile; let studentName = paymentData.userName || 'N/A';
-                    if(!studentMobile && paymentData.userEmail && paymentData.userEmail !== 'admin@manual.sale') {
-                        const userQuery = await db.collection('users').where('email', '==', paymentData.userEmail).limit(1).get();
-                        if (!userQuery.empty) { const userData = userQuery.docs[0].data(); studentMobile = userData.mobile; if(!studentName || studentName === 'N/A') studentName = userData.name || 'N/A'; }
-                    }
-                    if (!studentMobile || studentMobile.trim() === '') { showToast(`No mobile number found.`, 'error'); return; }
-                    const date = new Date().toLocaleDateString('en-GB'), itemName = paymentData.itemName, amount = paymentData.amount, trxID = paymentData.transactionId || 'N/A', paymentStatus = 'Payment Successfull';
-                    const message = `Date                   : ${date}\nStudent Name   : ${studentName}\nService/Course : ${itemName}\nAmount              : ${amount} BDT\nTrxID                  : ${trxID}\nPayment Status : ${paymentStatus}`;
-                    window.sendViaMacroDroid(studentMobile, message);
-                } catch (error) { showToast("Failed to prepare WhatsApp receipt.", "error"); }
-            };
-
-            window.printReceipt = async (paymentId) => {
-                try {
-                    const doc = await db.collection('payments').doc(paymentId).get(); if (!doc.exists) { showToast('Payment not found', 'error'); return; }
-                    const data = doc.data();
-                    let custName = data.userName; if(!custName && data.userEmail !== 'admin@manual.sale') custName = data.userEmail; if(!custName) custName = "Walk-in Customer";
-                    document.getElementById('receipt-customer').textContent = custName; document.getElementById('receipt-voucher').textContent = data.transactionId || 'N/A'; document.getElementById('receipt-date').textContent = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString('en-GB', {day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit'}) : new Date().toLocaleString('en-GB');
-                    let qty = data.quantity || 1; let itemName = data.itemName || 'N/A';
-                    if (!data.quantity && itemName.includes('(x')) { const match = itemName.match(/\(x(\d+)\)$/); if (match) { qty = parseInt(match[1]); itemName = itemName.replace(/\(x\d+\)$/, '').trim(); } }
-                    let netAmount = Number(data.amount) || 0; let discount = Number(data.discountAmount) || 0; let grossAmount = netAmount + discount; let rate = grossAmount / qty;
-                    const tbody = document.getElementById('receipt-items');
-                    tbody.innerHTML = `<tr><td style="padding:4px 0;">1</td><td style="padding:4px 0;">${itemName}</td><td style="text-align:center; padding:4px 0;">${qty}</td><td style="text-align:right; padding:4px 0;">${rate.toFixed(2)}</td><td style="text-align:right; padding:4px 0;">${grossAmount.toFixed(2)}</td><td style="text-align:right; padding:4px 0;">${discount.toFixed(2)}</td></tr>`;
-                    document.getElementById('receipt-amount').textContent = grossAmount.toFixed(2); document.getElementById('receipt-discount').textContent = discount.toFixed(2); document.getElementById('receipt-net').textContent = netAmount.toFixed(2); document.getElementById('receipt-cash').textContent = netAmount.toFixed(2);
-                    const logoDoc = await db.collection('site_settings').doc('header_settings').get(); if (logoDoc.exists && logoDoc.data().logoImageUrl) { document.getElementById('receipt-logo').src = logoDoc.data().logoImageUrl; }
-                    window.print();
-                } catch (err) { showToast('Failed to print receipt', 'error'); console.error(err); }
-            };
 
             async function renderGeneric(collection, tableBodyId, rowRenderer) {
                 const tableBody = document.getElementById(tableBodyId); tableBody.innerHTML = `<tr><td colspan="10" style="text-align: center;">Loading data...</td></tr>`;
@@ -2244,14 +1841,12 @@
                     let html = '';
                     snapshot.forEach(doc => {
                         const data = doc.data(); const date = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString('en-US') : 'N/A';
-                        const msg = `Hi ${data.userName || ''}, we noticed you left something in your cart (${data.itemName}). Complete your purchase now and get a special discount!`;
-                        html += `<tr><td data-label="User Info">${data.userName || 'N/A'} <br><small style="color:var(--text-muted);">${data.userMobile || data.userEmail}</small></td><td data-label="Item">${data.itemName}</td><td data-label="Amount">৳ ${data.amount}</td><td data-label="Time">${date}</td><td class="actions-cell" data-label="Action"><button class="btn-whatsapp" onclick="openStudentWhatsappModal('${data.userMobile}', '${data.userName}', '${msg}')" title="Send WhatsApp Reminder"><span class="material-symbols-outlined">chat</span></button><button class="btn-delete" onclick="deleteItem('abandoned_carts', '${doc.id}')" title="Delete"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
+                        html += `<tr><td data-label="User Info">${data.userName || 'N/A'}<br><small style="color:var(--text-muted);">${data.userMobile || data.userEmail}</small></td><td data-label="Item">${data.itemName}</td><td data-label="Amount">৳ ${data.amount}</td><td data-label="Time">${date}</td><td class="actions-cell" data-label="Action"><button class="btn-whatsapp" onclick="openStudentWhatsappModal('${data.userMobile}', '${data.userName}')"><span class="material-symbols-outlined">chat</span></button><button class="btn-delete" onclick="deleteItem('abandoned_carts', '${doc.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
                     });
                     tableBody.innerHTML = html;
                 } catch(e) { tableBody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Error: ${e.message}</td></tr>`; }
             }
 
-            // --- Installments Page + Send Reminders ---
             async function renderInstallments() {
                 const tableBody = document.getElementById('installments-table-body'); tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center;">Loading...</td></tr>`;
                 try {
@@ -2260,57 +1855,21 @@
                     let html = '';
                     snapshot.forEach(doc => {
                         const data = doc.data(); const due = (Number(data.totalAmount) || 0) - (Number(data.paidAmount) || 0);
-                        const msg = `Hi ${data.userName || ''}, your payment of ৳${due} for ${data.itemName} is due on ${data.nextDueDate}. Please clear the due to continue.`;
-                        html += `<tr><td data-label="User Info">${data.userName || 'N/A'} <br><small style="color:var(--text-muted);">${data.userMobile || ''}</small></td><td data-label="Course/Service">${data.itemName}</td><td data-label="Total Amount">৳ ${data.totalAmount}</td><td data-label="Paid Amount" style="color:var(--accent-green);font-weight:bold;">৳ ${data.paidAmount}</td><td data-label="Due Amount" style="color:var(--accent-red);font-weight:bold;">৳ ${due}</td><td data-label="Next Due Date">${data.nextDueDate || 'N/A'}</td><td data-label="Status"><span class="status-badge ${due > 0 ? 'pending' : 'approved'}">${due > 0 ? 'Pending' : 'Completed'}</span></td><td class="actions-cell" data-label="Action"><button class="btn-whatsapp" onclick="openStudentWhatsappModal('${data.userMobile}', '${data.userName}', '${msg}')" title="Send Reminder"><span class="material-symbols-outlined">notifications_active</span></button><button class="btn-edit" onclick="openModalForEdit('installments', '${doc.id}')" title="Update Payment"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('installments', '${doc.id}')" title="Delete"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
+                        html += `<tr><td data-label="User Info">${data.userName || 'N/A'}<br><small style="color:var(--text-muted);">${data.userMobile || ''}</small></td><td data-label="Course/Service">${data.itemName}</td><td data-label="Total Amount">৳ ${data.totalAmount}</td><td data-label="Paid Amount" style="color:var(--accent-green);">৳ ${data.paidAmount}</td><td data-label="Due Amount" style="color:var(--accent-red);">৳ ${due}</td><td data-label="Next Due Date">${data.nextDueDate || 'N/A'}</td><td data-label="Status"><span class="status-badge ${due > 0 ? 'pending' : 'approved'}">${due > 0 ? 'Pending' : 'Completed'}</span></td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('installments', '${doc.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('installments', '${doc.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
                     });
                     tableBody.innerHTML = html;
                 } catch(e) { tableBody.innerHTML = `<tr><td colspan="8" style="color:red; text-align:center;">Error: ${e.message}</td></tr>`; }
             }
 
-            document.getElementById('send-installment-reminders-btn').addEventListener('click', async () => {
-                const btn = document.getElementById('send-installment-reminders-btn');
-                btn.innerHTML = 'Checking...'; btn.disabled = true;
-                try {
-                    const snapshot = await db.collection('installments').get();
-                    let sentCount = 0;
-                    const today = new Date(); today.setHours(0,0,0,0);
-                    const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
-                    
-                    const updates = [];
-
-                    snapshot.forEach(doc => {
-                        const data = doc.data();
-                        const due = (Number(data.totalAmount) || 0) - (Number(data.paidAmount) || 0);
-                        if (due > 0 && data.nextDueDate) {
-                            const dueDate = new Date(data.nextDueDate);
-                            dueDate.setHours(0,0,0,0);
-                            if (dueDate.getTime() === tomorrow.getTime()) {
-                                if (data.lastReminderDate !== data.nextDueDate) {
-                                    const msg = `Hi ${data.userName || ''}, your payment of ৳${due} for ${data.itemName} is due tomorrow (${data.nextDueDate}). Please clear the due to avoid interruption.`;
-                                    window.sendViaMacroDroid(data.userMobile, msg, false);
-                                    updates.push(db.collection('installments').doc(doc.id).update({ lastReminderDate: data.nextDueDate }));
-                                    sentCount++;
-                                }
-                            }
-                        }
-                    });
-                    
-                    await Promise.all(updates);
-                    showToast(`Sent ${sentCount} reminders successfully!`, 'success');
-                } catch (err) { showToast('Error sending reminders', 'error'); }
-                btn.innerHTML = '<span class="material-symbols-outlined">send</span> Auto Send Due Reminders';
-                btn.disabled = false;
-            });
-
             async function renderExpenses() {
                 const tableBody = document.getElementById('expenses-table-body'); tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">Loading...</td></tr>`;
                 try {
                     const snapshot = await db.collection('expenses').orderBy('timestamp', 'desc').get();
-                    if(snapshot.empty) { tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">No expenses recorded yet.</td></tr>`; return; }
+                    if(snapshot.empty) { tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">No expenses recorded.</td></tr>`; return; }
                     let html = '';
                     snapshot.forEach(doc => {
                         const data = doc.data(); const date = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleDateString('en-GB') : 'N/A';
-                        html += `<tr><td data-label="Date">${date}</td><td data-label="Category">${data.category}</td><td data-label="Note / Reason">${data.note || 'N/A'}</td><td data-label="Amount" style="color:var(--accent-red);font-weight:bold;">৳ ${data.amount}</td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('expenses', '${doc.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('expenses', '${doc.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
+                        html += `<tr><td data-label="Date">${date}</td><td data-label="Category">${data.category}</td><td data-label="Note">${data.note || 'N/A'}</td><td data-label="Amount" style="color:var(--accent-red);font-weight:bold;">৳ ${data.amount}</td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('expenses', '${doc.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('expenses', '${doc.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
                     });
                     tableBody.innerHTML = html;
                 } catch(e) { tableBody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Error: ${e.message}</td></tr>`; }
@@ -2321,179 +1880,68 @@
                 try {
                     let query = db.collection('payments'); if (statusFilter) query = query.where('status', '==', statusFilter);
                     const snapshot = await query.orderBy('timestamp', 'desc').get();
-                    if (snapshot.empty) { tableBody.innerHTML = `<tr><td colspan="10" style="text-align: center;">No ${statusFilter || ''} payments found.</td></tr>`; return; }
+                    if (snapshot.empty) { tableBody.innerHTML = `<tr><td colspan="10" style="text-align: center;">No payments found.</td></tr>`; return; }
                     let tableHTML = '';
                     snapshot.forEach(doc => {
                         const payment = { id: doc.id, ...doc.data() }; const timestamp = payment.timestamp ? new Date(payment.timestamp.seconds * 1000).toLocaleString('en-US') : 'N/A'; const statusClass = (payment.status || 'pending').toLowerCase(); const profit = (payment.status === 'approved' && payment.profit != null) ? `৳ ${payment.profit}` : 'N/A';
-                        const nameDisplay = payment.userName ? `<div style="font-weight: 500;">${payment.userName}</div>` : ''; const mobileDisplay = payment.userMobile ? `<div><small style="color:var(--text-muted);">${payment.userMobile}</small></div>` : ''; const emailDisplay = payment.userEmail !== 'admin@manual.sale' ? `<div><small>${payment.userEmail}</small></div>` : `<div><small style="color:var(--accent-yellow);">Manual Sale</small></div>`; const customerInfo = `<div>${nameDisplay}${mobileDisplay}${emailDisplay}</div>`;
-                        const discountDisplay = payment.discountAmount ? `৳ ${payment.discountAmount}` : '৳ 0';
-                        const printBtn = `<button class="btn-edit" style="background:#fffbeb !important; color:#d97706 !important;" onclick="printReceipt('${payment.id}')" title="Print Receipt"><span class="material-symbols-outlined">print</span></button>`; const editBtn = `<button class="btn-edit" onclick="openModalForEdit('payments', '${payment.id}')" title="Edit Payment"><span class="material-symbols-outlined">edit</span></button>`; const whatsappBtn = (payment.status === 'approved' && payment.userEmail !== 'admin@manual.sale') ? `<button class="btn-whatsapp" onclick="sendWhatsAppReceipt('${payment.id}')" title="Send WhatsApp Receipt"><span class="material-symbols-outlined">send</span></button>` : '';
-                        
-                        tableHTML += `<tr><td data-label="Customer Info">${customerInfo}</td><td data-label="Item">${payment.itemName}</td><td data-label="Amount">৳ ${payment.amount}</td><td data-label="Discount">${discountDisplay}</td><td data-label="Profit">${profit}</td><td data-label="TrxID">${payment.transactionId || 'N/A'}</td><td data-label="Time">${timestamp}</td><td data-label="Status"><span class="status-badge ${statusClass}">${payment.status}</span></td><td class="actions-cell" data-label="Action"><div style="display:flex; flex-wrap:wrap; gap:5px; justify-content:flex-end;"><select class="status-select" onchange="updatePaymentStatus('${payment.id}', this.value)" style="margin-bottom: 5px;"><option value="pending" ${payment.status === 'pending' ? 'selected' : ''}>Pending</option><option value="approved" ${payment.status === 'approved' ? 'selected' : ''}>Approved</option><option value="rejected" ${payment.status === 'rejected' ? 'selected' : ''}>Rejected</option></select><div style="display:flex;">${printBtn}${whatsappBtn}${editBtn}<button class="btn-delete" onclick="deleteItem('payments', '${payment.id}')" title="Delete Payment"><span class="material-symbols-outlined">delete</span></button></div></div></td></tr>`;
+                        tableHTML += `<tr><td data-label="Customer Info">${payment.userName || 'N/A'} <br><small>${payment.userEmail || ''}</small></td><td data-label="Item">${payment.itemName}</td><td data-label="Amount">৳ ${payment.amount}</td><td data-label="Discount">৳ ${payment.discountAmount || 0}</td><td data-label="Profit">${profit}</td><td data-label="TrxID">${payment.transactionId || 'N/A'}</td><td data-label="Time">${timestamp}</td><td data-label="Status"><span class="status-badge ${statusClass}">${payment.status}</span></td><td class="actions-cell" data-label="Action"><button class="btn-delete" onclick="deleteItem('payments', '${payment.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
                     });
-                    tableBody.innerHTML = tableHTML; if (paymentSearchInput.value) paymentSearchInput.dispatchEvent(new Event('keyup'));
+                    tableBody.innerHTML = tableHTML;
                 } catch (error) { tableBody.innerHTML = `<tr><td colspan="10" style="color: red; text-align: center;">Error: ${error.message}</td></tr>`; }
             }
 
             async function renderUsers() {
                 const tableBody = document.getElementById('users-table-body'); tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center;">Loading students...</td></tr>`;
                 try {
-                    const paymentsSnapshot = await db.collection('payments').where('status', '==', 'approved').get(); const payingUserEmails = new Set(paymentsSnapshot.docs.map(doc => doc.data().userEmail));
                     const usersSnapshot = await db.collection('users').get(); if (usersSnapshot.empty) { tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center;">No students found.</td></tr>`; return; }
-                    let usersArray = []; usersSnapshot.forEach(doc => usersArray.push({ id: doc.id, ...doc.data() }));
-                    usersArray.sort((a, b) => { const timeA = a.timestamp ? (a.timestamp.seconds || 0) : 0; const timeB = b.timestamp ? (b.timestamp.seconds || 0) : 0; return timeB - timeA; });
                     let tableHTML = '';
-                    usersArray.forEach(user => {
-                        const hasPurchased = payingUserEmails.has(user.email); const statusClass = hasPurchased ? 'student-active-indicator' : 'student-inactive-indicator'; const statusTitle = hasPurchased ? 'This student has purchased items.' : 'No purchases yet.';
-                        let verifyBadge = (user.email_verified === true || typeof user.email_verified === 'undefined') ? '<span class="status-badge approved" style="background-color: #ecfdf5; color: #059669;"><span class="material-symbols-outlined" style="font-size:12px; vertical-align:middle; margin-right:2px;">verified</span>Verified</span>' : '<span class="status-badge rejected" style="background-color: #fff1f2; color: #e11d48;"><span class="material-symbols-outlined" style="font-size:12px; vertical-align:middle; margin-right:2px;">warning</span>Unverified</span>';
-                        tableHTML += `<tr><td data-label="Name" class="${statusClass}" title="${statusTitle}">${user.name || 'N/A'}</td><td data-label="Email">${user.email}</td><td data-label="Mobile"><span class="copyable-mobile" onclick="copyToClipboard('${user.mobile || ''}')" title="Click to copy">${user.mobile || 'N/A'}</span></td><td data-label="Referral Code">${user.referralCode || 'N/A'}</td><td data-label="Balance">৳ ${user.affiliateBalance || 0}</td><td data-label="Status">${verifyBadge}</td><td class="actions-cell" data-label="Action"><button class="btn-edit" style="background:#ecfdf5 !important; color:#059669 !important;" onclick="viewStudentProgress('${user.id}', '${user.name || 'Unknown'}')" title="View Progress"><span class="material-symbols-outlined">bar_chart</span></button><button class="btn-whatsapp" onclick="openStudentWhatsappModal('${user.mobile}', '${user.name || ''}')" title="Send Follow-up Message"><span class="material-symbols-outlined">chat</span></button><button class="btn-edit" onclick="openModalForEdit('users', '${user.id}')" title="Edit Student"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('users', '${user.id}')" title="Delete Student"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
+                    usersSnapshot.forEach(doc => {
+                        const user = { id: doc.id, ...doc.data() };
+                        tableHTML += `<tr><td data-label="Name">${user.name || 'N/A'}</td><td data-label="Email">${user.email}</td><td data-label="Mobile">${user.mobile || 'N/A'}</td><td data-label="Referral">${user.referralCode || 'N/A'}</td><td data-label="Balance">৳ ${user.affiliateBalance || 0}</td><td data-label="Status"><span class="status-badge approved">Verified</span></td><td class="actions-cell" data-label="Action"><button class="btn-whatsapp" onclick="openStudentWhatsappModal('${user.mobile}', '${user.name || ''}')"><span class="material-symbols-outlined">chat</span></button><button class="btn-edit" onclick="openModalForEdit('users', '${user.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('users', '${user.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
                     });
                     tableBody.innerHTML = tableHTML;
                 } catch (error) { tableBody.innerHTML = `<tr><td colspan="7" style="color: red; text-align: center;">Error: ${error.message}</td></tr>`; }
             }
 
-            const renderUserNotifications = () => renderGeneric('notifications', 'user-notifications-table-body', (notif) => {
-                const target = notif.targetUid === 'all' ? '<strong style="color:var(--primary-blue)">All Users</strong>' : (notif.targetUid || 'Unknown'); const date = notif.timestamp ? new Date(notif.timestamp.seconds * 1000).toLocaleString('en-US') : 'N/A';
-                return `<tr><td data-label="Date">${date}</td><td data-label="Target User">${target}</td><td data-label="Title">${notif.title}</td><td data-label="Message">${notif.message}</td><td data-label="Type"><span class="status-badge" style="background:#eef2ff; color:var(--primary-blue);">${notif.type || 'general'}</span></td><td class="actions-cell" data-label="Action"><button class="btn-delete" onclick="deleteItem('notifications', '${notif.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
-            });
-
-            async function renderCertificates() {
-                const tableBody = document.getElementById('certificates-table-body'); tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">Loading certificates...</td></tr>`;
-                try {
-                    const snapshot = await db.collection('certificates').orderBy('issue_date', 'desc').get(); if (snapshot.empty) { tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">No certificates generated yet.</td></tr>`; return; }
-                    let tableHTML = '';
-                    snapshot.forEach(doc => {
-                        const cert = { id: doc.id, ...doc.data() }; const date = cert.issue_date ? new Date(cert.issue_date.seconds * 1000).toLocaleString('en-US') : 'N/A';
-                        tableHTML += `<tr><td data-label="Certificate ID" style="font-family:monospace; font-weight:bold; color:var(--primary-blue);">${cert.certificate_id || 'N/A'}</td><td data-label="Student Email">${cert.user_email || cert.user_id || 'N/A'}</td><td data-label="Course Name">${cert.course_name || 'N/A'}</td><td data-label="Issue Date">${date}</td><td class="actions-cell" data-label="Action"><button class="btn-edit" style="background:#fffbeb !important; color:#d97706 !important;" onclick="copyToClipboard('${cert.certificate_id}')" title="Copy Certificate ID"><span class="material-symbols-outlined">content_copy</span></button><button class="btn-delete" onclick="deleteItem('certificates', '${cert.id}')" title="Delete"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
-                    });
-                    tableBody.innerHTML = tableHTML;
-                } catch (error) { tableBody.innerHTML = `<tr><td colspan="5" style="color: red; text-align: center;">Failed to load certificates.</td></tr>`; }
-            }
-
-            window.updateServiceStatus = async (docId, isChecked) => { try { await db.collection('services').doc(docId).update({ status: isChecked }); if (isChecked) showToast('Service is now Active.', 'success'); else showToast('Service is now Inactive.', 'success'); } catch (error) { showToast('Failed to update status.', 'error'); renderServices(); } };
-            const renderServices = () => renderGeneric('services', 'services-table-body', (service) => { const isActive = service.status !== false; const imgDisplay = service.imageUrl ? `<img src="${service.imageUrl}" style="width:40px; height:40px; object-fit:cover; border-radius:6px; border:1px solid var(--border-color);">` : '<span style="font-size:12px; color:var(--text-muted);">No Image</span>'; return `<tr><td data-label="Image">${imgDisplay}</td><td data-label="Service Name">${service.name}</td><td data-label="Buy Price">৳ ${service.purchasePrice || 0}</td><td data-label="Selling Price">৳ ${service.currentPrice}</td><td data-label="Commission">৳ ${service.commission || 0}</td><td data-label="Status"><label class="switch"><input type="checkbox" onchange="updateServiceStatus('${service.id}', this.checked)" ${isActive ? 'checked' : ''}><span class="slider"></span></label></td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('services', '${service.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('services', '${service.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`; });
-            const renderCourses = () => renderGeneric('courses', 'courses-table-body', (course) => `<tr><td data-label="Course Name">${course.name}</td><td data-label="Instructor">${course.instructor}</td><td data-label="Price">৳ ${course.price}</td><td data-label="Commission">৳ ${course.commission || 0}</td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('courses', '${course.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('courses', '${course.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
-            const renderEnrollments = () => renderGeneric('enrollments', 'enrollments-table-body', (enroll) => `<tr><td data-label="Student Email">${enroll.studentEmail}</td><td data-label="Course Name">${enroll.courseName}</td><td data-label="Batch No.">${enroll.batch}</td><td class="actions-cell" data-label="Action"><button class="btn-delete" onclick="deleteItem('enrollments', '${enroll.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
-            const renderCurriculum = () => renderGeneric('curriculum', 'curriculum-table-body', (curr) => `<tr><td data-label="Course Name">${curr.courseName}</td><td data-label="Batch No.">${curr.batch}</td><td data-label="Modules">${curr.modules ? curr.modules.length : 0}</td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('curriculum', '${curr.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('curriculum', '${curr.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
-            const renderNotices = () => renderGeneric('notices', 'notices-table-body', (notice) => `<tr><td data-label="Title">${notice.title}</td><td data-label="Description">${(notice.description || '').substring(0, 50)}...</td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('notices', '${notice.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('notices', '${notice.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
-            const renderTrustScreenshots = () => renderGeneric('trust_screenshots', 'trust-screenshots-table-body', (item) => `<tr><td data-label="Title">${item.title}</td><td data-label="Image"><img src="${item.imageUrl}" alt="${item.title}" class="table-image-preview"></td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('trust_screenshots', '${item.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('trust_screenshots', '${item.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
-            const renderVideoReviews = () => renderGeneric('video_reviews', 'video-reviews-table-body', (item) => `<tr><td data-label="Title">${item.title}</td><td data-label="Subtitle">${item.subtitle}</td><td data-label="YouTube Link"><a href="${item.youtubeLink}" target="_blank" style="color:var(--primary-blue); font-weight:500;">Watch Video</a></td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('video_reviews', '${item.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('video_reviews', '${item.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
-            const renderJoinClass = () => renderGeneric('joinClass', 'join-class-table-body', (item) => `<tr><td data-label="Course Name">${item.courseName}</td><td data-label="Batch No.">${item.batch || 'N/A'}</td><td data-label="Topic">${item.topic || 'N/A'}</td><td data-label="Link"><a href="${item.link}" target="_blank" style="color:var(--primary-blue);font-weight:500;">Class Link</a></td><td data-label="Time">${item.dateTime ? new Date(item.dateTime.seconds * 1000).toLocaleString('en-US') : 'N/A'}</td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('joinClass', '${item.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('joinClass', '${item.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
-            const renderOnlineClasses = () => renderGeneric('online_classes', 'online-classes-table-body', (item) => {
-                const dueBill = (Number(item.totalBill) || 0) - (Number(item.paidBill) || 0); const scheduleHTML = `<div style="font-size: 0.85em; color: var(--text-muted); text-align: left;"><div style="margin-bottom: 3px;"><strong>1:</strong> ${item.class1 || 'N/A'}</div><div style="margin-bottom: 3px;"><strong>2:</strong> ${item.class2 || 'N/A'}</div><div style="margin-bottom: 3px;"><strong>3:</strong> ${item.class3 || 'N/A'}</div><div><strong>4:</strong> ${item.class4 || 'N/A'}</div></div>`;
-                return `<tr><td data-label="Batch No.">${item.batchNumber}</td><td data-label="Students">${item.studentCount} User</td><td data-label="Total Bill">৳ ${item.totalBill}</td><td data-label="Paid Bill">৳ ${item.paidBill}</td><td data-label="Due Bill" style="color: ${dueBill > 0 ? 'var(--accent-red)' : 'var(--accent-green)'}; font-weight: bold;">৳ ${dueBill}</td><td data-label="Class Schedule">${scheduleHTML}</td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('online_classes', '${item.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('online_classes', '${item.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
-            });
-            const renderWithdrawals = () => renderGeneric('withdrawals', 'withdrawals-table-body', (req) => {
-                const statusClass = (req.status || 'pending').toLowerCase();
-                return `<tr><td data-label="Email">${req.userEmail}</td><td data-label="Amount">৳ ${req.amount.toLocaleString('en-US')}</td><td data-label="Method">${req.method}</td><td data-label="Account No.">${req.accountNumber}</td><td data-label="Request Date">${req.requestDate ? new Date(req.requestDate.seconds * 1000).toLocaleString('en-US') : 'N/A'}</td><td data-label="Status"><span class="status-badge ${statusClass}">${req.status}</span></td><td class="actions-cell" data-label="Action"><select class="status-select" id="withdraw-status-${req.id}"><option value="pending" ${req.status === 'pending' ? 'selected' : ''}>Pending</option><option value="paid" ${req.status === 'paid' ? 'selected' : ''}>Paid</option></select><button class="btn btn-save-status" onclick="updateWithdrawalStatus('${req.id}', '${req.userId}', ${req.amount})">Save</button><button class="btn-edit" onclick="openModalForEdit('withdrawals', '${req.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('withdrawals', '${req.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
-            });
-
-            window.updateCouponStatus = async (docId, isChecked) => { try { await db.collection('coupons').doc(docId).update({ active: isChecked }); if (isChecked) showToast('Coupon is now Active.', 'success'); else showToast('Coupon is now Inactive.', 'success'); } catch (error) { showToast('Failed to update status.', 'error'); renderCoupons(); } };
-            const renderCoupons = () => renderGeneric('coupons', 'coupons-table-body', (coupon) => {
-                const isActive = coupon.active !== false; 
-                return `<tr><td data-label="Coupon Code"><strong>${coupon.code}</strong></td><td data-label="Applicable Item">${coupon.applicableItem || 'All (Global)'}</td><td data-label="Discount Type">${coupon.discountType === 'percentage' ? 'Percentage (%)' : 'Flat Amount (৳)'}</td><td data-label="Discount Value">${coupon.discountType === 'percentage' ? coupon.discountValue + '%' : '৳ ' + coupon.discountValue}</td><td data-label="Status"><label class="switch"><input type="checkbox" onchange="updateCouponStatus('${coupon.id}', this.checked)" ${isActive ? 'checked' : ''}><span class="slider"></span></label></td><td class="actions-cell" data-label="Action"><button class="btn-edit" onclick="openModalForEdit('coupons', '${coupon.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('coupons', '${coupon.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`;
-            });
-
-            window.updateWithdrawalStatus = async (docId, userId, amount) => {
-                const selectElement = document.getElementById(`withdraw-status-${docId}`), newStatus = selectElement.value;
-                try {
-                    const withdrawDocRef = db.collection('withdrawals').doc(docId), userDocRef = db.collection('users').doc(userId); const withdrawDoc = await withdrawDocRef.get(); if (!withdrawDoc.exists) throw new Error("Withdrawal request not found.");
-                    const oldStatus = withdrawDoc.data().status; if (oldStatus === newStatus) { showToast('Status is unchanged.'); return; }
-                    if (oldStatus === 'pending' && newStatus === 'paid') {
-                        await db.runTransaction(async (t) => { const userDoc = await t.get(userDocRef); if (!userDoc.exists) throw new Error("User not found!"); t.update(userDocRef, { affiliateBalance: firebase.firestore.FieldValue.increment(-amount) }); t.update(withdrawDocRef, { status: newStatus }); }); showToast('Status marked "Paid" & user balance deducted.');
-                    } else if (oldStatus === 'paid' && newStatus === 'pending') {
-                        await db.runTransaction(async (t) => { const userDoc = await t.get(userDocRef); if (!userDoc.exists) throw new Error("User not found!"); t.update(userDocRef, { affiliateBalance: firebase.firestore.FieldValue.increment(amount) }); t.update(withdrawDocRef, { status: newStatus }); }); showToast('Status marked "Pending" & user balance restored.');
-                    } else { await withdrawDocRef.update({ status: newStatus }); showToast('Status updated successfully.'); }
-                    renderWithdrawals();
-                } catch (error) { showToast(`Failed: ${error.message}`, 'error'); }
-            };
-
-            // Global Installment Filtering Logic
-            window.filterInstallmentUsers = function(term) {
-                term = term.toLowerCase().trim();
-                const opts = document.getElementById('installment-user-select').options;
-                for(let i=1; i<opts.length; i++) {
-                    const search = opts[i].getAttribute('data-search') || '';
-                    opts[i].style.display = search.includes(term) ? '' : 'none';
-                }
-            };
-            window.fillInstallmentForm = function(sel) {
-                const opt = sel.options[sel.selectedIndex];
-                if(!opt || opt.value === '') return;
-                document.querySelector('[name="userName"]').value = opt.getAttribute('data-name') || '';
-                document.querySelector('[name="userMobile"]').value = opt.getAttribute('data-mobile') || '';
-                document.querySelector('[name="itemName"]').value = opt.getAttribute('data-item') || '';
-                document.querySelector('[name="totalAmount"]').value = opt.getAttribute('data-amount') || '';
-            };
+            const renderUserNotifications = () => renderGeneric('notifications', 'user-notifications-table-body', (notif) => `<tr><td data-label="Date">${notif.timestamp ? new Date(notif.timestamp.seconds * 1000).toLocaleDateString() : 'N/A'}</td><td data-label="Target">${notif.targetUid || 'All'}</td><td data-label="Title">${notif.title}</td><td data-label="Message">${notif.message}</td><td data-label="Type">${notif.type || 'general'}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('notifications', '${notif.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            async function renderCertificates() { renderGeneric('certificates', 'certificates-table-body', (cert) => `<tr><td data-label="Cert ID">${cert.certificate_id}</td><td data-label="Email">${cert.user_email}</td><td data-label="Course">${cert.course_name}</td><td data-label="Date">${cert.issue_date ? new Date(cert.issue_date.seconds * 1000).toLocaleDateString() : 'N/A'}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('certificates', '${cert.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`); }
+            const renderServices = () => renderGeneric('services', 'services-table-body', (s) => `<tr><td data-label="Image"><img src="${s.imageUrl}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;"></td><td data-label="Name">${s.name}</td><td data-label="Buy Price">৳ ${s.purchasePrice || 0}</td><td data-label="Sell Price">৳ ${s.currentPrice}</td><td data-label="Comm">৳ ${s.commission || 0}</td><td data-label="Status"><span class="status-badge approved">Active</span></td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('services', '${s.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('services', '${s.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            const renderCourses = () => renderGeneric('courses', 'courses-table-body', (c) => `<tr><td data-label="Name">${c.name}</td><td data-label="Instructor">${c.instructor}</td><td data-label="Price">৳ ${c.price}</td><td data-label="Comm">৳ ${c.commission || 0}</td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('courses', '${c.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('courses', '${c.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            const renderEnrollments = () => renderGeneric('enrollments', 'enrollments-table-body', (e) => `<tr><td data-label="Email">${e.studentEmail}</td><td data-label="Course">${e.courseName}</td><td data-label="Batch">${e.batch}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('enrollments', '${e.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            const renderCurriculum = () => renderGeneric('curriculum', 'curriculum-table-body', (c) => `<tr><td data-label="Course">${c.courseName}</td><td data-label="Batch">${c.batch}</td><td data-label="Modules">${c.modules ? c.modules.length : 0}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('curriculum', '${c.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            const renderNotices = () => renderGeneric('notices', 'notices-table-body', (n) => `<tr><td data-label="Title">${n.title}</td><td data-label="Description">${n.description.substring(0, 40)}...</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('notices', '${n.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            const renderTrustScreenshots = () => renderGeneric('trust_screenshots', 'trust-screenshots-table-body', (t) => `<tr><td data-label="Title">${t.title}</td><td data-label="Image"><img src="${t.imageUrl}" class="table-image-preview"></td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('trust_screenshots', '${t.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            const renderVideoReviews = () => renderGeneric('video_reviews', 'video-reviews-table-body', (v) => `<tr><td data-label="Title">${v.title}</td><td data-label="Subtitle">${v.subtitle}</td><td data-label="Link"><a href="${v.youtubeLink}" target="_blank">Watch</a></td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('video_reviews', '${v.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            const renderJoinClass = () => renderGeneric('joinClass', 'join-class-table-body', (j) => `<tr><td data-label="Course">${j.courseName}</td><td data-label="Batch">${j.batch}</td><td data-label="Topic">${j.topic}</td><td data-label="Link"><a href="${j.link}" target="_blank">Class Link</a></td><td data-label="Time">${j.dateTime ? new Date(j.dateTime.seconds * 1000).toLocaleString() : 'N/A'}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('joinClass', '${j.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            const renderOnlineClasses = () => renderGeneric('online_classes', 'online-classes-table-body', (o) => `<tr><td data-label="Batch">${o.batchNumber}</td><td data-label="Students">${o.studentCount} Users</td><td data-label="Total">৳ ${o.totalBill}</td><td data-label="Paid">৳ ${o.paidBill}</td><td data-label="Due">৳ ${o.totalBill - o.paidBill}</td><td data-label="Class 1">${o.class1 || 'N/A'}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('online_classes', '${o.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            const renderWithdrawals = () => renderGeneric('withdrawals', 'withdrawals-table-body', (w) => `<tr><td data-label="Email">${w.userEmail}</td><td data-label="Amount">৳ ${w.amount}</td><td data-label="Method">${w.method}</td><td data-label="Account">${w.accountNumber}</td><td data-label="Date">${w.requestDate ? new Date(w.requestDate.seconds * 1000).toLocaleDateString() : 'N/A'}</td><td data-label="Status">${w.status}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('withdrawals', '${w.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            const renderCoupons = () => renderGeneric('coupons', 'coupons-table-body', (c) => `<tr><td data-label="Code"><strong>${c.code}</strong></td><td data-label="Item">${c.applicableItem}</td><td data-label="Type">${c.discountType}</td><td data-label="Value">${c.discountValue}</td><td data-label="Status">${c.active !== false ? 'Active' : 'Inactive'}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('coupons', '${c.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
 
             window.openModalForAdd = async (collection) => {
-                modalForm.reset(); modalTitle.textContent = `Add New ${getBengaliTypeName(collection)}`; let formFieldsHTML = '', extra = {};
-                if (['enrollments', 'joinClass', 'curriculum', 'user_notifications', 'installments', 'coupons'].includes(collection)) {
-                    modalForm.innerHTML = `<p style="text-align:center; color: var(--text-muted);">Loading necessary data...</p>`; adminModal.classList.remove('hidden');
-                    try {
-                        if (['enrollments', 'joinClass', 'curriculum'].includes(collection)) {
-                            const coursesSnapshot = await db.collection('courses').get();
-                            extra.courseOptions = coursesSnapshot.docs.map(doc => `<option value="${doc.data().name}">${doc.data().name}</option>`).join('');
-                        }
-                        if (collection === 'coupons') {
-                            const coursesSnapshot = await db.collection('courses').get();
-                            const servicesSnapshot = await db.collection('services').get();
-                            let opts = '<option value="All">All Items (Global)</option><optgroup label="Services">';
-                            servicesSnapshot.forEach(doc => { opts += `<option value="${doc.data().name}">${doc.data().name}</option>`; });
-                            opts += '</optgroup><optgroup label="Courses">';
-                            coursesSnapshot.forEach(doc => { opts += `<option value="${doc.data().name}">${doc.data().name}</option>`; });
-                            opts += '</optgroup>';
-                            extra.itemOptions = opts;
-                        }
-                        if (collection === 'enrollments' || collection === 'user_notifications') {
-                            const usersSnapshot = await db.collection('users').get();
-                            extra.userOptions = usersSnapshot.docs.map(doc => {
-                                const d = doc.data(); const searchStr = `${d.name || ''} ${d.email || ''} ${d.mobile || ''}`.toLowerCase();
-                                if(collection === 'user_notifications') return `<option value="${doc.id}">${d.name || 'Unknown'} | ${d.email}</option>`;
-                                return `<option value="${doc.id}|${d.email}" data-search="${searchStr}">${d.name || 'N/A'} | ${d.email} | ${d.mobile || 'N/A'}</option>`;
-                            }).join('');
-                        }
-                        if (collection === 'installments') {
-                            const paymentsSnap = await db.collection('payments').where('status', '==', 'approved').get();
-                            let opts = '';
-                            paymentsSnap.forEach(doc => {
-                                const d = doc.data();
-                                const searchStr = `${d.userName||''} ${d.userEmail||''} ${d.userMobile||''} ${d.itemName||''}`.toLowerCase();
-                                opts += `<option value="${doc.id}" data-search="${searchStr}" data-name="${d.userName||''}" data-mobile="${d.userMobile||d.userEmail||''}" data-item="${d.itemName||''}" data-amount="${d.amount||0}">
-                                    ${d.userName||'Unknown'} | ${d.userMobile||d.userEmail||'No Contact'} | ${d.itemName||''}
-                                </option>`;
-                            });
-                            extra.installmentUserOptions = opts;
-                        }
-                    } catch (error) { showToast(`Failed to load data.`, 'error'); adminModal.classList.add('hidden'); return; }
+                modalForm.reset(); 
+                modalTitle.textContent = `Add New ${getBengaliTypeName(collection)}`;
+                let formFieldsHTML = '', extra = {};
+                
+                if (collection === 'subscriptions') {
+                    formFieldsHTML = getFormFields('subscriptions', {}, extra);
+                } else {
+                    formFieldsHTML = getFormFields(collection, {}, extra);
                 }
-                formFieldsHTML = getFormFields(collection, {}, extra); modalForm.innerHTML = formFieldsHTML + getFormFooter(); adminModal.classList.remove('hidden');
+                
+                modalForm.innerHTML = formFieldsHTML + getFormFooter(); 
+                adminModal.classList.remove('hidden');
                 modalForm.onsubmit = (e) => { e.preventDefault(); saveItem(collection); };
             };
 
             window.openModalForEdit = async (collection, id) => {
                 try {
-                    const doc = await db.collection(collection).doc(id).get(); if (!doc.exists) { console.error("No such document!"); return; }
-                    const itemData = doc.data(); let formFieldsHTML = '', extra = {};
-                    if (['joinClass', 'curriculum', 'coupons'].includes(collection)) {
-                        modalForm.innerHTML = `<p style="text-align:center; color: var(--text-muted);">Loading data...</p>`; adminModal.classList.remove('hidden');
-                        if (collection === 'coupons') {
-                            const coursesSnapshot = await db.collection('courses').get();
-                            const servicesSnapshot = await db.collection('services').get();
-                            let opts = `<option value="All" ${itemData.applicableItem === 'All' ? 'selected' : ''}>All Items (Global)</option><optgroup label="Services">`;
-                            servicesSnapshot.forEach(doc => { opts += `<option value="${doc.data().name}" ${doc.data().name === itemData.applicableItem ? 'selected' : ''}>${doc.data().name}</option>`; });
-                            opts += '</optgroup><optgroup label="Courses">';
-                            coursesSnapshot.forEach(doc => { opts += `<option value="${doc.data().name}" ${doc.data().name === itemData.applicableItem ? 'selected' : ''}>${doc.data().name}</option>`; });
-                            opts += '</optgroup>';
-                            extra.itemOptions = opts;
-                        } else {
-                            const coursesSnapshot = await db.collection('courses').get(); extra.courseOptions = coursesSnapshot.docs.map(courseDoc => `<option value="${courseDoc.data().name}" ${courseDoc.data().name === itemData.courseName ? 'selected' : ''}>${courseDoc.data().name}</option>`).join('');
-                        }
-                    }
-                    if (collection === 'installments') {
-                        extra.installmentUserOptions = ''; 
-                    }
-                    formFieldsHTML = getFormFields(collection, itemData, extra); modalForm.innerHTML = formFieldsHTML + getFormFooter(); modalTitle.textContent = `Edit ${getBengaliTypeName(collection)}`; adminModal.classList.remove('hidden');
+                    const doc = await db.collection(collection).doc(id).get(); 
+                    if (!doc.exists) return;
+                    const itemData = doc.data(); 
+                    let formFieldsHTML = getFormFields(collection, itemData); 
+                    modalForm.innerHTML = formFieldsHTML + getFormFooter(); 
+                    modalTitle.textContent = `Edit ${getBengaliTypeName(collection)}`; 
+                    adminModal.classList.remove('hidden');
                     modalForm.onsubmit = (e) => { e.preventDefault(); saveItem(collection, id); };
                 } catch (error) { showToast("Failed to load details for editing.", "error"); }
             };
@@ -2503,7 +1951,6 @@
                     try {
                         await db.collection(collection).doc(id).delete(); showToast('Deleted successfully.');
                         const activePage = document.querySelector('.page.active').id; navigateTo(activePage); 
-                        if (!['service_stock', 'follow_ups', 'notifications', 'certificates'].includes(collection)) renderDashboard();
                     } catch (error) { showToast('Failed to delete item.', 'error'); }
                 }
             };
@@ -2512,41 +1959,22 @@
                 const formData = new FormData(modalForm); let newItem;
                 try {
                     switch (collection) {
-                        case 'payments':
-                            newItem = { userName: formData.get('userName'), userMobile: formData.get('userMobile'), userEmail: formData.get('userEmail'), itemName: formData.get('itemName'), quantity: Number(formData.get('quantity')) || 1, amount: Number(formData.get('amount')), discountAmount: Number(formData.get('discountAmount')), profit: Number(formData.get('profit')), transactionId: formData.get('transactionId') }; break;
-                        case 'services':
-                            newItem = { name: formData.get('name'), imageUrl: formData.get('imageUrl'), description: formData.get('description'), purchasePrice: Number(formData.get('purchasePrice')), oldPrice: Number(formData.get('oldPrice')), currentPrice: Number(formData.get('currentPrice')), commission: Number(formData.get('commission')), features: formData.get('features').split(',').map(f => f.trim()) }; break;
-                        case 'coupons':
-                            newItem = { code: formData.get('code').toUpperCase(), applicableItem: formData.get('applicableItem') || 'All', discountType: formData.get('discountType'), discountValue: Number(formData.get('discountValue')), active: formData.get('active') === 'true', timestamp: firebase.firestore.FieldValue.serverTimestamp() }; break;
-                        case 'courses':
-                            newItem = { name: formData.get('name'), instructor: formData.get('instructor'), price: Number(formData.get('price')), commission: Number(formData.get('commission')), category: formData.get('category'), duration: formData.get('duration'), lectures: Number(formData.get('lectures')), image: formData.get('image') }; break;
-                        case 'enrollments':
-                            const [studentUid, studentEmail] = formData.get('student').split('|'); const courseName = formData.get('courseName'); const batch = formData.get('batch');
-                            if (!studentUid || !courseName || !batch) throw new Error("Please fill all information.");
-                            const courseDoc = await db.collection('courses').where('name', '==', courseName).limit(1).get(); if (courseDoc.empty) throw new Error("Course not found."); const courseDetails = courseDoc.docs[0].data();
-                            newItem = { studentUid, studentEmail, courseName, batch, enrollmentDate: new Date(), courseImage: courseDetails.image || '', courseCategory: courseDetails.category || '' };
-                            await db.collection('notifications').add({ targetUid: studentUid, title: 'Course Enrollment', message: `Congratulations! You have been enrolled in '${courseName}' (Batch: ${batch}). Start learning now!`, timestamp: firebase.firestore.FieldValue.serverTimestamp(), type: 'new_course', read: false }); break;
-                        case 'joinClass':
-                            newItem = { courseName: formData.get('courseName'), batch: formData.get('batch'), topic: formData.get('topic'), classNumber: Number(formData.get('classNumber')), link: formData.get('link'), dateTime: new Date(formData.get('dateTime')) }; break;
-                        case 'online_classes':
-                            newItem = { batchNumber: formData.get('batchNumber'), studentCount: Number(formData.get('studentCount')), totalBill: Number(formData.get('totalBill')), paidBill: Number(formData.get('paidBill')), class1: formData.get('class1'), class2: formData.get('class2'), class3: formData.get('class3'), class4: formData.get('class4'), timestamp: firebase.firestore.FieldValue.serverTimestamp() }; break;
-                        case 'curriculum':
-                            const modules = []; document.querySelectorAll('.module-container').forEach(moduleEl => { const videos = []; moduleEl.querySelectorAll('.video-entry').forEach(videoEl => videos.push({ title: videoEl.querySelector('[name=videoTitle]').value, youtubeLink: videoEl.querySelector('[name=videoLink]').value, duration: videoEl.querySelector('[name=videoDuration]').value, classNote: videoEl.querySelector('[name=classNote]').value })); modules.push({ title: moduleEl.querySelector('[name=moduleTitle]').value, videos }); });
-                            newItem = { courseName: formData.get('courseName'), batch: formData.get('batch'), modules }; break;
-                        case 'withdrawals':
-                            newItem = { amount: Number(formData.get('amount')), method: formData.get('method'), accountNumber: formData.get('accountNumber') }; break;
-                        case 'users':
-                            newItem = { name: formData.get('name'), mobile: formData.get('mobile'), title: formData.get('title'), referralCode: formData.get('referralCode'), affiliateBalance: Number(formData.get('affiliateBalance')), email_verified: formData.get('email_verified') === 'true' };
-                            if (formData.get('password')) newItem.password = formData.get('password'); break;
-                        case 'user_notifications':
-                            newItem = { targetUid: formData.get('targetUid'), type: formData.get('type'), title: formData.get('title'), message: formData.get('message'), read: false, timestamp: firebase.firestore.FieldValue.serverTimestamp() };
-                            await db.collection('notifications').add(newItem); adminModal.classList.add('hidden'); navigateTo('user-notifications-page'); showToast('Notification Sent successfully.'); return; 
-                        case 'trust_screenshots':
-                            newItem = { title: formData.get('title'), imageUrl: formData.get('imageUrl'), timestamp: firebase.firestore.FieldValue.serverTimestamp() }; break;
-                        case 'video_reviews':
-                            newItem = { title: formData.get('title'), subtitle: formData.get('subtitle'), youtubeLink: formData.get('youtubeLink'), timestamp: firebase.firestore.FieldValue.serverTimestamp() }; break;
-                        case 'follow_ups':
-                            newItem = { studentName: formData.get('studentName'), phoneNumber: formData.get('phoneNumber'), courseName: formData.get('courseName'), status: formData.get('status'), followUpResult: formData.get('followUpResult'), adminNote: formData.get('adminNote'), nextFollowUpDate: formData.get('nextFollowUpDate') }; break;
+                        case 'subscriptions':
+                            const durationDays = Number(formData.get('durationDays')) || 30;
+                            const start = new Date(formData.get('startDate'));
+                            const exp = new Date(start);
+                            exp.setDate(exp.getDate() + durationDays);
+
+                            newItem = {
+                                userName: formData.get('userName'),
+                                userMobile: formData.get('userMobile'),
+                                packageName: formData.get('packageName'),
+                                durationDays: durationDays,
+                                startDate: formData.get('startDate'),
+                                expiryDate: exp.toISOString(),
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                            };
+                            break;
                         case 'expenses':
                             newItem = { category: formData.get('category'), amount: Number(formData.get('amount')), note: formData.get('note'), timestamp: firebase.firestore.FieldValue.serverTimestamp() }; break;
                         case 'installments':
@@ -2554,64 +1982,48 @@
                         default:
                             newItem = { title: formData.get('title'), description: formData.get('description'), timestamp: firebase.firestore.FieldValue.serverTimestamp() };
                     }
-                    if (id) await db.collection(collection).doc(id).set(newItem, { merge: true }); else await db.collection(collection).add(newItem);
-                    adminModal.classList.add('hidden'); navigateTo(document.querySelector('.page.active').id);
-                    if (collection !== 'follow_ups') renderDashboard(); showToast('Saved successfully.');
+                    if (id) await db.collection(collection).doc(id).set(newItem, { merge: true }); 
+                    else await db.collection(collection).add(newItem);
+                    
+                    adminModal.classList.add('hidden'); 
+                    navigateTo(document.querySelector('.page.active').id);
+                    renderDashboard(); 
+                    showToast('Saved successfully.');
                 } catch (error) { showToast(`Failed to save: ${error.message}`, "error"); }
             }
-
-            modalForm.addEventListener('click', function(e) {
-                if (e.target.closest('#add-module-btn')) { e.preventDefault(); document.getElementById('curriculum-modules-container').insertAdjacentHTML('beforeend', getModuleHTML()); }
-                if (e.target.closest('.btn-add-video')) { e.preventDefault(); e.target.closest('.btn-add-video').previousElementSibling.insertAdjacentHTML('beforeend', getVideoHTML()); }
-                if (e.target.closest('.btn-remove')) { e.preventDefault(); e.target.closest('.module-container, .video-entry').remove(); }
-            });
 
             closeModalBtn.addEventListener('click', () => adminModal.classList.add('hidden'));
 
             function getBengaliTypeName(collection) {
-                const names = { payments: 'Payment', services: 'Service', courses: 'Course', enrollments: 'Enrollment', joinClass: 'Class Link', online_classes: 'Online Class Batch', curriculum: 'Curriculum', users: 'Student', withdrawals: 'Withdrawal Request', trust_screenshots: 'Trust Screenshot', video_reviews: 'Video Review', coupons: 'Coupon', follow_ups: 'Follow-up Record', user_notifications: 'Push Notification', certificates: 'Certificate', expenses: 'Expense', installments: 'Installment', abandoned_carts: 'Abandoned Cart' }; return names[collection] || 'Notice';
+                const names = { subscriptions: 'Subscription / Monthly IP', payments: 'Payment', services: 'Service', courses: 'Course', enrollments: 'Enrollment', joinClass: 'Class Link', online_classes: 'Online Class Batch', curriculum: 'Curriculum', users: 'Student', withdrawals: 'Withdrawal Request', trust_screenshots: 'Trust Screenshot', video_reviews: 'Video Review', coupons: 'Coupon', follow_ups: 'Follow-up Record', user_notifications: 'Push Notification', certificates: 'Certificate', expenses: 'Expense', installments: 'Installment', abandoned_carts: 'Abandoned Cart' }; 
+                return names[collection] || 'Notice';
             }
 
-            function getModuleHTML(module = { title: '', videos: [] }) { return `<div class="module-container"><div class="module-header-flex"><h4 style="color: var(--text-dark);">Module / Class</h4><button type="button" class="btn-remove" style="background:#fff1f2; color:var(--accent-red); border:none; padding:6px 12px; border-radius:6px; cursor:pointer;">Remove Module</button></div><div class="form-group"><label>Module Title</label><input type="text" name="moduleTitle" placeholder="Class 01: Introduction" value="${module.title || ''}" required></div><div class="videos-container">${(module.videos || []).map(getVideoHTML).join('')}</div><button type="button" class="btn-add-small btn-add-video"><span class="material-symbols-outlined">add</span> Add New Video</button></div>`; }
-            function getVideoHTML(video = {}) { return `<div class="video-entry"><div class="video-entry-inputs"><input type="text" name="videoTitle" placeholder="Video Title" value="${video.title || ''}" required><input type="text" name="videoLink" placeholder="YouTube Link" value="${video.youtubeLink || ''}" required><input type="text" name="videoDuration" placeholder="Duration (e.g., 10:45)" value="${video.duration || ''}"><button type="button" class="btn-remove" style="background:#fff1f2; color:var(--accent-red); border:none; padding:8px; border-radius:8px; cursor:pointer;"><span class="material-symbols-outlined">delete</span></button></div><textarea name="classNote" placeholder="Write class note here... (Optional)">${video.classNote || ''}</textarea></div>`; }
-
-            function getFormFields(type, data = {}, extra = {}) {
+            function getFormFields(type, data = {}) {
                 switch (type) {
-                    case 'payments': return `
-                        <div class="form-group"><label>Customer Name</label><input type="text" name="userName" value="${data.userName || ''}"></div>
-                        <div class="form-group"><label>Customer Mobile</label><input type="text" name="userMobile" value="${data.userMobile || ''}"></div>
-                        <div class="form-group"><label>Email (readonly)</label><input type="text" name="userEmail" value="${data.userEmail || ''}" readonly style="background:var(--background-light);"></div>
-                        <div class="form-group"><label>Item Name</label><input type="text" name="itemName" value="${data.itemName || ''}" required></div>
-                        <div class="form-group"><label>Quantity</label><input type="number" name="quantity" value="${data.quantity || 1}" required></div>
-                        <div class="form-group"><label>Amount (Net BDT)</label><input type="number" name="amount" value="${data.amount || 0}" required></div>
-                        <div class="form-group"><label>Discount Amount (BDT)</label><input type="number" name="discountAmount" value="${data.discountAmount || 0}"></div>
-                        <div class="form-group"><label>Profit (BDT)</label><input type="number" name="profit" value="${data.profit || 0}" required></div>
-                        <div class="form-group"><label>Transaction ID</label><input type="text" name="transactionId" value="${data.transactionId || ''}"></div>`;
-                    case 'services': return `<div class="form-group"><label>Service Image URL</label><input type="text" name="imageUrl" value="${data.imageUrl || ''}" placeholder="https://example.com/image.png"></div><div class="form-group"><label>Service Name</label><input type="text" name="name" value="${data.name || ''}" required></div><div class="form-group"><label>Short Description</label><textarea name="description" rows="3">${data.description || ''}</textarea></div><div class="form-group"><label>Purchase Price (BDT)</label><input type="number" name="purchasePrice" value="${data.purchasePrice || 0}" required></div><div class="form-group"><label>Selling Price (BDT)</label><input type="number" name="currentPrice" value="${data.currentPrice || 0}" required></div><div class="form-group"><label>Commission (BDT)</label><input type="number" name="commission" value="${data.commission || 0}"></div><div class="form-group"><label>Old Price (BDT)</label><input type="number" name="oldPrice" value="${data.oldPrice || 0}"></div><div class="form-group"><label>Features (Comma Separated)</label><input type="text" name="features" value="${(data.features || []).join(', ')}"></div>`;
-                    case 'coupons': return `<div class="form-group"><label>Applicable Item (Course/Service)</label><select name="applicableItem" required>${extra.itemOptions || '<option value="All">All Items (Global)</option>'}</select></div><div class="form-group"><label>Coupon Code</label><input type="text" name="code" value="${data.code || ''}" placeholder="e.g., MYSALES50" required style="text-transform: uppercase;"></div><div class="form-group"><label>Discount Type</label><select name="discountType" required><option value="percentage" ${data.discountType === 'percentage' ? 'selected' : ''}>Percentage (%)</option><option value="flat" ${data.discountType === 'flat' ? 'selected' : ''}>Flat Amount (৳)</option></select></div><div class="form-group"><label>Discount Value</label><input type="number" name="discountValue" value="${data.discountValue || ''}" placeholder="e.g., 50" required></div><div class="form-group"><label>Status</label><select name="active"><option value="true" ${data.active !== false ? 'selected' : ''}>Active</option><option value="false" ${data.active === false ? 'selected' : ''}>Inactive</option></select></div>`;
-                    case 'courses': return `<div class="form-group"><label>Course Name</label><input type="text" name="name" value="${data.name || ''}" required></div><div class="form-group"><label>Instructor Name</label><input type="text" name="instructor" value="${data.instructor || ''}" required></div><div class="form-group"><label>Price (BDT)</label><input type="number" name="price" value="${data.price || 0}" required></div><div class="form-group"><label>Commission (BDT)</label><input type="number" name="commission" value="${data.commission || 0}"></div><div class="form-group"><label>Category</label><input type="text" name="category" value="${data.category || ''}" placeholder="e.g., FREELANCING"></div><div class="form-group"><label>Duration</label><input type="text" name="duration" value="${data.duration || ''}" placeholder="e.g., 24:00 Hours"></div><div class="form-group"><label>Total Lectures</label><input type="number" name="lectures" value="${data.lectures || 0}" placeholder="e.g., 40"></div><div class="form-group"><label>Image URL</label><input type="text" name="image" value="${data.image || ''}" placeholder="https://i.ibb.co/JqgWkCg/placeholder.png"></div>`;
-                    case 'enrollments': return `<div class="form-group"><label>Search & Select Student</label><input type="text" placeholder="Type Name, Email or Mobile..." oninput="window.filterStudents(this.value)" style="margin-bottom: 8px; border: 2px solid var(--primary-blue);"><select name="student" id="student-select-box" required size="5" style="width:100%; padding:8px; border:1px solid var(--border-color); border-radius:12px; background:var(--background-light);">${extra.userOptions || ''}</select></div><div class="form-group"><label>Select Course</label><select name="courseName" required>${extra.courseOptions || ''}</select></div><div class="form-group"><label>Batch No.</label><input type="text" name="batch" value="${data.batch || ''}" placeholder="e.g., 122" required></div>`;
-                    case 'user_notifications': return `
-                        <div class="form-group"><label>Target User</label><select name="targetUid" required><option value="all">Send to All Users</option>${extra.userOptions || ''}</select></div>
-                        <div class="form-group"><label>Notification Type</label><select name="type" required><option value="general">General</option><option value="new_course">New Course Added</option><option value="live_class">Live Class Reminder</option><option value="payment_success">Payment Approved</option><option value="assignment">Assignment Available</option><option value="certificate">Certificate Ready</option></select></div>
-                        <div class="form-group"><label>Notification Title</label><input type="text" name="title" placeholder="e.g., New Course Added!" required></div><div class="form-group"><label>Notification Message</label><textarea name="message" rows="3" placeholder="Write your message here..." required></textarea></div>`;
-                    case 'joinClass': const dt = data.dateTime ? new Date(data.dateTime.seconds * 1000).toISOString().slice(0, 16) : ''; return `<div class="form-group"><label>Select Course</label><select name="courseName" required>${extra.courseOptions || ''}</select></div><div class="form-group"><label>Batch No.</label><input type="text" name="batch" value="${data.batch || ''}" required></div><div class="form-group"><label>Class Topic</label><input type="text" name="topic" value="${data.topic || ''}" required></div><div class="form-group"><label>Class No.</label><input type="number" name="classNumber" value="${data.classNumber || ''}" required></div><div class="form-group"><label>Class Link</label><input type="text" name="link" value="${data.link || ''}" required></div><div class="form-group"><label>Class Date & Time</label><input type="datetime-local" name="dateTime" value="${dt}" required></div>`;
-                    case 'online_classes': return `
-                        <div class="form-group"><label>Batch Number</label><input type="text" name="batchNumber" value="${data.batchNumber || ''}" required></div><div class="form-group"><label>Total Students Enrolled</label><input type="number" name="studentCount" value="${data.studentCount || 0}" required></div><div class="form-group"><label>Total Bill (BDT)</label><input type="number" name="totalBill" value="${data.totalBill || 0}" required></div><div class="form-group"><label>Paid Bill (BDT)</label><input type="number" name="paidBill" value="${data.paidBill || 0}" required></div><h4 style="margin-top: 24px; margin-bottom: 16px; color: var(--text-dark); border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">Class Schedule (Next 4)</h4><div class="form-group"><label>Class 1 Time</label><input type="text" name="class1" value="${data.class1 || ''}" placeholder="e.g., 12 Oct 2024, 08:00 PM"></div><div class="form-group"><label>Class 2 Time</label><input type="text" name="class2" value="${data.class2 || ''}" placeholder="e.g., 14 Oct 2024, 08:00 PM"></div><div class="form-group"><label>Class 3 Time</label><input type="text" name="class3" value="${data.class3 || ''}" placeholder="e.g., 16 Oct 2024, 08:00 PM"></div><div class="form-group"><label>Class 4 Time</label><input type="text" name="class4" value="${data.class4 || ''}" placeholder="e.g., 18 Oct 2024, 08:00 PM"></div>`;
-                    case 'curriculum': return `<div class="form-group"><label>Select Course</label><select name="courseName" required>${extra.courseOptions || ''}</select></div><div class="form-group"><label>Batch No.</label><input type="text" name="batch" value="${data.batch || ''}" required></div><hr style="margin: 24px 0; border:none; border-top:1px solid var(--border-color);"><div id="curriculum-modules-container">${(data.modules && data.modules.length > 0) ? data.modules.map(getModuleHTML).join('') : getModuleHTML()}</div><button type="button" id="add-module-btn" class="btn btn-add-small"><span class="material-symbols-outlined">add</span> Add New Module</button>`;
-                    case 'withdrawals': return `<div class="form-group"><label>Student Email (readonly)</label><input type="email" name="userEmail" value="${data.userEmail || ''}" readonly style="background:var(--background-light);"></div><div class="form-group"><label>Amount (BDT)</label><input type="number" name="amount" value="${data.amount || 0}" required></div><div class="form-group"><label>Method</label><input type="text" name="method" value="${data.method || ''}" required></div><div class="form-group"><label>Account Number</label><input type="text" name="accountNumber" value="${data.accountNumber || ''}" required></div>`;
-                    case 'users': return `<div class="form-group"><label>Full Name</label><input type="text" name="name" value="${data.name || ''}" ></div><div class="form-group"><label>Email (readonly)</label><input type="email" name="email" value="${data.email || ''}" readonly style="background:var(--background-light);"></div><div class="form-group"><label>Mobile</label><input type="text" name="mobile" value="${data.mobile || ''}" ></div><div class="form-group"><label>Title</label><input type="text" name="title" value="${data.title || ''}" ></div><div class="form-group"><label>Referral Code</label><input type="text" name="referralCode" value="${data.referralCode || ''}" ></div><div class="form-group"><label>Affiliate Balance (BDT)</label><input type="number" name="affiliateBalance" value="${data.affiliateBalance || 0}" ></div><div class="form-group"><label>Verification Status</label><select name="email_verified"><option value="true" ${(data.email_verified === true || typeof data.email_verified === 'undefined') ? 'selected' : ''}>Verified</option><option value="false" ${data.email_verified === false ? 'selected' : ''}>Unverified</option></select></div><div class="form-group"><label>New Password</label><input type="text" name="password" placeholder="Leave blank to keep unchanged"></div>`;
-                    case 'video_reviews': 
-                        return `<div class="form-group"><label>Title (e.g., Digital Marketing Success)</label><input type="text" name="title" value="${data.title || ''}" required></div><div class="form-group"><label>Subtitle (e.g., Freelancer Rahim - Earning $500/mo)</label><input type="text" name="subtitle" value="${data.subtitle || ''}" required></div><div class="form-group"><label>YouTube Embed URL (e.g., https://www.youtube.com/embed/...)</label><input type="text" name="youtubeLink" value="${data.youtubeLink || ''}" required></div>`;
-                    case 'follow_ups':
-                        return `<div class="form-group"><label>Student Name</label><input type="text" name="studentName" value="${data.studentName || ''}" readonly style="background:var(--background-light);"></div><div class="form-group"><label>Phone Number</label><input type="text" name="phoneNumber" value="${data.phoneNumber || ''}" readonly style="background:var(--background-light);"></div><div class="form-group"><label>Course Name (Optional)</label><input type="text" name="courseName" value="${data.courseName || ''}"></div><div class="form-group"><label>Message Status</label><select name="status"><option value="sent" ${data.status === 'sent' ? 'selected' : ''}>Sent</option><option value="failed" ${data.status === 'failed' ? 'selected' : ''}>Not Send (Failed)</option><option value="pending" ${data.status === 'pending' ? 'selected' : ''}>Pending</option></select></div><div class="form-group"><label>Follow-up Result</label><select name="followUpResult"><option value="Pending" ${data.followUpResult === 'Pending' ? 'selected' : ''}>Pending</option><option value="Interested" ${data.followUpResult === 'Interested' ? 'selected' : ''}>Interested</option><option value="Not Interested" ${data.followUpResult === 'Not Interested' ? 'selected' : ''}>Not Interested</option><option value="No Response" ${data.followUpResult === 'No Response' ? 'selected' : ''}>No Response</option><option value="Already Joined" ${data.followUpResult === 'Already Joined' ? 'selected' : ''}>Already Joined Another</option><option value="Phone Off" ${data.followUpResult === 'Phone Off' ? 'selected' : ''}>Phone Off</option></select></div><div class="form-group"><label>Admin Note</label><textarea name="adminNote" rows="3" placeholder="e.g. Student will join next week">${data.adminNote || ''}</textarea></div><div class="form-group"><label>Next Follow-up Date</label><input type="date" name="nextFollowUpDate" value="${data.nextFollowUpDate || ''}"></div>`;
-                    case 'installments': 
-                        let userSearchHtml = '';
-                        if (extra.installmentUserOptions !== undefined && extra.installmentUserOptions !== '') {
-                            userSearchHtml = `<div class="form-group"><label>Select Student from Previous Sales</label><input type="text" id="installment-user-search" placeholder="Search by email, mobile, or name..." oninput="window.filterInstallmentUsers(this.value)" style="margin-bottom: 8px; border: 2px solid var(--primary-blue);"><select id="installment-user-select" size="5" style="width:100%; padding:8px; border:1px solid var(--border-color); border-radius:12px; background:var(--background-light);" onchange="window.fillInstallmentForm(this)"><option value="">-- Select or Search Student --</option>${extra.installmentUserOptions}</select></div><hr style="margin: 20px 0; border: none; border-top: 1px dashed var(--border-color);">`;
-                        }
+                    case 'subscriptions':
+                        const todayStr = new Date().toISOString().split('T')[0];
                         return `
-                        ${userSearchHtml}
+                            <div class="form-group"><label>Customer Name</label><input type="text" name="userName" value="${data.userName || ''}" placeholder="e.g. Shafiqul Islam" required></div>
+                            <div class="form-group"><label>Customer Mobile</label><input type="text" name="userMobile" value="${data.userMobile || ''}" placeholder="e.g. 017XXXXXXXX" required></div>
+                            <div class="form-group"><label>Package / Service Name</label><input type="text" name="packageName" value="${data.packageName || ''}" placeholder="e.g. Monthly Dedicated IP / Standard Pack" required></div>
+                            <div class="form-group">
+                                <label>Duration / Duration Period</label>
+                                <select name="durationDays" required>
+                                    <option value="1" ${data.durationDays == 1 ? 'selected' : ''}>1 Day Trial</option>
+                                    <option value="10" ${data.durationDays == 10 ? 'selected' : ''}>10 Days Package</option>
+                                    <option value="15" ${data.durationDays == 15 ? 'selected' : ''}>15 Days Package</option>
+                                    <option value="30" ${data.durationDays == 30 || !data.durationDays ? 'selected' : ''}>30 Days (Monthly)</option>
+                                    <option value="60" ${data.durationDays == 60 ? 'selected' : ''}>60 Days (2 Months)</option>
+                                    <option value="90" ${data.durationDays == 90 ? 'selected' : ''}>90 Days (3 Months)</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label>Start Date</label><input type="date" name="startDate" value="${data.startDate || todayStr}" required></div>
+                        `;
+                    case 'expenses': 
+                        return `<div class="form-group"><label>Expense Category</label><select name="category" required><option value="Facebook Ads" ${data.category === 'Facebook Ads' ? 'selected' : ''}>Facebook Ads</option><option value="Server/Domain" ${data.category === 'Server/Domain' ? 'selected' : ''}>Server/Domain</option><option value="Salary" ${data.category === 'Salary' ? 'selected' : ''}>Salary</option><option value="Tools/Software" ${data.category === 'Tools/Software' ? 'selected' : ''}>Tools/Software</option><option value="Others" ${data.category === 'Others' ? 'selected' : ''}>Others</option></select></div><div class="form-group"><label>Amount (BDT)</label><input type="number" name="amount" value="${data.amount || ''}" required></div><div class="form-group"><label>Note / Reason</label><textarea name="note" rows="3">${data.note || ''}</textarea></div>`;
+                    case 'installments': 
+                        return `
                         <div class="form-group"><label>Student Name</label><input type="text" name="userName" value="${data.userName || ''}" required></div>
                         <div class="form-group"><label>Student Mobile</label><input type="text" name="userMobile" value="${data.userMobile || ''}" required></div>
                         <div class="form-group"><label>Course/Item Name</label><input type="text" name="itemName" value="${data.itemName || ''}" required></div>
@@ -2619,8 +2031,8 @@
                         <div class="form-group"><label>Paid Amount (BDT)</label><input type="number" name="paidAmount" value="${data.paidAmount || ''}" required></div>
                         <div class="form-group"><label>Next Due Date</label><input type="date" name="nextDueDate" value="${data.nextDueDate || ''}" required></div>
                     `;
-                    case 'expenses': return `<div class="form-group"><label>Expense Category</label><select name="category" required><option value="Facebook Ads" ${data.category === 'Facebook Ads' ? 'selected' : ''}>Facebook Ads</option><option value="Server/Domain" ${data.category === 'Server/Domain' ? 'selected' : ''}>Server/Domain</option><option value="Salary" ${data.category === 'Salary' ? 'selected' : ''}>Salary</option><option value="Tools/Software" ${data.category === 'Tools/Software' ? 'selected' : ''}>Tools/Software</option><option value="Others" ${data.category === 'Others' ? 'selected' : ''}>Others</option></select></div><div class="form-group"><label>Amount (BDT)</label><input type="number" name="amount" value="${data.amount || ''}" required></div><div class="form-group"><label>Note / Reason</label><textarea name="note" rows="3">${data.note || ''}</textarea></div>`;
-                    default: return `<div class="form-group"><label>Title</label><input type="text" name="title" value="${data.title || ''}" required></div><div class="form-group"><label>Description</label><textarea name="description" rows="4" required>${data.description || ''}</textarea></div>`;
+                    default: 
+                        return `<div class="form-group"><label>Title</label><input type="text" name="title" value="${data.title || ''}" required></div><div class="form-group"><label>Description</label><textarea name="description" rows="4" required>${data.description || ''}</textarea></div>`;
                 }
             }
 
@@ -2628,16 +2040,6 @@
                 return `<div class="modal-footer"><button type="button" class="btn btn-cancel" onclick="document.getElementById('admin-modal').classList.add('hidden')">Cancel</button><button type="submit" class="btn btn-primary">Save Changes</button></div>`;
             }
         });
-        
-        window.filterStudents = function(searchTerm) {
-            const term = searchTerm.toLowerCase().trim(); const select = document.getElementById('student-select-box'); if(!select) return;
-            const options = select.getElementsByTagName('option'); let firstVisible = null;
-            for(let i=0; i<options.length; i++) {
-                const searchData = options[i].getAttribute('data-search') || '';
-                if(searchData.includes(term)) { options[i].style.display = ''; if(!firstVisible) firstVisible = options[i]; } else { options[i].style.display = 'none'; }
-            }
-            if(firstVisible && term !== '') firstVisible.selected = true;
-        }; 
     </script>
 </body>
 </html>
