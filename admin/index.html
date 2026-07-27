@@ -2113,7 +2113,7 @@
                 } catch (error) { tableBody.innerHTML = `<tr><td colspan="7" style="color: red; text-align: center;">Error: ${error.message}</td></tr>`; }
             }
 
-            const renderServices = () => renderGeneric('services', 'services-table-body', (s) => `<tr><td data-label="Image"><img src="${s.imageUrl || 'https://i.ibb.co/JqgWkCg/placeholder.png'}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;"></td><td data-label="Name">${s.name}</td><td data-label="Package Type"><span class="status-badge ${s.packageType === 'subscription' ? 'expiring-soon' : 'approved'}">${s.packageType === 'subscription' ? (s.durationDays || '30') + ' Days Sub' : 'One-time'}</span></td><td data-label="Buy Price">৳ ${s.purchasePrice || 0}</td><td data-label="Sell Price">৳ ${s.currentPrice || 0}</td><td data-label="Comm">৳ ${s.commission || 0}</td><td data-label="Status"><span class="status-badge approved">Active</span></td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('services', '${s.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('services', '${s.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            const renderServices = () => renderGeneric('services', 'services-table-body', (s) => `<tr><td data-label="Image"><img src="${s.imageUrl || 'https://i.ibb.co/JqgWkCg/placeholder.png'}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;"></td><td data-label="Name">${s.name}</td><td data-label="Package Type"><span class="status-badge ${s.packageType === 'subscription' ? 'expiring-soon' : 'approved'}">${s.packageType === 'subscription' ? (s.durationDays || '30') + ' Days Sub' : 'One-time'}</span></td><td data-label="Buy Price">৳ ${s.purchasePrice || 0}</td><td data-label="Sell Price">৳ ${s.currentPrice || 0}</td><td data-label="Comm">৳ ${s.commission || 0}</td><td data-label="Status"><label class="switch"><input type="checkbox" onchange="window.toggleServiceStatus('${s.id}', this.checked)" ${s.active !== false ? 'checked' : ''}><span class="slider"></span></label></td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('services', '${s.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('services', '${s.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderCourses = () => renderGeneric('courses', 'courses-table-body', (c) => `<tr><td data-label="Name">${c.name}</td><td data-label="Instructor">${c.instructor}</td><td data-label="Price">৳ ${c.price}</td><td data-label="Comm">৳ ${c.commission || 0}</td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('courses', '${c.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('courses', '${c.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderEnrollments = () => renderGeneric('enrollments', 'enrollments-table-body', (e) => `<tr><td data-label="Email">${e.studentEmail}</td><td data-label="Course">${e.courseName}</td><td data-label="Batch">${e.batch}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('enrollments', '${e.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderCurriculum = () => renderGeneric('curriculum', 'curriculum-table-body', (c) => `<tr><td data-label="Course">${c.courseName}</td><td data-label="Batch">${c.batch}</td><td data-label="Modules">${c.modules ? c.modules.length : 0}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('curriculum', '${c.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
@@ -2144,6 +2144,15 @@
                 modalForm.onsubmit = (e) => { e.preventDefault(); saveItem(collection, id); };
             };
 
+            window.toggleServiceStatus = async (id, isActive) => {
+                try {
+                    await db.collection('services').doc(id).update({ active: isActive });
+                    showToast('Service status updated successfully!');
+                } catch (error) {
+                    showToast('Failed to update status.', 'error');
+                }
+            };
+
             window.deleteItem = async (collection, id) => {
                 if (confirm('Are you sure you want to delete this item?')) {
                     try {
@@ -2159,10 +2168,15 @@
                     newItem = { 
                         name: formData.get('name'), 
                         imageUrl: formData.get('imageUrl'), 
-                        purchasePrice: Number(formData.get('purchasePrice')), 
-                        currentPrice: Number(formData.get('currentPrice')), 
+                        shortDescription: formData.get('shortDescription') || '',
+                        purchasePrice: Number(formData.get('purchasePrice')) || 0, 
+                        currentPrice: Number(formData.get('currentPrice')) || 0, 
+                        oldPrice: Number(formData.get('oldPrice')) || 0,
+                        commission: Number(formData.get('commission')) || 0,
+                        features: formData.get('features') || '',
                         packageType: formData.get('packageType'),
-                        durationDays: Number(formData.get('durationDays')) || 30
+                        durationDays: Number(formData.get('durationDays')) || 30,
+                        active: formData.get('active') === 'on'
                     };
                 } else if (collection === 'subscriptions') {
                     const durationDays = Number(formData.get('durationDays')) || 30;
@@ -2194,8 +2208,16 @@
             function getFormFields(type, data = {}) {
                 if (type === 'services') {
                     return `
+                        <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; background: var(--background-light); padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 20px;">
+                            <label style="margin-bottom: 0; font-size: 1em; color: var(--text-dark);">Status (Active/Inactive)</label>
+                            <label class="switch">
+                                <input type="checkbox" name="active" ${data.active !== false ? 'checked' : ''}>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="form-group"><label>Service Image URL</label><input type="text" name="imageUrl" value="${data.imageUrl || ''}" placeholder="https://example.com/image.png"></div>
                         <div class="form-group"><label>Service Name</label><input type="text" name="name" value="${data.name || ''}" required></div>
-                        <div class="form-group"><label>Service Image URL</label><input type="text" name="imageUrl" value="${data.imageUrl || ''}"></div>
+                        <div class="form-group"><label>Short Description</label><textarea name="shortDescription" rows="2">${data.shortDescription || ''}</textarea></div>
                         <div class="form-group">
                             <label>Package Type</label>
                             <select name="packageType" onchange="window.toggleSubDays(this.value)">
@@ -2212,8 +2234,15 @@
                                 <option value="30" ${data.durationDays == 30 || !data.durationDays ? 'selected' : ''}>30 Days (Monthly)</option>
                             </select>
                         </div>
-                        <div class="form-group"><label>Buy Price (BDT)</label><input type="number" name="purchasePrice" value="${data.purchasePrice || 0}"></div>
-                        <div class="form-group"><label>Selling Price (BDT)</label><input type="number" name="currentPrice" value="${data.currentPrice || 0}"></div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div class="form-group" style="margin-bottom:0;"><label>Purchase Price (BDT)</label><input type="number" name="purchasePrice" value="${data.purchasePrice || 0}"></div>
+                            <div class="form-group" style="margin-bottom:0;"><label>Selling Price (BDT)</label><input type="number" name="currentPrice" value="${data.currentPrice || 0}"></div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top:20px;">
+                            <div class="form-group" style="margin-bottom:0;"><label>Old Price (BDT)</label><input type="number" name="oldPrice" value="${data.oldPrice || 0}"></div>
+                            <div class="form-group" style="margin-bottom:0;"><label>Commission (BDT)</label><input type="number" name="commission" value="${data.commission || 0}"></div>
+                        </div>
+                        <div class="form-group" style="margin-top:20px;"><label>Features (Comma Separated)</label><textarea name="features" rows="2" placeholder="e.g. High Speed, 24/7 Support">${data.features || ''}</textarea></div>
                     `;
                 } else if (type === 'subscriptions') {
                     const todayStr = new Date().toISOString().split('T')[0];
