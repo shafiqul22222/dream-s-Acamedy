@@ -2298,7 +2298,18 @@
                             }
                         }
 
-                        h += `<div class="service-card"><div class="service-header">${m}<h3>${v.name || 'Service'}</h3><p class="plan-description">${v.shortDescription || v.description || ''}</p></div><div class="pricing-area"><div class="pricing-info">${oldP > 0 ? `<span class="old-price">৳ ${oldP}</span>` : ''}${sv > 0 ? `<span class="save-badge">Save ${sv}%</span>` : ''}</div><div class="current-price"><span class="price-amount">৳ ${curP}</span></div></div><div class="service-body"><ul class="service-features">${featuresHtml}</ul><a href="#" class="btn-service-action buy-now-btn" data-name="${v.name}" data-price="${curP}">Order Now <span class="material-symbols-outlined">shopping_cart_checkout</span></a></div></div>`; 
+                        // Subscription Duration Logic
+                        let durationBadge = '';
+                        let durationText = '';
+                        if (v.packageType === 'subscription') {
+                            let days = v.durationDays || 30; // Default 30 if empty
+                            // টপ রাইট কর্নারে সুন্দর ব্যাজ
+                            durationBadge = `<span style="position: absolute; top: 16px; left: 16px; background: linear-gradient(135deg, var(--brand-secondary), var(--brand-accent)); color: white; padding: 6px 14px; border-radius: 99px; font-size: 0.85rem; font-weight: 700; box-shadow: var(--shadow-md); z-index: 10;"><span class="material-symbols-outlined" style="font-size: 16px; vertical-align: middle; margin-right: 4px;">timer</span>${days} Days Pack</span>`;
+                            // প্রাইসের পাশে লেখার জন্য
+                            durationText = `<span style="font-size: 1rem; color: var(--text-muted); font-weight: 600; margin-left: 6px;">/ ${days} Days</span>`;
+                        }
+
+                        h += `<div class="service-card">${durationBadge}<div class="service-header">${m}<h3>${v.name || 'Service'}</h3><p class="plan-description">${v.shortDescription || v.description || ''}</p></div><div class="pricing-area"><div class="pricing-info">${oldP > 0 ? `<span class="old-price">৳ ${oldP}</span>` : ''}${sv > 0 ? `<span class="save-badge">Save ${sv}%</span>` : ''}</div><div class="current-price"><span class="price-amount">৳ ${curP}</span>${durationText}</div></div><div class="service-body"><ul class="service-features">${featuresHtml}</ul><a href="#" class="btn-service-action buy-now-btn" data-name="${v.name}" data-price="${curP}">Order Now <span class="material-symbols-outlined">shopping_cart_checkout</span></a></div></div>`; 
                     }); 
                     
                     c.innerHTML = h || '<p style="text-align:center; width:100%; color:var(--text-muted);">No active services found right now.</p>'; 
