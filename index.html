@@ -2261,39 +2261,52 @@
             
             async function displayServices() { const c = document.getElementById('services-container'); const iconMap = n => { const x=n.toLowerCase(); return x.includes('ip')||x.includes('proxy')?'dns':x.includes('number')||x.includes('otp')?'sms':x.includes('server')||x.includes('vps')?'router':x.includes('bank')||x.includes('card')?'credit_card':x.includes('id')||x.includes('verify')?'verified_user':'workspace_premium'; }; try { const s = await db.collection('services').get(); let h = ''; s.forEach(d => { const v = d.data(); if(v.status===false) return; const sv = Math.round(((v.oldPrice-v.currentPrice)/v.oldPrice)*100); const m = v.imageUrl ? `<img src="${v.imageUrl}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 24px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">` : `<div class="service-icon-box"><span class="material-symbols-outlined">${iconMap(v.name)}</span></div>`; h += `<div class="service-card"><div class="service-header">${m}<h3>${v.name}</h3><p class="plan-description">${v.description}</p></div><div class="pricing-area"><div class="pricing-info"><span class="old-price">৳ ${v.oldPrice}</span>${sv>0?`<span class="save-badge">Save ${sv}%</span>`:''}</div><div class="current-price"><span class="price-amount">৳ ${v.currentPrice}</span></div></div><div class="service-body"><ul class="service-features">${(v.features||[]).map(f=>`<li><span class="material-symbols-outlined">check_circle</span><span>${f}</span></li>`).join('')}</ul><a href="#" class="btn-service-action buy-now-btn" data-name="${v.name}" data-price="${v.currentPrice}">Order Now <span class="material-symbols-outlined">shopping_cart_checkout</span></a></div></div>`; }); c.innerHTML = h; document.querySelectorAll('.buy-now-btn').forEach(b => b.addEventListener('click', handleBuyNowClick)); } catch(e) {} }
             
-            async function displayCourses() { 
-                const c = document.getElementById('courses-container'); 
+            async function displayServices() { 
+                const c = document.getElementById('services-container'); 
+                const iconMap = n => { 
+                    if(!n) return 'workspace_premium';
+                    const x = n.toLowerCase(); 
+                    return x.includes('ip')||x.includes('proxy')?'dns':x.includes('number')||x.includes('otp')?'sms':x.includes('server')||x.includes('vps')?'router':x.includes('bank')||x.includes('card')?'credit_card':x.includes('id')||x.includes('verify')?'verified_user':'workspace_premium'; 
+                }; 
                 try { 
-                    const s = await db.collection('courses').get(); 
+                    const s = await db.collection('services').get(); 
                     let h = ''; 
                     s.forEach(d => { 
                         const v = d.data(); 
-                        h += `<div class="course-card">
-                            <div class="card-thumbnail"><img src="${v.image}"><span class="top-course-tag">Top Rated</span></div>
-                            <div class="card-content">
-                                <div class="card-meta"><span class="category-tag">${v.category}</span><div class="rating">★★★★★</div></div>
-                                <h3 style="height: 56px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; margin-bottom: 16px;">
-                                    <a href="javascript:void(0)" class="course-title-click" data-name="${v.name}" data-price="${v.price}" data-img="${v.image}" style="text-decoration: none; color: var(--brand-primary); transition: color 0.3s ease;" onmouseover="this.style.color='var(--brand-secondary)'" onmouseout="this.style.color='var(--brand-primary)'" title="Click to view modules">${v.name}</a>
-                                </h3>
-                                <div class="instructor"><span class="material-symbols-outlined">person</span><span>${v.instructor}</span></div>
-                                <div class="course-info"><div class="course-info-item"><span class="material-symbols-outlined">schedule</span><span>${v.duration}</span></div><div class="course-info-item"><span class="material-symbols-outlined">receipt_long</span><span>${v.lectures} Lectures</span></div></div>
-                                <div class="card-footer"><span class="price">৳ ${v.price}</span><a href="#" class="btn btn-outline buy-now-btn" data-name="${v.name}" data-price="${v.price}">Buy Course</a></div>
-                            </div>
-                        </div>`; 
+                        
+                        // Check Active Status
+                        if(v.active === false || v.status === false) return; 
+                        
+                        // Price Calculations
+                        let oldP = Number(v.oldPrice) || 0;
+                        let curP = Number(v.currentPrice) || 0;
+                        let sv = 0;
+                        if(oldP > curP && oldP > 0) {
+                            sv = Math.round(((oldP - curP) / oldP) * 100); 
+                        }
+                        
+                        // Image or Icon
+                        const m = (v.imageUrl && v.imageUrl.trim() !== '') ? `<img src="${v.imageUrl}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 24px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">` : `<div class="service-icon-box"><span class="material-symbols-outlined">${iconMap(v.name)}</span></div>`; 
+                        
+                        // Features Parsing (Array or String)
+                        let featuresHtml = '';
+                        if (v.features) {
+                            if (Array.isArray(v.features)) {
+                                featuresHtml = v.features.map(f => `<li><span class="material-symbols-outlined">check_circle</span><span>${f}</span></li>`).join('');
+                            } else if (typeof v.features === 'string') {
+                                featuresHtml = v.features.split(',').filter(f => f.trim() !== '').map(f => `<li><span class="material-symbols-outlined">check_circle</span><span>${f.trim()}</span></li>`).join('');
+                            }
+                        }
+
+                        h += `<div class="service-card"><div class="service-header">${m}<h3>${v.name || 'Service'}</h3><p class="plan-description">${v.shortDescription || v.description || ''}</p></div><div class="pricing-area"><div class="pricing-info">${oldP > 0 ? `<span class="old-price">৳ ${oldP}</span>` : ''}${sv > 0 ? `<span class="save-badge">Save ${sv}%</span>` : ''}</div><div class="current-price"><span class="price-amount">৳ ${curP}</span></div></div><div class="service-body"><ul class="service-features">${featuresHtml}</ul><a href="#" class="btn-service-action buy-now-btn" data-name="${v.name}" data-price="${curP}">Order Now <span class="material-symbols-outlined">shopping_cart_checkout</span></a></div></div>`; 
                     }); 
-                    c.innerHTML = h; 
-                    document.querySelectorAll('.buy-now-btn').forEach(b => b.addEventListener('click', handleBuyNowClick)); 
                     
-                    document.querySelectorAll('.course-title-click').forEach(title => {
-                        title.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            const name = e.currentTarget.dataset.name;
-                            const price = e.currentTarget.dataset.price;
-                            const img = e.currentTarget.dataset.img;
-                            openCoursePreviewModal(name, price, img);
-                        });
-                    });
-                } catch(e){} 
+                    c.innerHTML = h || '<p style="text-align:center; width:100%; color:var(--text-muted);">No active services found right now.</p>'; 
+                    document.querySelectorAll('.buy-now-btn').forEach(b => b.addEventListener('click', handleBuyNowClick)); 
+                } catch(e) { 
+                    console.error("Error loading services:", e);
+                    c.innerHTML = '<p style="text-align:center; width:100%; color:red;">Failed to load services. Please check your network connection.</p>';
+                } 
             }
             
             async function displayNotices() { const c = document.getElementById('notice-board'); try { const s = await db.collection('notices').orderBy('timestamp','desc').get(); let h=''; s.forEach(d=>{ const n=d.data(); h+=`<div class="notice-item"><span class="material-symbols-outlined">campaign</span><div class="notice-details"><h4>${n.title}</h4><p>${n.description}</p></div></div>`;}); c.innerHTML = h||'<p>No notices available.</p>'; }catch(e){} }
