@@ -2259,8 +2259,6 @@
                 } else navigateTo('login');
             }
             
-            async function displayServices() { const c = document.getElementById('services-container'); const iconMap = n => { const x=n.toLowerCase(); return x.includes('ip')||x.includes('proxy')?'dns':x.includes('number')||x.includes('otp')?'sms':x.includes('server')||x.includes('vps')?'router':x.includes('bank')||x.includes('card')?'credit_card':x.includes('id')||x.includes('verify')?'verified_user':'workspace_premium'; }; try { const s = await db.collection('services').get(); let h = ''; s.forEach(d => { const v = d.data(); if(v.status===false) return; const sv = Math.round(((v.oldPrice-v.currentPrice)/v.oldPrice)*100); const m = v.imageUrl ? `<img src="${v.imageUrl}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 24px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">` : `<div class="service-icon-box"><span class="material-symbols-outlined">${iconMap(v.name)}</span></div>`; h += `<div class="service-card"><div class="service-header">${m}<h3>${v.name}</h3><p class="plan-description">${v.description}</p></div><div class="pricing-area"><div class="pricing-info"><span class="old-price">৳ ${v.oldPrice}</span>${sv>0?`<span class="save-badge">Save ${sv}%</span>`:''}</div><div class="current-price"><span class="price-amount">৳ ${v.currentPrice}</span></div></div><div class="service-body"><ul class="service-features">${(v.features||[]).map(f=>`<li><span class="material-symbols-outlined">check_circle</span><span>${f}</span></li>`).join('')}</ul><a href="#" class="btn-service-action buy-now-btn" data-name="${v.name}" data-price="${v.currentPrice}">Order Now <span class="material-symbols-outlined">shopping_cart_checkout</span></a></div></div>`; }); c.innerHTML = h; document.querySelectorAll('.buy-now-btn').forEach(b => b.addEventListener('click', handleBuyNowClick)); } catch(e) {} }
-            
             async function displayServices() { 
                 const c = document.getElementById('services-container'); 
                 const iconMap = n => { 
@@ -2303,9 +2301,7 @@
                         let durationText = '';
                         if (v.packageType === 'subscription') {
                             let days = v.durationDays || 30; // Default 30 if empty
-                            // টপ রাইট কর্নারে সুন্দর ব্যাজ
                             durationBadge = `<span style="position: absolute; top: 16px; left: 16px; background: linear-gradient(135deg, var(--brand-secondary), var(--brand-accent)); color: white; padding: 6px 14px; border-radius: 99px; font-size: 0.85rem; font-weight: 700; box-shadow: var(--shadow-md); z-index: 10;"><span class="material-symbols-outlined" style="font-size: 16px; vertical-align: middle; margin-right: 4px;">timer</span>${days} Days Pack</span>`;
-                            // প্রাইসের পাশে লেখার জন্য
                             durationText = `<span style="font-size: 1rem; color: var(--text-muted); font-weight: 600; margin-left: 6px;">/ ${days} Days</span>`;
                         }
 
@@ -2319,6 +2315,62 @@
                     c.innerHTML = '<p style="text-align:center; width:100%; color:red;">Failed to load services. Please check your network connection.</p>';
                 } 
             }
+            
+            // ================= NEW: displayCourses function added =================
+            async function displayCourses() { 
+                const c = document.getElementById('courses-container'); 
+                if(!c) return;
+                try { 
+                    const snap = await db.collection('courses').get(); 
+                    if (snap.empty) { 
+                        c.innerHTML = '<p style="text-align:center; width:100%; color:var(--text-muted);">No active courses found right now.</p>'; 
+                        return; 
+                    } 
+                    let h = ''; 
+                    snap.forEach(d => { 
+                        const v = d.data(); 
+                        if(v.status === false || v.active === false) return; 
+                        let curP = Number(v.currentPrice) || Number(v.price) || 0; 
+                        let img = v.image || v.imageUrl || 'https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png'; 
+                        let cat = v.category || 'Premium'; 
+                        let instructor = v.instructor || 'Expert Mentor'; 
+                        
+                        h += `<div class="course-card">
+                                <div class="card-thumbnail">
+                                    <img src="${img}" alt="${v.name}">
+                                    <span class="top-course-tag">Top Course</span>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-meta">
+                                        <span class="category-tag">${cat}</span>
+                                        <span class="rating">★★★★★</span>
+                                    </div>
+                                    <h3>${v.name}</h3>
+                                    <div class="course-info">
+                                        <div class="instructor"><span class="material-symbols-outlined" style="font-size: 18px;">person</span> ${instructor}</div>
+                                    </div>
+                                    <button class="btn btn-outline preview-course-btn" data-name="${v.name}" data-price="${curP}" data-img="${img}" style="width: 100%; padding: 10px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 15px;">
+                                        Course Preview <span class="material-symbols-outlined" style="font-size: 18px; margin-left: 5px;">visibility</span>
+                                    </button>
+                                    <div class="card-footer">
+                                        <span class="price">৳ ${curP}</span>
+                                        <a href="#" class="buy-now-btn" data-name="${v.name}" data-price="${curP}">Enroll <span class="material-symbols-outlined">shopping_cart_checkout</span></a>
+                                    </div>
+                                </div>
+                            </div>`; 
+                    }); 
+                    c.innerHTML = h || '<p style="text-align:center; width:100%; color:var(--text-muted);">No active courses found right now.</p>'; 
+                    c.querySelectorAll('.buy-now-btn').forEach(b => b.addEventListener('click', handleBuyNowClick)); 
+                    c.querySelectorAll('.preview-course-btn').forEach(b => b.addEventListener('click', e => {
+                        e.preventDefault();
+                        window.openCoursePreviewModal(e.currentTarget.dataset.name, e.currentTarget.dataset.price, e.currentTarget.dataset.img);
+                    }));
+                } catch(e) { 
+                    console.error("Error loading courses:", e);
+                    c.innerHTML = '<p style="text-align:center; width:100%; color:red;">Failed to load courses.</p>'; 
+                } 
+            }
+            // ================= End of NEW displayCourses function =================
             
             async function displayNotices() { const c = document.getElementById('notice-board'); try { const s = await db.collection('notices').orderBy('timestamp','desc').get(); let h=''; s.forEach(d=>{ const n=d.data(); h+=`<div class="notice-item"><span class="material-symbols-outlined">campaign</span><div class="notice-details"><h4>${n.title}</h4><p>${n.description}</p></div></div>`;}); c.innerHTML = h||'<p>No notices available.</p>'; }catch(e){} }
             function initTrustSlider() { const c = document.querySelector('#screenshot-container'); const s = document.querySelectorAll('.screenshot-item'); let curr = 0; let i; function go(x) { if (x < 0) x = s.length - 1; else if (x >= s.length) x = 0; c.style.transform = `translateX(-${x * 100}%)`; curr = x; } function run() { clearInterval(i); i = setInterval(()=>go(curr+1), 3000); } document.querySelector('.next-btn').addEventListener('click', () => { go(curr+1); run(); }); document.querySelector('.prev-btn').addEventListener('click', () => { go(curr-1); run(); }); run(); }
@@ -2488,7 +2540,11 @@
                     const c = document.getElementById('ssn-country-select').value; const u = auth.currentUser; if(!u) return;
                     btnGenerateSsn.innerHTML = 'Generating... <span class="material-symbols-outlined">hourglass_empty</span>'; btnGenerateSsn.disabled = true;
                     const firstNames = ["James", "John", "Robert", "Michael", "William", "David", "Richard", "Joseph", "Thomas", "Charles", "Emma", "Olivia", "Ava", "Isabella", "Sophia", "Mia", "Amelia", "Harper"]; const lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez"]; const states = { "USA": ["CA", "NY", "TX", "FL", "IL"], "CANADA": ["ON", "QC", "BC", "AB", "MB"], "UK": ["ENG", "SCT", "WAL", "NIR"] }; const cities = ["Springfield", "Riverside", "Georgetown", "Fairview", "Madison", "Franklin", "Greenville", "Bristol", "Clinton"]; const counties = ["Orange County", "Cook County", "King County", "Wayne County", "Dallas County"];
-                    const ri = (arr) => arr[Math.floor(Math.random() * arr.length)]; const rn = (len) => Math.floor(Math.random() * Math.pow(10, len)).toString().padStart(len, '0'); const ry = Math.floor(Math.random() * (2000 - 1950 + 1)) + 1950; const rm = Math.floor(Math.random() * 12) + 1; const rd = Math.floor(Math.random() * 28) + 1;
+                    const ri = (arr) => arr[Math.floor(Math.random() * arr.length)]; 
+                    const rn = (len) => Math.floor(Math.random() * Math.pow(10, len)).toString().padStart(len, '0'); 
+                    const ry = Math.floor(Math.random() * (2000 - 1950 + 1)) + 1950; 
+                    const rm = Math.floor(Math.random() * 12) + 1; 
+                    const rd = Math.floor(Math.random() * 28) + 1;
                     const fd = { name: `${ri(firstNames)} ${ri(lastNames)}`, dob: `${rm.toString().padStart(2, '0')}/${rd.toString().padStart(2, '0')}/${ry}`, number: c === 'USA' ? `${rn(3)}-${rn(2)}-${rn(4)}` : `${rn(9)}`, country: c, state: ri(states[c]), county: ri(counties), city: ri(cities), zip: rn(5) };
                     document.getElementById('ssn-details-text').innerHTML = `<strong>Name:</strong> ${fd.name}<br><strong>Date of Birth:</strong> ${fd.dob}<br><strong>Number (SSN/ID):</strong> <span style="font-family: monospace; font-size: 1.15rem; color: var(--brand-secondary); font-weight: 800;">${fd.number}</span><br><strong>Country:</strong> ${fd.country}<br><strong>State:</strong> ${fd.state}<br><strong>County:</strong> ${fd.county}<br><strong>City:</strong> ${fd.city}<br><strong>Zip Code:</strong> ${fd.zip}`; document.getElementById('ssn-output-area').classList.remove('hidden');
                     try { await db.collection('ssn_list').add({ userId: u.uid, ...fd, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); showToast("SSN Generated & Saved to List successfully!", "success"); } catch (e) {}
@@ -2543,7 +2599,7 @@
             fetchLiveDollarRates(); 
             loadPaymentGateways(); 
             displayServices(); 
-            displayCourses(); 
+            displayCourses(); // এই ফাংশনটি এখন সঠিকভাবে কল হবে
             displayNotices(); 
             displayTrustScreenshots(); 
             displayVideoReviews(); 
