@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dreamsedu.publicvm.com/sitemap.xml
