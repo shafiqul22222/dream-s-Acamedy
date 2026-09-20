@@ -657,7 +657,7 @@
                         <input type="date" id="fu-date-filter" class="form-group" style="margin-bottom: 0; padding: 12px; border-radius: var(--btn-radius); border: 1px solid var(--border-color); background: var(--surface);">
                     </div>
                     <table class="data-table">
-                        <thead><tr><th>Serial</th><th>Student Name</th><th>Phone Number</th><th>Course Name</th><th>Message Date</th><th>Status</th><th>Follow-up Result</th><th>Next Follow-up</th><th>Action</th></tr></thead>
+                        <thead><tr><th>Serial</th><th>Student Name</th><th>Phone Number</th><th>Course/Service</th><th>Message Date</th><th>Status</th><th>Follow-up Result</th><th>Next Follow-up</th><th>Action</th></tr></thead>
                         <tbody id="follow-up-table-body"></tbody>
                     </table>
                 </div>
@@ -1163,6 +1163,7 @@
         });
 
         const ADMIN_EMAIL = "arafatislamshofiqul@gmail.com".toLowerCase();
+        let reportChartInstance = null;
 
         document.addEventListener('DOMContentLoaded', function() {
             const loginPage = document.getElementById('login-page');
@@ -1200,12 +1201,21 @@
             const mobilePageTitle = document.getElementById('mobile-page-title');
             const overlay = document.getElementById('overlay');
             const desktopToggleBtn = document.getElementById('desktop-sidebar-toggle');
-
             const paymentFilterButtons = document.getElementById('payment-filter-buttons');
 
             window.toggleSubDays = function(val) {
                 const grp = document.getElementById('sub-days-group');
                 if (grp) grp.style.display = val === 'subscription' ? 'block' : 'none';
+            };
+
+            // Toggle Service Active/Inactive Status in Firestore
+            window.toggleServiceStatus = async function(serviceId, isChecked) {
+                try {
+                    await db.collection('services').doc(serviceId).update({ active: isChecked });
+                    showToast(`Service is now ${isChecked ? 'Active' : 'Inactive'}.`);
+                } catch(err) {
+                    showToast("Failed to update status: " + err.message, "error");
+                }
             };
 
             if (desktopToggleBtn) {
@@ -1323,6 +1333,13 @@
                 });
             });
 
+            // DASHBOARD STAT CARD SHORTCUTS
+            document.getElementById('pending-payments-card')?.addEventListener('click', () => navigateTo('payments-page', { filter: 'pending' }));
+            document.getElementById('pending-dollar-requests-card')?.addEventListener('click', () => navigateTo('dollar-exchange-page'));
+            document.getElementById('expiring-subscriptions-card')?.addEventListener('click', () => navigateTo('subscriptions-page'));
+            document.getElementById('total-students-card')?.addEventListener('click', () => navigateTo('users-page'));
+            document.getElementById('total-followups-card')?.addEventListener('click', () => navigateTo('follow-up-page'));
+
             // DASHBOARD STATS
             async function renderDashboard() {
                 try {
@@ -1367,13 +1384,13 @@
                     paymentsSnapshot.forEach(doc => {
                         const payment = doc.data();
                         if (payment.status === 'approved') {
-                            totalSales += payment.amount || 0;
-                            totalProfit += payment.profit || 0;
+                            totalSales += Number(payment.amount) || 0;
+                            totalProfit += Number(payment.profit) || 0;
                             if (payment.timestamp) {
                                 const paymentDate = new Date(payment.timestamp.seconds * 1000);
                                 if (paymentDate.getMonth() === currentMonth && paymentDate.getFullYear() === currentYear) {
-                                    currentMonthSales += payment.amount || 0;
-                                    currentMonthProfit += payment.profit || 0;
+                                    currentMonthSales += Number(payment.amount) || 0;
+                                    currentMonthProfit += Number(payment.profit) || 0;
                                 }
                             }
                         } else if (payment.status === 'pending') { pendingPaymentsCount++; }
@@ -1381,11 +1398,11 @@
 
                     dollarExchangeSnapshot.forEach(doc => {
                         const exchange = doc.data();
-                        totalProfit += exchange.profit || 0;
+                        totalProfit += Number(exchange.profit) || 0;
                         if (exchange.timestamp) {
                             const exchangeDate = new Date(exchange.timestamp.seconds * 1000);
                             if (exchangeDate.getMonth() === currentMonth && exchangeDate.getFullYear() === currentYear) {
-                                currentMonthProfit += exchange.profit || 0;
+                                currentMonthProfit += Number(exchange.profit) || 0;
                             }
                         }
                     });
@@ -1413,45 +1430,776 @@
                 } catch (error) { console.error("Error loading dashboard data:", error); }
             }
 
+            // ================= 1. SUBSCRIPTION & IP MANAGER =================
+            async function renderSubscriptions() {
+                const tableBody = document.getElementById('subscriptions-table-body');
+                if(!tableBody) return;
+                tableBody.innerHTML = `<tr><td colspan="8" style="text-align:center;">Loading subscriptions...</td></tr>`;
+                try {
+                    const snap = await db.collection('subscriptions').get();
+                    if(snap.empty) {
+                        tableBody.innerHTML = `<tr><td colspan="8" style="text-align:center;">No active subscriptions found.</td></tr>`;
+                        return;
+                    }
+                    const now = new Date();
+                    let html = '';
+                    snap.forEach(doc => {
+                        const s = { id: doc.id, ...doc.data() };
+                        let diffDays = 0;
+                        let statusClass = 'approved';
+                        let statusText = 'Active';
+
+                        if(s.expiryDate) {
+                            const exp = new Date(s.expiryDate);
+                            diffDays = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
+                            if(diffDays < 0) {
+                                statusClass = 'rejected';
+                                statusText = 'Expired';
+                            } else if(diffDays <= 3) {
+                                statusClass = 'expiring-soon';
+                                statusText = 'Expiring Soon';
+                            }
+                        }
+
+                        html += `<tr>
+                            <td data-label="Student Info"><strong>${s.userName || 'N/A'}</strong><br><small style="color:var(--text-muted);">${s.userMobile || s.userEmail || ''}</small></td>
+                            <td data-label="Package">${s.packageName || 'Monthly Package'}</td>
+                            <td data-label="Duration">${s.durationDays || 30} Days</td>
+                            <td data-label="Start">${s.startDate ? new Date(s.startDate).toLocaleDateString('en-GB') : 'N/A'}</td>
+                            <td data-label="Expiry">${s.expiryDate ? new Date(s.expiryDate).toLocaleDateString('en-GB') : 'N/A'}</td>
+                            <td data-label="Days Left"><strong>${diffDays < 0 ? 0 : diffDays}</strong> Days</td>
+                            <td data-label="Status"><span class="status-badge ${statusClass}">${statusText}</span></td>
+                            <td class="actions-cell" data-label="Action">
+                                <button class="btn-whatsapp" onclick="openStudentWhatsappModal('${s.userMobile || ''}', '${s.userName || ''}')" title="Alert Expiry via WhatsApp"><span class="material-symbols-outlined">chat</span></button>
+                                <button class="btn-edit" onclick="openModalForEdit('subscriptions', '${s.id}')" title="Edit"><span class="material-symbols-outlined">edit</span></button>
+                                <button class="btn-delete" onclick="deleteItem('subscriptions', '${s.id}')" title="Delete"><span class="material-symbols-outlined">delete</span></button>
+                            </td>
+                        </tr>`;
+                    });
+                    tableBody.innerHTML = html;
+                } catch(err) {
+                    tableBody.innerHTML = `<tr><td colspan="8" style="color:red; text-align:center;">Error: ${err.message}</td></tr>`;
+                }
+            }
+
+            // Subscriptions Search Bar
+            document.getElementById('sub-search-input')?.addEventListener('input', function() {
+                const val = this.value.toLowerCase();
+                document.querySelectorAll('#subscriptions-table-body tr').forEach(row => {
+                    row.style.display = row.textContent.toLowerCase().includes(val) ? '' : 'none';
+                });
+            });
+
+            // ================= 2. EXPENSE MANAGER =================
+            async function renderExpenses() {
+                const tableBody = document.getElementById('expenses-table-body');
+                if(!tableBody) return;
+                tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Loading expenses...</td></tr>`;
+                try {
+                    const snap = await db.collection('expenses').get();
+                    if(snap.empty) {
+                        tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No expenses recorded yet.</td></tr>`;
+                        return;
+                    }
+                    let expenses = [];
+                    snap.forEach(d => expenses.push({ id: d.id, ...d.data() }));
+                    expenses.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+
+                    let html = '';
+                    expenses.forEach(ex => {
+                        const date = ex.timestamp ? new Date(ex.timestamp.seconds * 1000).toLocaleDateString('en-GB') : 'N/A';
+                        html += `<tr>
+                            <td data-label="Date">${date}</td>
+                            <td data-label="Category"><strong>${ex.category || 'General'}</strong></td>
+                            <td data-label="Note">${ex.note || 'None'}</td>
+                            <td data-label="Amount" style="color:var(--accent-red); font-weight:700;">৳ ${ex.amount || 0}</td>
+                            <td class="actions-cell" data-label="Action">
+                                <button class="btn-delete" onclick="deleteItem('expenses', '${ex.id}')" title="Delete"><span class="material-symbols-outlined">delete</span></button>
+                            </td>
+                        </tr>`;
+                    });
+                    tableBody.innerHTML = html;
+                } catch(e) {
+                    tableBody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Error: ${e.message}</td></tr>`;
+                }
+            }
+
+            // ================= 3. INSTALLMENTS / DUE MANAGER =================
+            async function renderInstallments() {
+                const tableBody = document.getElementById('installments-table-body');
+                if(!tableBody) return;
+                tableBody.innerHTML = `<tr><td colspan="8" style="text-align:center;">Loading installment records...</td></tr>`;
+                try {
+                    const snap = await db.collection('installments').get();
+                    if(snap.empty) {
+                        tableBody.innerHTML = `<tr><td colspan="8" style="text-align:center;">No due/installment records found.</td></tr>`;
+                        return;
+                    }
+                    let html = '';
+                    snap.forEach(d => {
+                        const inst = { id: d.id, ...d.data() };
+                        const due = (Number(inst.totalAmount) || 0) - (Number(inst.paidAmount) || 0);
+                        const statusClass = due <= 0 ? 'approved' : 'rejected';
+                        const statusText = due <= 0 ? 'Completed' : 'Due Pending';
+
+                        html += `<tr>
+                            <td data-label="User Info"><strong>${inst.userName || 'N/A'}</strong><br><small style="color:var(--text-muted);">${inst.userMobile || ''}</small></td>
+                            <td data-label="Course/Service">${inst.itemName || 'N/A'}</td>
+                            <td data-label="Total Amount">৳ ${inst.totalAmount || 0}</td>
+                            <td data-label="Paid Amount" style="color:var(--accent-green); font-weight:600;">৳ ${inst.paidAmount || 0}</td>
+                            <td data-label="Due Amount" style="color:var(--accent-red); font-weight:700;">৳ ${due}</td>
+                            <td data-label="Next Due Date">${inst.nextDueDate ? new Date(inst.nextDueDate).toLocaleDateString('en-GB') : 'N/A'}</td>
+                            <td data-label="Status"><span class="status-badge ${statusClass}">${statusText}</span></td>
+                            <td class="actions-cell" data-label="Action">
+                                <button class="btn-whatsapp" onclick="openStudentWhatsappModal('${inst.userMobile || ''}', '${inst.userName || ''}')" title="Send Due Reminder"><span class="material-symbols-outlined">chat</span></button>
+                                <button class="btn-edit" onclick="openModalForEdit('installments', '${inst.id}')" title="Update"><span class="material-symbols-outlined">edit</span></button>
+                                <button class="btn-delete" onclick="deleteItem('installments', '${inst.id}')" title="Delete"><span class="material-symbols-outlined">delete</span></button>
+                            </td>
+                        </tr>`;
+                    });
+                    tableBody.innerHTML = html;
+                } catch(e) {
+                    tableBody.innerHTML = `<tr><td colspan="8" style="color:red; text-align:center;">Error: ${e.message}</td></tr>`;
+                }
+            }
+
+            // Installments Search Bar
+            document.getElementById('installment-search-input')?.addEventListener('input', function() {
+                const val = this.value.toLowerCase();
+                document.querySelectorAll('#installments-table-body tr').forEach(row => {
+                    row.style.display = row.textContent.toLowerCase().includes(val) ? '' : 'none';
+                });
+            });
+
+            // ================= 4. ABANDONED CARTS =================
+            async function renderAbandonedCarts() {
+                const tableBody = document.getElementById('abandoned-carts-table-body');
+                if(!tableBody) return;
+                tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Loading abandoned carts...</td></tr>`;
+                try {
+                    const snap = await db.collection('abandoned_carts').get();
+                    if(snap.empty) {
+                        tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No abandoned checkout carts found.</td></tr>`;
+                        return;
+                    }
+                    let html = '';
+                    snap.forEach(d => {
+                        const cart = { id: d.id, ...d.data() };
+                        const time = cart.timestamp ? new Date(cart.timestamp.seconds * 1000).toLocaleString() : 'Recently';
+                        html += `<tr>
+                            <td data-label="User Info"><strong>${cart.userName || 'Visitor'}</strong><br><small style="color:var(--text-muted);">${cart.userMobile || cart.userEmail || ''}</small></td>
+                            <td data-label="Item">${cart.itemName || 'N/A'}</td>
+                            <td data-label="Amount" style="color:var(--primary-blue); font-weight:700;">৳ ${cart.amount || 0}</td>
+                            <td data-label="Time"><small>${time}</small></td>
+                            <td class="actions-cell" data-label="Action">
+                                <button class="btn-whatsapp" onclick="openStudentWhatsappModal('${cart.userMobile || ''}', '${cart.userName || ''}')" title="Send WhatsApp Offer"><span class="material-symbols-outlined">chat</span></button>
+                                <button class="btn-delete" onclick="deleteItem('abandoned_carts', '${cart.id}')" title="Remove"><span class="material-symbols-outlined">delete</span></button>
+                            </td>
+                        </tr>`;
+                    });
+                    tableBody.innerHTML = html;
+                } catch(e) {
+                    tableBody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Error: ${e.message}</td></tr>`;
+                }
+            }
+
+            // ================= 5. MANUAL SALES =================
+            async function renderManualSalePage() {
+                const select = document.getElementById('manual-item-selection');
+                if(!select) return;
+                select.innerHTML = '<option value="">Loading items...</option>';
+                try {
+                    let html = '<option value="" disabled selected>Select a Course or Service</option>';
+                    const coursesSnap = await db.collection('courses').get();
+                    coursesSnap.forEach(d => { html += `<option value="[Course] ${d.data().name}" data-type="course">[Course] ${d.data().name}</option>`; });
+                    const servicesSnap = await db.collection('services').get();
+                    servicesSnap.forEach(d => { html += `<option value="[Service] ${d.data().name}" data-type="service">[Service] ${d.data().name}</option>`; });
+                    select.innerHTML = html;
+                } catch(e) {
+                    select.innerHTML = '<option value="">Error loading items</option>';
+                }
+            }
+
+            document.getElementById('manual-sale-form')?.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const userName = document.getElementById('manual-user-name').value || 'Cash Customer';
+                const userMobile = document.getElementById('manual-user-mobile').value || '';
+                const userEmail = document.getElementById('manual-user-email').value || '';
+                const itemName = document.getElementById('manual-item-selection').value;
+                const durationDays = Number(document.getElementById('manual-duration-days').value) || 0;
+                const quantity = Number(document.getElementById('manual-quantity').value) || 1;
+                const saleAmount = Number(document.getElementById('manual-sale-amount').value) || 0;
+                const discountAmount = Number(document.getElementById('manual-discount-amount').value) || 0;
+                const profitAmount = Number(document.getElementById('manual-profit-amount').value) || 0;
+
+                try {
+                    // 1. Add to payments as approved
+                    await db.collection('payments').add({
+                        userName,
+                        userMobile,
+                        userEmail,
+                        itemName,
+                        amount: saleAmount,
+                        discountAmount,
+                        profit: profitAmount,
+                        quantity,
+                        paymentMethod: 'Cash / Manual',
+                        status: 'approved',
+                        transactionId: 'MANUAL-' + Date.now().toString().slice(-6),
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    // 2. If duration is selected, add subscription
+                    if(durationDays > 0) {
+                        const now = new Date();
+                        const exp = new Date(now);
+                        exp.setDate(exp.getDate() + durationDays);
+                        await db.collection('subscriptions').add({
+                            userName,
+                            userMobile,
+                            userEmail,
+                            packageName: itemName,
+                            durationDays,
+                            startDate: now.toISOString().split('T')[0],
+                            expiryDate: exp.toISOString(),
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    }
+
+                    showToast("Manual sale recorded successfully!");
+                    this.reset();
+                    renderDashboard();
+                } catch(err) {
+                    showToast("Failed to save manual sale: " + err.message, "error");
+                }
+            });
+
+            // ================= 6. DOLLAR RATES & USER REQUESTS =================
+            async function renderDollarRatesSettings() {
+                try {
+                    const doc = await db.collection('site_settings').doc('dollar_rates').get();
+                    if(doc.exists) {
+                        const d = doc.data();
+                        document.getElementById('rate-ach').value = d.ACH || 105;
+                        document.getElementById('rate-visa').value = d.VISA || 105;
+                        document.getElementById('rate-apple').value = d.APPLE || 98;
+                    }
+                } catch(e) { console.error("Error loading rates: ", e); }
+            }
+
+            document.getElementById('dollar-rate-settings-form')?.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                try {
+                    await db.collection('site_settings').doc('dollar_rates').set({
+                        ACH: Number(document.getElementById('rate-ach').value),
+                        VISA: Number(document.getElementById('rate-visa').value),
+                        APPLE: Number(document.getElementById('rate-apple').value)
+                    }, { merge: true });
+                    showToast("Dollar rates updated successfully!");
+                } catch(err) {
+                    showToast("Failed to update rates: " + err.message, "error");
+                }
+            });
+
+            document.getElementById('dollar-exchange-form')?.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                try {
+                    await db.collection('dollar_exchange').add({
+                        type: document.getElementById('exchange-type').value,
+                        buyCost: Number(document.getElementById('dollar-buy-amount').value),
+                        sellValue: Number(document.getElementById('dollar-sell-amount').value),
+                        profit: Number(document.getElementById('dollar-profit-amount').value),
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    showToast("Dollar transaction added!");
+                    this.reset();
+                    renderDashboard();
+                } catch(err) {
+                    showToast("Failed to add transaction: " + err.message, "error");
+                }
+            });
+
+            async function renderDollarSellRequests() {
+                const tableBody = document.getElementById('dollar-sell-requests-body');
+                if(!tableBody) return;
+                tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Loading requests...</td></tr>`;
+                try {
+                    const snap = await db.collection('dollar_sells').get();
+                    if(snap.empty) {
+                        tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center;">No dollar sell requests found.</td></tr>`;
+                        return;
+                    }
+                    let html = '';
+                    snap.forEach(d => {
+                        const r = { id: d.id, ...d.data() };
+                        const statusClass = (r.status || 'pending').toLowerCase();
+                        html += `<tr>
+                            <td data-label="User">${r.userEmail || 'N/A'}</td>
+                            <td data-label="Card Type"><strong>${r.cardType || 'N/A'}</strong></td>
+                            <td data-label="Card Link"><a href="${r.cardLink}" target="_blank" style="color:var(--primary-blue); font-weight:600;">View Link</a></td>
+                            <td data-label="Method">${r.paymentMethod || 'N/A'}</td>
+                            <td data-label="Mobile"><span style="cursor:pointer; text-decoration:underline;" onclick="copyToClipboard('${r.phoneNumber || ''}')">${r.phoneNumber || 'N/A'}</span></td>
+                            <td data-label="Status"><span class="status-badge ${statusClass}">${r.status || 'pending'}</span></td>
+                            <td class="actions-cell" data-label="Action">
+                                <select class="status-select" onchange="updateDollarRequestStatus('${r.id}', this.value)">
+                                    <option value="pending" ${r.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="approved" ${r.status === 'approved' ? 'selected' : ''}>Approved</option>
+                                    <option value="rejected" ${r.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+                                </select>
+                                <button class="btn-whatsapp" onclick="openStudentWhatsappModal('${r.phoneNumber || ''}', 'Student')" title="Chat on WhatsApp"><span class="material-symbols-outlined">chat</span></button>
+                                <button class="btn-delete" onclick="deleteItem('dollar_sells', '${r.id}')" title="Delete"><span class="material-symbols-outlined">delete</span></button>
+                            </td>
+                        </tr>`;
+                    });
+                    tableBody.innerHTML = html;
+                } catch(e) {
+                    tableBody.innerHTML = `<tr><td colspan="7" style="color:red; text-align:center;">Error: ${e.message}</td></tr>`;
+                }
+            }
+
+            window.updateDollarRequestStatus = async (id, newStatus) => {
+                try {
+                    await db.collection('dollar_sells').doc(id).update({ status: newStatus });
+                    showToast("Dollar request status updated!");
+                    renderDashboard();
+                } catch(e) {
+                    showToast("Failed to update status: " + e.message, "error");
+                }
+            };
+
+            // ================= 7. FOLLOW-UP HISTORY & EXPORT =================
+            let followUpRecordsCache = [];
+
+            async function renderFollowUps() {
+                const tableBody = document.getElementById('follow-up-table-body');
+                if(!tableBody) return;
+                tableBody.innerHTML = `<tr><td colspan="9" style="text-align:center;">Loading follow-ups...</td></tr>`;
+                try {
+                    const snap = await db.collection('follow_ups').get();
+                    if(snap.empty) {
+                        tableBody.innerHTML = `<tr><td colspan="9" style="text-align:center;">No follow-up messages sent yet.</td></tr>`;
+                        return;
+                    }
+                    followUpRecordsCache = [];
+                    let sentCount = 0, failedCount = 0, interestedCount = 0, pendingCount = 0;
+
+                    snap.forEach(d => {
+                        const item = { id: d.id, ...d.data() };
+                        followUpRecordsCache.push(item);
+                        if(item.status === 'sent') sentCount++;
+                        else if(item.status === 'failed') failedCount++;
+                        else pendingCount++;
+
+                        if(item.result === 'Interested') interestedCount++;
+                    });
+
+                    document.getElementById('fu-total-sent').textContent = sentCount;
+                    document.getElementById('fu-total-failed').textContent = failedCount;
+                    document.getElementById('fu-total-interested').textContent = interestedCount;
+                    document.getElementById('fu-total-pending').textContent = pendingCount;
+
+                    filterAndRenderFollowUpTable();
+                } catch(e) {
+                    tableBody.innerHTML = `<tr><td colspan="9" style="color:red; text-align:center;">Error: ${e.message}</td></tr>`;
+                }
+            }
+
+            function filterAndRenderFollowUpTable() {
+                const tableBody = document.getElementById('follow-up-table-body');
+                const search = (document.getElementById('fu-search-input')?.value || '').toLowerCase();
+                const statusFilter = document.getElementById('fu-status-filter')?.value || 'all';
+                const resultFilter = document.getElementById('fu-result-filter')?.value || 'all';
+                const dateFilter = document.getElementById('fu-date-filter')?.value || '';
+
+                let filtered = followUpRecordsCache.filter(item => {
+                    const matchesSearch = (item.studentName || '').toLowerCase().includes(search) || (item.phoneNumber || '').includes(search);
+                    const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
+                    const matchesResult = resultFilter === 'all' || item.result === resultFilter;
+                    const matchesDate = !dateFilter || (item.date && item.date.startsWith(dateFilter));
+                    return matchesSearch && matchesStatus && matchesResult && matchesDate;
+                });
+
+                if(filtered.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="9" style="text-align:center;">No matching records found.</td></tr>`;
+                    return;
+                }
+
+                let html = '';
+                filtered.forEach((fu, idx) => {
+                    html += `<tr>
+                        <td data-label="Serial">${idx + 1}</td>
+                        <td data-label="Name"><strong>${fu.studentName || 'N/A'}</strong></td>
+                        <td data-label="Phone"><span onclick="copyToClipboard('${fu.phoneNumber || ''}')" style="cursor:pointer; text-decoration:underline;">${fu.phoneNumber || 'N/A'}</span></td>
+                        <td data-label="Course">${fu.courseName || 'General'}</td>
+                        <td data-label="Date"><small>${fu.date || 'N/A'}</small></td>
+                        <td data-label="Status"><span class="status-badge ${fu.status === 'sent' ? 'approved' : (fu.status === 'failed' ? 'rejected' : 'pending')}">${fu.status || 'sent'}</span></td>
+                        <td data-label="Result">
+                            <select class="status-select" onchange="updateFollowUpResult('${fu.id}', this.value)">
+                                <option value="Pending" ${fu.result === 'Pending' ? 'selected' : ''}>Pending</option>
+                                <option value="Interested" ${fu.result === 'Interested' ? 'selected' : ''}>Interested</option>
+                                <option value="Not Interested" ${fu.result === 'Not Interested' ? 'selected' : ''}>Not Interested</option>
+                                <option value="No Response" ${fu.result === 'No Response' ? 'selected' : ''}>No Response</option>
+                                <option value="Already Joined" ${fu.result === 'Already Joined' ? 'selected' : ''}>Already Joined</option>
+                                <option value="Phone Off" ${fu.result === 'Phone Off' ? 'selected' : ''}>Phone Off</option>
+                            </select>
+                        </td>
+                        <td data-label="Next Follow-up"><small>${fu.nextDate || 'Not Set'}</small></td>
+                        <td class="actions-cell" data-label="Action">
+                            <button class="btn-whatsapp" onclick="openStudentWhatsappModal('${fu.phoneNumber || ''}', '${fu.studentName || ''}')" title="Chat"><span class="material-symbols-outlined">chat</span></button>
+                            <button class="btn-delete" onclick="deleteItem('follow_ups', '${fu.id}')" title="Delete"><span class="material-symbols-outlined">delete</span></button>
+                        </td>
+                    </tr>`;
+                });
+                tableBody.innerHTML = html;
+            }
+
+            window.updateFollowUpResult = async (id, result) => {
+                try {
+                    await db.collection('follow_ups').doc(id).update({ result });
+                    showToast("Follow-up result updated!");
+                    renderDashboard();
+                } catch(e) {
+                    showToast("Failed: " + e.message, "error");
+                }
+            };
+
+            // Follow-up Filters Event Listeners
+            document.getElementById('fu-search-input')?.addEventListener('input', filterAndRenderFollowUpTable);
+            document.getElementById('fu-status-filter')?.addEventListener('change', filterAndRenderFollowUpTable);
+            document.getElementById('fu-result-filter')?.addEventListener('change', filterAndRenderFollowUpTable);
+            document.getElementById('fu-date-filter')?.addEventListener('change', filterAndRenderFollowUpTable);
+
+            // Export Follow Up CSV
+            document.getElementById('export-followup-btn')?.addEventListener('click', () => {
+                if(followUpRecordsCache.length === 0) return showToast("No records to export!", "error");
+                let csv = "Serial,Student Name,Phone,Course,Date,Status,Result\n";
+                followUpRecordsCache.forEach((fu, i) => {
+                    csv += `"${i+1}","${fu.studentName || ''}","${fu.phoneNumber || ''}","${fu.courseName || ''}","${fu.date || ''}","${fu.status || ''}","${fu.result || ''}"\n`;
+                });
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.setAttribute("download", `followup_report_${Date.now()}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            // ================= 8. REPORTS PAGE WITH CHART.JS =================
+            async function renderReportsPage() {
+                const now = new Date();
+                const past30 = new Date(now);
+                past30.setDate(past30.getDate() - 30);
+
+                if(!document.getElementById('start-date').value) {
+                    document.getElementById('start-date').value = past30.toISOString().split('T')[0];
+                }
+                if(!document.getElementById('end-date').value) {
+                    document.getElementById('end-date').value = now.toISOString().split('T')[0];
+                }
+                generateReport();
+            }
+
+            document.getElementById('generate-report-btn')?.addEventListener('click', generateReport);
+
+            async function generateReport() {
+                const startDateStr = document.getElementById('start-date').value;
+                const endDateStr = document.getElementById('end-date').value;
+                if(!startDateStr || !endDateStr) return showToast("Please select both dates!", "error");
+
+                const start = new Date(startDateStr);
+                const end = new Date(endDateStr);
+                end.setHours(23, 59, 59, 999);
+
+                const tableBody = document.getElementById('report-table-body');
+                tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Calculating report...</td></tr>`;
+
+                try {
+                    const paymentsSnap = await db.collection('payments').where('status', '==', 'approved').get();
+                    let dailyData = {};
+                    let tableRows = '';
+
+                    paymentsSnap.forEach(d => {
+                        const p = d.data();
+                        if(p.timestamp) {
+                            const pDate = new Date(p.timestamp.seconds * 1000);
+                            if(pDate >= start && pDate <= end) {
+                                const key = pDate.toISOString().split('T')[0];
+                                if(!dailyData[key]) dailyData[key] = { sales: 0, profit: 0 };
+                                dailyData[key].sales += Number(p.amount) || 0;
+                                dailyData[key].profit += Number(p.profit) || 0;
+
+                                tableRows += `<tr>
+                                    <td>${key}</td>
+                                    <td>${p.itemName || 'Service'}</td>
+                                    <td style="color:var(--primary-blue); font-weight:600;">৳ ${p.amount || 0}</td>
+                                    <td style="color:var(--accent-green); font-weight:600;">৳ ${p.profit || 0}</td>
+                                </tr>`;
+                            }
+                        }
+                    });
+
+                    tableBody.innerHTML = tableRows || `<tr><td colspan="4" style="text-align:center;">No sales found in this date range.</td></tr>`;
+
+                    // Render Chart.js
+                    const labels = Object.keys(dailyData).sort();
+                    const salesValues = labels.map(l => dailyData[l].sales);
+                    const profitValues = labels.map(l => dailyData[l].profit);
+
+                    const ctx = document.getElementById('report-chart').getContext('2d');
+                    if(reportChartInstance) reportChartInstance.destroy();
+
+                    reportChartInstance = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels.length ? labels : ['No Data'],
+                            datasets: [
+                                {
+                                    label: 'Sales (BDT)',
+                                    data: salesValues.length ? salesValues : [0],
+                                    borderColor: '#4f46e5',
+                                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                                    fill: true,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: 'Net Profit (BDT)',
+                                    data: profitValues.length ? profitValues : [0],
+                                    borderColor: '#10b981',
+                                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                    fill: true,
+                                    tension: 0.3
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: { beginAtZero: true }
+                            }
+                        }
+                    });
+                } catch(e) {
+                    tableBody.innerHTML = `<tr><td colspan="4" style="color:red; text-align:center;">Report Error: ${e.message}</td></tr>`;
+                }
+            }
+
+            // ================= 9. STUDENT WHATSAPP MODAL LOGIC =================
+            window.openStudentWhatsappModal = async function(mobile, name) {
+                document.getElementById('wa-recipient-number').value = mobile || '';
+                document.getElementById('wa-student-name').value = name || 'Student';
+                document.getElementById('wa-message-text').value = '';
+                document.getElementById('wa-template-select').value = '';
+                document.getElementById('wa-dynamic-fields').classList.add('hidden');
+                studentWhatsappModal.classList.remove('hidden');
+
+                // Load courses and services into wa-item-select
+                const itemSelect = document.getElementById('wa-item-select');
+                itemSelect.innerHTML = '<option value="">Select Item</option>';
+                try {
+                    const cSnap = await db.collection('courses').get();
+                    cSnap.forEach(d => itemSelect.innerHTML += `<option value="${d.data().name}" data-price="${d.data().price}">[Course] ${d.data().name}</option>`);
+                    const sSnap = await db.collection('services').get();
+                    sSnap.forEach(d => itemSelect.innerHTML += `<option value="${d.data().name}" data-price="${d.data().currentPrice || 0}">[Service] ${d.data().name}</option>`);
+                } catch(e) {}
+            };
+
+            closeWhatsappModalBtn?.addEventListener('click', () => studentWhatsappModal.classList.add('hidden'));
+            cancelWhatsappModalBtn?.addEventListener('click', () => studentWhatsappModal.classList.add('hidden'));
+
+            document.getElementById('wa-template-select')?.addEventListener('change', function() {
+                const val = this.value;
+                const studentName = document.getElementById('wa-student-name').value;
+                const dynamicFields = document.getElementById('wa-dynamic-fields');
+                const messageBox = document.getElementById('wa-message-text');
+
+                if(val === 'course_discount' || val === 'service_discount') {
+                    dynamicFields.classList.remove('hidden');
+                    messageBox.value = `Hello ${studentName}! 🎉 Dream's Academy has a special exclusive discount for you! Join today and get special access.`;
+                } else if(val === 'abandoned') {
+                    dynamicFields.classList.add('hidden');
+                    messageBox.value = `Dear ${studentName}, we noticed you left your checkout cart incomplete. Need any help completing your enrollment? Reply to this message!`;
+                } else if(val === 'follow_up') {
+                    dynamicFields.classList.add('hidden');
+                    messageBox.value = `Assalamu Alaikum ${studentName}, how is your learning going with Dream's Academy? Please let us know if you need any support.`;
+                } else {
+                    dynamicFields.classList.add('hidden');
+                }
+            });
+
+            document.getElementById('wa-item-select')?.addEventListener('change', function() {
+                const selected = this.options[this.selectedIndex];
+                const price = selected.dataset.price || 0;
+                document.getElementById('wa-original-price').value = price;
+            });
+
+            studentWhatsappForm?.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const mobile = document.getElementById('wa-recipient-number').value.trim();
+                const studentName = document.getElementById('wa-student-name').value;
+                const message = document.getElementById('wa-message-text').value.trim();
+                const sendToAll = document.getElementById('wa-send-all').checked;
+
+                if(!message) return showToast("Please write a message!", "error");
+
+                try {
+                    // Check MacroDroid Webhook URL
+                    const macroDoc = await db.collection('site_settings').doc('macrodroid_webhook').get();
+                    const webhookUrl = macroDoc.exists ? macroDoc.data().url : '';
+
+                    if(sendToAll) {
+                        const usersSnap = await db.collection('users').get();
+                        let count = 0;
+                        usersSnap.forEach(u => {
+                            const uMobile = u.data().mobile;
+                            if(uMobile) {
+                                count++;
+                                if(webhookUrl) {
+                                    fetch(webhookUrl, {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ number: uMobile, message: message })
+                                    }).catch(err => console.error(err));
+                                }
+                                db.collection('follow_ups').add({
+                                    studentName: u.data().name || 'Student',
+                                    phoneNumber: uMobile,
+                                    courseName: 'Bulk Notification',
+                                    date: new Date().toISOString().split('T')[0],
+                                    status: 'sent',
+                                    result: 'Pending'
+                                });
+                            }
+                        });
+                        showToast(`Messages dispatched to ${count} students!`);
+                    } else {
+                        if(webhookUrl) {
+                            await fetch(webhookUrl, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ number: mobile, message: message })
+                            });
+                            showToast("Message sent via MacroDroid silently!");
+                        } else {
+                            // Fallback direct WhatsApp web
+                            let cleanNumber = mobile.replace(/[^0-9]/g, '');
+                            if(cleanNumber.startsWith('0')) cleanNumber = '88' + cleanNumber;
+                            window.open(`https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`, '_blank');
+                            showToast("Opening WhatsApp Web...");
+                        }
+
+                        await db.collection('follow_ups').add({
+                            studentName,
+                            phoneNumber: mobile,
+                            courseName: document.getElementById('wa-item-select')?.value || 'Direct Message',
+                            date: new Date().toISOString().split('T')[0],
+                            status: 'sent',
+                            result: 'Pending'
+                        });
+                    }
+
+                    studentWhatsappModal.classList.add('hidden');
+                } catch(err) {
+                    showToast("Failed to send message: " + err.message, "error");
+                }
+            });
+
+            // ================= 10. SEND SERVICE VIA WHATSAPP =================
+            sendServiceForm?.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const mobile = document.getElementById('whatsapp-number').value.trim();
+                const serviceName = document.getElementById('service-selection').value;
+                const info = document.getElementById('service-info').value.trim();
+
+                const message = `*Dream's Academy - Service Delivery*\nItem: ${serviceName}\n\nDetails:\n${info}\n\nThank you for choosing us!`;
+
+                try {
+                    const macroDoc = await db.collection('site_settings').doc('macrodroid_webhook').get();
+                    const webhookUrl = macroDoc.exists ? macroDoc.data().url : '';
+
+                    if(webhookUrl) {
+                        await fetch(webhookUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ number: mobile, message: message })
+                        });
+                        showToast("Service details dispatched via MacroDroid!");
+                    } else {
+                        let cleanNumber = mobile.replace(/[^0-9]/g, '');
+                        if(cleanNumber.startsWith('0')) cleanNumber = '88' + cleanNumber;
+                        window.open(`https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`, '_blank');
+                    }
+
+                    await db.collection('follow_ups').add({
+                        studentName: 'Service Customer',
+                        phoneNumber: mobile,
+                        courseName: serviceName,
+                        date: new Date().toISOString().split('T')[0],
+                        status: 'sent',
+                        result: 'Pending'
+                    });
+
+                    sendServiceForm.reset();
+                } catch(err) {
+                    showToast("Failed to send: " + err.message, "error");
+                }
+            });
+
+            // ================= 11. SEARCH INPUT FILTERS =================
+            document.getElementById('payment-search-input')?.addEventListener('input', function() {
+                const val = this.value.toLowerCase();
+                document.querySelectorAll('#payments-table-body tr').forEach(r => {
+                    r.style.display = r.textContent.toLowerCase().includes(val) ? '' : 'none';
+                });
+            });
+
+            document.getElementById('user-search-input')?.addEventListener('input', function() {
+                const val = this.value.toLowerCase();
+                document.querySelectorAll('#users-table-body tr').forEach(r => {
+                    r.style.display = r.textContent.toLowerCase().includes(val) ? '' : 'none';
+                });
+            });
+
+            document.getElementById('cert-search-input')?.addEventListener('input', function() {
+                const val = this.value.toLowerCase();
+                document.querySelectorAll('#certificates-table-body tr').forEach(r => {
+                    r.style.display = r.textContent.toLowerCase().includes(val) ? '' : 'none';
+                });
+            });
+
             // WEBSITE SETTINGS SYNC (FIREBASE LOAD & SAVE)
             async function renderSettings() {
                 try {
-                    // 1. Hero
                     const heroDoc = await db.collection('site_settings').doc('hero').get();
                     if (heroDoc.exists && heroDoc.data().imageUrl) {
                         document.getElementById('hero-image-url').value = heroDoc.data().imageUrl;
                         document.getElementById('hero-image-preview').src = heroDoc.data().imageUrl;
                     }
-                    // 2. Logo
                     const logoDoc = await db.collection('site_settings').doc('logo').get();
                     if (logoDoc.exists && logoDoc.data().imageUrl) {
                         document.getElementById('logo-image-url').value = logoDoc.data().imageUrl;
                         document.getElementById('logo-image-preview').src = logoDoc.data().imageUrl;
                     }
-                    // 3. About Us
                     const aboutDoc = await db.collection('site_settings').doc('about_us').get();
                     if (aboutDoc.exists && aboutDoc.data().imageUrl) {
                         document.getElementById('about-us-image-url').value = aboutDoc.data().imageUrl;
                         document.getElementById('about-us-image-preview').src = aboutDoc.data().imageUrl;
                     }
-                    // 4. Contact Us
                     const contactDoc = await db.collection('site_settings').doc('contact_us').get();
                     if (contactDoc.exists && contactDoc.data().imageUrl) {
                         document.getElementById('contact-us-image-url').value = contactDoc.data().imageUrl;
                         document.getElementById('contact-us-image-preview').src = contactDoc.data().imageUrl;
                     }
-                    // 5. Chat Icon
                     const chatDoc = await db.collection('site_settings').doc('chat_icon').get();
                     if (chatDoc.exists && chatDoc.data().imageUrl) {
                         document.getElementById('chat-icon-image-url').value = chatDoc.data().imageUrl;
                         document.getElementById('chat-icon-image-preview').src = chatDoc.data().imageUrl;
                     }
-                    // 6. MacroDroid
                     const macroDoc = await db.collection('site_settings').doc('macrodroid_webhook').get();
                     if (macroDoc.exists && macroDoc.data().url) {
                         document.getElementById('macrodroid-webhook-url').value = macroDoc.data().url;
                     }
-                    // 7. EmailJS
                     const emailDoc = await db.collection('site_settings').doc('emailjs_settings').get();
                     if (emailDoc.exists) {
                         const edata = emailDoc.data();
@@ -1461,7 +2209,6 @@
                         document.getElementById('emailjs-template-receipt').value = edata.templateReceipt || '';
                         document.getElementById('emailjs-template-otp').value = edata.templateOtp || '';
                     }
-                    // 8. Social Media Links
                     const socialDoc = await db.collection('site_settings').doc('social_links').get();
                     socialLinksContainer.innerHTML = '';
                     if (socialDoc.exists && Array.isArray(socialDoc.data().links)) {
@@ -1565,7 +2312,7 @@
                 showToast("Social links updated!");
             };
 
-            // RENDER PAYMENTS (CRASH-PROOF & INDEX-FREE)
+            // RENDER PAYMENTS
             async function renderPayments(statusFilter = null) {
                 const tableBody = document.getElementById('payments-table-body');
                 if (!tableBody) return;
@@ -1582,12 +2329,10 @@
                         payments.push({ id: doc.id, ...doc.data() });
                     });
 
-                    // Filter by status if selected
                     if (statusFilter && statusFilter !== 'all') {
                         payments = payments.filter(p => (p.status || 'pending').toLowerCase() === statusFilter.toLowerCase());
                     }
 
-                    // Sort descending by date in memory (Avoids Firestore Index Error)
                     payments.sort((a, b) => {
                         const timeA = a.timestamp?.seconds || (a.timestamp ? new Date(a.timestamp).getTime() : 0);
                         const timeB = b.timestamp?.seconds || (b.timestamp ? new Date(b.timestamp).getTime() : 0);
@@ -1694,12 +2439,14 @@
                         const stockQuery = await db.collection('service_stock').where('serviceName', '==', baseName).get();
                         if (!stockQuery.empty) {
                             let stockDoc = stockQuery.docs[0]; let stockData = stockDoc.data();
-                            let stockLines = stockData.topupId ? stockData.topupId.split('\n').filter(line => line.trim() !== '') : []; let extractedLines = [];
+                            let stockLines = stockData.topupId ? stockData.topupId.split('\n').filter(line => line.trim() !== '') : []; 
+                            let extractedLines = [];
                             for(let i=0; i<qtyToDeduct; i++) { if(stockLines.length > 0) { extractedLines.push(stockLines.shift()); } }
                             if (extractedLines.length > 0) {
-                                let deliveredServiceDetails = extractedLines.join('\n');
-                                let remainingQty = (Number(stockData.quantity) || 0) - extractedLines.length; let remainingTopupId = stockLines.join('\n');
-                                if (remainingQty <= 0 && stockLines.length === 0) { await db.collection('service_stock').doc(stockDoc.id).delete(); } else { await db.collection('service_stock').doc(stockDoc.id).update({ quantity: remainingQty, topupId: remainingTopupId }); }
+                                let remainingQty = (Number(stockData.quantity) || 0) - extractedLines.length; 
+                                let remainingTopupId = stockLines.join('\n');
+                                if (remainingQty <= 0 && stockLines.length === 0) { await db.collection('service_stock').doc(stockDoc.id).delete(); } 
+                                else { await db.collection('service_stock').doc(stockDoc.id).update({ quantity: remainingQty, topupId: remainingTopupId }); }
                             }
                         }
 
@@ -1767,7 +2514,6 @@
                 }
             }
 
-
             // GENERIC RENDERER
             async function renderGeneric(collection, tableBodyId, rowRenderer) {
                 const tableBody = document.getElementById(tableBodyId); 
@@ -1783,15 +2529,10 @@
 
             // RENDER COLLECTIONS
             const renderCoupons = () => renderGeneric('coupons', 'coupons-table-body', (c) => `<tr><td data-label="Code"><strong>${c.code}</strong></td><td data-label="Item">${c.applicableItem || 'All Items'}</td><td data-label="Type">${c.discountType === 'percentage' ? 'Percentage (%)' : 'Fixed Amount (৳)'}</td><td data-label="Value">${c.discountValue}</td><td data-label="Status"><span class="status-badge ${c.active !== false ? 'approved' : 'rejected'}">${c.active !== false ? 'Active' : 'Inactive'}</span></td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('coupons', '${c.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('coupons', '${c.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
-            
             const renderEnrollments = () => renderGeneric('enrollments', 'enrollments-table-body', (e) => `<tr><td data-label="Email">${e.studentEmail}</td><td data-label="Course">${e.courseName}</td><td data-label="Batch">${e.batch}</td><td data-label="Date">${e.date || 'N/A'}</td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('enrollments', '${e.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('enrollments', '${e.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
-            
             const renderCurriculum = () => renderGeneric('curriculum', 'curriculum-table-body', (c) => `<tr><td data-label="Course">${c.courseName}</td><td data-label="Batch">${c.batch}</td><td data-label="Modules">${c.modules ? c.modules.length : 0} Modules</td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('curriculum', '${c.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('curriculum', '${c.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
-            
             const renderJoinClass = () => renderGeneric('joinClass', 'join-class-table-body', (j) => `<tr><td data-label="Course">${j.courseName}</td><td data-label="Batch">${j.batch}</td><td data-label="Topic">${j.topic}</td><td data-label="Link"><a href="${j.link}" target="_blank" style="color:var(--primary-blue); font-weight:600;">Join Class</a></td><td data-label="Time">${j.scheduleTime || 'N/A'}</td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('joinClass', '${j.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('joinClass', '${j.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
-            
             const renderOnlineClasses = () => renderGeneric('online_classes', 'online-classes-table-body', (o) => `<tr><td data-label="Batch"><strong>${o.batchNumber}</strong></td><td data-label="Students">${o.studentCount || 0} Users</td><td data-label="Total">৳ ${o.totalBill || 0}</td><td data-label="Paid" style="color:var(--accent-green);">৳ ${o.paidBill || 0}</td><td data-label="Due" style="color:var(--accent-red);">৳ ${(Number(o.totalBill) || 0) - (Number(o.paidBill) || 0)}</td><td data-label="Schedule"><small>1: ${o.class1 || '-'}<br>2: ${o.class2 || '-'}</small></td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('online_classes', '${o.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('online_classes', '${o.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
-
             const renderServices = () => renderGeneric('services', 'services-table-body', (s) => `<tr><td data-label="Image"><img src="${s.imageUrl || 'https://i.ibb.co/JqgWkCg/placeholder.png'}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;"></td><td data-label="Name">${s.name}</td><td data-label="Package Type"><span class="status-badge ${s.packageType === 'subscription' ? 'expiring-soon' : 'approved'}">${s.packageType === 'subscription' ? (s.durationDays || '30') + ' Days Sub' : 'One-time'}</span></td><td data-label="Buy Price">৳ ${s.purchasePrice || 0}</td><td data-label="Sell Price">৳ ${s.currentPrice || 0}</td><td data-label="Comm">৳ ${s.commission || 0}</td><td data-label="Status"><label class="switch"><input type="checkbox" onchange="window.toggleServiceStatus('${s.id}', this.checked)" ${s.active !== false ? 'checked' : ''}><span class="slider"></span></label></td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('services', '${s.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('services', '${s.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderCourses = () => renderGeneric('courses', 'courses-table-body', (c) => `<tr><td data-label="Name">${c.name}</td><td data-label="Instructor">${c.instructor}</td><td data-label="Price">৳ ${c.price}</td><td data-label="Comm">৳ ${c.commission || 0}</td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('courses', '${c.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('courses', '${c.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderNotices = () => renderGeneric('notices', 'notices-table-body', (n) => `<tr><td data-label="Title">${n.title}</td><td data-label="Description">${(n.description || '').substring(0, 40)}...</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('notices', '${n.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
@@ -1799,7 +2540,7 @@
             const renderVideoReviews = () => renderGeneric('video_reviews', 'video-reviews-table-body', (v) => `<tr><td data-label="Title">${v.title}</td><td data-label="Subtitle">${v.subtitle}</td><td data-label="Link"><a href="${v.youtubeLink}" target="_blank">Watch</a></td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('video_reviews', '${v.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderWithdrawals = () => renderGeneric('withdrawals', 'withdrawals-table-body', (w) => `<tr><td data-label="Email">${w.userEmail}</td><td data-label="Amount">৳ ${w.amount}</td><td data-label="Method">${w.method}</td><td data-label="Account">${w.accountNumber}</td><td data-label="Date">${w.requestDate ? new Date(w.requestDate.seconds * 1000).toLocaleDateString() : 'N/A'}</td><td data-label="Status">${w.status}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('withdrawals', '${w.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderUserNotifications = () => renderGeneric('notifications', 'user-notifications-table-body', (notif) => `<tr><td data-label="Date">${notif.timestamp ? new Date(notif.timestamp.seconds * 1000).toLocaleDateString() : 'N/A'}</td><td data-label="Target">${notif.targetUid || 'All'}</td><td data-label="Title">${notif.title}</td><td data-label="Message">${notif.message}</td><td data-label="Type">${notif.type || 'general'}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('notifications', '${notif.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
-            const renderCertificates = () => renderGeneric('certificates', 'certificates-table-body', (cert) => `<tr><td data-label="Cert ID">${cert.certificate_id}</td><td data-label="Email">${cert.user_email}</td><td data-label="Course">${cert.course_name}</td><td data-label="Date">${cert.issue_date ? new Date(cert.issue_date.seconds * 1000).toLocaleDateString() : 'N/A'}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('certificates', '${cert.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            const renderCertificates = () => renderGeneric('certificates', 'certificates-table-body', (cert) => `<tr><td data-label="Cert ID">${cert.certificate_id}</td><td data-label="Email">${cert.user_email || cert.user_id}</td><td data-label="Course">${cert.course_name}</td><td data-label="Date">${cert.issue_date ? new Date(cert.issue_date.seconds * 1000).toLocaleDateString() : 'N/A'}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('certificates', '${cert.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderServiceStock = () => renderGeneric('service_stock', 'service-stock-table-body', (stockItem) => `<tr><td data-label="Service Name">${stockItem.serviceName}</td><td data-label="Quantity">${stockItem.quantity}</td><td data-label="Topup ID" style="white-space: pre-wrap; word-break: break-all;">${stockItem.topupId}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('service_stock', '${stockItem.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
 
             // MODAL FORMS GENERATOR
@@ -1825,7 +2566,6 @@
             };
 
             async function getFormFields(type, data = {}) {
-                // Fetch courses and services for dropdowns
                 let courseOptions = '<option value="" disabled selected>Select Course</option>';
                 let itemOptions = '<option value="All">All Items (Global Coupon)</option>';
                 try {
@@ -2031,11 +2771,11 @@
                 const container = document.getElementById('curriculum-builder-container');
                 if (!container) return;
                 container.innerHTML = '';
-                modules.forEach((mod, mIndex) => {
+                modules.forEach((mod) => {
                     const modCard = document.createElement('div');
                     modCard.className = 'module-card';
                     let lessonsHTML = '';
-                    (mod.lessons || []).forEach((les, lIndex) => {
+                    (mod.lessons || []).forEach((les) => {
                         lessonsHTML += `
                             <div class="lesson-row">
                                 <input type="text" placeholder="Lesson Title" value="${les.title || ''}" class="les-title">
