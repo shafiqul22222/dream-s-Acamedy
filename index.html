@@ -2722,6 +2722,7 @@
                         <div class="dashboard-page hidden" id="support-page">
                             <div class="content-card"><div class="content-header"><h2>Support Center</h2></div>
                                 <div class="dx-panel" style="margin-bottom:20px;">
+                                    <select id="dx-sup-course" style="width:100%;margin-bottom:10px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--navy-border);background:var(--navy-dark);color:#fff;font:inherit;"><option value="">General question</option></select>
                                     <input type="text" id="dx-sup-subject" placeholder="Subject" maxlength="120" style="width:100%;margin-bottom:10px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--navy-border);background:var(--navy-dark);color:#fff;font:inherit;">
                                     <textarea id="dx-sup-msg" rows="4" placeholder="Describe your problem or question..." maxlength="1500" style="width:100%;margin-bottom:10px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--navy-border);background:var(--navy-dark);color:#fff;font:inherit;"></textarea>
                                     <button class="btn btn-gradient" id="dx-sup-send">Send Request</button>
@@ -4052,7 +4053,7 @@
                 const el = document.getElementById('dx-sid');
                 try {
                     const ref = db.collection('users').doc(u.uid), cref = db.collection('counters').doc('studentId');
-                    let id = (await ref.get()).data(); id = id && id.studentId;
+                    const ud = (await ref.get()).data() || {}; let id = ud.studentId;
                     if (!id) id = await db.runTransaction(async tx => {
                         const cur = await tx.get(ref); if (!cur.exists) return null;
                         if (cur.data().studentId) return cur.data().studentId;
@@ -4060,6 +4061,7 @@
                         tx.set(cref, { next: n + 1 }); tx.update(ref, { studentId: n }); return n;
                     });
                     if (el) el.textContent = 'Student ID: ' + (id || '-');
+                    if (id) { const es = await db.collection('enrollments').where('studentUid', '==', u.uid).get(); es.forEach(d => { if (!d.data().studentName || !d.data().studentId) d.ref.update({ studentName: ud.name || '', studentId: id }).catch(() => {}); }); }
                 } catch (e) { console.error('Student ID error', e); }
                 window.__dxIdBusy = false;
             };
@@ -4167,6 +4169,7 @@
                 } catch (e) { box.innerHTML = '<p class="dx-empty">Could not load materials.</p>'; }
             };
             window.dxSupport = async function() {
+                const sel = document.getElementById('dx-sup-course'); if (sel && sel.options.length === 1) window.dxData.forEach(c => sel.add(new Option(c.name, c.name)));
                 const box = document.getElementById('dx-sup-list'), u = auth.currentUser; if (!u) return;
                 try {
                     const sn = await db.collection('supportTickets').where('uid','==',u.uid).get();
@@ -4179,7 +4182,7 @@
                 if (!u || !sub.value.trim() || !msg.value.trim()) return showToast('Please fill in subject and message.', 'error');
                 this.disabled = true;
                 try {
-                    await db.collection('supportTickets').add({ uid: u.uid, name: (document.querySelector('.dx-name') || {}).textContent || '', email: u.email || '', subject: sub.value.trim(), message: msg.value.trim(), status: 'open', reply: '', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                    await db.collection('supportTickets').add({ uid: u.uid, name: (document.querySelector('.dx-name') || {}).textContent || '', email: u.email || '', courseName: (document.getElementById('dx-sup-course') || {}).value || '', subject: sub.value.trim(), message: msg.value.trim(), status: 'open', reply: '', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
                     sub.value = ''; msg.value = ''; showToast('Request sent. We will reply soon.', 'success'); window.dxSupport();
                 } catch (e) { showToast('Could not send. Try again.', 'error'); }
                 this.disabled = false;
