@@ -695,6 +695,7 @@
             </div>
             <ul class="sidebar-nav">
                 <li data-page="my-students-page" style="display:none;"><a href="#"><span class="material-symbols-outlined">groups</span> My Students</a></li>
+                <li data-page="my-earning-page" style="display:none;"><a href="#"><span class="material-symbols-outlined">savings</span> My Earning</a></li>
                 <li class="active" data-page="dashboard-page"><a href="#"><span class="material-symbols-outlined">dashboard</span> Dashboard</a></li>
                 <li data-page="subscriptions-page"><a href="#"><span class="material-symbols-outlined">timer</span> Subscriptions / IP</a></li>
                 <li data-page="reports-page"><a href="#"><span class="material-symbols-outlined">analytics</span> Reports</a></li>
@@ -730,9 +731,10 @@
                 <li data-page="support-page"><a href="#"><span class="material-symbols-outlined">support_agent</span> Support Tickets</a></li>
                 <li data-page="online-classes-page"><a href="#"><span class="material-symbols-outlined">video_camera_front</span> Online Classes</a></li>
                 <li data-page="withdrawals-page"><a href="#"><span class="material-symbols-outlined">paid</span> Withdrawals</a></li>
+                <li data-page="staff-withdrawals-page"><a href="#"><span class="material-symbols-outlined">request_quote</span> Employee Withdraw</a></li>
                 <li data-page="settings-page"><a href="#"><span class="material-symbols-outlined">settings</span> Settings</a></li>
             </ul>
-            <div class="sidebar-profile"><span class="avatar" data-avatar>A</span><span class="profile-text"><strong data-admin-name>Arafat Islam Shafikul</strong><small>Admin</small></span></div>
+            <div class="sidebar-profile"><span class="avatar" data-avatar>A</span><span class="profile-text"><strong data-admin-name>Arafat Islam Shafikul</strong><small data-role-label>Admin</small></span></div>
             <button class="logout-btn" id="logout-btn"><span class="material-symbols-outlined">logout</span> Log Out</button>
         </aside>
 
@@ -760,7 +762,7 @@
                     <div class="profile-menu">
                         <button type="button" class="profile-btn" id="tb-profile" aria-haspopup="true">
                             <span class="avatar" data-avatar>A</span>
-                            <span class="profile-text"><strong data-admin-name>Arafat Islam Shafikul</strong><small>Admin</small></span>
+                            <span class="profile-text"><strong data-admin-name>Arafat Islam Shafikul</strong><small data-role-label>Admin</small></span>
                             <span class="material-symbols-outlined">expand_more</span>
                         </button>
                         <div id="profile-dropdown" class="hidden">
@@ -1358,11 +1360,32 @@
             </div>
             <div id="my-students-page" class="page">
                 <div class="page-header"><h1>My Students</h1></div>
+                <div id="batch-chips" style="margin-bottom:14px;"></div>
                 <div class="content-box"><table class="data-table"><thead><tr><th>Student ID</th><th>Name</th><th>Course</th><th>Batch</th><th>Progress</th></tr></thead><tbody id="my-students-body"></tbody></table></div>
             </div>
             <div id="staff-page" class="page">
                 <div class="page-header"><h1>Instructors</h1><button class="btn btn-add" onclick="openModalForAdd('staff')"><span class="material-symbols-outlined">add</span> New Instructor</button></div>
                 <div class="content-box"><table class="data-table"><thead><tr><th>Name</th><th>Email</th><th>Courses</th><th>Status</th><th>Action</th></tr></thead><tbody id="staff-table-body"></tbody></table></div>
+            </div>
+            <div id="my-earning-page" class="page">
+                <div class="page-header"><h1>My Earning</h1></div>
+                <div id="earning-summary" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:20px;"></div>
+                <div class="content-box" style="margin-bottom:20px;"><table class="data-table"><thead><tr><th>Course</th><th>Batch</th><th>Students</th><th>Rate / Student</th><th>Earned</th></tr></thead><tbody id="earning-lines"></tbody></table></div>
+                <div class="content-box" style="margin-bottom:20px;padding:20px;">
+                    <h3 style="margin-bottom:12px;">Withdraw Earnings</h3>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;">
+                        <div class="form-group"><label>Amount (BDT)</label><input type="number" id="wd-amount" min="1"></div>
+                        <div class="form-group"><label>Method</label><select id="wd-method"><option>bKash</option><option>Nagad</option></select></div>
+                        <div class="form-group"><label>Account Number</label><input type="text" id="wd-number" placeholder="01XXXXXXXXX"></div>
+                    </div>
+                    <button class="btn btn-add" onclick="dxWithdraw()"><span class="material-symbols-outlined">payments</span> Request Withdraw</button>
+                </div>
+                <div class="page-header"><h1>Withdraw History</h1></div>
+                <div class="content-box"><table class="data-table"><thead><tr><th>Date</th><th>Amount</th><th>Method</th><th>Account</th><th>Status</th><th>Note / TrxID</th></tr></thead><tbody id="earning-history"></tbody></table></div>
+            </div>
+            <div id="staff-withdrawals-page" class="page">
+                <div class="page-header"><h1>Employee Withdraw</h1></div>
+                <div class="content-box"><table class="data-table"><thead><tr><th>Instructor</th><th>Amount</th><th>Method</th><th>Account</th><th>Date</th><th>Status</th><th>Action</th></tr></thead><tbody id="staff-withdrawals-body"></tbody></table></div>
             </div>
             <div id="withdrawals-page" class="page">
                 <div class="page-header"><h1>Withdrawal Requests</h1></div>
@@ -1640,7 +1663,10 @@
                         try {
                             const sd = await db.collection('staff').doc(em).get();
                             if (!sd.exists || sd.data().active === false || sd.data().role !== 'instructor') throw new Error('no access');
-                            window.ROLE = 'instructor'; window.MY_COURSES = sd.data().courses || [];
+                            window.ROLE = 'instructor'; const sdd = sd.data(); window.MY_COURSES = sdd.courses || []; window.MY_TEACH = sdd.teach || []; window.MY_RATES = sdd.rates || {}; window.MY_NAME = sdd.name || 'Instructor'; window.MY_EMAIL = em;
+                            document.querySelectorAll('[data-admin-name]').forEach(x => x.textContent = window.MY_NAME);
+                            document.querySelectorAll('[data-role-label]').forEach(x => x.textContent = 'Instructor');
+                            document.querySelectorAll('[data-avatar]').forEach(x => { if (!x.classList.contains('has-photo')) x.textContent = window.MY_NAME.charAt(0).toUpperCase(); });
                             document.querySelectorAll('.sidebar-nav li').forEach(li => { if (!window.INSTR_ALLOW.includes(li.getAttribute('data-page'))) li.remove(); else li.style.display = ''; });
                             const gs = document.querySelector('.global-search'); if (gs) gs.style.display = 'none';
                             loginPage.classList.add('hidden'); adminPanel.classList.remove('hidden'); navigateTo('my-students-page');
@@ -1721,6 +1747,8 @@
                     case 'settings-page': renderSettings(); break;
                     case 'my-students-page': renderMyStudents(); break;
                     case 'staff-page': renderStaff(); break;
+                    case 'my-earning-page': renderMyEarning(); break;
+                    case 'staff-withdrawals-page': renderStaffWithdrawals(); break;
                     case 'assignments-page': renderAssignments(); break;
                     case 'materials-page': renderMaterials(); break;
                     case 'support-page': renderSupport(); break;
@@ -2975,36 +3003,88 @@
             };
 
             // ===== Instructor role =====
-            window.INSTR_ALLOW = ['my-students-page', 'curriculum-page', 'join-class-page', 'assignments-page', 'materials-page', 'support-page', 'user-notifications-page', 'certificates-page'];
+            window.INSTR_ALLOW = ['my-students-page', 'my-earning-page', 'curriculum-page', 'join-class-page', 'assignments-page', 'materials-page', 'support-page', 'user-notifications-page', 'certificates-page'];
             const DX_SCOPE = { curriculum: 'courseName', joinClass: 'courseName', assignments: 'courseName', assignmentSubmissions: 'courseName', materials: 'courseName', supportTickets: 'courseName', certificates: 'course_name', enrollments: 'courseName' };
+            const DX_PAIR = new Set(['curriculum', 'joinClass', 'assignments', 'assignmentSubmissions', 'materials', 'enrollments']);
             async function dxFetch(col) {
                 if (window.ROLE !== 'instructor') return db.collection(col).get();
-                if (!DX_SCOPE[col]) throw new Error('Only the admin can view this list.');
                 const docs = [];
-                for (const c of window.MY_COURSES) (await db.collection(col).where(DX_SCOPE[col], '==', c).get()).forEach(d => docs.push(d));
+                if (DX_PAIR.has(col)) {
+                    for (const p of window.MY_TEACH) { const [c, b] = p.split('||'); (await db.collection(col).where('courseName', '==', c).where('batch', '==', b).get()).forEach(d => docs.push(d)); }
+                } else if (DX_SCOPE[col]) {
+                    for (const c of window.MY_COURSES) (await db.collection(col).where(DX_SCOPE[col], '==', c).get()).forEach(d => docs.push(d));
+                } else throw new Error('Only the admin can view this list.');
                 return { empty: !docs.length, docs, size: docs.length, forEach: fn => docs.forEach(fn) };
             }
-            const renderStaff = () => renderGeneric('staff', 'staff-table-body', s => `<tr><td data-label="Name"><strong>${dxe(s.name)}</strong></td><td data-label="Email">${dxe(s.email)}</td><td data-label="Courses">${dxe((s.courses || []).join(', '))}</td><td data-label="Status"><span class="status-badge ${s.active !== false ? 'approved' : 'rejected'}">${s.active !== false ? 'Active' : 'Disabled'}</span></td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('staff', '${dxe(s.id)}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('staff', '${dxe(s.id)}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
-            async function renderMyStudents() {
-                const tb = document.getElementById('my-students-body');
+            const renderStaff = () => renderGeneric('staff', 'staff-table-body', s => `<tr><td data-label="Name"><strong>${dxe(s.name)}</strong></td><td data-label="Email">${dxe(s.email)}</td><td data-label="Courses">${dxe((s.teach || []).map(t => t.replace('||', ' / Batch ')).join(', '))}</td><td data-label="Status"><span class="status-badge ${s.active !== false ? 'approved' : 'rejected'}">${s.active !== false ? 'Active' : 'Disabled'}</span></td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('staff', '${dxe(s.id)}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('staff', '${dxe(s.id)}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            
+
+            window.dxInstructorForm = () => {
+                if (window.ROLE !== 'instructor') return;
+                const cs = modalForm.querySelector('select[name="courseName"]'); if (!cs) return;
+                const bi = modalForm.querySelector('[name="batch"]'), cur = cs.value + '||' + (bi ? bi.value : '');
+                const sel = document.createElement('select'); sel.name = 'teachPair'; sel.required = true;
+                sel.innerHTML = '<option value="" disabled>Select course &amp; batch</option>' + window.MY_TEACH.map(p => { const [c, b] = p.split('||'); return `<option value="${dxe(p)}" ${p === cur ? 'selected' : ''}>${dxe(c)} — Batch ${dxe(b)}</option>`; }).join('');
+                if (!window.MY_TEACH.includes(cur)) sel.selectedIndex = 0;
+                cs.replaceWith(sel); if (bi) { const g = bi.closest('.form-group'); if (g) g.remove(); }
+            };
+            async function renderMyStudents(selected) {
+                const chips = document.getElementById('batch-chips'), tb = document.getElementById('my-students-body'), pairs = window.MY_TEACH || [];
+                if (!pairs.length) { chips.innerHTML = ''; tb.innerHTML = '<tr><td colspan="5" style="text-align:center;">No batch assigned yet.</td></tr>'; return; }
+                const sel = pairs.includes(selected) ? selected : (pairs.includes(window.dxSelPair) ? window.dxSelPair : pairs[0]); window.dxSelPair = sel;
+                chips.innerHTML = pairs.map(p => { const [c, b] = p.split('||'); return `<button type="button" data-p="${dxe(p)}" class="btn ${p === sel ? 'btn-primary' : 'btn-cancel'}" style="margin:0 8px 8px 0;">${dxe(c)} — Batch ${dxe(b)}</button>`; }).join('');
+                chips.onclick = e => { const b = e.target.closest('button[data-p]'); if (b) renderMyStudents(b.dataset.p); };
                 tb.innerHTML = '<tr><td colspan="5" style="text-align:center;">Loading...</td></tr>';
                 try {
-                    const courses = window.ROLE === 'instructor' ? window.MY_COURSES : [], totals = {}; let rows = '';
-                    for (const c of courses) {
-                        const es = await db.collection('enrollments').where('courseName', '==', c).get();
-                        for (const d of es.docs) {
-                            const e = d.data(), k = c + '|' + e.batch;
-                            if (!(k in totals)) {
-                                const cu = await db.collection('curriculum').where('courseName', '==', c).where('batch', '==', e.batch).get();
-                                totals[k] = cu.empty ? 0 : (cu.docs[0].data().modules || []).reduce((a, m) => a + (m.videos || m.lessons || []).length, 0);
-                            }
-                            const done = (e.completed_lessons || []).length, pct = totals[k] ? Math.min(100, Math.round(done / totals[k] * 100)) : 0;
-                            rows += `<tr><td data-label="ID">${e.studentId || '-'}</td><td data-label="Name"><strong>${dxe(e.studentName) || 'Not synced yet'}</strong></td><td data-label="Course">${dxe(c)}</td><td data-label="Batch">${dxe(e.batch)}</td><td data-label="Progress"><div style="background:#e2e8f0;border-radius:99px;height:8px;min-width:90px;"><div style="width:${pct}%;height:8px;border-radius:99px;background:var(--primary-blue);"></div></div><small>${done}/${totals[k]} lessons (${pct}%)</small></td></tr>`;
-                        }
-                    }
-                    tb.innerHTML = rows || '<tr><td colspan="5" style="text-align:center;">No students yet.</td></tr>';
+                    const [c, b] = sel.split('||');
+                    const cu = await db.collection('curriculum').where('courseName', '==', c).where('batch', '==', b).get();
+                    const total = cu.empty ? 0 : (cu.docs[0].data().modules || []).reduce((a, m) => a + (m.videos || m.lessons || []).length, 0);
+                    const es = await db.collection('enrollments').where('courseName', '==', c).where('batch', '==', b).get();
+                    tb.innerHTML = es.empty ? '<tr><td colspan="5" style="text-align:center;">No students in this batch yet.</td></tr>' : es.docs.map(d => {
+                        const e = d.data(), done = (e.completed_lessons || []).length, pct = total ? Math.min(100, Math.round(done / total * 100)) : 0;
+                        return `<tr><td data-label="ID">${e.studentId || '-'}</td><td data-label="Name"><strong>${dxe(e.studentName) || 'Not synced yet'}</strong></td><td data-label="Course">${dxe(c)}</td><td data-label="Batch">${dxe(b)}</td><td data-label="Progress"><div style="background:#e2e8f0;border-radius:99px;height:8px;min-width:90px;"><div style="width:${pct}%;height:8px;border-radius:99px;background:var(--primary-blue);"></div></div><small>${done}/${total} lessons (${pct}%)</small></td></tr>`;
+                    }).join('');
                 } catch (e) { tb.innerHTML = `<tr><td colspan="5" style="color:red;text-align:center;">Error: ${e.message}</td></tr>`; }
             }
+            async function renderMyEarning() {
+                const sum = document.getElementById('earning-summary'), lines = document.getElementById('earning-lines'), hist = document.getElementById('earning-history');
+                try {
+                    let total = 0, rows = '';
+                    for (const p of window.MY_TEACH) {
+                        const [c, b] = p.split('||'), rate = Number(window.MY_RATES[c]) || 0;
+                        const n = (await db.collection('enrollments').where('courseName', '==', c).where('batch', '==', b).get()).size;
+                        total += n * rate; rows += `<tr><td data-label="Course">${dxe(c)}</td><td data-label="Batch">${dxe(b)}</td><td data-label="Students">${n}</td><td data-label="Rate">৳ ${rate}</td><td data-label="Earned"><strong>৳ ${n * rate}</strong></td></tr>`;
+                    }
+                    lines.innerHTML = rows || '<tr><td colspan="5" style="text-align:center;">No batch assigned yet.</td></tr>';
+                    const wd = (await db.collection('staffWithdrawals').where('staffEmail', '==', window.MY_EMAIL).get()).docs.map(d => d.data()).sort((a, b) => (b.requestDate ? b.requestDate.toMillis() : 0) - (a.requestDate ? a.requestDate.toMillis() : 0));
+                    const paid = wd.filter(w => w.status === 'paid').reduce((a, w) => a + w.amount, 0), pend = wd.filter(w => w.status === 'pending').reduce((a, w) => a + w.amount, 0);
+                    window.dxAvail = Math.max(0, total - paid - pend);
+                    const card = (t, v, c) => `<div style="background:#fff;border:1px solid var(--border-color);border-radius:14px;padding:16px;"><small style="color:#64748b;">${t}</small><div style="font-size:1.5rem;font-weight:800;color:${c};">৳ ${v}</div></div>`;
+                    sum.innerHTML = card('Total Earned', total, 'var(--primary-blue)') + card('Withdrawn', paid, '#16a34a') + card('Pending', pend, '#d97706') + card('Available', window.dxAvail, '#0f172a');
+                    hist.innerHTML = wd.length ? wd.map(w => `<tr><td data-label="Date">${w.requestDate ? w.requestDate.toDate().toLocaleDateString('en-GB') : ''}</td><td data-label="Amount">৳ ${w.amount}</td><td data-label="Method">${dxe(w.method)}</td><td data-label="Account">${dxe(w.accountNumber)}</td><td data-label="Status"><span class="status-badge ${w.status === 'paid' ? 'approved' : (w.status === 'rejected' ? 'rejected' : 'pending')}">${dxe(w.status)}</span></td><td data-label="Note">${dxe(w.trxId || w.adminNote || '')}</td></tr>`).join('') : '<tr><td colspan="6" style="text-align:center;">No withdraw requests yet.</td></tr>';
+                } catch (e) { sum.innerHTML = `<p style="color:red;">Error: ${e.message}</p>`; }
+            }
+            window.dxWithdraw = async () => {
+                const amount = Number(document.getElementById('wd-amount').value), method = document.getElementById('wd-method').value, num = document.getElementById('wd-number').value.trim();
+                if (!amount || amount < 1) return showToast('Enter a valid amount.', 'error');
+                if (amount > (window.dxAvail || 0)) return showToast('Amount is more than your available balance.', 'error');
+                if (!/^01[3-9]\d{8}$/.test(num)) return showToast('Enter a valid 11-digit bKash/Nagad number.', 'error');
+                try {
+                    await db.collection('staffWithdrawals').add({ staffEmail: window.MY_EMAIL, staffName: window.MY_NAME, amount, method, accountNumber: num, status: 'pending', requestDate: firebase.firestore.FieldValue.serverTimestamp() });
+                    showToast('Withdraw request sent.'); document.getElementById('wd-amount').value = ''; renderMyEarning();
+                } catch (e) { showToast('Failed: ' + e.message, 'error'); }
+            };
+            const renderStaffWithdrawals = () => renderGeneric('staffWithdrawals', 'staff-withdrawals-body', w => `<tr><td data-label="Instructor"><strong>${dxe(w.staffName)}</strong><br><small>${dxe(w.staffEmail)}</small></td><td data-label="Amount">৳ ${w.amount}</td><td data-label="Method">${dxe(w.method)}</td><td data-label="Account"><span style="cursor:pointer;text-decoration:underline;" onclick="copyToClipboard('${dxe(w.accountNumber)}')" title="Click to copy">${dxe(w.accountNumber)}</span></td><td data-label="Date">${w.requestDate ? w.requestDate.toDate().toLocaleDateString('en-GB') : ''}</td><td data-label="Status"><span class="status-badge ${w.status === 'paid' ? 'approved' : (w.status === 'rejected' ? 'rejected' : 'pending')}">${dxe(w.status)}</span></td><td class="actions-cell">${w.status === 'pending' ? `<button class="btn-edit" title="Mark as paid" onclick="dxPayStaff('${w.id}')"><span class="material-symbols-outlined">check_circle</span></button><button class="btn-delete" title="Reject" onclick="dxRejectStaff('${w.id}')"><span class="material-symbols-outlined">cancel</span></button>` : `<button class="btn-delete" onclick="deleteItem('staffWithdrawals', '${w.id}')"><span class="material-symbols-outlined">delete</span></button>`}</td></tr>`);
+            window.dxPayStaff = async id => {
+                const t = prompt('Payment sent? Enter bKash/Nagad Transaction ID (optional):'); if (t === null) return;
+                await db.collection('staffWithdrawals').doc(id).update({ status: 'paid', trxId: t.trim(), paidAt: firebase.firestore.FieldValue.serverTimestamp() });
+                showToast('Marked as paid.'); renderStaffWithdrawals();
+            };
+            window.dxRejectStaff = async id => {
+                const t = prompt('Reason for rejection:'); if (t === null) return;
+                await db.collection('staffWithdrawals').doc(id).update({ status: 'rejected', adminNote: t.trim() });
+                showToast('Request rejected.'); renderStaffWithdrawals();
+            };
 
             // MODAL FORMS GENERATOR
             window.openModalForAdd = async (collection) => {
@@ -3013,7 +3093,7 @@
                 modalForm.innerHTML = `<p style="text-align:center; padding: 20px;">Loading form...</p>`;
                 adminModal.classList.remove('hidden');
                 const fieldsHTML = await getFormFields(collection, {});
-                modalForm.innerHTML = fieldsHTML + getFormFooter(); 
+                modalForm.innerHTML = fieldsHTML + getFormFooter(); window.dxInstructorForm(); 
                 modalForm.onsubmit = (e) => { e.preventDefault(); saveItem(collection); };
             };
 
@@ -3024,7 +3104,7 @@
                 const doc = await db.collection(collection).doc(id).get(); 
                 if (!doc.exists) return;
                 const fieldsHTML = await getFormFields(collection, doc.data());
-                modalForm.innerHTML = fieldsHTML + getFormFooter(); 
+                modalForm.innerHTML = fieldsHTML + getFormFooter(); window.dxInstructorForm(); 
                 modalForm.onsubmit = (e) => { e.preventDefault(); saveItem(collection, id); };
             };
 
@@ -3074,13 +3154,18 @@
                         <div class="form-group"><label>Your Reply</label><textarea name="reply" rows="4" required>${dxe(data.reply)}</textarea></div>`;
                 }
                 if (type === 'staff') {
-                    let boxes = '';
-                    (await db.collection('courses').get()).forEach(d => { const n = d.data().name; boxes += `<label style="display:flex;gap:8px;align-items:center;margin:6px 0;"><input type="checkbox" name="staffCourse" value="${dxe(n)}" ${(data.courses || []).includes(n) ? 'checked' : ''}> ${dxe(n)}</label>`; });
+                    const found = {}; (await db.collection('enrollments').get()).forEach(d => { const e = d.data(); (found[e.courseName] = found[e.courseName] || new Set()).add(String(e.batch)); });
+                    let rows = '', i = 0;
+                    (await db.collection('courses').get()).forEach(d => {
+                        const n = d.data().name, mine = (data.teach || []).filter(t => t.startsWith(n + '||')).map(t => t.split('||')[1]).join(', ');
+                        rows += `<div style="border:1px solid var(--border-color);border-radius:12px;padding:12px;margin-bottom:10px;"><input type="hidden" name="sc_${i}" value="${dxe(n)}"><strong>${dxe(n)}</strong><small style="display:block;color:#64748b;">Existing batches: ${[...(found[n] || [])].join(', ') || 'none yet'}</small>
+                        <div style="display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-top:8px;"><div><label style="font-size:.8em;">Batches (comma separated)</label><input type="text" name="sb_${i}" value="${dxe(mine)}" placeholder="e.g., 1, 2"></div><div><label style="font-size:.8em;">Earning / student (৳)</label><input type="number" name="sr_${i}" value="${(data.rates || {})[n] || ''}" placeholder="0"></div></div></div>`; i++;
+                    });
                     return `
                         <div class="form-group"><label>Instructor Name</label><input type="text" name="name" value="${dxe(data.name)}" required></div>
                         <div class="form-group"><label>Login Email</label><input type="email" name="email" value="${dxe(data.email)}" ${data.email ? 'readonly' : ''} required></div>
                         ${data.email ? '' : '<div class="form-group"><label>Password (min 6 characters)</label><input type="text" name="password" required></div>'}
-                        <div class="form-group"><label>Assigned Courses</label>${boxes || '<p>No courses yet.</p>'}</div>
+                        <div class="form-group"><label>Assign Batches (leave blank = no access to that course)</label>${rows || '<p>No courses yet.</p>'}</div>
                         <div class="form-group" style="display:flex;justify-content:space-between;align-items:center;"><label style="margin-bottom:0;">Active</label><label class="switch"><input type="checkbox" name="active" ${data.active !== false ? 'checked' : ''}><span class="slider"></span></label></div>`;
                 }
                 if (type === 'coupons') {
@@ -3259,7 +3344,7 @@
 
                 if (type === 'notifications') {
                     return `
-                        ${window.ROLE === 'instructor' ? `<div class="form-group"><label>Send to students of</label><select name="targetCourse" required>${courseOptions}</select></div>` : `<div class="form-group"><label>Target User (Email or UID, blank for All)</label><input type="text" name="targetUid" value="${data.targetUid || ''}"></div>`}
+                        ${window.ROLE === 'instructor' ? `<div class="form-group"><label>Send to students of</label><select name="targetPair" required>${(window.MY_TEACH || []).map(p => { const [c, b] = p.split('||'); return `<option value="${dxe(p)}">${dxe(c)} — Batch ${dxe(b)}</option>`; }).join('')}</select></div>` : `<div class="form-group"><label>Target User (Email or UID, blank for All)</label><input type="text" name="targetUid" value="${data.targetUid || ''}"></div>`}
                         <div class="form-group"><label>Title</label><input type="text" name="title" value="${data.title || ''}" required></div>
                         <div class="form-group"><label>Message</label><textarea name="message" rows="4" required>${data.message || ''}</textarea></div>
                     `;
@@ -3336,7 +3421,8 @@
 
             // ITEM SAVER
             async function saveItem(collection, id = null) {
-                const formData = new FormData(modalForm); 
+                const formData = new FormData(modalForm);
+                if (window.ROLE === 'instructor' && formData.get('teachPair')) { const tpp = formData.get('teachPair').split('||'); formData.set('courseName', tpp[0]); formData.set('batch', tpp[1]); }
                 let newItem = {};
 
                 if (collection === 'coupons') {
@@ -3349,7 +3435,12 @@
                     };
                 } else if (collection === 'staff') {
                     const em = (formData.get('email') || '').trim().toLowerCase();
-                    const courses = [...modalForm.querySelectorAll('input[name="staffCourse"]:checked')].map(i => i.value);
+                    const teach = [], courses = [], rates = {};
+                    for (let i = 0; formData.get('sc_' + i) !== null; i++) {
+                        const cn = formData.get('sc_' + i), bs = (formData.get('sb_' + i) || '').split(/[,\s]+/).filter(Boolean);
+                        if (!bs.length) continue; courses.push(cn); rates[cn] = Number(formData.get('sr_' + i)) || 0; bs.forEach(b => teach.push(cn + '||' + b));
+                    }
+                    if (!teach.length) { showToast('Add at least one course batch.', 'error'); return; }
                     try {
                         if (!id) {
                             if ((formData.get('password') || '').length < 6) { showToast('Password must be at least 6 characters.', 'error'); return; }
@@ -3358,7 +3449,7 @@
                             catch (e) { if (e.code !== 'auth/email-already-in-use') throw e; }
                             await sec.auth().signOut(); await sec.delete();
                         }
-                        await db.collection('staff').doc(em).set({ name: formData.get('name'), email: em, role: 'instructor', courses, active: formData.get('active') === 'on', updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+                        await db.collection('staff').doc(em).set({ name: formData.get('name'), email: em, role: 'instructor', designation: 'Instructor', courses, teach, rates, active: formData.get('active') === 'on', updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
                         adminModal.classList.add('hidden'); showToast('Instructor saved.'); navigateTo('staff-page');
                     } catch (e) { showToast('Failed: ' + e.message, 'error'); }
                     return;
@@ -3512,9 +3603,10 @@
                     };
                 } else if (collection === 'notifications') {
                     if (window.ROLE === 'instructor') {
-                        const cn = formData.get('targetCourse');
-                        if (!cn || !window.MY_COURSES.includes(cn)) { showToast('Select one of your courses.', 'error'); return; }
-                        const es = await db.collection('enrollments').where('courseName', '==', cn).get();
+                        const tp = formData.get('targetPair') || '';
+                        if (!window.MY_TEACH.includes(tp)) { showToast('Select one of your batches.', 'error'); return; }
+                        const [cn, bn] = tp.split('||');
+                        const es = await db.collection('enrollments').where('courseName', '==', cn).where('batch', '==', bn).get();
                         const uids = [...new Set(es.docs.map(d => d.data().studentUid).filter(Boolean))];
                         let ib = db.batch(), k = 0;
                         for (const u of uids) { ib.set(db.collection('notifications').doc(), { title: formData.get('title'), message: formData.get('message'), type: 'general', targetUid: u, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); if (++k % 400 === 0) { await ib.commit(); ib = db.batch(); } }
@@ -3628,7 +3720,7 @@
             const l = $('today-label'); if (l) l.textContent = `${g('weekday')}, ${g('day')} ${g('month')} ${g('year')}`;
         }
         function setIdentity(user) {
-            const name = (user && user.displayName) || 'Arafat Islam Shafikul';
+            const name = (window.ROLE === 'instructor' && window.MY_NAME) || (user && user.displayName) || 'Arafat Islam Shafikul';
             document.querySelectorAll('[data-admin-name]').forEach(e => e.textContent = name);
             document.querySelectorAll('[data-avatar]').forEach(e => {
                 if (user && user.photoURL) { e.style.backgroundImage = `url("${user.photoURL}")`; e.textContent = ''; e.classList.add('has-photo'); }
