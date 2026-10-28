@@ -3363,7 +3363,7 @@
                 document.querySelectorAll('.sidebar-avatar-img').forEach(img => img.src = photo);
                 document.querySelector('.sidebar-user h4').textContent = `Hi, ${name.split(' ')[0]}`;
                 document.querySelectorAll('.dx-name').forEach(e => e.textContent = name);
-                const dxSid = document.getElementById('dx-sid'); if (dxSid && auth.currentUser) dxSid.textContent = 'Student ID: DA-' + auth.currentUser.uid.slice(0, 6).toUpperCase();
+                const dxSid = document.getElementById('dx-sid'); if (dxSid) dxSid.textContent = 'Student ID: -'; if (auth.currentUser && window.dxEnsureId) window.dxEnsureId(auth.currentUser);
                 document.querySelector('.profile-dropdown-header img').src = photo;
                 document.querySelector('.profile-dropdown-header h4').textContent = name;
                 document.querySelector('.profile-dropdown-header p').textContent = userData.email;
@@ -4045,6 +4045,24 @@
             }
 
 
+
+            // ===== Sequential Student ID (starts at 1001) =====
+            window.dxEnsureId = async function(u) {
+                if (window.__dxIdBusy) return; window.__dxIdBusy = true;
+                const el = document.getElementById('dx-sid');
+                try {
+                    const ref = db.collection('users').doc(u.uid), cref = db.collection('counters').doc('studentId');
+                    let id = (await ref.get()).data(); id = id && id.studentId;
+                    if (!id) id = await db.runTransaction(async tx => {
+                        const cur = await tx.get(ref); if (!cur.exists) return null;
+                        if (cur.data().studentId) return cur.data().studentId;
+                        const c = await tx.get(cref), n = c.exists ? c.data().next : 1001;
+                        tx.set(cref, { next: n + 1 }); tx.update(ref, { studentId: n }); return n;
+                    });
+                    if (el) el.textContent = 'Student ID: ' + (id || '-');
+                } catch (e) { console.error('Student ID error', e); }
+                window.__dxIdBusy = false;
+            };
             // ===== Dashboard v2 helpers =====
             const dxEsc = s => String(s == null ? '' : s).replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
             window.dxData = [];
