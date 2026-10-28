@@ -694,6 +694,7 @@
                 <span class="brand-text"><strong>Dream's Academy</strong><small>Admin Panel</small></span>
             </div>
             <ul class="sidebar-nav">
+                <li data-page="my-students-page" style="display:none;"><a href="#"><span class="material-symbols-outlined">groups</span> My Students</a></li>
                 <li class="active" data-page="dashboard-page"><a href="#"><span class="material-symbols-outlined">dashboard</span> Dashboard</a></li>
                 <li data-page="subscriptions-page"><a href="#"><span class="material-symbols-outlined">timer</span> Subscriptions / IP</a></li>
                 <li data-page="reports-page"><a href="#"><span class="material-symbols-outlined">analytics</span> Reports</a></li>
@@ -706,6 +707,7 @@
                 <li data-page="dollar-exchange-page"><a href="#"><span class="material-symbols-outlined">currency_exchange</span> Dollar Exchange</a></li>
                 <li data-page="users-page"><a href="#"><span class="material-symbols-outlined">group</span> Student List</a></li>
                 
+                <li data-page="staff-page"><a href="#"><span class="material-symbols-outlined">co_present</span> Instructors</a></li>
                 <li data-page="user-notifications-page"><a href="#"><span class="material-symbols-outlined">notifications_active</span> Push Notifications</a></li>
                 <li data-page="certificates-page"><a href="#"><span class="material-symbols-outlined">workspace_premium</span> Certificates</a></li>
 
@@ -1354,6 +1356,14 @@
                 <div class="page-header"><h1>Support Tickets</h1></div>
                 <div class="content-box"><table class="data-table"><thead><tr><th>Student</th><th>Subject</th><th>Message</th><th>Date</th><th>Status</th><th>Action</th></tr></thead><tbody id="support-table-body"></tbody></table></div>
             </div>
+            <div id="my-students-page" class="page">
+                <div class="page-header"><h1>My Students</h1></div>
+                <div class="content-box"><table class="data-table"><thead><tr><th>Student ID</th><th>Name</th><th>Course</th><th>Batch</th><th>Progress</th></tr></thead><tbody id="my-students-body"></tbody></table></div>
+            </div>
+            <div id="staff-page" class="page">
+                <div class="page-header"><h1>Instructors</h1><button class="btn btn-add" onclick="openModalForAdd('staff')"><span class="material-symbols-outlined">add</span> New Instructor</button></div>
+                <div class="content-box"><table class="data-table"><thead><tr><th>Name</th><th>Email</th><th>Courses</th><th>Status</th><th>Action</th></tr></thead><tbody id="staff-table-body"></tbody></table></div>
+            </div>
             <div id="withdrawals-page" class="page">
                 <div class="page-header"><h1>Withdrawal Requests</h1></div>
                 <div class="content-box">
@@ -1620,12 +1630,21 @@
 
             window.showToast = showToast;
 
-            auth.onAuthStateChanged(user => {
+            auth.onAuthStateChanged(async user => {
                 if (user) {
-                    if (user.email && user.email.toLowerCase() === ADMIN_EMAIL) {
+                    const em = (user.email || '').toLowerCase();
+                    if (em === ADMIN_EMAIL) {
+                        window.ROLE = 'admin';
                         loginPage.classList.add('hidden'); adminPanel.classList.remove('hidden'); navigateTo('dashboard-page');
                     } else {
-                        auth.signOut().then(() => { showToast('Sorry, only the admin can log in here!', 'error'); });
+                        try {
+                            const sd = await db.collection('staff').doc(em).get();
+                            if (!sd.exists || sd.data().active === false || sd.data().role !== 'instructor') throw new Error('no access');
+                            window.ROLE = 'instructor'; window.MY_COURSES = sd.data().courses || [];
+                            document.querySelectorAll('.sidebar-nav li').forEach(li => { if (!window.INSTR_ALLOW.includes(li.getAttribute('data-page'))) li.remove(); else li.style.display = ''; });
+                            const gs = document.querySelector('.global-search'); if (gs) gs.style.display = 'none';
+                            loginPage.classList.add('hidden'); adminPanel.classList.remove('hidden'); navigateTo('my-students-page');
+                        } catch (e) { auth.signOut().then(() => { showToast('Sorry, you do not have panel access!', 'error'); }); }
                     }
                 } else {
                     loginPage.classList.remove('hidden'); adminPanel.classList.add('hidden');
@@ -1636,7 +1655,7 @@
                 e.preventDefault();
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
-                if (email.toLowerCase() !== ADMIN_EMAIL) { showToast('Sorry, only the admin can log in here!', 'error'); return; }
+                
                 auth.signInWithEmailAndPassword(email, password).catch(error => { showToast('Invalid email or password!', 'error'); });
             });
 
@@ -1655,6 +1674,7 @@
             };
 
             function navigateTo(pageId, options = {}) {
+                if (window.ROLE === 'instructor' && !window.INSTR_ALLOW.includes(pageId)) pageId = 'my-students-page';
                 pages.forEach(p => p.classList.remove('active'));
                 const targetPage = document.getElementById(pageId);
                 if (targetPage) targetPage.classList.add('active');
@@ -1699,6 +1719,8 @@
                     case 'online-classes-page': renderOnlineClasses(); break;
                     case 'withdrawals-page': renderWithdrawals(); break;
                     case 'settings-page': renderSettings(); break;
+                    case 'my-students-page': renderMyStudents(); break;
+                    case 'staff-page': renderStaff(); break;
                     case 'assignments-page': renderAssignments(); break;
                     case 'materials-page': renderMaterials(); break;
                     case 'support-page': renderSupport(); break;
@@ -2901,7 +2923,7 @@
                 const tableBody = document.getElementById(tableBodyId); 
                 tableBody.innerHTML = `<tr><td colspan="10" style="text-align: center;">Loading data...</td></tr>`;
                 try {
-                    const snapshot = await db.collection(collection).get();
+                    const snapshot = await dxFetch(collection);
                     if (snapshot.empty) { tableBody.innerHTML = `<tr><td colspan="10" style="text-align: center;">No data found.</td></tr>`; return; }
                     let tableHTML = ''; 
                     snapshot.forEach(doc => tableHTML += rowRenderer({ id: doc.id, ...doc.data() })); 
@@ -2952,6 +2974,38 @@
                 } catch (e) { showToast('Failed: ' + e.message, 'error'); }
             };
 
+            // ===== Instructor role =====
+            window.INSTR_ALLOW = ['my-students-page', 'curriculum-page', 'join-class-page', 'assignments-page', 'materials-page', 'support-page', 'user-notifications-page', 'certificates-page'];
+            const DX_SCOPE = { curriculum: 'courseName', joinClass: 'courseName', assignments: 'courseName', assignmentSubmissions: 'courseName', materials: 'courseName', supportTickets: 'courseName', certificates: 'course_name', enrollments: 'courseName' };
+            async function dxFetch(col) {
+                if (window.ROLE !== 'instructor') return db.collection(col).get();
+                if (!DX_SCOPE[col]) throw new Error('Only the admin can view this list.');
+                const docs = [];
+                for (const c of window.MY_COURSES) (await db.collection(col).where(DX_SCOPE[col], '==', c).get()).forEach(d => docs.push(d));
+                return { empty: !docs.length, docs, size: docs.length, forEach: fn => docs.forEach(fn) };
+            }
+            const renderStaff = () => renderGeneric('staff', 'staff-table-body', s => `<tr><td data-label="Name"><strong>${dxe(s.name)}</strong></td><td data-label="Email">${dxe(s.email)}</td><td data-label="Courses">${dxe((s.courses || []).join(', '))}</td><td data-label="Status"><span class="status-badge ${s.active !== false ? 'approved' : 'rejected'}">${s.active !== false ? 'Active' : 'Disabled'}</span></td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('staff', '${dxe(s.id)}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('staff', '${dxe(s.id)}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            async function renderMyStudents() {
+                const tb = document.getElementById('my-students-body');
+                tb.innerHTML = '<tr><td colspan="5" style="text-align:center;">Loading...</td></tr>';
+                try {
+                    const courses = window.ROLE === 'instructor' ? window.MY_COURSES : [], totals = {}; let rows = '';
+                    for (const c of courses) {
+                        const es = await db.collection('enrollments').where('courseName', '==', c).get();
+                        for (const d of es.docs) {
+                            const e = d.data(), k = c + '|' + e.batch;
+                            if (!(k in totals)) {
+                                const cu = await db.collection('curriculum').where('courseName', '==', c).where('batch', '==', e.batch).get();
+                                totals[k] = cu.empty ? 0 : (cu.docs[0].data().modules || []).reduce((a, m) => a + (m.videos || m.lessons || []).length, 0);
+                            }
+                            const done = (e.completed_lessons || []).length, pct = totals[k] ? Math.min(100, Math.round(done / totals[k] * 100)) : 0;
+                            rows += `<tr><td data-label="ID">${e.studentId || '-'}</td><td data-label="Name"><strong>${dxe(e.studentName) || 'Not synced yet'}</strong></td><td data-label="Course">${dxe(c)}</td><td data-label="Batch">${dxe(e.batch)}</td><td data-label="Progress"><div style="background:#e2e8f0;border-radius:99px;height:8px;min-width:90px;"><div style="width:${pct}%;height:8px;border-radius:99px;background:var(--primary-blue);"></div></div><small>${done}/${totals[k]} lessons (${pct}%)</small></td></tr>`;
+                        }
+                    }
+                    tb.innerHTML = rows || '<tr><td colspan="5" style="text-align:center;">No students yet.</td></tr>';
+                } catch (e) { tb.innerHTML = `<tr><td colspan="5" style="color:red;text-align:center;">Error: ${e.message}</td></tr>`; }
+            }
+
             // MODAL FORMS GENERATOR
             window.openModalForAdd = async (collection) => {
                 modalForm.reset(); 
@@ -2979,8 +3033,7 @@
                 let itemOptions = '<option value="All">All Items (Global Coupon)</option>';
                 try {
                     const coursesSnap = await db.collection('courses').get();
-                    coursesSnap.forEach(d => {
-                        const name = d.data().name;
+                    coursesSnap.forEach(d => { const name = d.data().name; if (window.ROLE === 'instructor' && !window.MY_COURSES.includes(name)) return;
                         courseOptions += `<option value="${name}" ${data.courseName === name ? 'selected' : ''}>${name}</option>`;
                         itemOptions += `<option value="${name}" ${data.applicableItem === name ? 'selected' : ''}>[Course] ${name}</option>`;
                     });
@@ -3019,6 +3072,16 @@
                         <div class="form-group"><label>${dxe(data.name)} (${dxe(data.email)})</label><input type="text" value="${dxe(data.subject)}" disabled></div>
                         <div class="form-group"><textarea rows="3" disabled>${dxe(data.message)}</textarea></div>
                         <div class="form-group"><label>Your Reply</label><textarea name="reply" rows="4" required>${dxe(data.reply)}</textarea></div>`;
+                }
+                if (type === 'staff') {
+                    let boxes = '';
+                    (await db.collection('courses').get()).forEach(d => { const n = d.data().name; boxes += `<label style="display:flex;gap:8px;align-items:center;margin:6px 0;"><input type="checkbox" name="staffCourse" value="${dxe(n)}" ${(data.courses || []).includes(n) ? 'checked' : ''}> ${dxe(n)}</label>`; });
+                    return `
+                        <div class="form-group"><label>Instructor Name</label><input type="text" name="name" value="${dxe(data.name)}" required></div>
+                        <div class="form-group"><label>Login Email</label><input type="email" name="email" value="${dxe(data.email)}" ${data.email ? 'readonly' : ''} required></div>
+                        ${data.email ? '' : '<div class="form-group"><label>Password (min 6 characters)</label><input type="text" name="password" required></div>'}
+                        <div class="form-group"><label>Assigned Courses</label>${boxes || '<p>No courses yet.</p>'}</div>
+                        <div class="form-group" style="display:flex;justify-content:space-between;align-items:center;"><label style="margin-bottom:0;">Active</label><label class="switch"><input type="checkbox" name="active" ${data.active !== false ? 'checked' : ''}><span class="slider"></span></label></div>`;
                 }
                 if (type === 'coupons') {
                     return `
@@ -3196,7 +3259,7 @@
 
                 if (type === 'notifications') {
                     return `
-                        <div class="form-group"><label>Target User (Email or UID, blank for All)</label><input type="text" name="targetUid" value="${data.targetUid || ''}"></div>
+                        ${window.ROLE === 'instructor' ? `<div class="form-group"><label>Send to students of</label><select name="targetCourse" required>${courseOptions}</select></div>` : `<div class="form-group"><label>Target User (Email or UID, blank for All)</label><input type="text" name="targetUid" value="${data.targetUid || ''}"></div>`}
                         <div class="form-group"><label>Title</label><input type="text" name="title" value="${data.title || ''}" required></div>
                         <div class="form-group"><label>Message</label><textarea name="message" rows="4" required>${data.message || ''}</textarea></div>
                     `;
@@ -3284,6 +3347,21 @@
                         discountValue: Number(formData.get('discountValue')) || 0,
                         active: formData.get('active') === 'on'
                     };
+                } else if (collection === 'staff') {
+                    const em = (formData.get('email') || '').trim().toLowerCase();
+                    const courses = [...modalForm.querySelectorAll('input[name="staffCourse"]:checked')].map(i => i.value);
+                    try {
+                        if (!id) {
+                            if ((formData.get('password') || '').length < 6) { showToast('Password must be at least 6 characters.', 'error'); return; }
+                            const sec = firebase.initializeApp(firebaseConfig, 'sec' + Date.now());
+                            try { await sec.auth().createUserWithEmailAndPassword(em, formData.get('password')); }
+                            catch (e) { if (e.code !== 'auth/email-already-in-use') throw e; }
+                            await sec.auth().signOut(); await sec.delete();
+                        }
+                        await db.collection('staff').doc(em).set({ name: formData.get('name'), email: em, role: 'instructor', courses, active: formData.get('active') === 'on', updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+                        adminModal.classList.add('hidden'); showToast('Instructor saved.'); navigateTo('staff-page');
+                    } catch (e) { showToast('Failed: ' + e.message, 'error'); }
+                    return;
                 } else if (collection === 'assignments') {
                     const dd = formData.get('dueDate');
                     newItem = { courseName: formData.get('courseName'), batch: (formData.get('batch') || '').trim(), title: formData.get('title'), description: formData.get('description') || '', dueDate: dd ? firebase.firestore.Timestamp.fromDate(new Date(dd)) : null };
@@ -3315,7 +3393,7 @@
                     const cs = await db.collection('courses').where('name', '==', formData.get('courseName')).get();
                     const cd = cs.empty ? {} : cs.docs[0].data();
                     newItem = {
-                        studentUid: us.docs[0].id,
+                        studentUid: us.docs[0].id, studentName: us.docs[0].data().name || '', studentId: us.docs[0].data().studentId || null,
                         studentEmail: em,
                         courseName: formData.get('courseName'),
                         courseImage: cd.image || cd.imageUrl || '',
@@ -3433,6 +3511,15 @@
                         imageUrl: formData.get('imageUrl')
                     };
                 } else if (collection === 'notifications') {
+                    if (window.ROLE === 'instructor') {
+                        const cn = formData.get('targetCourse');
+                        if (!cn || !window.MY_COURSES.includes(cn)) { showToast('Select one of your courses.', 'error'); return; }
+                        const es = await db.collection('enrollments').where('courseName', '==', cn).get();
+                        const uids = [...new Set(es.docs.map(d => d.data().studentUid).filter(Boolean))];
+                        let ib = db.batch(), k = 0;
+                        for (const u of uids) { ib.set(db.collection('notifications').doc(), { title: formData.get('title'), message: formData.get('message'), type: 'general', targetUid: u, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); if (++k % 400 === 0) { await ib.commit(); ib = db.batch(); } }
+                        await ib.commit(); adminModal.classList.add('hidden'); showToast(`Sent to ${uids.length} students.`); return;
+                    }
                     let target = (formData.get('targetUid') || '').trim();
                     const nb = { title: formData.get('title'), message: formData.get('message'), type: 'general', timestamp: firebase.firestore.FieldValue.serverTimestamp() };
                     if (!target || target.toLowerCase() === 'all') {
@@ -3459,9 +3546,7 @@
                     else await db.collection(collection).add(newItem);
                     
                     adminModal.classList.add('hidden'); 
-                    showToast('Saved successfully.');
-                    navigateTo(document.querySelector('.page.active').id);
-                    renderDashboard();
+                    showToast('Saved successfully.'); navigateTo(document.querySelector('.page.active').id); if (window.ROLE !== 'instructor') renderDashboard();
                 } catch(err) {
                     showToast(`Failed to save: ${err.message}`, 'error');
                 }
