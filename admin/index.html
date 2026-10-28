@@ -723,6 +723,9 @@
                 <li data-page="video-reviews-page"><a href="#"><span class="material-symbols-outlined">video_library</span> Video Reviews</a></li>
 
                 <li data-page="join-class-page"><a href="#"><span class="material-symbols-outlined">video_call</span> Class Joining</a></li>
+                <li data-page="assignments-page"><a href="#"><span class="material-symbols-outlined">assignment</span> Assignments</a></li>
+                <li data-page="materials-page"><a href="#"><span class="material-symbols-outlined">folder_open</span> Course Materials</a></li>
+                <li data-page="support-page"><a href="#"><span class="material-symbols-outlined">support_agent</span> Support Tickets</a></li>
                 <li data-page="online-classes-page"><a href="#"><span class="material-symbols-outlined">video_camera_front</span> Online Classes</a></li>
                 <li data-page="withdrawals-page"><a href="#"><span class="material-symbols-outlined">paid</span> Withdrawals</a></li>
                 <li data-page="settings-page"><a href="#"><span class="material-symbols-outlined">settings</span> Settings</a></li>
@@ -1141,11 +1144,11 @@
 
             <!-- Users Page -->
             <div id="users-page" class="page">
-                <div class="page-header"><h1>Student Management</h1></div>
+                <div class="page-header"><h1>Student Management</h1><button class="btn btn-add" onclick="dxGenerateIds()"><span class="material-symbols-outlined">badge</span> Generate Missing Student IDs</button></div>
                 <div class="search-bar-container"><input type="text" id="user-search-input" placeholder="Search students by name, email, or mobile..."></div>
                 <div class="content-box">
                     <table class="data-table">
-                        <thead><tr><th>Name</th><th>Email</th><th>Mobile</th><th>Referral Code</th><th>Balance</th><th>Status</th><th>Action</th></tr></thead>
+                        <thead><tr><th>Student ID</th><th>Name</th><th>Email</th><th>Mobile</th><th>Referral Code</th><th>Balance</th><th>Status</th><th>Action</th></tr></thead>
                         <tbody id="users-table-body"></tbody>
                     </table>
                 </div>
@@ -1337,6 +1340,20 @@
             </div>
             
             <!-- Withdrawals Page -->
+            <div id="assignments-page" class="page">
+                <div class="page-header"><h1>Assignments</h1><button class="btn btn-add" onclick="openModalForAdd('assignments')"><span class="material-symbols-outlined">add</span> New Assignment</button></div>
+                <div class="content-box"><table class="data-table"><thead><tr><th>Title</th><th>Course</th><th>Batch</th><th>Due</th><th>Action</th></tr></thead><tbody id="assignments-table-body"></tbody></table></div>
+                <div class="page-header" style="margin-top:28px;"><h1>Student Submissions</h1></div>
+                <div class="content-box"><table class="data-table"><thead><tr><th>Student</th><th>Course</th><th>Answer</th><th>Submitted</th><th>Grade</th><th>Action</th></tr></thead><tbody id="submissions-table-body"></tbody></table></div>
+            </div>
+            <div id="materials-page" class="page">
+                <div class="page-header"><h1>Course Materials</h1><button class="btn btn-add" onclick="openModalForAdd('materials')"><span class="material-symbols-outlined">add</span> New Material</button></div>
+                <div class="content-box"><table class="data-table"><thead><tr><th>Title</th><th>Course</th><th>Batch</th><th>Type</th><th>Link</th><th>Action</th></tr></thead><tbody id="materials-table-body"></tbody></table></div>
+            </div>
+            <div id="support-page" class="page">
+                <div class="page-header"><h1>Support Tickets</h1></div>
+                <div class="content-box"><table class="data-table"><thead><tr><th>Student</th><th>Subject</th><th>Message</th><th>Date</th><th>Status</th><th>Action</th></tr></thead><tbody id="support-table-body"></tbody></table></div>
+            </div>
             <div id="withdrawals-page" class="page">
                 <div class="page-header"><h1>Withdrawal Requests</h1></div>
                 <div class="content-box">
@@ -1682,6 +1699,9 @@
                     case 'online-classes-page': renderOnlineClasses(); break;
                     case 'withdrawals-page': renderWithdrawals(); break;
                     case 'settings-page': renderSettings(); break;
+                    case 'assignments-page': renderAssignments(); break;
+                    case 'materials-page': renderMaterials(); break;
+                    case 'support-page': renderSupport(); break;
                 }
             }
 
@@ -2855,6 +2875,7 @@
                     usersSnapshot.forEach(doc => {
                         const user = { id: doc.id, ...doc.data() };
                         tableHTML += `<tr>
+                            <td data-label="ID"><strong>${user.studentId || '-'}</strong></td>
                             <td data-label="Name"><strong>${user.name || 'N/A'}</strong></td>
                             <td data-label="Email">${user.email || 'N/A'}</td>
                             <td data-label="Mobile"><span style="cursor:pointer; text-decoration:underline;" onclick="copyToClipboard('${user.mobile || ''}')" title="Click to copy">${user.mobile || 'N/A'}</span></td>
@@ -2892,17 +2913,44 @@
             const renderCoupons = () => renderGeneric('coupons', 'coupons-table-body', (c) => `<tr><td data-label="Code"><strong>${c.code}</strong></td><td data-label="Item">${c.applicableItem || 'All Items'}</td><td data-label="Type">${c.discountType === 'percentage' ? 'Percentage (%)' : 'Fixed Amount (৳)'}</td><td data-label="Value">${c.discountValue}</td><td data-label="Status"><span class="status-badge ${c.active !== false ? 'approved' : 'rejected'}">${c.active !== false ? 'Active' : 'Inactive'}</span></td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('coupons', '${c.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('coupons', '${c.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderEnrollments = () => renderGeneric('enrollments', 'enrollments-table-body', (e) => `<tr><td data-label="Email">${e.studentEmail}</td><td data-label="Course">${e.courseName}</td><td data-label="Batch">${e.batch}</td><td data-label="Date">${e.date || 'N/A'}</td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('enrollments', '${e.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('enrollments', '${e.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderCurriculum = () => renderGeneric('curriculum', 'curriculum-table-body', (c) => `<tr><td data-label="Course">${c.courseName}</td><td data-label="Batch">${c.batch}</td><td data-label="Modules">${c.modules ? c.modules.length : 0} Modules</td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('curriculum', '${c.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('curriculum', '${c.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
-            const renderJoinClass = () => renderGeneric('joinClass', 'join-class-table-body', (j) => `<tr><td data-label="Course">${j.courseName}</td><td data-label="Batch">${j.batch}</td><td data-label="Topic">${j.topic}</td><td data-label="Link"><a href="${j.link}" target="_blank" style="color:var(--primary-blue); font-weight:600;">Join Class</a></td><td data-label="Time">${j.scheduleTime || 'N/A'}</td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('joinClass', '${j.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('joinClass', '${j.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            const renderJoinClass = () => renderGeneric('joinClass', 'join-class-table-body', (j) => `<tr><td data-label="Course">${j.courseName}</td><td data-label="Batch">${j.batch}</td><td data-label="Topic">${j.topic}</td><td data-label="Link"><a href="${j.link}" target="_blank" style="color:var(--primary-blue); font-weight:600;">Join Class</a></td><td data-label="Time">${j.dateTime ? j.dateTime.toDate().toLocaleString('en-GB') : (j.scheduleTime ? j.scheduleTime + ' ⚠ re-save' : 'N/A')}</td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('joinClass', '${j.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('joinClass', '${j.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderOnlineClasses = () => renderGeneric('online_classes', 'online-classes-table-body', (o) => `<tr><td data-label="Batch"><strong>${o.batchNumber}</strong></td><td data-label="Students">${o.studentCount || 0} Users</td><td data-label="Total">৳ ${o.totalBill || 0}</td><td data-label="Paid" style="color:var(--accent-green);">৳ ${o.paidBill || 0}</td><td data-label="Due" style="color:var(--accent-red);">৳ ${(Number(o.totalBill) || 0) - (Number(o.paidBill) || 0)}</td><td data-label="Schedule"><small>1: ${o.class1 || '-'}<br>2: ${o.class2 || '-'}</small></td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('online_classes', '${o.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('online_classes', '${o.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderServices = () => renderGeneric('services', 'services-table-body', (s) => `<tr><td data-label="Image"><img src="${s.imageUrl || 'https://i.ibb.co/JqgWkCg/placeholder.png'}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;"></td><td data-label="Name">${s.name}</td><td data-label="Package Type"><span class="status-badge ${s.packageType === 'subscription' ? 'expiring-soon' : 'approved'}">${s.packageType === 'subscription' ? (s.durationDays || '30') + ' Days Sub' : 'One-time'}</span></td><td data-label="Buy Price">৳ ${s.purchasePrice || 0}</td><td data-label="Sell Price">৳ ${s.currentPrice || 0}</td><td data-label="Comm">৳ ${s.commission || 0}</td><td data-label="Status"><label class="switch"><input type="checkbox" onchange="window.toggleServiceStatus('${s.id}', this.checked)" ${s.active !== false ? 'checked' : ''}><span class="slider"></span></label></td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('services', '${s.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('services', '${s.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderCourses = () => renderGeneric('courses', 'courses-table-body', (c) => `<tr><td data-label="Name">${c.name}</td><td data-label="Instructor">${c.instructor}</td><td data-label="Price">৳ ${c.price}</td><td data-label="Comm">৳ ${c.commission || 0}</td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('courses', '${c.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('courses', '${c.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
-            const renderNotices = () => renderGeneric('notices', 'notices-table-body', (n) => `<tr><td data-label="Title">${n.title}</td><td data-label="Description">${(n.description || '').substring(0, 40)}...</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('notices', '${n.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            const renderNotices = () => renderGeneric('notices', 'notices-table-body', (n) => `<tr><td data-label="Title">${n.title}</td><td data-label="Description">${(n.description || '').substring(0, 40)}...</td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('notices', '${n.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('notices', '${n.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderTrustScreenshots = () => renderGeneric('trust_screenshots', 'trust-screenshots-table-body', (t) => `<tr><td data-label="Title">${t.title}</td><td data-label="Image"><img src="${t.imageUrl}" class="table-image-preview"></td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('trust_screenshots', '${t.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderVideoReviews = () => renderGeneric('video_reviews', 'video-reviews-table-body', (v) => `<tr><td data-label="Title">${v.title}</td><td data-label="Subtitle">${v.subtitle}</td><td data-label="Link"><a href="${v.youtubeLink}" target="_blank">Watch</a></td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('video_reviews', '${v.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderWithdrawals = () => renderGeneric('withdrawals', 'withdrawals-table-body', (w) => `<tr><td data-label="Email">${w.userEmail}</td><td data-label="Amount">৳ ${w.amount}</td><td data-label="Method">${w.method}</td><td data-label="Account">${w.accountNumber}</td><td data-label="Date">${w.requestDate ? new Date(w.requestDate.seconds * 1000).toLocaleDateString() : 'N/A'}</td><td data-label="Status">${w.status}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('withdrawals', '${w.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderUserNotifications = () => renderGeneric('notifications', 'user-notifications-table-body', (notif) => `<tr><td data-label="Date">${notif.timestamp ? new Date(notif.timestamp.seconds * 1000).toLocaleDateString() : 'N/A'}</td><td data-label="Target">${notif.targetUid || 'All'}</td><td data-label="Title">${notif.title}</td><td data-label="Message">${notif.message}</td><td data-label="Type">${notif.type || 'general'}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('notifications', '${notif.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderCertificates = () => renderGeneric('certificates', 'certificates-table-body', (cert) => `<tr><td data-label="Cert ID">${cert.certificate_id}</td><td data-label="Email">${cert.user_email || cert.user_id}</td><td data-label="Course">${cert.course_name}</td><td data-label="Date">${cert.issue_date ? new Date(cert.issue_date.seconds * 1000).toLocaleDateString() : 'N/A'}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('certificates', '${cert.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderServiceStock = () => renderGeneric('service_stock', 'service-stock-table-body', (stockItem) => `<tr><td data-label="Service Name">${stockItem.serviceName}</td><td data-label="Quantity">${stockItem.quantity}</td><td data-label="Topup ID" style="white-space: pre-wrap; word-break: break-all;">${stockItem.topupId}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('service_stock', '${stockItem.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+
+            // ===== Assignments / Materials / Support / Student ID =====
+            window.dxe = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+            window.dxLocal = ts => { if (!ts || !ts.toDate) return ''; const d = ts.toDate(), p = n => String(n).padStart(2, '0'); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`; };
+            const dxDt = ts => ts && ts.toDate ? ts.toDate().toLocaleString('en-GB') : 'N/A';
+            const dxBtns = (col, id, edit = true) => `<td class="actions-cell">${edit ? `<button class="btn-edit" onclick="openModalForEdit('${col}', '${id}')"><span class="material-symbols-outlined">edit</span></button>` : ''}<button class="btn-delete" onclick="deleteItem('${col}', '${id}')"><span class="material-symbols-outlined">delete</span></button></td>`;
+            const renderAssignments = () => {
+                renderGeneric('assignments', 'assignments-table-body', a => `<tr><td data-label="Title"><strong>${dxe(a.title)}</strong></td><td data-label="Course">${dxe(a.courseName)}</td><td data-label="Batch">${dxe(a.batch) || 'All'}</td><td data-label="Due">${dxDt(a.dueDate)}</td>${dxBtns('assignments', a.id)}</tr>`);
+                renderGeneric('assignmentSubmissions', 'submissions-table-body', s => `<tr><td data-label="Student"><strong>${dxe(s.studentName)}</strong></td><td data-label="Course">${dxe(s.courseName)}</td><td data-label="Answer" title="${dxe(s.answer)}">${dxe((s.answer || '').substring(0, 60))}${(s.answer || '').length > 60 ? '...' : ''} <a href="#" onclick="copyToClipboard(${dxe(JSON.stringify(s.answer || ''))}); return false;">copy</a></td><td data-label="Submitted">${dxDt(s.submittedAt)}</td><td data-label="Grade">${s.grade ? `<span class="status-badge approved">${dxe(s.grade)}</span>` : '<span class="status-badge pending">Not graded</span>'}</td>${dxBtns('assignmentSubmissions', s.id)}</tr>`);
+            };
+            const renderMaterials = () => renderGeneric('materials', 'materials-table-body', m => `<tr><td data-label="Title"><strong>${dxe(m.title)}</strong></td><td data-label="Course">${dxe(m.courseName)}</td><td data-label="Batch">${dxe(m.batch) || 'All'}</td><td data-label="Type">${dxe(m.type)}</td><td data-label="Link"><a href="${dxe(m.link)}" target="_blank" style="color:var(--primary-blue);font-weight:600;">Open</a></td>${dxBtns('materials', m.id)}</tr>`);
+            const renderSupport = () => renderGeneric('supportTickets', 'support-table-body', t => `<tr><td data-label="Student"><strong>${dxe(t.name)}</strong><br><small>${dxe(t.email)}</small></td><td data-label="Subject">${dxe(t.subject)}</td><td data-label="Message">${dxe((t.message || '').substring(0, 80))}</td><td data-label="Date">${dxDt(t.createdAt)}</td><td data-label="Status"><span class="status-badge ${t.reply ? 'approved' : 'pending'}">${t.reply ? 'Replied' : 'Open'}</span></td>${dxBtns('supportTickets', t.id)}</tr>`);
+            window.dxGenerateIds = async () => {
+                if (!confirm('Give a Student ID (starting 1001) to every student who has none?')) return;
+                try {
+                    const all = (await db.collection('users').get()).docs.filter(d => !d.data().studentId);
+                    all.sort((a, b) => ((a.data().timestamp && a.data().timestamp.toMillis()) || 0) - ((b.data().timestamp && b.data().timestamp.toMillis()) || 0));
+                    const cref = db.collection('counters').doc('studentId');
+                    for (const d of all) {
+                        await db.runTransaction(async tx => {
+                            const c = await tx.get(cref), n = c.exists ? c.data().next : 1001;
+                            tx.set(cref, { next: n + 1 }); tx.update(d.ref, { studentId: n });
+                        });
+                    }
+                    showToast(`${all.length} Student IDs generated.`); renderUsers();
+                } catch (e) { showToast('Failed: ' + e.message, 'error'); }
+            };
 
             // MODAL FORMS GENERATOR
             window.openModalForAdd = async (collection) => {
@@ -2943,6 +2991,35 @@
                     });
                 } catch(e) { console.error("Error loading dropdown items: ", e); }
 
+                if (type === 'assignments') {
+                    return `
+                        <div class="form-group"><label>Course</label><select name="courseName" required>${courseOptions}</select></div>
+                        <div class="form-group"><label>Batch (leave blank for all batches)</label><input type="text" name="batch" value="${data.batch || ''}" placeholder="e.g., 1"></div>
+                        <div class="form-group"><label>Title</label><input type="text" name="title" value="${dxe(data.title)}" required></div>
+                        <div class="form-group"><label>Description / Instructions</label><textarea name="description" rows="4">${dxe(data.description)}</textarea></div>
+                        <div class="form-group"><label>Due Date</label><input type="datetime-local" name="dueDate" value="${window.dxLocal(data.dueDate)}"></div>`;
+                }
+                if (type === 'materials') {
+                    return `
+                        <div class="form-group"><label>Course</label><select name="courseName" required>${courseOptions}</select></div>
+                        <div class="form-group"><label>Batch (leave blank for all batches)</label><input type="text" name="batch" value="${data.batch || ''}" placeholder="e.g., 1"></div>
+                        <div class="form-group"><label>Title</label><input type="text" name="title" value="${dxe(data.title)}" required></div>
+                        <div class="form-group"><label>Type</label><select name="type"><option value="pdf" ${data.type === 'pdf' ? 'selected' : ''}>PDF</option><option value="video" ${data.type === 'video' ? 'selected' : ''}>Video</option><option value="file" ${data.type === 'file' ? 'selected' : ''}>Other file</option></select></div>
+                        <div class="form-group"><label>Download / Open Link</label><input type="url" name="link" value="${dxe(data.link)}" required></div>`;
+                }
+                if (type === 'assignmentSubmissions') {
+                    return `
+                        <div class="form-group"><label>Student</label><input type="text" value="${dxe(data.studentName)} - ${dxe(data.courseName)}" disabled></div>
+                        <div class="form-group"><label>Answer</label><textarea rows="4" disabled>${dxe(data.answer)}</textarea></div>
+                        <div class="form-group"><label>Grade / Marks</label><input type="text" name="grade" value="${dxe(data.grade)}" placeholder="e.g., 90/100 or A+" required></div>
+                        <div class="form-group"><label>Feedback</label><textarea name="feedback" rows="3">${dxe(data.feedback)}</textarea></div>`;
+                }
+                if (type === 'supportTickets') {
+                    return `
+                        <div class="form-group"><label>${dxe(data.name)} (${dxe(data.email)})</label><input type="text" value="${dxe(data.subject)}" disabled></div>
+                        <div class="form-group"><textarea rows="3" disabled>${dxe(data.message)}</textarea></div>
+                        <div class="form-group"><label>Your Reply</label><textarea name="reply" rows="4" required>${dxe(data.reply)}</textarea></div>`;
+                }
                 if (type === 'coupons') {
                     return `
                         <div class="form-group"><label>Coupon Code</label><input type="text" name="code" value="${data.code || ''}" placeholder="e.g., DREAM50" style="text-transform: uppercase;" required></div>
@@ -2967,7 +3044,7 @@
                     return `
                         <div class="form-group"><label>Student Email</label><input type="email" name="studentEmail" value="${data.studentEmail || ''}" placeholder="student@gmail.com" required></div>
                         <div class="form-group"><label>Course Name</label><select name="courseName" required>${courseOptions}</select></div>
-                        <div class="form-group"><label>Batch Number</label><input type="text" name="batch" value="${data.batch || 'Batch 01'}" placeholder="e.g., Batch 01" required></div>
+                        <div class="form-group"><label>Batch Number</label><input type="text" name="batch" value="${data.batch || '1'}" placeholder="e.g., 1" required></div>
                     `;
                 }
 
@@ -2976,7 +3053,7 @@
                     setTimeout(() => renderCurriculumEditor(window.currModules), 50);
                     return `
                         <div class="form-group"><label>Course Name</label><select name="courseName" required>${courseOptions}</select></div>
-                        <div class="form-group"><label>Batch Number</label><input type="text" name="batch" value="${data.batch || 'Batch 01'}" placeholder="e.g., Batch 01" required></div>
+                        <div class="form-group"><label>Batch Number</label><input type="text" name="batch" value="${data.batch || '1'}" placeholder="e.g., 1" required></div>
                         <hr style="margin:20px 0; border:none; border-top:1px solid var(--border-color);">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                             <h4 style="font-weight:600;">Modules & Lessons</h4>
@@ -2989,16 +3066,17 @@
                 if (type === 'joinClass') {
                     return `
                         <div class="form-group"><label>Course Name</label><select name="courseName" required>${courseOptions}</select></div>
-                        <div class="form-group"><label>Batch Number</label><input type="text" name="batch" value="${data.batch || 'Batch 01'}" placeholder="e.g., Batch 01" required></div>
+                        <div class="form-group"><label>Batch Number</label><input type="text" name="batch" value="${data.batch || '1'}" placeholder="e.g., 1" required></div>
                         <div class="form-group"><label>Topic / Class Name</label><input type="text" name="topic" value="${data.topic || ''}" placeholder="e.g., Class 01: Introduction" required></div>
                         <div class="form-group"><label>Class Link (Zoom / Meet / Live)</label><input type="url" name="link" value="${data.link || ''}" placeholder="https://meet.google.com/..." required></div>
-                        <div class="form-group"><label>Schedule Time</label><input type="text" name="scheduleTime" value="${data.scheduleTime || ''}" placeholder="e.g., Tomorrow at 9:00 PM" required></div>
+                        <div class="form-group"><label>Class Number</label><input type="text" name="classNumber" value="${data.classNumber || ''}" placeholder="e.g., 1" required></div>
+                        <div class="form-group"><label>Date &amp; Time</label><input type="datetime-local" name="dateTime" value="${window.dxLocal(data.dateTime)}" required></div>
                     `;
                 }
 
                 if (type === 'online_classes') {
                     return `
-                        <div class="form-group"><label>Batch Number</label><input type="text" name="batchNumber" value="${data.batchNumber || 'Batch 01'}" placeholder="e.g., Batch 01" required></div>
+                        <div class="form-group"><label>Batch Number</label><input type="text" name="batchNumber" value="${data.batchNumber || 'Batch 01'}" placeholder="e.g., 1" required></div>
                         <div class="form-group"><label>Total Students Count</label><input type="number" name="studentCount" value="${data.studentCount || 0}" placeholder="e.g., 25" required></div>
                         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
                             <div class="form-group"><label>Total Bill (BDT)</label><input type="number" name="totalBill" value="${data.totalBill || 0}" required></div>
@@ -3015,6 +3093,9 @@
                     return `
                         <div class="form-group"><label>Course Name</label><input type="text" name="name" value="${data.name || ''}" required></div>
                         <div class="form-group"><label>Instructor</label><input type="text" name="instructor" value="${data.instructor || ''}" required></div>
+                        <div class="form-group"><label>Course Image URL</label><input type="url" name="image" value="${data.image || data.imageUrl || ''}" placeholder="https://..."></div>
+                        <div class="form-group"><label>Category</label><input type="text" name="category" value="${data.category || ''}" placeholder="e.g., Design"></div>
+                        <div class="form-group"><label>Default Batch (for online purchases)</label><input type="text" name="batch" value="${data.batch || '1'}"></div>
                         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
                             <div class="form-group"><label>Course Price (BDT)</label><input type="number" name="price" value="${data.price || 0}" required></div>
                             <div class="form-group"><label>Affiliate Commission (BDT)</label><input type="number" name="commission" value="${data.commission || 0}"></div>
@@ -3136,12 +3217,13 @@
                     const modCard = document.createElement('div');
                     modCard.className = 'module-card';
                     let lessonsHTML = '';
-                    (mod.lessons || []).forEach((les) => {
+                    (mod.videos || mod.lessons || []).forEach((les) => {
                         lessonsHTML += `
                             <div class="lesson-row">
                                 <input type="text" placeholder="Lesson Title" value="${les.title || ''}" class="les-title">
-                                <input type="text" placeholder="Video URL / Embed" value="${les.videoUrl || ''}" class="les-url">
+                                <input type="text" placeholder="Video URL / Embed" value="${les.youtubeLink || les.videoUrl || ''}" class="les-url">
                                 <input type="text" placeholder="Duration (10m)" value="${les.duration || ''}" class="les-dur">
+                                <input type="text" placeholder="Class note (optional)" value="${(les.classNote || '').replace(/"/g, '&quot;')}" class="les-note">
                                 <label style="font-size:0.8em; display:flex; align-items:center; gap:4px;"><input type="checkbox" class="les-free" ${les.isFree ? 'checked' : ''}> Free</label>
                                 <button type="button" class="btn-remove-small" onclick="this.parentElement.remove()"><span class="material-symbols-outlined">delete</span></button>
                             </div>
@@ -3182,6 +3264,7 @@
                     <input type="text" placeholder="Lesson Title" class="les-title">
                     <input type="text" placeholder="Video URL / Embed" class="les-url">
                     <input type="text" placeholder="Duration (e.g. 15m)" class="les-dur">
+                    <input type="text" placeholder="Class note (optional)" class="les-note">
                     <label style="font-size:0.8em; display:flex; align-items:center; gap:4px;"><input type="checkbox" class="les-free"> Free</label>
                     <button type="button" class="btn-remove-small" onclick="this.parentElement.remove()"><span class="material-symbols-outlined">delete</span></button>
                 `;
@@ -3201,6 +3284,21 @@
                         discountValue: Number(formData.get('discountValue')) || 0,
                         active: formData.get('active') === 'on'
                     };
+                } else if (collection === 'assignments') {
+                    const dd = formData.get('dueDate');
+                    newItem = { courseName: formData.get('courseName'), batch: (formData.get('batch') || '').trim(), title: formData.get('title'), description: formData.get('description') || '', dueDate: dd ? firebase.firestore.Timestamp.fromDate(new Date(dd)) : null };
+                    if (!id) newItem.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                } else if (collection === 'materials') {
+                    newItem = { courseName: formData.get('courseName'), batch: (formData.get('batch') || '').trim(), title: formData.get('title'), type: formData.get('type'), link: formData.get('link') };
+                    if (!id) newItem.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                } else if (collection === 'assignmentSubmissions') {
+                    newItem = { grade: formData.get('grade'), feedback: formData.get('feedback') || '', gradedAt: firebase.firestore.FieldValue.serverTimestamp() };
+                    const sd = (await db.collection('assignmentSubmissions').doc(id).get()).data() || {};
+                    if (sd.uid) await db.collection('notifications').add({ targetUid: sd.uid, title: 'Assignment graded', message: `${sd.courseName || ''}: ${newItem.grade}`, type: 'assignment', timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+                } else if (collection === 'supportTickets') {
+                    newItem = { reply: formData.get('reply'), status: 'replied', repliedAt: firebase.firestore.FieldValue.serverTimestamp() };
+                    const td = (await db.collection('supportTickets').doc(id).get()).data() || {};
+                    if (td.uid) await db.collection('notifications').add({ targetUid: td.uid, title: 'Support replied', message: td.subject || 'Your request has a reply', type: 'support', timestamp: firebase.firestore.FieldValue.serverTimestamp() });
                 } else if (collection === 'users') {
                     newItem = {
                         name: formData.get('name'),
@@ -3210,11 +3308,21 @@
                         affiliateBalance: Number(formData.get('affiliateBalance')) || 0
                     };
                 } else if (collection === 'enrollments') {
+                    const em = (formData.get('studentEmail') || '').trim();
+                    let us = await db.collection('users').where('email', '==', em).get();
+                    if (us.empty) us = await db.collection('users').where('email', '==', em.toLowerCase()).get();
+                    if (us.empty) { showToast('No registered student with this email. Student must sign up first.', 'error'); return; }
+                    const cs = await db.collection('courses').where('name', '==', formData.get('courseName')).get();
+                    const cd = cs.empty ? {} : cs.docs[0].data();
                     newItem = {
-                        studentEmail: formData.get('studentEmail'),
+                        studentUid: us.docs[0].id,
+                        studentEmail: em,
                         courseName: formData.get('courseName'),
+                        courseImage: cd.image || cd.imageUrl || '',
+                        courseCategory: cd.category || '',
                         batch: formData.get('batch'),
                         date: new Date().toLocaleDateString('en-GB'),
+                        enrollmentDate: firebase.firestore.FieldValue.serverTimestamp(),
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     };
                 } else if (collection === 'curriculum') {
@@ -3226,12 +3334,13 @@
                         mc.querySelectorAll('.lesson-row').forEach(lr => {
                             lessons.push({
                                 title: lr.querySelector('.les-title').value,
-                                videoUrl: lr.querySelector('.les-url').value,
+                                youtubeLink: lr.querySelector('.les-url').value,
                                 duration: lr.querySelector('.les-dur').value,
-                                isFree: lr.querySelector('.les-free').checked
+                                isFree: lr.querySelector('.les-free').checked,
+                                classNote: (lr.querySelector('.les-note') || {}).value || ''
                             });
                         });
-                        modules.push({ title: mTitle, lessons: lessons });
+                        modules.push({ title: mTitle, videos: lessons });
                     });
                     newItem = {
                         courseName: formData.get('courseName'),
@@ -3245,7 +3354,7 @@
                         batch: formData.get('batch'),
                         topic: formData.get('topic'),
                         link: formData.get('link'),
-                        scheduleTime: formData.get('scheduleTime'),
+                        classNumber: formData.get('classNumber'), dateTime: firebase.firestore.Timestamp.fromDate(new Date(formData.get('dateTime'))), scheduleTime: new Date(formData.get('dateTime')).toLocaleString('en-GB'),
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     };
                 } else if (collection === 'online_classes') {
@@ -3263,7 +3372,7 @@
                 } else if (collection === 'courses') {
                     newItem = {
                         name: formData.get('name'),
-                        instructor: formData.get('instructor'),
+                        instructor: formData.get('instructor'), image: formData.get('image') || '', category: formData.get('category') || '', batch: formData.get('batch') || '1',
                         price: Number(formData.get('price')) || 0,
                         commission: Number(formData.get('commission')) || 0
                     };
@@ -3324,12 +3433,19 @@
                         imageUrl: formData.get('imageUrl')
                     };
                 } else if (collection === 'notifications') {
-                    newItem = {
-                        targetUid: formData.get('targetUid') || 'All',
-                        title: formData.get('title'),
-                        message: formData.get('message'),
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    };
+                    let target = (formData.get('targetUid') || '').trim();
+                    const nb = { title: formData.get('title'), message: formData.get('message'), type: 'general', timestamp: firebase.firestore.FieldValue.serverTimestamp() };
+                    if (!target || target.toLowerCase() === 'all') {
+                        const all = await db.collection('users').get(); let batch = db.batch(), n = 0;
+                        for (const u of all.docs) { batch.set(db.collection('notifications').doc(), { ...nb, targetUid: u.id }); if (++n % 400 === 0) { await batch.commit(); batch = db.batch(); } }
+                        await batch.commit(); adminModal.classList.add('hidden'); showToast(`Sent to ${all.size} students.`); navigateTo(document.querySelector('.page.active').id); return;
+                    }
+                    if (target.includes('@')) {
+                        const us = await db.collection('users').where('email', '==', target).get();
+                        if (us.empty) { showToast('No student with this email.', 'error'); return; }
+                        target = us.docs[0].id;
+                    }
+                    newItem = { ...nb, targetUid: target };
                 } else {
                     newItem = { 
                         title: formData.get('title'), 
