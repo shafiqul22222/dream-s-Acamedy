@@ -1940,6 +1940,83 @@
             #scrollTopBtn { bottom: 80px; right: 20px; }
             #floating-whatsapp-btn { bottom: 80px; left: 20px; width: 52px; height: 52px; }
         }
+
+        /* ===== LMS Dashboard v2 (layout only, same colour tokens) ===== */
+        .dx-profile .sidebar-user { align-items: center; }
+        .dx-profile .sidebar-user > div { min-width: 0; }
+        .dx-profile h4 { margin-bottom: 4px; }
+        .dx-pill { display: inline-block; padding: 2px 12px; border-radius: var(--radius-pill); font-size: .72rem; font-weight: 800; background: var(--gradient-water-3d); color: #020617; }
+        .dx-sid { display: block; margin-top: 6px; font-size: .78rem; color: var(--text-body); overflow: hidden; text-overflow: ellipsis; }
+        .dx-badge { margin-left: auto; font-size: .68rem; font-weight: 800; padding: 2px 9px; border-radius: var(--radius-pill); background: #ef4444; color: #fff; }
+        .sidebar-nav li.active .dx-badge { background: #020617; color: var(--water-cyan); }
+        .dx-promo { border: 1px solid var(--navy-border); border-radius: var(--radius-md); padding: 22px; background: var(--gradient-card-3d), var(--navy-dark); box-shadow: var(--shadow-card); position: relative; overflow: hidden; }
+        .dx-promo::after { content: ''; position: absolute; right: -30px; top: -30px; width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, var(--water-glow-subtle), transparent 70%); }
+        .dx-promo p { color: var(--text-body); font-size: .85rem; }
+        .dx-promo strong { display: block; color: #fff; font-size: 1.1rem; line-height: 1.3; margin: 4px 0 10px; }
+        .dx-promo em { font-family: 'Great Vibes', cursive; font-style: normal; font-size: 1.7rem; color: var(--water-cyan); }
+
+        .dx-grid { display: grid; grid-template-columns: minmax(0, 1fr) 310px; gap: 24px; align-items: start; }
+        .dx-main, .dx-side { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+        .dx-panel { background: var(--gradient-card-3d); border: 1px solid var(--navy-border); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-card); }
+        .dx-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; gap: 12px; }
+        .dx-head h3 { font-size: 1.15rem; color: #fff; display: flex; align-items: center; gap: 10px; }
+        .dx-head h3 .material-symbols-outlined { color: var(--water-cyan); }
+        .dx-link { background: none; border: 0; cursor: pointer; font: inherit; font-size: .82rem; font-weight: 700; color: var(--water-cyan); white-space: nowrap; }
+        .dx-link:hover { text-decoration: underline; }
+
+        .dx-hero { position: relative; overflow: hidden; border: 1px solid var(--navy-border); border-radius: var(--radius-lg); padding: 30px; background: linear-gradient(135deg, rgba(0,242,254,.14), rgba(15,33,77,.9) 55%, rgba(7,15,38,.95)); box-shadow: var(--shadow-card); }
+        .dx-hero h2 { font-size: 1.05rem; color: var(--text-body); font-weight: 600; }
+        .dx-hero h1 { font-size: 2rem; color: #fff; line-height: 1.2; margin: 2px 0 6px; overflow-wrap: anywhere; }
+        .dx-hero p { color: #cbd5e1; }
+        .dx-script { position: absolute; right: 28px; top: 22px; text-align: right; font-family: 'Great Vibes', cursive; font-size: 2.3rem; line-height: 1.05; color: var(--water-cyan); opacity: .9; pointer-events: none; }
+        .dx-stats { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 24px; }
+        .dx-stat { flex: 1 1 140px; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: var(--radius-sm); background: rgba(7,15,38,.7); border: 1px solid var(--navy-border); }
+        .dx-stat .material-symbols-outlined { color: var(--water-cyan); font-size: 28px; }
+        .dx-stat small { display: block; font-size: .75rem; color: var(--text-body); }
+        .dx-stat b { font-size: 1.3rem; color: #fff; }
+
+        .dx-courses { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+        .dx-course { display: flex; flex-direction: column; background: rgba(7,15,38,.6); border: 1px solid var(--navy-border); border-radius: var(--radius-md); overflow: hidden; }
+        .dx-thumb { position: relative; }
+        .dx-thumb img { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
+        .dx-status { position: absolute; top: 8px; right: 8px; font-size: .68rem; font-weight: 800; padding: 3px 10px; border-radius: var(--radius-pill); background: var(--water-deep); color: #fff; }
+        .dx-status.done { background: #10b981; } .dx-status.new { background: var(--navy-card-light); border: 1px solid var(--navy-border); }
+        .dx-cbody { padding: 14px; display: flex; flex-direction: column; flex: 1; }
+        .dx-cbody h3 { font-size: .95rem; line-height: 1.35; color: #fff; min-height: 2.7em; margin-bottom: 4px; }
+        .dx-cbody > small { color: var(--text-muted); font-size: .76rem; }
+        .dx-meter { display: flex; justify-content: space-between; font-size: .76rem; color: #cbd5e1; margin-top: 12px; }
+        .dx-cbody .progress-bar-bg { margin: 6px 0 14px; height: 6px; }
+        .dx-cbody .btn { margin-top: auto; width: 100%; padding: 10px 12px; font-size: .85rem; }
+        .dx-cbody .download-cert-btn { margin-top: 8px; border-color: var(--water-cyan); color: var(--water-cyan); }
+
+        .dx-two { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; }
+        .dx-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid rgba(56,189,248,.1); }
+        .dx-row:first-of-type { border-top: 0; }
+        .dx-ico { flex: 0 0 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; background: var(--water-glow-subtle); color: var(--water-cyan); }
+        .dx-row p { color: #e2e8f0; font-size: .86rem; line-height: 1.35; } .dx-row small { color: var(--text-muted); font-size: .74rem; }
+        .dx-row > div:nth-child(2) { flex: 1; min-width: 0; }
+        .dx-empty { color: var(--text-muted); font-size: .86rem; padding: 6px 0; }
+        .dx-qgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .dx-q { display: flex; align-items: center; gap: 10px; padding: 14px; text-align: left; cursor: pointer; font: inherit; font-size: .84rem; font-weight: 700; color: #e2e8f0; background: rgba(7,15,38,.6); border: 1px solid var(--navy-border); border-radius: var(--radius-md); transition: var(--transition-smooth); }
+        .dx-q:hover { border-color: var(--water-cyan); color: var(--water-cyan); }
+        .dx-q .material-symbols-outlined { color: var(--water-cyan); }
+        .dx-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: none; border: 0; padding: 0; box-shadow: none; }
+        .dx-tiles .dx-q { flex-direction: column; text-align: center; padding: 18px 10px; background: var(--gradient-card-3d); }
+        .dx-tiles .dx-q .material-symbols-outlined { font-size: 30px; }
+
+        .dx-donut-wrap { display: flex; gap: 18px; align-items: center; }
+        .dx-donut { --p: 0; flex: 0 0 118px; height: 118px; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--water-cyan) calc(var(--p) * 1%), rgba(56,189,248,.15) 0); }
+        .dx-donut span { width: 88px; height: 88px; border-radius: 50%; display: grid; place-items: center; background: var(--navy-dark); font-weight: 800; font-size: 1.35rem; color: #fff; }
+        .dx-legend { flex: 1; font-size: .82rem; color: #cbd5e1; } .dx-legend div { display: flex; justify-content: space-between; padding: 5px 0; }
+        .dx-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; }
+        .dx-join { padding: 7px 16px; border-radius: var(--radius-sm); font-size: .8rem; font-weight: 800; text-decoration: none; background: var(--gradient-water-3d); color: #020617; }
+        .dx-join.off { background: rgba(148,163,184,.15); color: var(--text-body); }
+        .dx-why { display: flex; flex-wrap: wrap; gap: 18px 32px; align-items: center; justify-content: space-between; margin-top: 24px; padding: 22px 28px; border: 1px solid var(--navy-border); border-radius: var(--radius-lg); background: var(--gradient-card-3d); }
+        .dx-why h3 { color: #fff; font-size: 1.15rem; } .dx-why > div { display: flex; align-items: center; gap: 10px; }
+        .dx-why .material-symbols-outlined { color: var(--water-cyan); font-size: 30px; }
+        .dx-why small { display: block; color: var(--text-muted); } .dx-why b { color: #e2e8f0; font-size: .85rem; }
+        @media (max-width: 1100px) { .dx-grid, .dx-two { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) { .dx-script { display: none; } .dx-hero h1 { font-size: 1.5rem; } .dx-panel { padding: 18px; } }
     </style>
 </head>
 <body>
@@ -2539,21 +2616,27 @@
             <section class="dashboard">
                 <div class="container dashboard-container">
                     <aside class="dashboard-sidebar">
-                        <div class="sidebar-welcome-card">
-                            <div class="sidebar-user"><img src="https://i.ibb.co/L1LQtBm/default-avatar.png" alt="Dreams Academy Student Avatar" class="sidebar-avatar-img"><h4>Welcome, Student</h4></div>
+                        <div class="sidebar-welcome-card dx-profile">
+                            <div class="sidebar-user"><img src="https://i.ibb.co/L1LQtBm/default-avatar.png" alt="Dreams Academy Student Avatar" class="sidebar-avatar-img"><div><h4>Hi, Student</h4><span class="dx-pill">Student</span></div></div>
+                            <span class="dx-sid" id="dx-sid" style="position:relative;z-index:1;">Student ID: -</span>
                         </div>
                         <nav class="sidebar-nav">
                             <ul id="sidebar-menu">
-                                <li data-page="my-courses-page" class="active"><a href="#my-courses-page"><span class="material-symbols-outlined">menu_book</span> Enrolled Courses</a></li>
-                                <li data-page="class-joining-page"><a href="#class-joining-page"><span class="material-symbols-outlined">video_camera_front</span> Live Classroom</a></li>
-                                <li data-page="my-profile-page"><a href="#my-profile-page"><span class="material-symbols-outlined">manage_accounts</span> Account Profile</a></li>
+                                <li data-page="my-courses-page" class="active"><a href="#my-courses-page"><span class="material-symbols-outlined">dashboard</span> Dashboard</a></li>
+                                <li data-page="class-joining-page"><a href="#class-joining-page"><span class="material-symbols-outlined">video_camera_front</span> Live Classes <span class="dx-badge hidden" id="dx-live-badge">Live</span></a></li>
+                                <li data-page="progress-page"><a href="#progress-page"><span class="material-symbols-outlined">workspace_premium</span> Progress &amp; Certificates</a></li>
+                                <li data-page="my-profile-page"><a href="#my-profile-page"><span class="material-symbols-outlined">manage_accounts</span> My Profile</a></li>
+                                <li data-page="assignments-page"><a href="#assignments-page"><span class="material-symbols-outlined">assignment</span> My Assignments</a></li>
+                                <li data-page="materials-page"><a href="#materials-page"><span class="material-symbols-outlined">folder_open</span> Course Materials</a></li>
+                                <li data-page="support-page"><a href="#support-page"><span class="material-symbols-outlined">support_agent</span> Support Center</a></li>
+                                <li data-page="noticeboard"><a href="#noticeboard"><span class="material-symbols-outlined">campaign</span> Notice Board</a></li>
                                 <li data-page="my-services-page"><a href="#my-services-page"><span class="material-symbols-outlined">design_services</span> My Services</a></li>
                                 <li data-page="ssn-generate-page"><a href="#ssn-generate-page"><span class="material-symbols-outlined">badge</span> SSN Generator</a></li>
                                 <li data-page="ssn-list-page"><a href="#ssn-list-page"><span class="material-symbols-outlined">list_alt</span> Saved SSN List</a></li>
                             </ul>
                         </nav>
-                        <div class="countdown-timer">
-                            <h4>Next Live Zoom Class</h4>
+                        <div class="dx-promo"><p>Learn Today</p><strong>Build Your Tomorrow</strong><em>Dream's Academy</em></div>
+                        <div class="countdown-timer" style="display:none;">
                             <div id="timer">
                                 <div class="time-block" id="days">00<span>Days</span></div>
                                 <div class="time-block" id="hours">00<span>Hours</span></div>
@@ -2564,10 +2647,87 @@
                     </aside>
 
                     <main class="dashboard-content">
-                        <!-- Enrolled Courses -->
+                        <!-- Dashboard Home -->
                         <div class="dashboard-page" id="my-courses-page">
-                           <div class="content-header"><h2>My Courses & Modules</h2></div>
-                           <div class="course-grid" id="my-courses-grid"></div>
+                          <div class="dx-grid">
+                            <div class="dx-main">
+                              <section class="dx-hero">
+                                <div class="dx-script">Better Skills,<br>Bigger Dreams</div>
+                                <h2>Welcome Back,</h2>
+                                <h1><span class="dx-name">Student</span></h1>
+                                <p>Keep learning, keep growing!</p>
+                                <div class="dx-stats">
+                                  <div class="dx-stat"><span class="material-symbols-outlined">menu_book</span><div><small>Enrolled Courses</small><b id="dx-s-courses">0</b></div></div>
+                                  <div class="dx-stat"><span class="material-symbols-outlined">task_alt</span><div><small>Completed Lessons</small><b id="dx-s-lessons">0</b></div></div>
+                                  <div class="dx-stat"><span class="material-symbols-outlined">workspace_premium</span><div><small>Certificates Ready</small><b id="dx-s-certs">0</b></div></div>
+                                </div>
+                              </section>
+                              <section class="dx-panel">
+                                <div class="dx-head"><h3><span class="material-symbols-outlined">menu_book</span> My Courses</h3><button class="dx-link" data-dx-go="courses">Browse Courses</button></div>
+                                <div class="dx-courses" id="my-courses-grid"></div>
+                              </section>
+                              <div class="dx-two">
+                                <section class="dx-panel"><div class="dx-head"><h3><span class="material-symbols-outlined">history</span> Recent Activities</h3></div><div id="dx-activity"><p class="dx-empty">Loading...</p></div></section>
+                                <section class="dx-panel"><div class="dx-head"><h3><span class="material-symbols-outlined">link</span> Quick Links</h3></div>
+                                  <div class="dx-qgrid">
+                                    <button class="dx-q" data-dx-go="progress-page"><span class="material-symbols-outlined">download</span> Download Certificates</button>
+                                    <button class="dx-q" data-dx-go="class-joining-page"><span class="material-symbols-outlined">video_camera_front</span> Class Schedule</button>
+                                    <button class="dx-q" data-dx-wa><span class="material-symbols-outlined">chat</span> Ask Instructor</button>
+                                    <button class="dx-q" data-dx-go="support-page"><span class="material-symbols-outlined">support_agent</span> Support Center</button>
+                                  </div>
+                                </section>
+                              </div>
+                            </div>
+                            <div class="dx-side">
+                              <div class="dx-panel dx-tiles">
+                                <button class="dx-q" data-dx-go="class-joining-page"><span class="material-symbols-outlined">videocam</span>Join Live Class</button>
+                                <button class="dx-q" data-dx-go="courses"><span class="material-symbols-outlined">shopping_bag</span>Browse Courses</button>
+                                <button class="dx-q" data-dx-go="assignments-page"><span class="material-symbols-outlined">assignment</span>My Assignments</button>
+                                <button class="dx-q" data-dx-go="materials-page"><span class="material-symbols-outlined">download</span>Download Materials</button>
+                              </div>
+                              <section class="dx-panel"><div class="dx-head"><h3><span class="material-symbols-outlined">emoji_events</span> Your Progress</h3></div>
+                                <div class="dx-donut-wrap"><div class="dx-donut" id="dx-donut"><span id="dx-donut-pct">0%</span></div>
+                                  <div class="dx-legend"><div><span><i style="background:#10b981"></i>Completed</span><b id="dx-l-done">0</b></div><div><span><i style="background:var(--water-blue)"></i>In Progress</span><b id="dx-l-prog">0</b></div><div><span><i style="background:var(--text-muted)"></i>Not Started</span><b id="dx-l-new">0</b></div></div></div>
+                              </section>
+                              <section class="dx-panel"><div class="dx-head"><h3><span class="material-symbols-outlined">event</span> Upcoming Live Classes</h3><button class="dx-link" data-dx-go="class-joining-page">View All</button></div><div id="dx-upcoming"><p class="dx-empty">Loading...</p></div></section>
+                              <section class="dx-panel"><div class="dx-head"><h3><span class="material-symbols-outlined">campaign</span> Recent Announcements</h3><button class="dx-link" data-dx-go="noticeboard">View All</button></div><div id="dx-notices"><p class="dx-empty">Loading...</p></div></section>
+                            </div>
+                          </div>
+                          <div class="dx-why">
+                            <h3>Why Learn With Dream's Academy?</h3>
+                            <div><span class="material-symbols-outlined">school</span><p><b>Expert Instructors</b><small>Learn from real professionals</small></p></div>
+                            <div><span class="material-symbols-outlined">all_inclusive</span><p><b>Lifetime Access</b><small>Study anytime, anywhere</small></p></div>
+                            <div><span class="material-symbols-outlined">workspace_premium</span><p><b>Certificates</b><small>Boost your career</small></p></div>
+                            <div><span class="material-symbols-outlined">support_agent</span><p><b>24/7 Support</b><small>We are here for you</small></p></div>
+                          </div>
+                        </div>
+
+                        <!-- Progress & Certificates -->
+                        <div class="dashboard-page hidden" id="progress-page">
+                            <div class="content-card">
+                                <div class="content-header"><h2>Progress &amp; Certificates</h2></div>
+                                <div id="dx-progress-list"></div>
+                            </div>
+                        </div>
+
+                        <!-- Assignments -->
+                        <div class="dashboard-page hidden" id="assignments-page">
+                            <div class="content-card"><div class="content-header"><h2>My Assignments</h2></div><div id="dx-assign-list"></div></div>
+                        </div>
+                        <!-- Materials -->
+                        <div class="dashboard-page hidden" id="materials-page">
+                            <div class="content-card"><div class="content-header"><h2>Course Materials</h2></div><div id="dx-mat-list"></div></div>
+                        </div>
+                        <!-- Support -->
+                        <div class="dashboard-page hidden" id="support-page">
+                            <div class="content-card"><div class="content-header"><h2>Support Center</h2></div>
+                                <div class="dx-panel" style="margin-bottom:20px;">
+                                    <input type="text" id="dx-sup-subject" placeholder="Subject" maxlength="120" style="width:100%;margin-bottom:10px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--navy-border);background:var(--navy-dark);color:#fff;font:inherit;">
+                                    <textarea id="dx-sup-msg" rows="4" placeholder="Describe your problem or question..." maxlength="1500" style="width:100%;margin-bottom:10px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--navy-border);background:var(--navy-dark);color:#fff;font:inherit;"></textarea>
+                                    <button class="btn btn-gradient" id="dx-sup-send">Send Request</button>
+                                </div>
+                                <div id="dx-sup-list"></div>
+                            </div>
                         </div>
 
                         <!-- Live Class Joining -->
@@ -3008,6 +3168,10 @@
                 if (targetPageId === 'class-joining-page') displayLiveClasses();
                 if (targetPageId === 'my-services-page') displayMyServices();
                 if (targetPageId === 'ssn-list-page') displaySSNList();
+                if (targetPageId === 'progress-page' && window.dxProgressPage) window.dxProgressPage();
+                if (targetPageId === 'assignments-page' && window.dxAssignments) window.dxAssignments();
+                if (targetPageId === 'materials-page' && window.dxMaterials) window.dxMaterials();
+                if (targetPageId === 'support-page' && window.dxSupport) window.dxSupport();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
@@ -3198,6 +3362,8 @@
                 const photo = userData.photoURL || 'https://i.ibb.co/L1LQtBm/default-avatar.png';
                 document.querySelectorAll('.sidebar-avatar-img').forEach(img => img.src = photo);
                 document.querySelector('.sidebar-user h4').textContent = `Hi, ${name.split(' ')[0]}`;
+                document.querySelectorAll('.dx-name').forEach(e => e.textContent = name);
+                const dxSid = document.getElementById('dx-sid'); if (dxSid && auth.currentUser) dxSid.textContent = 'Student ID: DA-' + auth.currentUser.uid.slice(0, 6).toUpperCase();
                 document.querySelector('.profile-dropdown-header img').src = photo;
                 document.querySelector('.profile-dropdown-header h4').textContent = name;
                 document.querySelector('.profile-dropdown-header p').textContent = userData.email;
@@ -3280,8 +3446,8 @@
                 const grid = document.getElementById('my-courses-grid'); const user = auth.currentUser; if(!user || !grid) return;
                 try {
                     const snap = await db.collection('enrollments').where('studentUid','==',user.uid).get();
-                    if(snap.empty){ grid.innerHTML='<p style="color: #94a3b8;">You haven\'t enrolled in any courses yet.</p>'; return; }
-                    let html=''; 
+                    if(snap.empty){ grid.innerHTML='<p style="color: #94a3b8;">You haven\'t enrolled in any courses yet.</p>'; window.dxRender([]); return; }
+                    let html=''; const dxData=[];
                     for(let d of snap.docs) { 
                         const c = d.data(); 
                         const currSnap = await db.collection('curriculum').where('courseName','==',c.courseName).where('batch','==',c.batch).get();
@@ -3291,12 +3457,15 @@
                         const completedLessons = c.completed_lessons ? c.completed_lessons.length : 0;
                         const remainingLessons = Math.max(0, totalLessons - completedLessons);
                         const progressPercent = totalLessons === 0 ? 0 : Math.round((completedLessons / totalLessons) * 100);
+                        dxData.push({ name: c.courseName, batch: c.batch, total: totalLessons, done: completedLessons, pct: progressPercent });
 
                         let certBtnHtml = progressPercent >= 100 && totalLessons > 0 ? `<button class="btn btn-outline download-cert-btn" data-course="${c.courseName}" style="width:100%; margin-top:12px; border-color:var(--water-cyan); color:var(--water-cyan);">Download Certificate <span class="material-symbols-outlined">workspace_premium</span></button>` : '';
 
-                        html += `<div class="course-card"><div class="card-thumbnail"><img src="${c.courseImage}" alt="${c.courseName} - Dreams Academy"></div><div class="card-content"><span class="category-tag" style="align-self: flex-start; margin-bottom: 12px;">Batch ${c.batch}</span><h3>${c.courseName}</h3><div class="progress-container"><div class="progress-text"><span>Progress: ${progressPercent}%</span><span>${completedLessons}/${totalLessons} Lessons</span></div><div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${progressPercent}%;"></div></div><div style="font-size: 0.8rem; color: #94a3b8; margin-top: 6px;">Remaining: ${remainingLessons} Lessons</div></div><button class="btn btn-gradient start-course-btn" data-name="${c.courseName}" data-batch="${c.batch}" data-docid="${d.id}" style="width:100%;">Continue Learning</button>${certBtnHtml}</div></div>`; 
+                        const stCls = progressPercent >= 100 && totalLessons > 0 ? 'done' : (completedLessons > 0 ? '' : 'new'), stTxt = stCls === 'done' ? 'Completed' : (completedLessons > 0 ? 'In Progress' : 'Not Started');
+                        const certBtn2 = stCls === 'done' ? `<button class="btn btn-outline download-cert-btn" data-course="${c.courseName}">Certificate <span class="material-symbols-outlined">workspace_premium</span></button>` : '';
+                        html += `<div class="dx-course"><div class="dx-thumb"><img src="${c.courseImage}" alt="${c.courseName} - Dreams Academy"><span class="dx-status ${stCls}">${stTxt}</span></div><div class="dx-cbody"><h3>${c.courseName}</h3><small>Batch ${c.batch}</small><div class="dx-meter"><span>${completedLessons}/${totalLessons} Lessons</span><b>${progressPercent}%</b></div><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${progressPercent}%"></div></div><button class="btn ${completedLessons > 0 ? 'btn-gradient' : 'btn-outline'} start-course-btn" data-name="${c.courseName}" data-batch="${c.batch}" data-docid="${d.id}">${completedLessons > 0 ? 'Continue Learning' : 'Start Course'}</button>${certBtn2}</div></div>`;
                     } 
-                    grid.innerHTML=html;
+                    grid.innerHTML=html; window.dxRender(dxData);
                     document.querySelectorAll('.start-course-btn').forEach(btn => btn.addEventListener('click', e => {
                         const name = e.currentTarget.dataset.name, batch = e.currentTarget.dataset.batch; window.currentEnrollmentDocId = e.currentTarget.dataset.docid;
                         document.getElementById('curriculum-course-title').textContent = `${name} - Batch ${batch}`; navigateTo('course-curriculum-page'); fetchAndDisplayCurriculum(name, batch);
@@ -3874,6 +4043,129 @@
                     } 
                 });
             }
+
+
+            // ===== Dashboard v2 helpers =====
+            const dxEsc = s => String(s == null ? '' : s).replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+            window.dxData = [];
+            window.dxRender = function(list) {
+                window.dxData = list;
+                const done = list.filter(x => x.total > 0 && x.pct >= 100).length, fresh = list.filter(x => x.done === 0).length;
+                const lessons = list.reduce((a, x) => a + x.done, 0), total = list.reduce((a, x) => a + x.total, 0);
+                const pct = total ? Math.round(lessons / total * 100) : 0;
+                const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+                set('dx-s-courses', list.length); set('dx-s-lessons', lessons); set('dx-s-certs', done);
+                set('dx-l-done', done); set('dx-l-new', fresh); set('dx-l-prog', list.length - done - fresh); set('dx-donut-pct', pct + '%');
+                document.getElementById('dx-donut').style.setProperty('--p', pct);
+                dxLoadUpcoming(list); dxLoadNotices(); dxLoadActivity();
+            };
+            async function dxLoadUpcoming(list) {
+                const box = document.getElementById('dx-upcoming'); if (!box) return;
+                try {
+                    const now = new Date(); let items = [];
+                    for (const c of list) {
+                        const s = await db.collection('joinClass').where('courseName','==',c.name).where('batch','==',c.batch).orderBy('dateTime','desc').get();
+                        s.forEach(d => { const l = d.data(), t = l.dateTime.toDate(); if (t.getTime() > now.getTime() - 2*3600000) items.push({ l, t }); });
+                    }
+                    items.sort((a, b) => a.t - b.t); items = items.slice(0, 3);
+                    document.getElementById('dx-live-badge').classList.toggle('hidden', !items.some(x => (x.t - now) / 60000 <= 15));
+                    box.innerHTML = items.length ? items.map(({ l, t }) => {
+                        const open = (t - now) / 60000 <= 15, when = t.toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+                        return `<div class="dx-row"><div class="dx-ico"><span class="material-symbols-outlined">videocam</span></div><div><p>${dxEsc(l.topic)}</p><small>${when}</small></div>${open ? `<a class="dx-join" href="${dxEsc(l.link)}" target="_blank" rel="noopener">Join</a>` : '<span class="dx-join off">Soon</span>'}</div>`;
+                    }).join('') : '<p class="dx-empty">No upcoming live classes.</p>';
+                } catch (e) { box.innerHTML = '<p class="dx-empty">No upcoming live classes.</p>'; }
+            }
+            async function dxLoadNotices() {
+                const box = document.getElementById('dx-notices'); if (!box) return;
+                try {
+                    const s = await db.collection('notices').orderBy('timestamp','desc').limit(3).get();
+                    box.innerHTML = s.empty ? '<p class="dx-empty">No announcements yet.</p>' : s.docs.map(d => { const n = d.data(), dt = n.timestamp ? n.timestamp.toDate().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
+                        return `<div class="dx-row"><div class="dx-ico"><span class="material-symbols-outlined">campaign</span></div><div><p>${dxEsc(n.title)}</p><small>${dt}</small></div></div>`; }).join('');
+                } catch (e) { box.innerHTML = '<p class="dx-empty">No announcements yet.</p>'; }
+            }
+            async function dxLoadActivity() {
+                const box = document.getElementById('dx-activity'), u = auth.currentUser; if (!box || !u) return;
+                const icons = { course: 'menu_book', live_class: 'video_camera_front', payment: 'payments', assignment: 'assignment', certificate: 'workspace_premium', account: 'verified_user' };
+                try {
+                    const s = await db.collection('notifications').where('targetUid','==',u.uid).orderBy('timestamp','desc').limit(4).get();
+                    box.innerHTML = s.empty ? '<p class="dx-empty">Your recent activity will show up here.</p>' : s.docs.map(d => { const n = d.data();
+                        return `<div class="dx-row"><div class="dx-ico"><span class="material-symbols-outlined">${icons[n.type] || 'notifications'}</span></div><div><p>${dxEsc(n.title)}: ${dxEsc(n.message)}</p><small>${formatNotificationTime(n.timestamp)}</small></div></div>`; }).join('');
+                } catch (e) { box.innerHTML = '<p class="dx-empty">Your recent activity will show up here.</p>'; }
+            }
+            window.dxProgressPage = function() {
+                const box = document.getElementById('dx-progress-list');
+                box.innerHTML = window.dxData.length ? window.dxData.map(x => `<div class="dx-row" style="flex-wrap:wrap;"><div style="flex:1;min-width:220px;"><p style="color:#fff;font-weight:700;">${dxEsc(x.name)} <small>(Batch ${dxEsc(x.batch)})</small></p><div class="dx-meter"><span>${x.done}/${x.total} Lessons</span><b>${x.pct}%</b></div><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${x.pct}%"></div></div></div>${x.total > 0 && x.pct >= 100 ? `<button class="btn btn-outline dx-cert" data-course="${dxEsc(x.name)}" style="border-color:var(--water-cyan);color:var(--water-cyan);">Download Certificate <span class="material-symbols-outlined">workspace_premium</span></button>` : '<span class="dx-join off">Complete all lessons to unlock</span>'}</div>`).join('') : '<p class="dx-empty">You haven\'t enrolled in any courses yet.</p>';
+                box.querySelectorAll('.dx-cert').forEach(b => b.addEventListener('click', () => generateCertificatePDF(b.dataset.course)));
+            };
+            document.querySelectorAll('[data-dx-go]').forEach(b => b.addEventListener('click', () => navigateTo(b.dataset.dxGo)));
+            document.querySelectorAll('[data-dx-wa]').forEach(b => b.addEventListener('click', () => { const w = document.getElementById('floating-whatsapp-btn'); if (w && w.href) window.open(w.href, '_blank', 'noopener'); }));
+
+
+            // ===== Assignments / Materials / Support =====
+            const dxWhen = t => t && t.toDate ? t.toDate().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+            const dxBatchOk = (item, c) => !item.batch || String(item.batch) === String(c.batch);
+            async function dxCourseList() {
+                if (!window.dxData.length) await new Promise(r => setTimeout(r, 1500));
+                return window.dxData;
+            }
+            window.dxAssignments = async function() {
+                const box = document.getElementById('dx-assign-list'), u = auth.currentUser; if (!u) return;
+                box.innerHTML = '<p class="dx-empty">Loading...</p>';
+                try {
+                    const courses = await dxCourseList(); const items = [];
+                    for (const c of courses) {
+                        const sn = await db.collection('assignments').where('courseName','==',c.name).get();
+                        sn.forEach(d => { const a = d.data(); if (dxBatchOk(a, c)) items.push({ id: d.id, ...a }); });
+                    }
+                    const subs = {}; (await db.collection('assignmentSubmissions').where('uid','==',u.uid).get()).forEach(d => subs[d.data().assignmentId] = d.data());
+                    items.sort((a, b) => (b.createdAt ? b.createdAt.toMillis() : 0) - (a.createdAt ? a.createdAt.toMillis() : 0));
+                    if (!items.length) { box.innerHTML = '<p class="dx-empty">No assignments yet.</p>'; return; }
+                    box.innerHTML = items.map(a => { const sb = subs[a.id], due = a.dueDate && a.dueDate.toDate ? a.dueDate.toDate() : null, late = due && due < new Date();
+                        const st = sb ? (sb.grade ? 'Graded' : 'Submitted') : (late ? 'Overdue' : 'Pending');
+                        return `<div class="dx-panel" style="margin-bottom:16px;"><div class="dx-head"><h3>${dxEsc(a.title)}</h3><span class="dx-status ${sb ? 'done' : (late ? '' : 'new')}" style="position:static;">${st}</span></div>
+                        <p style="color:#cbd5e1;margin-bottom:6px;">${dxEsc(a.description)}</p><small style="color:var(--text-muted);">${dxEsc(a.courseName)}${due ? ' • Due: ' + dxWhen(a.dueDate) : ''}</small>
+                        ${sb && sb.grade ? `<p style="margin-top:10px;color:var(--water-cyan);"><b>Grade: ${dxEsc(sb.grade)}</b>${sb.feedback ? ' - ' + dxEsc(sb.feedback) : ''}</p>` : ''}
+                        ${sb && sb.grade ? '' : `<textarea class="dx-ans" rows="3" placeholder="Write your answer or paste your work link..." style="width:100%;margin:12px 0 8px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--navy-border);background:var(--navy-dark);color:#fff;font:inherit;">${dxEsc(sb ? sb.answer : '')}</textarea><button class="btn btn-gradient dx-sub" data-id="${a.id}" data-course="${dxEsc(a.courseName)}" data-batch="${dxEsc(a.batch || '')}">${sb ? 'Update Submission' : 'Submit Assignment'}</button>`}</div>`; }).join('');
+                    box.querySelectorAll('.dx-sub').forEach(b => b.addEventListener('click', async () => {
+                        const ans = b.parentElement.querySelector('.dx-ans').value.trim(); if (!ans) return showToast('Please write your answer first.', 'error');
+                        b.disabled = true;
+                        try {
+                            await db.collection('assignmentSubmissions').doc(b.dataset.id + '_' + u.uid).set({ assignmentId: b.dataset.id, uid: u.uid, studentName: (document.querySelector('.dx-name') || {}).textContent || '', courseName: b.dataset.course, batch: b.dataset.batch, answer: ans, submittedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+                            showToast('Assignment submitted!', 'success'); window.dxAssignments();
+                        } catch (e) { showToast('Could not submit. Try again.', 'error'); b.disabled = false; }
+                    }));
+                } catch (e) { box.innerHTML = '<p class="dx-empty">Could not load assignments.</p>'; }
+            };
+            window.dxMaterials = async function() {
+                const box = document.getElementById('dx-mat-list'); box.innerHTML = '<p class="dx-empty">Loading...</p>';
+                try {
+                    const courses = await dxCourseList(); let html = '';
+                    for (const c of courses) {
+                        const rows = []; (await db.collection('materials').where('courseName','==',c.name).get()).forEach(d => { const m = d.data(); if (dxBatchOk(m, c)) rows.push(m); });
+                        if (!rows.length) continue;
+                        html += `<div class="dx-panel" style="margin-bottom:16px;"><div class="dx-head"><h3>${dxEsc(c.name)}</h3></div>` + rows.map(m => `<div class="dx-row"><div class="dx-ico"><span class="material-symbols-outlined">${m.type === 'video' ? 'play_circle' : (m.type === 'pdf' ? 'picture_as_pdf' : 'description')}</span></div><div><p>${dxEsc(m.title)}</p><small>${dxEsc(m.type || 'file')}</small></div><a class="dx-join" href="${dxEsc(m.link)}" target="_blank" rel="noopener">Open</a></div>`).join('') + '</div>';
+                    }
+                    box.innerHTML = html || '<p class="dx-empty">No materials uploaded yet.</p>';
+                } catch (e) { box.innerHTML = '<p class="dx-empty">Could not load materials.</p>'; }
+            };
+            window.dxSupport = async function() {
+                const box = document.getElementById('dx-sup-list'), u = auth.currentUser; if (!u) return;
+                try {
+                    const sn = await db.collection('supportTickets').where('uid','==',u.uid).get();
+                    const t = sn.docs.map(d => d.data()).sort((a, b) => (b.createdAt ? b.createdAt.toMillis() : 0) - (a.createdAt ? a.createdAt.toMillis() : 0));
+                    box.innerHTML = t.length ? t.map(x => `<div class="dx-panel" style="margin-bottom:14px;"><div class="dx-head"><h3>${dxEsc(x.subject)}</h3><span class="dx-status ${x.reply ? 'done' : ''}" style="position:static;">${x.reply ? 'Replied' : 'Open'}</span></div><p style="color:#cbd5e1;">${dxEsc(x.message)}</p><small style="color:var(--text-muted);">${dxWhen(x.createdAt)}</small>${x.reply ? `<p style="margin-top:12px;padding:12px;border-radius:var(--radius-sm);background:var(--water-glow-subtle);color:#fff;"><b>Support:</b> ${dxEsc(x.reply)}</p>` : ''}</div>`).join('') : '<p class="dx-empty">No support requests yet.</p>';
+                } catch (e) { box.innerHTML = '<p class="dx-empty">Could not load requests.</p>'; }
+            };
+            document.getElementById('dx-sup-send').addEventListener('click', async function() {
+                const u = auth.currentUser, sub = document.getElementById('dx-sup-subject'), msg = document.getElementById('dx-sup-msg');
+                if (!u || !sub.value.trim() || !msg.value.trim()) return showToast('Please fill in subject and message.', 'error');
+                this.disabled = true;
+                try {
+                    await db.collection('supportTickets').add({ uid: u.uid, name: (document.querySelector('.dx-name') || {}).textContent || '', email: u.email || '', subject: sub.value.trim(), message: msg.value.trim(), status: 'open', reply: '', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                    sub.value = ''; msg.value = ''; showToast('Request sent. We will reply soon.', 'success'); window.dxSupport();
+                } catch (e) { showToast('Could not send. Try again.', 'error'); }
+                this.disabled = false;
+            });
 
             // Live Class HUD Timer
             setInterval(function() { 
