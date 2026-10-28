@@ -731,6 +731,7 @@
                 <li data-page="support-page"><a href="#"><span class="material-symbols-outlined">support_agent</span> Support Tickets</a></li>
                 <li data-page="online-classes-page"><a href="#"><span class="material-symbols-outlined">video_camera_front</span> Online Classes</a></li>
                 <li data-page="withdrawals-page"><a href="#"><span class="material-symbols-outlined">paid</span> Withdrawals</a></li>
+                <li data-page="staff-earnings-page"><a href="#"><span class="material-symbols-outlined">account_balance_wallet</span> Instructor Earnings</a></li>
                 <li data-page="staff-withdrawals-page"><a href="#"><span class="material-symbols-outlined">request_quote</span> Employee Withdraw</a></li>
                 <li data-page="settings-page"><a href="#"><span class="material-symbols-outlined">settings</span> Settings</a></li>
             </ul>
@@ -1371,6 +1372,8 @@
                 <div class="page-header"><h1>My Earning</h1></div>
                 <div id="earning-summary" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:20px;"></div>
                 <div class="content-box" style="margin-bottom:20px;"><table class="data-table"><thead><tr><th>Course</th><th>Batch</th><th>Students</th><th>Rate / Student</th><th>Earned</th></tr></thead><tbody id="earning-lines"></tbody></table></div>
+                <div class="page-header"><h1>Earning History</h1></div>
+                <div class="content-box" style="margin-bottom:20px;"><table class="data-table"><thead><tr><th>Date</th><th>Details</th><th>Course / Batch</th><th>Amount</th></tr></thead><tbody id="earning-ledger"></tbody></table></div>
                 <div class="content-box" style="margin-bottom:20px;padding:20px;">
                     <h3 style="margin-bottom:12px;">Withdraw Earnings</h3>
                     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;">
@@ -1382,6 +1385,12 @@
                 </div>
                 <div class="page-header"><h1>Withdraw History</h1></div>
                 <div class="content-box"><table class="data-table"><thead><tr><th>Date</th><th>Amount</th><th>Method</th><th>Account</th><th>Status</th><th>Note / TrxID</th></tr></thead><tbody id="earning-history"></tbody></table></div>
+            </div>
+            <div id="staff-earnings-page" class="page">
+                <div class="page-header"><h1>Instructor Earnings</h1><div style="display:flex;gap:8px;flex-wrap:wrap;"><button class="btn btn-add" onclick="dxSyncClick()"><span class="material-symbols-outlined">sync</span> Sync Earnings</button><button class="btn btn-add" onclick="openModalForAdd('staffEarnings')"><span class="material-symbols-outlined">add</span> Add Adjustment</button></div></div>
+                <div class="content-box"><table class="data-table"><thead><tr><th>Instructor</th><th>Earned</th><th>Withdrawn</th><th>Pending</th><th>Available</th></tr></thead><tbody id="staff-earn-summary"></tbody></table></div>
+                <div class="page-header" style="margin-top:28px;"><h1>Earning Ledger</h1></div>
+                <div class="content-box"><table class="data-table"><thead><tr><th>Date</th><th>Instructor</th><th>Type</th><th>Course / Batch</th><th>Student</th><th>Amount</th><th>Note</th><th>Action</th></tr></thead><tbody id="staff-earn-ledger"></tbody></table></div>
             </div>
             <div id="staff-withdrawals-page" class="page">
                 <div class="page-header"><h1>Employee Withdraw</h1></div>
@@ -1657,7 +1666,7 @@
                 if (user) {
                     const em = (user.email || '').toLowerCase();
                     if (em === ADMIN_EMAIL) {
-                        window.ROLE = 'admin';
+                        window.ROLE = 'admin'; setTimeout(() => { if (window.dxSyncAll) window.dxSyncAll().catch(() => {}); }, 2500);
                         loginPage.classList.add('hidden'); adminPanel.classList.remove('hidden'); navigateTo('dashboard-page');
                     } else {
                         try {
@@ -1749,6 +1758,7 @@
                     case 'staff-page': renderStaff(); break;
                     case 'my-earning-page': renderMyEarning(); break;
                     case 'staff-withdrawals-page': renderStaffWithdrawals(); break;
+                    case 'staff-earnings-page': renderStaffEarnings(); break;
                     case 'assignments-page': renderAssignments(); break;
                     case 'materials-page': renderMaterials(); break;
                     case 'support-page': renderSupport(); break;
@@ -3046,16 +3056,55 @@
                     }).join('');
                 } catch (e) { tb.innerHTML = `<tr><td colspan="5" style="color:red;text-align:center;">Error: ${e.message}</td></tr>`; }
             }
-            async function renderMyEarning() {
-                const sum = document.getElementById('earning-summary'), lines = document.getElementById('earning-lines'), hist = document.getElementById('earning-history');
-                try {
-                    let total = 0, rows = '';
-                    for (const p of window.MY_TEACH) {
-                        const [c, b] = p.split('||'), rate = Number(window.MY_RATES[c]) || 0;
-                        const n = (await db.collection('enrollments').where('courseName', '==', c).where('batch', '==', b).get()).size;
-                        total += n * rate; rows += `<tr><td data-label="Course">${dxe(c)}</td><td data-label="Batch">${dxe(b)}</td><td data-label="Students">${n}</td><td data-label="Rate">৳ ${rate}</td><td data-label="Earned"><strong>৳ ${n * rate}</strong></td></tr>`;
+            // Credits one ledger entry per enrolled student (id = enrollmentId__instructorEmail, so never duplicated)
+            async function dxSyncFor(staff, existing) {
+                let b = db.batch(), n = 0;
+                for (const t of (staff.teach || [])) {
+                    const [c, bt] = t.split('||'), rate = Number((staff.rates || {})[c]) || 0; if (!rate) continue;
+                    const es = await db.collection('enrollments').where('courseName', '==', c).where('batch', '==', bt).get();
+                    for (const d of es.docs) {
+                        const id = d.id + '__' + staff.email; if (existing.has(id)) continue; const e = d.data();
+                        b.set(db.collection('staffEarnings').doc(id), { staffEmail: staff.email, staffName: staff.name || '', type: 'enrollment', amount: rate, courseName: c, batch: bt, enrollmentId: d.id, studentName: e.studentName || '', studentId: e.studentId || null, note: '', by: window.ROLE, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                        existing.add(id); if (++n % 400 === 0) { await b.commit(); b = db.batch(); }
                     }
+                }
+                if (n % 400 !== 0) await b.commit();
+                return n;
+            }
+            window.dxSyncAll = async () => {
+                const staff = (await db.collection('staff').get()).docs.map(d => ({ ...d.data(), email: d.id }));
+                const existing = new Set((await db.collection('staffEarnings').get()).docs.map(d => d.id)); let n = 0;
+                for (const s of staff) n += await dxSyncFor(s, existing);
+                return n;
+            };
+            window.dxSyncClick = async () => {
+                try { const n = await window.dxSyncAll(); showToast(`${n} new earning entries credited.`); renderStaffEarnings(); }
+                catch (e) { showToast('Failed: ' + e.message, 'error'); }
+            };
+            async function renderStaffEarnings() {
+                const sb = document.getElementById('staff-earn-summary'), lb = document.getElementById('staff-earn-ledger');
+                try {
+                    const [st, le, wd] = await Promise.all([db.collection('staff').get(), db.collection('staffEarnings').get(), db.collection('staffWithdrawals').get()]);
+                    const agg = {}; st.forEach(d => agg[d.id] = { name: d.data().name, earn: 0, paid: 0, pend: 0 });
+                    le.forEach(d => { const e = d.data(); if (agg[e.staffEmail]) agg[e.staffEmail].earn += Number(e.amount) || 0; });
+                    wd.forEach(d => { const w = d.data(), a = agg[w.staffEmail]; if (!a) return; if (w.status === 'paid') a.paid += w.amount; if (w.status === 'pending') a.pend += w.amount; });
+                    sb.innerHTML = Object.entries(agg).map(([em, a]) => `<tr><td data-label="Instructor"><strong>${dxe(a.name)}</strong><br><small>${dxe(em)}</small></td><td data-label="Earned">৳ ${a.earn}</td><td data-label="Withdrawn">৳ ${a.paid}</td><td data-label="Pending">৳ ${a.pend}</td><td data-label="Available"><strong>৳ ${Math.max(0, a.earn - a.paid - a.pend)}</strong></td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center;">No instructors yet.</td></tr>';
+                    const rows = le.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt ? b.createdAt.toMillis() : 0) - (a.createdAt ? a.createdAt.toMillis() : 0)).slice(0, 200);
+                    lb.innerHTML = rows.map(e => `<tr><td data-label="Date">${e.createdAt ? e.createdAt.toDate().toLocaleDateString('en-GB') : ''}</td><td data-label="Instructor">${dxe(e.staffName)}</td><td data-label="Type">${dxe(e.type)}</td><td data-label="Course">${dxe(e.courseName)}${e.batch ? ' / Batch ' + dxe(e.batch) : ''}</td><td data-label="Student">${dxe(e.studentName)} ${e.studentId || ''}</td><td data-label="Amount" style="color:${e.amount < 0 ? '#dc2626' : '#16a34a'};"><strong>৳ ${e.amount}</strong></td><td data-label="Note">${dxe(e.note)}</td><td class="actions-cell">${e.type === 'enrollment' ? '' : `<button class="btn-delete" onclick="deleteItem('staffEarnings', '${e.id}')"><span class="material-symbols-outlined">delete</span></button>`}</td></tr>`).join('') || '<tr><td colspan="8" style="text-align:center;">No earnings yet. Click "Sync Earnings".</td></tr>';
+                } catch (e) { sb.innerHTML = `<tr><td colspan="5" style="color:red;">Error: ${e.message}</td></tr>`; }
+            }
+            async function renderMyEarning() {
+                const sum = document.getElementById('earning-summary'), lines = document.getElementById('earning-lines'), hist = document.getElementById('earning-history'), led = document.getElementById('earning-ledger');
+                try {
+                    const me = { name: window.MY_NAME, email: window.MY_EMAIL, teach: window.MY_TEACH, rates: window.MY_RATES };
+                    let mine = await db.collection('staffEarnings').where('staffEmail', '==', window.MY_EMAIL).get();
+                    try { if (await dxSyncFor(me, new Set(mine.docs.map(d => d.id)))) mine = await db.collection('staffEarnings').where('staffEmail', '==', window.MY_EMAIL).get(); } catch (e) { console.warn('sync', e); }
+                    const ent = mine.docs.map(d => d.data()), by = {}; let total = 0, adj = 0;
+                    ent.forEach(e => { const a = Number(e.amount) || 0; total += a; if (e.type === 'enrollment') { const k = e.courseName + '||' + e.batch; (by[k] = by[k] || { n: 0, s: 0 }); by[k].n++; by[k].s += a; } else adj += a; });
+                    let rows = window.MY_TEACH.map(p => { const [c, b] = p.split('||'), x = by[p] || { n: 0, s: 0 }; return `<tr><td data-label="Course">${dxe(c)}</td><td data-label="Batch">${dxe(b)}</td><td data-label="Students">${x.n}</td><td data-label="Rate">৳ ${Number(window.MY_RATES[c]) || 0}</td><td data-label="Earned"><strong>৳ ${x.s}</strong></td></tr>`; }).join('');
+                    if (adj) rows += `<tr><td data-label="Course" colspan="4">Adjustments (bonus / deduction by admin)</td><td data-label="Earned"><strong>৳ ${adj}</strong></td></tr>`;
                     lines.innerHTML = rows || '<tr><td colspan="5" style="text-align:center;">No batch assigned yet.</td></tr>';
+                    led.innerHTML = ent.sort((a, b) => (b.createdAt ? b.createdAt.toMillis() : 0) - (a.createdAt ? a.createdAt.toMillis() : 0)).slice(0, 50).map(e => `<tr><td data-label="Date">${e.createdAt ? e.createdAt.toDate().toLocaleDateString('en-GB') : ''}</td><td data-label="Details">${e.type === 'enrollment' ? 'New student: ' + dxe(e.studentName || 'Student') + (e.studentId ? ' (' + e.studentId + ')' : '') : dxe(e.type) + ': ' + dxe(e.note)}</td><td data-label="Course">${dxe(e.courseName)}${e.batch ? ' / Batch ' + dxe(e.batch) : ''}</td><td data-label="Amount" style="color:${e.amount < 0 ? '#dc2626' : '#16a34a'};"><strong>৳ ${e.amount}</strong></td></tr>`).join('') || '<tr><td colspan="4" style="text-align:center;">No earnings yet.</td></tr>';
                     const wd = (await db.collection('staffWithdrawals').where('staffEmail', '==', window.MY_EMAIL).get()).docs.map(d => d.data()).sort((a, b) => (b.requestDate ? b.requestDate.toMillis() : 0) - (a.requestDate ? a.requestDate.toMillis() : 0));
                     const paid = wd.filter(w => w.status === 'paid').reduce((a, w) => a + w.amount, 0), pend = wd.filter(w => w.status === 'pending').reduce((a, w) => a + w.amount, 0);
                     window.dxAvail = Math.max(0, total - paid - pend);
@@ -3152,6 +3201,14 @@
                         <div class="form-group"><label>${dxe(data.name)} (${dxe(data.email)})</label><input type="text" value="${dxe(data.subject)}" disabled></div>
                         <div class="form-group"><textarea rows="3" disabled>${dxe(data.message)}</textarea></div>
                         <div class="form-group"><label>Your Reply</label><textarea name="reply" rows="4" required>${dxe(data.reply)}</textarea></div>`;
+                }
+                if (type === 'staffEarnings') {
+                    let opts = ''; (await db.collection('staff').get()).forEach(d => { opts += `<option value="${dxe(d.id)}" data-name="${dxe(d.data().name)}">${dxe(d.data().name)} (${dxe(d.id)})</option>`; });
+                    return `
+                        <div class="form-group"><label>Instructor</label><select name="staffEmail" required>${opts}</select></div>
+                        <div class="form-group"><label>Type</label><select name="adjType"><option value="bonus">Bonus (add)</option><option value="deduction">Deduction (subtract)</option></select></div>
+                        <div class="form-group"><label>Amount (৳)</label><input type="number" name="amount" min="1" required></div>
+                        <div class="form-group"><label>Note (reason)</label><input type="text" name="note" required></div>`;
                 }
                 if (type === 'staff') {
                     const found = {}; (await db.collection('enrollments').get()).forEach(d => { const e = d.data(); (found[e.courseName] = found[e.courseName] || new Set()).add(String(e.batch)); });
@@ -3433,6 +3490,9 @@
                         discountValue: Number(formData.get('discountValue')) || 0,
                         active: formData.get('active') === 'on'
                     };
+                } else if (collection === 'staffEarnings') {
+                    const sel = modalForm.querySelector('select[name="staffEmail"]'), amt = Math.abs(Number(formData.get('amount')) || 0), ty = formData.get('adjType');
+                    newItem = { staffEmail: formData.get('staffEmail'), staffName: sel.options[sel.selectedIndex].dataset.name || '', type: ty, amount: ty === 'deduction' ? -amt : amt, courseName: '', batch: '', note: formData.get('note'), by: 'admin', createdAt: firebase.firestore.FieldValue.serverTimestamp() };
                 } else if (collection === 'staff') {
                     const em = (formData.get('email') || '').trim().toLowerCase();
                     const teach = [], courses = [], rates = {};
