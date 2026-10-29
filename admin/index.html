@@ -3323,6 +3323,12 @@
                         <div class="form-group"><label>Course Image URL</label><input type="url" name="image" value="${data.image || data.imageUrl || ''}" placeholder="https://..."></div>
                         <div class="form-group"><label>Category</label><input type="text" name="category" value="${data.category || ''}" placeholder="e.g., Design"></div>
                         <div class="form-group"><label>Default Batch (for online purchases)</label><input type="text" name="batch" value="${data.batch || '1'}"></div>
+                        <div class="form-group"><label>Old Price (৳, optional - shows discount)</label><input type="number" name="oldPrice" value="${data.oldPrice || ''}"></div>
+                        <div class="form-group"><label>Duration (optional, e.g., 2 Months)</label><input type="text" name="duration" value="${dxe(data.duration)}"></div>
+                        <div class="form-group"><label>Mode (optional, e.g., Live Zoom + Recorded)</label><input type="text" name="mode" value="${dxe(data.mode)}"></div>
+                        <div class="form-group"><label>Course Description (shown on course page)</label><textarea name="description" rows="3">${dxe(data.description)}</textarea></div>
+                        <div class="form-group"><label>What students will learn (one point per line)</label><textarea name="highlights" rows="4">${dxe((data.highlights || []).join('\n'))}</textarea></div>
+                        <div class="form-group"><label>FAQ (one per line: Question | Answer)</label><textarea name="faqs" rows="4">${dxe((data.faqs || []).map(f => f.q + ' | ' + f.a).join('\n'))}</textarea></div>
                         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
                             <div class="form-group"><label>Course Price (BDT)</label><input type="number" name="price" value="${data.price || 0}" required></div>
                             <div class="form-group"><label>Affiliate Commission (BDT)</label><input type="number" name="commission" value="${data.commission || 0}"></div>
@@ -3601,10 +3607,14 @@
                         });
                         modules.push({ title: mTitle, videos: lessons });
                     });
-                    newItem = {
-                        courseName: formData.get('courseName'),
-                        batch: formData.get('batch'),
-                        modules: modules,
+                    if (window.ROLE !== 'instructor') {
+                        try {
+                            const cs = await db.collection('courses').where('name', '==', formData.get('courseName')).get();
+                            const syl = modules.map(m => ({ title: m.title, lessons: (m.videos || []).map(v => v.title) }));
+                            cs.forEach(d => d.ref.update({ syllabus: syl }));
+                        } catch (e) { console.warn('syllabus mirror failed', e); }
+                    }
+                    newItem = { courseName: formData.get('courseName'), batch: formData.get('batch'), modules: modules,
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     };
                 } else if (collection === 'joinClass') {
@@ -3633,7 +3643,10 @@
                         name: formData.get('name'),
                         instructor: formData.get('instructor'), image: formData.get('image') || '', category: formData.get('category') || '', batch: formData.get('batch') || '1',
                         price: Number(formData.get('price')) || 0,
-                        commission: Number(formData.get('commission')) || 0
+                        commission: Number(formData.get('commission')) || 0,
+                        oldPrice: Number(formData.get('oldPrice')) || 0, duration: formData.get('duration') || '', mode: formData.get('mode') || '', description: formData.get('description') || '',
+                        highlights: (formData.get('highlights') || '').split('\n').map(t => t.trim()).filter(Boolean),
+                        faqs: (formData.get('faqs') || '').split('\n').map(t => t.trim()).filter(Boolean).map(t => { const i = t.indexOf('|'); return i < 0 ? null : { q: t.slice(0, i).trim(), a: t.slice(i + 1).trim() }; }).filter(f => f && f.q && f.a)
                     };
                 } else if (collection === 'services') {
                     newItem = { 
