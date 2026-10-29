@@ -3694,11 +3694,13 @@
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     };
                 } else if (collection === 'video_reviews') {
-                    newItem = {
-                        title: formData.get('title'),
-                        subtitle: formData.get('subtitle'),
-                        youtubeLink: formData.get('youtubeLink')
-                    };
+    newItem = {
+        title: formData.get('title'),
+        subtitle: formData.get('subtitle'),
+        youtubeLink: formData.get('youtubeLink')
+    };
+    if (!id) newItem.timestamp = firebase.firestore.FieldValue.serverTimestamp();
+}
                 } else if (collection === 'trust_screenshots') {
                     newItem = {
                         title: formData.get('title'),
