@@ -705,7 +705,7 @@
         }
         .course-grid, .service-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
             gap: 36px;
             justify-items: center;
         }
@@ -917,7 +917,7 @@
         /* ==========================================================================
            VIDEO REVIEWS & TRUST SLIDER
            ========================================================================== */
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 32px; }
         .video-card {
             background: var(--gradient-card-3d);
             border: 1px solid var(--navy-border);
@@ -1883,7 +1883,7 @@
         .legal-section-card h3 { color: var(--water-cyan); margin: 24px 0 12px; }
         .legal-section-card p, .legal-section-card li { color: #94a3b8; line-height: 1.8; }
 
-        .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 30px; }
         .blog-card {
             background: var(--gradient-card-3d);
             border: 1px solid var(--navy-border);
@@ -2017,6 +2017,88 @@
         .dx-why small { display: block; color: var(--text-muted); } .dx-why b { color: #e2e8f0; font-size: .85rem; }
         @media (max-width: 1100px) { .dx-grid, .dx-two { grid-template-columns: 1fr; } }
         @media (max-width: 600px) { .dx-script { display: none; } .dx-hero h1 { font-size: 1.5rem; } .dx-panel { padding: 18px; } }
+
+        /* ===== Mobile fixes: modals / checkout / overflow ===== */
+        img, video, iframe { max-width: 100%; }
+        .login-modal { align-items: flex-start; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+        .login-card, .checkout-card { margin: auto; }
+        @media (max-width: 768px) {
+            .login-modal { padding: 10px; }
+            .checkout-card { padding: 54px 16px 22px; gap: 22px; border-radius: var(--radius-md); max-height: none; overflow: visible; }
+            .checkout-item-details { flex-wrap: wrap; gap: 12px; }
+            .checkout-item-details img { width: 100%; height: auto; aspect-ratio: 16/9; }
+            .checkout-item-info { flex: 1 1 60%; min-width: 0; }
+            #checkout-item-price { margin-left: 0 !important; }
+            .checkout-section-title { font-size: 1rem; }
+            .coupon-input-group { flex-direction: column; }
+            .coupon-input-group button { padding: 12px; }
+            .checkout-coupon-area, .checkout-summary-box { padding: 16px; }
+            .summary-row.total { font-size: 1.1rem; }
+            .payment-method-label { padding: 12px; }
+            .close-modal-btn { top: 10px; right: 10px; }
+            #payment-modal .login-card { max-width: 100%; }
+            .otp-input-group { gap: 6px; }
+            .otp-input-group input { width: 42px; height: 50px; }
+        }
+
+        /* ===== Course page (Course Module) ===== */
+        .cp-wrap { padding-top: 24px; padding-bottom: 60px; }
+        .cp-crumb { font-size: .85rem; color: var(--text-muted); margin-bottom: 18px; display: flex; flex-wrap: wrap; gap: 6px; }
+        .cp-crumb a { color: var(--water-cyan); text-decoration: none; }
+        .cp-hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: center; padding: 34px; border: 1px solid var(--navy-border); border-radius: var(--radius-lg); background: linear-gradient(135deg, rgba(0,242,254,.12), rgba(15,33,77,.92) 55%, rgba(7,15,38,.96)); box-shadow: var(--shadow-card); }
+        .cp-tag { display: inline-block; padding: 4px 14px; border-radius: var(--radius-pill); font-size: .78rem; font-weight: 800; background: var(--water-glow-subtle); color: var(--water-cyan); border: 1px solid var(--navy-border); }
+        .cp-hero h1 { font-size: 2.1rem; line-height: 1.25; color: #fff; margin: 14px 0 12px; overflow-wrap: anywhere; }
+        .cp-lead { color: #cbd5e1; line-height: 1.7; margin-bottom: 18px; }
+        .cp-price-row { display: flex; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+        .cp-price { font-size: 2rem; font-weight: 800; color: var(--water-cyan); }
+        .cp-price-row s { color: var(--text-muted); } .cp-price-row b { color: #10b981; font-size: .85rem; }
+        .cp-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+        .cp-actions .btn { width: auto; padding: 13px 26px; }
+        .cp-hero-img img { width: 100%; border-radius: var(--radius-md); border: 1px solid var(--navy-border); aspect-ratio: 16/10; object-fit: cover; display: block; box-shadow: var(--shadow-3d-deep); }
+        .cp-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr)); gap: 14px; margin: 22px 0; }
+        .cp-fact { display: flex; gap: 12px; align-items: center; padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--navy-border); background: rgba(7,15,38,.7); }
+        .cp-fact .material-symbols-outlined { color: var(--water-cyan); font-size: 28px; }
+        .cp-fact small { display: block; color: var(--text-muted); font-size: .76rem; } .cp-fact b { color: #fff; font-size: .95rem; overflow-wrap: anywhere; }
+        .cp-sec { margin-top: 38px; }
+        .cp-sec > h2 { font-size: 1.5rem; color: #fff; margin-bottom: 6px; text-align: center; }
+        .cp-sec > p.cp-sub { text-align: center; color: var(--text-body); margin-bottom: 22px; }
+        .cp-learn { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 12px; }
+        .cp-learn div { display: flex; gap: 10px; align-items: flex-start; padding: 14px 16px; border-radius: var(--radius-md); border: 1px solid var(--navy-border); background: var(--gradient-card-3d); color: #e2e8f0; line-height: 1.5; }
+        .cp-learn .material-symbols-outlined { color: var(--water-cyan); }
+        .cp-why { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 14px; }
+        .cp-why div { padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--navy-border); background: var(--gradient-card-3d); }
+        .cp-why .material-symbols-outlined { color: var(--water-cyan); font-size: 32px; }
+        .cp-why h4 { color: #fff; margin: 8px 0 4px; } .cp-why p { color: var(--text-body); font-size: .88rem; line-height: 1.5; }
+        .cp-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 14px; counter-reset: st; }
+        .cp-steps div { position: relative; padding: 22px 18px 18px; border-radius: var(--radius-md); border: 1px solid var(--navy-border); background: rgba(7,15,38,.7); counter-increment: st; }
+        .cp-steps div::before { content: counter(st); position: absolute; top: -14px; left: 16px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--gradient-water-3d); color: #020617; font-weight: 800; }
+        .cp-steps h4 { color: #fff; margin-bottom: 4px; } .cp-steps p { color: var(--text-body); font-size: .86rem; line-height: 1.5; }
+        .cp-faq { max-width: 820px; margin: 0 auto; }
+        .cp-faq-item { border: 1px solid var(--navy-border); border-radius: var(--radius-md); margin-bottom: 10px; background: var(--gradient-card-3d); overflow: hidden; }
+        .cp-faq-q { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; background: none; border: 0; color: #fff; font: inherit; font-weight: 700; text-align: left; cursor: pointer; }
+        .cp-faq-a { display: none; padding: 0 18px 16px; color: #cbd5e1; line-height: 1.7; }
+        .cp-faq-item.open .cp-faq-a { display: block; } .cp-faq-item.open .cp-faq-q .material-symbols-outlined { transform: rotate(45deg); }
+        .cp-others { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 14px; }
+        .cp-other { display: block; text-decoration: none; border: 1px solid var(--navy-border); border-radius: var(--radius-md); overflow: hidden; background: var(--gradient-card-3d); }
+        .cp-other img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+        .cp-other div { padding: 12px 14px; } .cp-other b { color: #fff; display: block; margin-bottom: 4px; } .cp-other span { color: var(--water-cyan); font-weight: 800; }
+        .cp-cta { margin-top: 38px; text-align: center; padding: 32px 20px; border-radius: var(--radius-lg); border: 1px solid var(--navy-border); background: linear-gradient(135deg, rgba(0,242,254,.14), rgba(15,33,77,.95)); }
+        .cp-cta h2 { color: #fff; margin-bottom: 8px; } .cp-cta p { color: #cbd5e1; margin-bottom: 18px; }
+        .cp-cta .cp-actions { justify-content: center; }
+        .cp-sticky { display: none; }
+        @media (max-width: 820px) {
+            .cp-hero { grid-template-columns: 1fr; padding: 22px; gap: 22px; }
+            .cp-hero-img { order: -1; }
+            .cp-hero h1 { font-size: 1.55rem; }
+            .cp-price { font-size: 1.6rem; }
+            .cp-actions .btn { flex: 1 1 100%; }
+            .cp-wrap { padding-bottom: 150px; }
+            .cp-sec > h2 { font-size: 1.25rem; }
+            .cp-sticky { display: flex; position: fixed; left: 0; right: 0; bottom: 65px; z-index: 900; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; background: rgba(7,15,38,.97); border-top: 1px solid var(--navy-border); }
+            .cp-sticky small { display: block; color: var(--text-muted); font-size: .72rem; max-width: 52vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+            .cp-sticky b { color: var(--water-cyan); font-size: 1.15rem; }
+            .cp-sticky .btn { width: auto; padding: 11px 22px; }
+        }
     </style>
 </head>
 <body>
@@ -2551,7 +2633,9 @@
             </section>
 
             <!-- Blog Section -->
-            <section class="section page-section hidden" id="blog">
+            <section class="section page-section hidden" id="course-page"><div id="course-page-root"></div></section>
+
+        <section class="section page-section hidden" id="blog">
                 <div class="container">
                     <h2 class="section-title">Dreams Academy Blog & Insights</h2>
                     <div class="blog-grid">
@@ -3034,6 +3118,7 @@
 
             function navigateTo(targetId, addToHistory = true) {
                 if(!targetId) return;
+                if (typeof targetId === 'string' && targetId.indexOf('course/') === 0) { dxOpenCourse(targetId.slice(7), addToHistory); return; }
                 const modalRoutes = ['login', 'signup', 'forgot-password', 'dollarsell', 'checkout', 'otp'];
                 const isModal = modalRoutes.includes(targetId);
                 const el = document.getElementById(targetId);
@@ -3103,7 +3188,7 @@
                 const allSections = document.querySelectorAll('#main-content .page-section');
                 
                 if (targetId === 'home') {
-                    const hiddenOnHome = ['blog', 'terms', 'refund', 'privacy'];
+                    const hiddenOnHome = ['blog', 'terms', 'refund', 'privacy', 'course-page'];
                     allSections.forEach(s => {
                         if (hiddenOnHome.includes(s.getAttribute('id'))) {
                             s.classList.add('hidden');
@@ -3661,7 +3746,7 @@
                 if(auth.currentUser) {
                     const b = e.currentTarget, name = b.dataset.name, price = parseFloat(b.dataset.price); 
                     let img = 'https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png'; 
-                    const c = b.closest('.course-card') || b.closest('.service-card'); 
+                    const c = b.closest('.course-card') || b.closest('.service-card') || b.closest('#course-page'); 
                     if (c) { const i = c.querySelector('img'); if (i) img = i.src; }
                     
                     window.checkoutState = { courseName: name, originalPrice: price, discount: 0, finalPrice: price, image: img };
@@ -3728,11 +3813,13 @@
                 try { 
                     const snap = await db.collection('courses').get(); 
                     if (snap.empty) { c.innerHTML = '<p style="text-align:center; width:100%; color:var(--text-muted);">No active courses found.</p>'; return; } 
+                    window.__cpList = cpBuildList(snap);
                     let h = ''; 
                     snap.forEach(d => { 
                         const v = d.data(); 
                         if(v.status === false || v.active === false) return; 
                         let curP = Number(v.currentPrice) || Number(v.price) || 0; 
+                        const cpSlug = ((window.__cpList || []).find(x => x.id === d.id) || {}).slug || '';
                         let img = v.image || v.imageUrl || 'https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png'; 
                         let cat = v.category || 'Skill Development'; 
                         let instructor = v.instructor || 'Expert Faculty'; 
@@ -3751,21 +3838,21 @@
                                     <div class="course-info">
                                         <span class="material-symbols-outlined" style="color: var(--water-cyan);">person</span> ${instructor}
                                     </div>
-                                    <button class="btn btn-outline preview-course-btn" data-name="${v.name}" data-price="${curP}" data-img="${img}" style="width: 100%; padding: 10px; font-size: 0.88rem; margin-bottom: 14px;">
-                                        View Curriculum <span class="material-symbols-outlined" style="font-size: 18px;">visibility</span>
-                                    </button>
-                                    <div class="card-footer">
+                                    <div class="card-footer" style="flex-wrap: wrap; gap: 12px;">
                                         <span class="price">৳ ${curP}</span>
-                                        <a href="#" class="btn btn-gradient buy-now-btn" data-name="${v.name}" data-price="${curP}" style="width: auto; padding: 10px 20px;">Enroll <span class="material-symbols-outlined">arrow_forward</span></a>
+                                        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-left: auto;">
+                                            <a href="/course/${encodeURIComponent(cpSlug)}" class="btn btn-outline course-module-btn" data-slug="${cpSlug}" style="width: auto; padding: 10px 14px; font-size: 0.85rem;">Course Module</a>
+                                            <a href="#" class="btn btn-gradient buy-now-btn" data-name="${v.name}" data-price="${curP}" style="width: auto; padding: 10px 18px; font-size: 0.85rem;">Enroll <span class="material-symbols-outlined">arrow_forward</span></a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>`; 
                     }); 
                     c.innerHTML = h || '<p style="text-align:center; width:100%; color:var(--text-muted);">No courses listed.</p>'; 
                     c.querySelectorAll('.buy-now-btn').forEach(b => b.addEventListener('click', handleBuyNowClick)); 
-                    c.querySelectorAll('.preview-course-btn').forEach(b => b.addEventListener('click', e => {
+                    c.querySelectorAll('.course-module-btn').forEach(b => b.addEventListener('click', e => {
                         e.preventDefault();
-                        window.openCoursePreviewModal(e.currentTarget.dataset.name, e.currentTarget.dataset.price, e.currentTarget.dataset.img);
+                        navigateTo('course/' + e.currentTarget.dataset.slug);
                     }));
                 } catch(e) { c.innerHTML = '<p style="text-align:center; width:100%; color:#ef4444;">Error loading courses.</p>'; } 
             }
@@ -4187,6 +4274,130 @@
                 } catch (e) { showToast('Could not send. Try again.', 'error'); }
                 this.disabled = false;
             });
+
+
+            // ===== Course Module page (/course/<slug>) =====
+            function cpEsc(t) { return String(t == null ? '' : t).replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch])); }
+            function cpSlugBase(name) {
+                const b = String(name || 'course').toLowerCase().trim().replace(/[^a-z0-9\u0980-\u09FF]+/g, '-').replace(/^-+|-+$/g, '');
+                return b || 'course';
+            }
+            function cpBuildList(snap) {
+                const used = new Set(), out = [];
+                snap.forEach(d => {
+                    const v = d.data(); if (v.status === false || v.active === false) return;
+                    const base = cpSlugBase(v.name); let slug = base;
+                    if (used.has(slug)) slug = base + '-' + d.id.slice(0, 4);
+                    used.add(slug);
+                    out.push({ ...v, id: d.id, slug, curP: Number(v.currentPrice) || Number(v.price) || 0, img: v.image || v.imageUrl || 'https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png' });
+                });
+                return out;
+            }
+            function cpLines(x) {
+                if (Array.isArray(x)) return x.map(String).filter(Boolean);
+                return String(x || '').split('\n').map(t => t.trim()).filter(Boolean);
+            }
+            async function dxOpenCourse(slugRaw, addToHistory = true) {
+                let slug = slugRaw || ''; try { slug = decodeURIComponent(slug); } catch (e) {}
+                slug = slug.replace(/\/$/, '');
+                document.querySelectorAll('.login-modal').forEach(m => m.classList.add('hidden'));
+                if (addToHistory) { try { window.history.pushState({ section: 'course/' + slug }, '', '/course/' + encodeURIComponent(slug)); } catch (e) {} }
+                dashboardContent.classList.add('hidden'); mainContent.classList.remove('hidden');
+                showPageSection('course-page');
+                const root = document.getElementById('course-page-root');
+                root.innerHTML = '<div class="container" style="padding:80px 0;text-align:center;color:var(--text-body);"><span class="material-symbols-outlined" style="font-size:40px;color:var(--water-cyan);">autorenew</span><p>লোড হচ্ছে...</p></div>';
+                try {
+                    if (!window.__cpList) window.__cpList = cpBuildList(await db.collection('courses').get());
+                    const list = window.__cpList, c = list.find(x => x.slug === slug) || list.find(x => x.id === slug);
+                    if (!c) { root.innerHTML = '<div class="container" style="padding:80px 0;text-align:center;"><h2 style="color:#fff;">কোর্সটি পাওয়া যায়নি</h2><p style="color:var(--text-body);margin:10px 0 20px;">লিংকটি ভুল বা কোর্সটি আর চালু নেই।</p><a href="/courses" class="btn btn-gradient" data-go="courses" style="width:auto;display:inline-flex;">সব কোর্স দেখুন</a></div>'; cpBind(root); return; }
+                    cpRender(root, c, list);
+                } catch (e) { root.innerHTML = '<div class="container" style="padding:80px 0;text-align:center;color:#ef4444;">পেজ লোড করা যায়নি। আবার চেষ্টা করুন।</div>'; }
+            }
+            function cpRender(root, c, list) {
+                document.title = c.name + ' - Dreams Academy (ড্রিমস একাডেমি)';
+                document.getElementById('course-page').dataset.img = c.img;
+                const old = Number(c.oldPrice) || 0, save = old > c.curP && old > 0 ? Math.round((old - c.curP) / old * 100) : 0;
+                const learn = cpLines(c.highlights); const learnList = learn.length ? learn : ['লাইভ ক্লাস ও রেকর্ডেড মডিউলে ধাপে ধাপে শেখা', 'অ্যাসাইনমেন্ট ও ইন্সট্রাক্টরের ফিডব্যাক', 'কোর্স শেষে সার্টিফিকেট', 'সাপোর্ট সেন্টার ও ইন্সট্রাক্টরের সাথে যোগাযোগ'];
+                const desc = c.description || c.shortDescription || (c.name + ' কোর্সে Dreams Academy-র অভিজ্ঞ ইন্সট্রাক্টরের সাথে হাতে-কলমে শিখুন এবং নিজের দক্ষতা গড়ে তুলুন।');
+                const faqs = (Array.isArray(c.faqs) ? c.faqs : []).filter(f => f && f.q);
+                const faqList = faqs.length ? faqs : [
+                    { q: 'কোর্সে ভর্তি হব কীভাবে?', a: 'অ্যাকাউন্টে লগইন করে "ভর্তি হন" চাপুন, বিকাশে পেমেন্ট করে Transaction ID দিন। ভেরিফাই হলেই কোর্স আপনার ড্যাশবোর্ডে চালু হয়ে যাবে।' },
+                    { q: 'ক্লাস কোথায় হবে?', a: 'লাইভ ক্লাসের লিংক ও রেকর্ডেড মডিউল আপনার LMS ড্যাশবোর্ডেই পাবেন।' },
+                    { q: 'কোর্স শেষে সার্টিফিকেট পাব?', a: 'কোর্সের সব লেসন শেষ করলে ড্যাশবোর্ডের Progress & Certificates থেকে সার্টিফিকেট ডাউনলোড করতে পারবেন।' },
+                    { q: 'সমস্যা হলে কার সাথে যোগাযোগ করব?', a: 'ড্যাশবোর্ডের Support Center থেকে অথবা নিচের WhatsApp বাটনে আমাদের জানান।' }
+                ];
+                const wa = (document.getElementById('floating-whatsapp-btn') || {}).href || '#';
+                const others = list.filter(x => x.id !== c.id).slice(0, 3);
+                const facts = [['person', 'ইন্সট্রাক্টর', c.instructor || 'Expert Faculty'], ['schedule', 'সময়কাল', c.duration || ''], ['videocam', 'মাধ্যম', c.mode || 'লাইভ ক্লাস + রেকর্ডেড মডিউল'], ['workspace_premium', 'সার্টিফিকেট', 'কোর্স শেষে']].filter(f => f[2]);
+                root.innerHTML = `
+                <div class="container cp-wrap">
+                    <nav class="cp-crumb"><a href="/" data-go="home">হোম</a> › <a href="/courses" data-go="courses">কোর্সসমূহ</a> › <span>${cpEsc(c.name)}</span></nav>
+                    <section class="cp-hero">
+                        <div>
+                            <span class="cp-tag">${cpEsc(c.category || 'Skill Development')}</span>
+                            <h1>${cpEsc(c.name)}</h1>
+                            <p class="cp-lead">${cpEsc(desc)}</p>
+                            <div class="cp-price-row"><span class="cp-price">৳ ${c.curP}</span>${save ? `<s>৳ ${old}</s><b>${save}% ছাড়</b>` : ''}</div>
+                            <div class="cp-actions">
+                                <a href="#" class="btn btn-gradient buy-now-btn" data-name="${cpEsc(c.name)}" data-price="${c.curP}">এখনই ভর্তি হন <span class="material-symbols-outlined">arrow_forward</span></a>
+                                <button type="button" class="btn btn-outline cp-share"><span class="material-symbols-outlined">link</span> লিংক কপি</button>
+                            </div>
+                        </div>
+                        <div class="cp-hero-img"><img src="${cpEsc(c.img)}" alt="${cpEsc(c.name)} - Dreams Academy"></div>
+                    </section>
+                    <div class="cp-facts">${facts.map(f => `<div class="cp-fact"><span class="material-symbols-outlined">${f[0]}</span><div><small>${f[1]}</small><b>${cpEsc(f[2])}</b></div></div>`).join('')}</div>
+                    <section class="cp-sec"><h2>আপনি যা শিখবেন</h2><p class="cp-sub">এই কোর্সে যা যা পাবেন</p>
+                        <div class="cp-learn">${learnList.map(t => `<div><span class="material-symbols-outlined">check_circle</span><span>${cpEsc(t)}</span></div>`).join('')}</div></section>
+                    <section class="cp-sec hidden" id="cp-syllabus-sec"><h2>কোর্স মডিউল</h2><p class="cp-sub">কোর্সের সিলেবাস</p><div id="cp-syllabus" style="max-width:820px;margin:0 auto;"></div></section>
+                    <section class="cp-sec"><h2>কেন Dreams Academy?</h2><p class="cp-sub">শেখার প্রতিটি ধাপে আমরা পাশে আছি</p>
+                        <div class="cp-why">
+                            <div><span class="material-symbols-outlined">school</span><h4>অভিজ্ঞ ইন্সট্রাক্টর</h4><p>ইন্ডাস্ট্রির বাস্তব অভিজ্ঞতা থেকে শেখান।</p></div>
+                            <div><span class="material-symbols-outlined">video_camera_front</span><h4>লাইভ ক্লাস</h4><p>লাইভ ক্লাসে প্রশ্ন করুন, সাথে সাথে সমাধান পান।</p></div>
+                            <div><span class="material-symbols-outlined">assignment</span><h4>অ্যাসাইনমেন্ট ও ফিডব্যাক</h4><p>কাজ জমা দিন, গ্রেড ও মতামত পান।</p></div>
+                            <div><span class="material-symbols-outlined">workspace_premium</span><h4>সার্টিফিকেট</h4><p>কোর্স শেষ করে সার্টিফিকেট নিন।</p></div>
+                        </div></section>
+                    <section class="cp-sec"><h2>মাত্র ৪ ধাপে সম্পন্ন আপনার ভর্তি</h2><p class="cp-sub">কোনো ঝামেলা ছাড়াই শুরু করুন</p>
+                        <div class="cp-steps">
+                            <div><h4>অ্যাকাউন্টে লগইন</h4><p>সাইন আপ বা লগইন করুন।</p></div>
+                            <div><h4>ভর্তি হন চাপুন</h4><p>কুপন থাকলে এপ্লাই করে বিকাশে পেমেন্ট করুন।</p></div>
+                            <div><h4>Transaction ID দিন</h4><p>পেমেন্ট ভেরিফাই হলে ভর্তি নিশ্চিত হবে।</p></div>
+                            <div><h4>ড্যাশবোর্ডে ক্লাস শুরু</h4><p>কোর্স, লাইভ ক্লাস ও ম্যাটেরিয়াল এক জায়গায়।</p></div>
+                        </div></section>
+                    <section class="cp-sec"><h2>যে প্রশ্নগুলো প্রায়ই আসে</h2><p class="cp-sub">&nbsp;</p>
+                        <div class="cp-faq">${faqList.map(f => `<div class="cp-faq-item"><button type="button" class="cp-faq-q"><span>${cpEsc(f.q)}</span><span class="material-symbols-outlined">add</span></button><div class="cp-faq-a">${cpEsc(f.a)}</div></div>`).join('')}</div></section>
+                    ${others.length ? `<section class="cp-sec"><h2>আমাদের অন্যান্য কোর্স</h2><p class="cp-sub">আপনার জন্য আরও কোর্স</p><div class="cp-others">${others.map(o => `<a class="cp-other" href="/course/${encodeURIComponent(o.slug)}" data-course="${cpEsc(o.slug)}"><img src="${cpEsc(o.img)}" alt="${cpEsc(o.name)}"><div><b>${cpEsc(o.name)}</b><span>৳ ${o.curP}</span></div></a>`).join('')}</div></section>` : ''}
+                    <section class="cp-cta"><h2>ভর্তি বা তথ্যের জন্য যোগাযোগ করুন</h2><p>আমাদের টিম আপনার প্রশ্নের উত্তর দিতে প্রস্তুত।</p>
+                        <div class="cp-actions"><a href="#" class="btn btn-gradient buy-now-btn" data-name="${cpEsc(c.name)}" data-price="${c.curP}">এখনই ভর্তি হন</a><a href="${cpEsc(wa)}" target="_blank" rel="noopener" class="btn btn-outline"><span class="material-symbols-outlined">chat</span> WhatsApp-এ জানুন</a></div></section>
+                </div>
+                <div class="cp-sticky"><div><small>${cpEsc(c.name)}</small><b>৳ ${c.curP}</b></div><a href="#" class="btn btn-gradient buy-now-btn" data-name="${cpEsc(c.name)}" data-price="${c.curP}">ভর্তি হন</a></div>`;
+                cpBind(root);
+                root.querySelectorAll('.buy-now-btn').forEach(b => b.addEventListener('click', handleBuyNowClick));
+                root.querySelector('.cp-share').addEventListener('click', () => {
+                    const link = window.location.origin + '/course/' + encodeURIComponent(c.slug);
+                    const done = () => showToast('কোর্সের লিংক কপি হয়েছে!', 'success');
+                    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(link).then(done, () => window.prompt('লিংক কপি করুন:', link));
+                    else window.prompt('লিংক কপি করুন:', link);
+                });
+                cpSyllabus(c);
+            }
+            function cpBind(root) {
+                root.querySelectorAll('[data-go]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); navigateTo(a.dataset.go); }));
+                root.querySelectorAll('[data-course]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); navigateTo('course/' + a.dataset.course); }));
+                root.querySelectorAll('.cp-faq-q').forEach(b => b.addEventListener('click', () => b.parentElement.classList.toggle('open')));
+            }
+            async function cpSyllabus(c) {
+                let mods = Array.isArray(c.syllabus) ? c.syllabus : [];
+                if (!mods.length && auth.currentUser) {
+                    try {
+                        const q = await db.collection('curriculum').where('courseName', '==', c.name).get();
+                        if (!q.empty) mods = (q.docs[0].data().modules || []).map(m => ({ title: m.title, lessons: (m.videos || m.lessons || []).map(v => v.title) }));
+                    } catch (e) {}
+                }
+                if (!mods.length) return;
+                document.getElementById('cp-syllabus-sec').classList.remove('hidden');
+                document.getElementById('cp-syllabus').innerHTML = mods.map((m, i) => `<div class="curriculum-module"><div class="module-header" data-target="cp-mod-${i}"><span>${cpEsc(m.title)}</span><span class="material-symbols-outlined">expand_more</span></div><ul class="module-videos" id="cp-mod-${i}">${(m.lessons || []).map(t => `<li style="padding:12px 18px;border-top:1px solid rgba(56,189,248,.1);display:flex;justify-content:space-between;align-items:center;gap:10px;color:#94a3b8;"><span style="display:flex;align-items:center;gap:10px;"><span class="material-symbols-outlined" style="color:var(--water-cyan);">play_circle</span>${cpEsc(t)}</span><span class="material-symbols-outlined" style="color:#f59e0b;font-size:18px;">lock</span></li>`).join('')}</ul></div>`).join('');
+                document.querySelectorAll('#cp-syllabus .module-header').forEach(h => h.addEventListener('click', () => { h.classList.toggle('active'); document.getElementById(h.dataset.target).classList.toggle('show'); }));
+            }
 
             // Live Class HUD Timer
             setInterval(function() { 
