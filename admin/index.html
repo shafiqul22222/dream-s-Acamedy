@@ -722,6 +722,7 @@
                 <li data-page="curriculum-page"><a href="#"><span class="material-symbols-outlined">list_alt</span> Curriculum Management</a></li>
                 <li data-page="notices-page"><a href="#"><span class="material-symbols-outlined">campaign</span> Noticeboard</a></li>
                 
+                <li data-page="course-reviews-page"><a href="#"><span class="material-symbols-outlined">rate_review</span> Course Reviews</a></li>
                 <li data-page="trust-screenshots-page"><a href="#"><span class="material-symbols-outlined">verified</span> Trust Screenshots</a></li>
                 <li data-page="video-reviews-page"><a href="#"><span class="material-symbols-outlined">video_library</span> Video Reviews</a></li>
 
@@ -1284,6 +1285,11 @@
             </div>
 
             <!-- Trust Screenshots Page -->
+            <div id="course-reviews-page" class="page">
+                <div class="page-header"><h1>Course Reviews</h1><button class="btn btn-add" onclick="openModalForAdd('course_reviews')"><span class="material-symbols-outlined">add</span> New Review</button></div>
+                <p style="color:#64748b;margin-bottom:12px;">Review images and video reviews added here appear on that course's Course Module page.</p>
+                <div class="content-box"><table class="data-table"><thead><tr><th>Course</th><th>Type</th><th>Preview</th><th>Caption</th><th>Action</th></tr></thead><tbody id="course-reviews-body"></tbody></table></div>
+            </div>
             <div id="trust-screenshots-page" class="page">
                 <div class="page-header"><h1>Trust Screenshots</h1><button class="btn btn-add" onclick="openModalForAdd('trust_screenshots')"><span class="material-symbols-outlined">add</span> New Screenshot</button></div>
                 <div class="content-box">
@@ -1755,7 +1761,8 @@
                     case 'curriculum-page': renderCurriculum(); break;
                     case 'notices-page': renderNotices(); break;
                     case 'trust-screenshots-page': renderTrustScreenshots(); break;
-                    case 'video-reviews-page': renderVideoReviews(); break; 
+                    case 'video-reviews-page': renderVideoReviews(); break;
+                    case 'course-reviews-page': renderCourseReviews(); break; 
                     case 'join-class-page': renderJoinClass(); break;
                     case 'online-classes-page': renderOnlineClasses(); break;
                     case 'withdrawals-page': renderWithdrawals(); break;
@@ -2986,6 +2993,7 @@
             const renderCourses = () => renderGeneric('courses', 'courses-table-body', (c) => `<tr><td data-label="Name">${c.name}</td><td data-label="Instructor">${c.instructor}</td><td data-label="Price">৳ ${c.price}</td><td data-label="Comm">৳ ${c.commission || 0}</td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('courses', '${c.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('courses', '${c.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderNotices = () => renderGeneric('notices', 'notices-table-body', (n) => `<tr><td data-label="Title">${n.title}</td><td data-label="Description">${(n.description || '').substring(0, 40)}...</td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('notices', '${n.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('notices', '${n.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderTrustScreenshots = () => renderGeneric('trust_screenshots', 'trust-screenshots-table-body', (t) => `<tr><td data-label="Title">${t.title}</td><td data-label="Image"><img src="${t.imageUrl}" class="table-image-preview"></td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('trust_screenshots', '${t.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
+            const renderCourseReviews = () => renderGeneric('course_reviews', 'course-reviews-body', r => `<tr><td data-label="Course"><strong>${dxe(r.courseName)}</strong></td><td data-label="Type">${r.type === 'video' ? 'Video' : 'Image'}</td><td data-label="Preview">${r.type === 'video' ? `<a href="${dxe(r.videoLink)}" target="_blank" style="color:var(--primary-blue);font-weight:600;">Watch</a>` : `<img src="${dxe(r.imageUrl)}" class="table-image-preview">`}</td><td data-label="Caption">${dxe(r.title)}</td><td class="actions-cell"><button class="btn-edit" onclick="openModalForEdit('course_reviews', '${r.id}')"><span class="material-symbols-outlined">edit</span></button><button class="btn-delete" onclick="deleteItem('course_reviews', '${r.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderVideoReviews = () => renderGeneric('video_reviews', 'video-reviews-table-body', (v) => `<tr><td data-label="Title">${v.title}</td><td data-label="Subtitle">${v.subtitle}</td><td data-label="Link"><a href="${v.youtubeLink}" target="_blank">Watch</a></td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('video_reviews', '${v.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderWithdrawals = () => renderGeneric('withdrawals', 'withdrawals-table-body', (w) => `<tr><td data-label="Email">${w.userEmail}</td><td data-label="Amount">৳ ${w.amount}</td><td data-label="Method">${w.method}</td><td data-label="Account">${w.accountNumber}</td><td data-label="Date">${w.requestDate ? new Date(w.requestDate.seconds * 1000).toLocaleDateString() : 'N/A'}</td><td data-label="Status">${w.status}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('withdrawals', '${w.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
             const renderUserNotifications = () => renderGeneric('notifications', 'user-notifications-table-body', (notif) => `<tr><td data-label="Date">${notif.timestamp ? new Date(notif.timestamp.seconds * 1000).toLocaleDateString() : 'N/A'}</td><td data-label="Target">${notif.targetUid || 'All'}</td><td data-label="Title">${notif.title}</td><td data-label="Message">${notif.message}</td><td data-label="Type">${notif.type || 'general'}</td><td class="actions-cell"><button class="btn-delete" onclick="deleteItem('notifications', '${notif.id}')"><span class="material-symbols-outlined">delete</span></button></td></tr>`);
@@ -3416,10 +3424,18 @@
                     return `
                         <div class="form-group"><label>Review Title</label><input type="text" name="title" value="${data.title || ''}" required></div>
                         <div class="form-group"><label>Student Name / Subtitle</label><input type="text" name="subtitle" value="${data.subtitle || ''}" required></div>
-                        <div class="form-group"><label>YouTube Link</label><input type="url" name="youtubeLink" value="${data.youtubeLink || ''}" required></div>
+                        <div class="form-group"><label>Video Link (YouTube / Facebook / Vimeo - any link works)</label><input type="text" name="youtubeLink" value="${data.youtubeLink || ''}" required></div>
                     `;
                 }
 
+                if (type === 'course_reviews') {
+                    return `
+                        <div class="form-group"><label>Course</label><select name="courseName" required>${courseOptions}</select></div>
+                        <div class="form-group"><label>Review Type</label><select name="type"><option value="image" ${data.type !== 'video' ? 'selected' : ''}>Image (screenshot)</option><option value="video" ${data.type === 'video' ? 'selected' : ''}>Video review</option></select></div>
+                        <div class="form-group"><label>Student Name / Caption (optional)</label><input type="text" name="title" value="${dxe(data.title)}"></div>
+                        <div class="form-group"><label>Image URL (for Image type)</label><input type="url" name="imageUrl" value="${dxe(data.imageUrl)}"></div>
+                        <div class="form-group"><label>Video Link - YouTube / Facebook / Vimeo (for Video type)</label><input type="text" name="videoLink" value="${dxe(data.videoLink)}"></div>`;
+                }
                 if (type === 'trust_screenshots') {
                     return `
                         <div class="form-group"><label>Title</label><input type="text" name="title" value="${data.title || ''}" required></div>
@@ -3694,16 +3710,24 @@
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     };
                 } else if (collection === 'video_reviews') {
-    newItem = {
-        title: formData.get('title'),
-        subtitle: formData.get('subtitle'),
-        youtubeLink: formData.get('youtubeLink')
-    };
+                    newItem = {
+                        title: formData.get('title'),
+                        subtitle: formData.get('subtitle'),
+                        youtubeLink: formData.get('youtubeLink')
+                    };
+                    if (!id) newItem.timestamp = firebase.firestore.FieldValue.serverTimestamp();
+                } else if (collection === 'course_reviews') {
+                    const ty = formData.get('type'), im = (formData.get('imageUrl') || '').trim(), vd = (formData.get('videoLink') || '').trim();
+                    if (ty === 'image' && !im) { showToast('Enter the image URL.', 'error'); return; }
+                    if (ty === 'video' && !vd) { showToast('Enter the video link.', 'error'); return; }
+                    newItem = { courseName: formData.get('courseName'), type: ty, title: formData.get('title') || '', imageUrl: ty === 'image' ? im : '', videoLink: ty === 'video' ? vd : '' };
+                    if (!id) newItem.timestamp = firebase.firestore.FieldValue.serverTimestamp();
                 } else if (collection === 'trust_screenshots') {
                     newItem = {
                         title: formData.get('title'),
                         imageUrl: formData.get('imageUrl')
                     };
+                    if (!id) newItem.timestamp = firebase.firestore.FieldValue.serverTimestamp();
                 } else if (collection === 'notifications') {
                     if (window.ROLE === 'instructor') {
                         const tp = formData.get('targetPair') || '';
