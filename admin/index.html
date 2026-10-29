@@ -3694,20 +3694,16 @@
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     };
                 } else if (collection === 'video_reviews') {
-    newItem = {
-        title: formData.get('title'),
-        subtitle: formData.get('subtitle'),
-        youtubeLink: formData.get('youtubeLink')
-    };
-    if (!id) newItem.timestamp = firebase.firestore.FieldValue.serverTimestamp();
-}
+                    newItem = {
+                        title: formData.get('title'),
+                        subtitle: formData.get('subtitle'),
+                        youtubeLink: formData.get('youtubeLink')
+                    };
                 } else if (collection === 'trust_screenshots') {
-    newItem = {
-        title: formData.get('title'),
-        imageUrl: formData.get('imageUrl')
-    };
-    if (!id) newItem.timestamp = firebase.firestore.FieldValue.serverTimestamp();
-}
+                    newItem = {
+                        title: formData.get('title'),
+                        imageUrl: formData.get('imageUrl')
+                    };
                 } else if (collection === 'notifications') {
                     if (window.ROLE === 'instructor') {
                         const tp = formData.get('targetPair') || '';
