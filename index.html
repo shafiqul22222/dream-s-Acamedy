@@ -1766,6 +1766,7 @@
             box-shadow: 0 0 15px var(--water-cyan);
         }
         .social-icon img { width: 18px; height: 18px; object-fit: contain; }
+        .social-icon svg { width: 24px; height: 24px; display: block; }
 
         .copyright {
             text-align: center;
@@ -3922,15 +3923,33 @@
             }
 
             async function loadSettings() {
-                const d1 = await db.collection('site_settings').doc('header_settings').get(); if (d1.exists && d1.data().logoImageUrl) { document.querySelectorAll('.logo img').forEach(i=>i.src=d1.data().logoImageUrl); }
-                const d2 = await db.collection('site_settings').doc('hero_section').get(); if (d2.exists && d2.data().imageUrl) document.getElementById('hero-image').src = d2.data().imageUrl;
-                const d3 = await db.collection('site_settings').doc('about_us_section').get(); if (d3.exists && d3.data().imageUrl) document.getElementById('about-us-image').src = d3.data().imageUrl;
-                const d4 = await db.collection('site_settings').doc('contact_section').get(); if (d4.exists && d4.data().imageUrl) document.getElementById('contact-us-image').src = d4.data().imageUrl;
-                const d5 = await db.collection('site_settings').doc('floating_chat').get(); if (d5.exists && d5.data().imageUrl) document.getElementById('floating-chat-icon-img').src = d5.data().imageUrl;
-                const d6 = await db.collection('site_settings').doc('social_media').get(); const c = document.getElementById('social-icons-container'); 
-                const iconMap = { facebook: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/2048px-2021_Facebook_icon.svg.png" alt="Dreams Academy Facebook Page">`, youtube: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/2560px-YouTube_full-color_icon_%282017%29.svg.png" alt="Dreams Academy YouTube Channel">`, whatsapp: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/2044px-WhatsApp.svg.png" alt="Dreams Academy WhatsApp Support">`, instagram: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/2048px-Instagram_icon.png" alt="Dreams Academy Instagram">` }; 
-                c.innerHTML = ''; 
-                if (d6.exists && d6.data().links) d6.data().links.forEach(l => { if (l.platform && l.link && iconMap[l.platform.toLowerCase()]) { const el = document.createElement('a'); el.href = l.link; el.className = 'social-icon'; el.innerHTML = iconMap[l.platform.toLowerCase()]; el.target = '_blank'; c.appendChild(el); } });
+                // Admin panel saves to these documents (older names kept as fallback)
+                const get = async id => { try { const d = await db.collection('site_settings').doc(id).get(); return d.exists ? d.data() : {}; } catch (e) { return {}; } };
+                const [logo, logoOld, hero, heroOld, about, aboutOld, contact, contactOld, chat, chatOld, soc, socOld] = await Promise.all([
+                    get('logo'), get('header_settings'), get('hero'), get('hero_section'), get('about_us'), get('about_us_section'),
+                    get('contact_us'), get('contact_section'), get('chat_icon'), get('floating_chat'), get('social_links'), get('social_media')
+                ]);
+                const url = (a, b, k = 'imageUrl') => String(a[k] || b[k] || '').trim();
+                const setById = (id, u) => { const el = document.getElementById(id); if (el && u) el.src = u; };
+                const logoUrl = String(logo.imageUrl || logoOld.logoImageUrl || logoOld.imageUrl || '').trim();
+                if (logoUrl) document.querySelectorAll('.logo img').forEach(i => i.src = logoUrl);
+                setById('hero-image', url(hero, heroOld)); setById('about-us-image', url(about, aboutOld));
+                setById('contact-us-image', url(contact, contactOld)); setById('floating-chat-icon-img', url(chat, chatOld));
+
+                const ICONS = {"facebook": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"12\" fill=\"#1877F2\"/><path fill=\"#fff\" d=\"M13.5 19v-6.2h2.1l.4-2.6h-2.5V8.6c0-.8.3-1.3 1.4-1.3H16V5.1c-.3 0-1.1-.1-2-.1-2 0-3.4 1.2-3.4 3.5v1.7H8.5v2.6h2.1V19h2.9z\"/></svg>", "youtube": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"1\" y=\"4.5\" width=\"22\" height=\"15\" rx=\"4.5\" fill=\"#FF0000\"/><path fill=\"#fff\" d=\"M10 8.8l5.4 3.2-5.4 3.2z\"/></svg>", "whatsapp": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"12\" fill=\"#25D366\"/><path fill=\"#fff\" d=\"M12 5.2a6.8 6.8 0 0 0-5.8 10.3L5.2 19l3.6-1A6.8 6.8 0 1 0 12 5.2zm3.5 9.4c-.15.4-.9.8-1.2.8-.3 0-.7.1-2.3-.5-1.9-.8-3.1-2.7-3.2-2.8-.1-.1-.8-1-.8-2s.5-1.4.7-1.6c.2-.2.4-.2.5-.2h.4c.1 0 .3 0 .4.3l.6 1.4c.1.1 0 .3 0 .4l-.3.4-.2.3c-.1.1-.2.3 0 .5.5.9 1.2 1.5 2 1.9.2.1.4.1.5 0l.6-.7c.1-.2.3-.2.5-.1l1.3.6c.2.1.3.2.3.3 0 .2 0 .7-.2 1.1z\"/></svg>", "telegram": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"12\" fill=\"#229ED9\"/><path fill=\"#fff\" d=\"M5.5 11.8l11.6-4.5c.5-.2 1 .1.8.9l-2 9.2c-.1.7-.6.8-1.1.5l-3-2.2-1.4 1.4c-.2.2-.3.3-.6.3l.2-3.1 5.6-5c.2-.2 0-.3-.3-.1l-6.9 4.3-3-.9c-.6-.2-.6-.6.1-.8z\"/></svg>", "instagram": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><defs><linearGradient id=\"dxig\" x1=\"0\" y1=\"1\" x2=\"1\" y2=\"0\"><stop offset=\"0\" stop-color=\"#FEDA75\"/><stop offset=\".35\" stop-color=\"#FA7E1E\"/><stop offset=\".6\" stop-color=\"#D62976\"/><stop offset=\".85\" stop-color=\"#962FBF\"/><stop offset=\"1\" stop-color=\"#4F5BD5\"/></linearGradient></defs><rect x=\"1\" y=\"1\" width=\"22\" height=\"22\" rx=\"6.5\" fill=\"url(#dxig)\"/><rect x=\"6\" y=\"6\" width=\"12\" height=\"12\" rx=\"3.6\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1.7\"/><circle cx=\"12\" cy=\"12\" r=\"2.9\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1.7\"/><circle cx=\"16\" cy=\"8\" r=\"1\" fill=\"#fff\"/></svg>", "tiktok": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"12\" fill=\"#010101\"/><path fill=\"#fff\" d=\"M16.5 8.3a3 3 0 0 1-2.4-2.6h-2.2v8.1a1.7 1.7 0 1 1-1.2-1.6V10c-2.2-.1-4 1.6-4 3.8a3.9 3.9 0 0 0 7.8 0V9.6a5 5 0 0 0 2.9.9V8.3z\"/></svg>", "linkedin": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"1\" y=\"1\" width=\"22\" height=\"22\" rx=\"4\" fill=\"#0A66C2\"/><path fill=\"#fff\" d=\"M7 9.5h2.3V17H7zM8.15 5.9a1.35 1.35 0 1 1 0 2.7 1.35 1.35 0 0 1 0-2.7zM10.9 9.5h2.2v1c.4-.7 1.2-1.2 2.3-1.2 2.3 0 2.7 1.5 2.7 3.5V17h-2.3v-3.7c0-.9 0-2-1.2-2s-1.4.9-1.4 1.9V17h-2.3z\"/></svg>", "x": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"12\" fill=\"#000\"/><path stroke=\"#fff\" stroke-width=\"1.9\" stroke-linecap=\"round\" d=\"M7.5 7.5l9 9M16.5 7.5l-9 9\"/></svg>", "link": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"12\" fill=\"#38bdf8\"/><path fill=\"none\" stroke=\"#fff\" stroke-width=\"1.8\" stroke-linecap=\"round\" d=\"M10 14a3 3 0 0 0 4.2 0l2.3-2.3a3 3 0 0 0-4.2-4.2l-.8.8M14 10a3 3 0 0 0-4.2 0l-2.3 2.3a3 3 0 0 0 4.2 4.2l.8-.8\"/></svg>"};
+                const box = document.getElementById('social-icons-container'); if (!box) return;
+                box.innerHTML = '';
+                const links = Array.isArray(soc.links) ? soc.links : (Array.isArray(socOld.links) ? socOld.links : []);
+                links.forEach(l => {
+                    let href = String(l.url || l.link || '').trim(); const key = String(l.platform || '').toLowerCase().trim();
+                    if (!href) return;
+                    if (!/^(https?:|tel:|mailto:)/i.test(href)) href = (key === 'whatsapp' && /^[0-9+\s-]{8,}$/.test(href)) ? 'https://wa.me/' + href.replace(/[^0-9]/g, '').replace(/^0(?=1[0-9]{9}$)/, '88') : 'https://' + href.replace(/^\/+/, '');
+                    const a = document.createElement('a');
+                    a.href = href; a.className = 'social-icon'; a.target = '_blank'; a.rel = 'noopener noreferrer';
+                    a.setAttribute('aria-label', 'Dreams Academy ' + (key || 'link'));
+                    a.innerHTML = ICONS[key === 'twitter' ? 'x' : key] || ICONS.link;
+                    box.appendChild(a);
+                });
             }
 
             // Checkout & Bkash Automation
