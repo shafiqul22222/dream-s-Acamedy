@@ -2684,6 +2684,9 @@
                         <option value="telegram" ${platform === 'telegram' ? 'selected' : ''}>Telegram</option>
                         <option value="whatsapp" ${platform === 'whatsapp' ? 'selected' : ''}>WhatsApp</option>
                         <option value="instagram" ${platform === 'instagram' ? 'selected' : ''}>Instagram</option>
+                        <option value="tiktok" ${platform === 'tiktok' ? 'selected' : ''}>TikTok</option>
+                        <option value="linkedin" ${platform === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
+                        <option value="x" ${platform === 'x' || platform === 'twitter' ? 'selected' : ''}>X (Twitter)</option>
                     </select>
                     <input type="text" class="social-url" value="${url}" placeholder="https://..." style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
                     <button type="button" class="btn-remove-small" onclick="this.parentElement.remove()"><span class="material-symbols-outlined">delete</span></button>
@@ -2696,7 +2699,7 @@
             // Settings Save Handlers
             heroSettingsForm.onsubmit = async (e) => {
                 e.preventDefault();
-                const url = document.getElementById('hero-image-url').value;
+                const url = document.getElementById('hero-image-url').value.trim();
                 await db.collection('site_settings').doc('hero').set({ imageUrl: url }, { merge: true });
                 document.getElementById('hero-image-preview').src = url;
                 showToast("Hero image setting saved!");
@@ -2704,7 +2707,7 @@
 
             logoSettingsForm.onsubmit = async (e) => {
                 e.preventDefault();
-                const url = document.getElementById('logo-image-url').value;
+                const url = document.getElementById('logo-image-url').value.trim();
                 await db.collection('site_settings').doc('logo').set({ imageUrl: url }, { merge: true });
                 document.getElementById('logo-image-preview').src = url;
                 showToast("Logo setting saved!");
@@ -2712,7 +2715,7 @@
 
             aboutUsSettingsForm.onsubmit = async (e) => {
                 e.preventDefault();
-                const url = document.getElementById('about-us-image-url').value;
+                const url = document.getElementById('about-us-image-url').value.trim();
                 await db.collection('site_settings').doc('about_us').set({ imageUrl: url }, { merge: true });
                 document.getElementById('about-us-image-preview').src = url;
                 showToast("About Us setting saved!");
@@ -2720,7 +2723,7 @@
 
             contactUsSettingsForm.onsubmit = async (e) => {
                 e.preventDefault();
-                const url = document.getElementById('contact-us-image-url').value;
+                const url = document.getElementById('contact-us-image-url').value.trim();
                 await db.collection('site_settings').doc('contact_us').set({ imageUrl: url }, { merge: true });
                 document.getElementById('contact-us-image-preview').src = url;
                 showToast("Contact image setting saved!");
@@ -2728,7 +2731,7 @@
 
             chatIconSettingsForm.onsubmit = async (e) => {
                 e.preventDefault();
-                const url = document.getElementById('chat-icon-image-url').value;
+                const url = document.getElementById('chat-icon-image-url').value.trim();
                 await db.collection('site_settings').doc('chat_icon').set({ imageUrl: url }, { merge: true });
                 document.getElementById('chat-icon-image-preview').src = url;
                 showToast("Chat Icon setting saved!");
@@ -2760,7 +2763,7 @@
                 const links = [];
                 entries.forEach(row => {
                     const platform = row.querySelector('.social-platform').value;
-                    const url = row.querySelector('.social-url').value;
+                    const url = row.querySelector('.social-url').value.trim();
                     if(url) links.push({ platform, url });
                 });
                 await db.collection('site_settings').doc('social_links').set({ links: links });
