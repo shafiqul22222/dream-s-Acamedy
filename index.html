@@ -47,7 +47,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;800&family=Great+Vibes&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
 
     <!-- Certificate Generator Library -->
@@ -104,66 +104,72 @@
            3D NAVY BLUE + LIQUID WATER AQUA GLASSMORPHIC DESIGN SYSTEM
            ========================================================================== */
         :root {
-            /* Navy Base Colors */
-            --navy-deepest: #030712;
-            --navy-dark: #070f26;
-            --navy-surface: #0b1739;
-            --navy-card: #0f214d;
-            --navy-card-light: #162b63;
-            --navy-border: rgba(56, 189, 248, 0.18);
-            --navy-border-hover: rgba(0, 242, 254, 0.5);
+            /* Surfaces (light, institutional) */
+            --navy-deepest: #F3F6FB;
+            --navy-dark: #FFFFFF;
+            --navy-surface: #F8FAFD;
+            --navy-card: #FFFFFF;
+            --navy-card-light: #EEF3FA;
+            --navy-border: #D8E1EE;
+            --navy-border-hover: #1A56DB;
 
-            /* 3D Liquid Water / Aqua Gradient Colors */
-            --water-cyan: #00f2fe;
-            --water-blue: #38bdf8;
-            --water-deep: #0284c7;
-            --water-glow: rgba(0, 242, 254, 0.4);
-            --water-glow-subtle: rgba(56, 189, 248, 0.15);
+            /* Brand blues (kept variable names for compatibility) */
+            --water-cyan: #1A56DB;
+            --water-blue: #2F6FEB;
+            --water-deep: #0B2A5B;
+            --water-glow: rgba(26, 86, 219, 0.28);
+            --water-glow-subtle: rgba(26, 86, 219, 0.09);
             --water-pink: #ec4899;
+            --gold: #C79A2B;
 
-            /* Light & Text Colors */
-            --text-pure: #ffffff;
-            --text-heading: #f0f9ff;
-            --text-body: #94a3b8;
-            --text-muted: #64748b;
+            /* Text */
+            --text-pure: #0B1F3A;
+            --text-heading: #0B1F3A;
+            --text-body: #475569;
+            --text-muted: #64748B;
+            --text-soft: #334155;
 
             /* Gradients */
-            --gradient-water-3d: linear-gradient(135deg, #00f2fe 0%, #0284c7 50%, #0369a1 100%);
-            --gradient-water-liquid: linear-gradient(135deg, #00f2fe 0%, #38bdf8 50%, #6366f1 100%);
-            --gradient-card-3d: linear-gradient(145deg, rgba(15, 33, 77, 0.85) 0%, rgba(7, 15, 38, 0.95) 100%);
-            --gradient-card-hover: linear-gradient(145deg, rgba(22, 43, 99, 0.95) 0%, rgba(11, 23, 57, 0.98) 100%);
-            --gradient-surface: linear-gradient(180deg, #070f26 0%, #030712 100%);
+            --gradient-water-3d: linear-gradient(180deg, #2A6BEF 0%, #1A4FC2 100%);
+            --gradient-water-liquid: linear-gradient(135deg, #1F5FE0 0%, #0B2A5B 100%);
+            --gradient-card-3d: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
+            --gradient-card-hover: linear-gradient(180deg, #FFFFFF 0%, #F6F9FE 100%);
+            --gradient-surface: linear-gradient(180deg, #FFFFFF 0%, #F3F6FB 100%);
 
-            /* 3D Shadows & Glows */
-            --shadow-3d-deep: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 242, 254, 0.12);
-            --shadow-3d-glow: 0 10px 30px -5px rgba(0, 242, 254, 0.35), 0 0 15px rgba(56, 189, 248, 0.2);
-            --shadow-card: 0 12px 30px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            --shadow-inner-glow: inset 0 0 20px rgba(0, 242, 254, 0.08);
+            /* Shadows */
+            --shadow-3d-deep: 0 18px 40px -20px rgba(11, 42, 91, 0.3);
+            --shadow-3d-glow: 0 10px 22px -10px rgba(26, 86, 219, 0.55);
+            --shadow-card: 0 1px 2px rgba(11, 42, 91, 0.05), 0 14px 28px -20px rgba(11, 42, 91, 0.28);
+            --shadow-inner-glow: none;
 
-            --radius-sm: 12px;
-            --radius-md: 18px;
-            --radius-lg: 26px;
+            /* Tints used instead of old dark translucent fills */
+            --panel: #F5F8FD;
+            --panel-2: #EAF0F9;
+
+            --radius-sm: 10px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
             --radius-pill: 9999px;
 
             --bkash-pink: #e2136e;
             --bkash-gradient: linear-gradient(135deg, #e2136e, #9e084a);
 
-            --transition-bounce: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* --- Global Reset & Base Setup --- */
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; font-size: 16px; }
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
             background-color: var(--navy-deepest);
             color: var(--text-body);
             line-height: 1.65;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             background-image: 
-                radial-gradient(circle at 15% 15%, rgba(0, 242, 254, 0.07) 0%, transparent 40%),
+                radial-gradient(circle at 15% 15%, rgba(26, 86, 219, 0.07) 0%, transparent 40%),
                 radial-gradient(circle at 85% 85%, rgba(2, 132, 199, 0.08) 0%, transparent 45%),
                 radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.04) 0%, transparent 60%);
             background-attachment: fixed;
@@ -214,7 +220,7 @@
 
         .btn-gradient {
             background: var(--gradient-water-3d);
-            color: #030712;
+            color: #fff;
             box-shadow: var(--shadow-3d-glow);
             font-weight: 800;
         }
@@ -222,20 +228,20 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, #38bdf8 0%, #00f2fe 100%);
+            background: linear-gradient(135deg, #2F6FEB 0%, #1A56DB 100%);
             opacity: 0;
             transition: var(--transition-smooth);
             z-index: -1;
         }
         .btn-gradient:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 16px 36px -8px rgba(0, 242, 254, 0.55);
-            color: #020617;
+            box-shadow: 0 16px 36px -8px rgba(26, 86, 219, 0.55);
+            color: #fff;
         }
         .btn-gradient:hover::before { opacity: 1; }
 
         .btn-outline {
-            background: rgba(15, 33, 77, 0.6);
+            background: var(--panel-2);
             backdrop-filter: blur(10px);
             color: var(--text-pure);
             border: 1px solid var(--navy-border);
@@ -243,10 +249,10 @@
         }
         .btn-outline:hover {
             border-color: var(--water-cyan);
-            background: rgba(0, 242, 254, 0.1);
+            background: rgba(26, 86, 219, 0.1);
             color: var(--water-cyan);
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px -5px rgba(0, 242, 254, 0.25);
+            box-shadow: 0 10px 25px -5px rgba(26, 86, 219, 0.25);
         }
 
         /* --- Header & Navigation Bar --- */
@@ -254,7 +260,7 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: rgba(7, 15, 38, 0.82);
+            background: var(--panel);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border-bottom: 1px solid var(--navy-border);
@@ -273,7 +279,7 @@
             max-height: 48px;
             display: block;
             transition: var(--transition-bounce);
-            filter: drop-shadow(0 4px 10px rgba(0, 242, 254, 0.3));
+            filter: drop-shadow(0 4px 10px rgba(26, 86, 219, 0.3));
         }
         .logo:hover img { transform: scale(1.05) rotate(-1deg); }
 
@@ -285,7 +291,7 @@
         }
         .main-nav a {
             text-decoration: none;
-            color: #cbd5e1;
+            color: var(--text-soft);
             font-weight: 600;
             font-size: 0.95rem;
             position: relative;
@@ -294,7 +300,7 @@
         }
         .main-nav a:hover, .main-nav li.active a {
             color: var(--water-cyan);
-            text-shadow: 0 0 12px rgba(0, 242, 254, 0.5);
+            text-shadow: 0 0 12px rgba(26, 86, 219, 0.5);
         }
         .main-nav a::after {
             content: '';
@@ -316,7 +322,7 @@
 
         .search-bar { position: relative; }
         .search-bar input {
-            background: rgba(11, 23, 57, 0.75);
+            background: var(--panel);
             border: 1px solid var(--navy-border);
             padding: 12px 18px 12px 46px;
             border-radius: var(--radius-pill);
@@ -339,13 +345,13 @@
         }
         .search-bar input:focus {
             border-color: var(--water-cyan);
-            background: rgba(15, 33, 77, 0.95);
-            box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.2), inset 0 0 10px rgba(0, 242, 254, 0.1);
+            background: var(--panel-2);
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.2), inset 0 0 10px rgba(26, 86, 219, 0.1);
         }
 
         .header-icons { display: flex; align-items: center; gap: 16px; }
         .header-icons .material-symbols-outlined {
-            color: #cbd5e1;
+            color: var(--text-soft);
             font-size: 26px;
             cursor: pointer;
             transition: var(--transition-bounce);
@@ -363,7 +369,7 @@
             border-radius: 50%;
             background: var(--navy-card);
             border: 2px solid var(--water-cyan);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+            box-shadow: 0 0 15px rgba(26, 86, 219, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -379,7 +385,7 @@
             top: -4px;
             right: -4px;
             background: var(--gradient-water-liquid);
-            color: #020617;
+            color: #fff;
             font-size: 10px;
             font-weight: 800;
             width: 19px;
@@ -396,7 +402,7 @@
             position: absolute;
             top: 56px;
             right: 0;
-            background: rgba(11, 23, 57, 0.96);
+            background: var(--panel);
             backdrop-filter: blur(28px);
             border: 1px solid var(--navy-border);
             border-radius: var(--radius-lg);
@@ -425,10 +431,10 @@
             border: 3px solid var(--water-cyan);
             margin-bottom: 10px;
             object-fit: cover;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+            box-shadow: 0 0 15px rgba(26, 86, 219, 0.4);
             position: relative;
         }
-        .profile-dropdown-header h4 { font-size: 1.1rem; color: #fff; margin-bottom: 2px; position: relative; }
+        .profile-dropdown-header h4 { font-size: 1.1rem; color: var(--text-pure); margin-bottom: 2px; position: relative; }
         .profile-dropdown-header p { font-size: 0.85rem; color: var(--water-blue); position: relative; }
         .profile-dropdown-menu ul { list-style: none; padding: 12px; }
         .profile-dropdown-menu li a {
@@ -436,7 +442,7 @@
             align-items: center;
             gap: 12px;
             padding: 12px 16px;
-            color: #e2e8f0;
+            color: var(--text-soft);
             text-decoration: none;
             font-weight: 600;
             font-size: 0.9rem;
@@ -444,7 +450,7 @@
             transition: var(--transition-smooth);
         }
         .profile-dropdown-menu li a:hover {
-            background: rgba(0, 242, 254, 0.12);
+            background: rgba(26, 86, 219, 0.12);
             color: var(--water-cyan);
             transform: translateX(4px);
         }
@@ -452,7 +458,7 @@
         .notification-dropdown { width: 360px; max-height: 480px; display: flex; flex-direction: column; }
         .notification-dropdown-header {
             padding: 16px 20px;
-            background: rgba(15, 33, 77, 0.8);
+            background: var(--panel-2);
             border-bottom: 1px solid var(--navy-border);
             display: flex;
             justify-content: space-between;
@@ -464,11 +470,11 @@
             display: flex;
             gap: 14px;
             padding: 14px 18px;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.08);
+            border-bottom: 1px solid rgba(26, 86, 219, 0.08);
             cursor: pointer;
             transition: var(--transition-smooth);
         }
-        .notification-list-item:hover { background: rgba(0, 242, 254, 0.06); }
+        .notification-list-item:hover { background: rgba(26, 86, 219, 0.06); }
         .notification-icon {
             width: 40px;
             height: 40px;
@@ -477,10 +483,10 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            color: #030712;
+            color: #fff;
             font-weight: bold;
         }
-        .notification-content p { font-size: 0.88rem; color: #e2e8f0; margin-bottom: 4px; line-height: 1.4; }
+        .notification-content p { font-size: 0.88rem; color: var(--text-soft); margin-bottom: 4px; line-height: 1.4; }
         .notification-content span.time { font-size: 0.72rem; color: var(--water-blue); font-weight: 600; }
         .no-notification-message { text-align: center; padding: 35px 20px; color: var(--text-muted); font-size: 0.95rem; }
 
@@ -500,7 +506,7 @@
             transform: translateX(-50%);
             width: 800px;
             height: 500px;
-            background: radial-gradient(circle, rgba(0, 242, 254, 0.12) 0%, rgba(3, 105, 161, 0.06) 45%, transparent 70%);
+            background: radial-gradient(circle, rgba(26, 86, 219, 0.12) 0%, rgba(3, 105, 161, 0.06) 45%, transparent 70%);
             filter: blur(80px);
             z-index: 0;
             pointer-events: none;
@@ -518,8 +524,8 @@
             align-items: center;
             gap: 8px;
             padding: 8px 18px;
-            background: rgba(0, 242, 254, 0.08);
-            border: 1px solid rgba(0, 242, 254, 0.3);
+            background: rgba(26, 86, 219, 0.08);
+            border: 1px solid rgba(26, 86, 219, 0.3);
             border-radius: var(--radius-pill);
             color: var(--water-cyan);
             font-size: 0.85rem;
@@ -527,7 +533,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 24px;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
+            box-shadow: 0 0 15px rgba(26, 86, 219, 0.15);
         }
         .hero-content h1 {
             font-size: 3.8rem;
@@ -537,7 +543,7 @@
         }
         .hero-content p {
             font-size: 1.15rem;
-            color: #94a3b8;
+            color: var(--text-body);
             margin-bottom: 38px;
             max-width: 580px;
             line-height: 1.8;
@@ -555,7 +561,7 @@
             content: '';
             position: absolute;
             inset: 5%;
-            background: radial-gradient(circle, rgba(0, 242, 254, 0.25) 0%, rgba(2, 132, 199, 0.1) 60%, transparent 80%);
+            background: radial-gradient(circle, rgba(26, 86, 219, 0.25) 0%, rgba(2, 132, 199, 0.1) 60%, transparent 80%);
             filter: blur(50px);
             z-index: 0;
             border-radius: 50%;
@@ -569,7 +575,7 @@
             height: auto;
             position: relative;
             z-index: 1;
-            filter: drop-shadow(0 25px 50px rgba(0, 242, 254, 0.25));
+            filter: drop-shadow(0 25px 50px rgba(26, 86, 219, 0.25));
             animation: float 6s ease-in-out infinite;
         }
         @keyframes float { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-16px) rotate(1deg); } 100% { transform: translateY(0px) rotate(0deg); } }
@@ -604,24 +610,24 @@
             width: 64px;
             height: 64px;
             border-radius: var(--radius-md);
-            background: rgba(0, 242, 254, 0.1);
-            border: 1px solid rgba(0, 242, 254, 0.3);
+            background: rgba(26, 86, 219, 0.1);
+            border: 1px solid rgba(26, 86, 219, 0.3);
             color: var(--water-cyan);
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 16px;
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.15);
+            box-shadow: 0 0 20px rgba(26, 86, 219, 0.15);
             transition: var(--transition-bounce);
         }
         .stat-item:hover .stat-icon {
             background: var(--gradient-water-3d);
-            color: #020617;
+            color: #fff;
             transform: scale(1.1) rotate(6deg);
             box-shadow: 0 0 25px var(--water-cyan);
         }
         .stat-icon span { font-size: 32px; }
-        .stat-item h3 { font-size: 2.6rem; color: #fff; margin-bottom: 4px; font-weight: 800; }
+        .stat-item h3 { font-size: 2.6rem; color: var(--text-pure); margin-bottom: 4px; font-weight: 800; }
         .stat-item p { color: var(--water-blue); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
 
         /* ==========================================================================
@@ -631,7 +637,7 @@
         .section-title {
             text-align: center;
             font-size: 2.7rem;
-            color: #fff;
+            color: var(--text-pure);
             margin-bottom: 60px;
             position: relative;
         }
@@ -651,7 +657,7 @@
         /* ==========================================================================
            ABOUT SECTION
            ========================================================================== */
-        .about-section { background: rgba(7, 15, 38, 0.5); }
+        .about-section { background: var(--panel); }
         .about-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 70px; }
         .about-image { position: relative; }
         .about-image img {
@@ -663,8 +669,8 @@
             transition: var(--transition-bounce);
         }
         .about-image:hover img { transform: scale(1.02); border-color: var(--water-cyan); }
-        .about-content h3 { font-size: 2.3rem; line-height: 1.3; margin-bottom: 20px; color: #fff; }
-        .about-content p { color: #94a3b8; font-size: 1.05rem; margin-bottom: 28px; }
+        .about-content h3 { font-size: 2.3rem; line-height: 1.3; margin-bottom: 20px; color: var(--text-pure); }
+        .about-content p { color: var(--text-body); font-size: 1.05rem; margin-bottom: 28px; }
         .about-features { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .feature-item {
             background: var(--gradient-card-3d);
@@ -679,23 +685,23 @@
         .feature-item:hover {
             border-color: var(--water-cyan);
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 242, 254, 0.15);
+            box-shadow: 0 10px 25px rgba(26, 86, 219, 0.15);
         }
         .feature-item .icon {
             width: 48px;
             height: 48px;
             border-radius: var(--radius-sm);
-            background: rgba(0, 242, 254, 0.12);
+            background: rgba(26, 86, 219, 0.12);
             color: var(--water-cyan);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
             flex-shrink: 0;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.1);
+            box-shadow: 0 0 15px rgba(26, 86, 219, 0.1);
         }
-        .feature-item h4 { font-size: 1.05rem; color: #fff; margin-bottom: 6px; }
-        .feature-item p { font-size: 0.88rem; color: #94a3b8; margin-bottom: 0; }
+        .feature-item h4 { font-size: 1.05rem; color: var(--text-pure); margin-bottom: 6px; }
+        .feature-item p { font-size: 0.88rem; color: var(--text-body); margin-bottom: 0; }
 
         /* ==========================================================================
            COURSES & SERVICES: 3D CARDS
@@ -726,7 +732,7 @@
         .course-card:hover, .service-card:hover {
             transform: translateY(-10px) scale(1.01);
             border-color: var(--water-cyan);
-            box-shadow: var(--shadow-3d-deep), 0 0 25px rgba(0, 242, 254, 0.2);
+            box-shadow: var(--shadow-3d-deep), 0 0 25px rgba(26, 86, 219, 0.2);
         }
         .course-card::before, .service-card::before {
             content: '';
@@ -768,15 +774,15 @@
             font-size: 0.78rem;
             font-weight: 800;
             text-transform: uppercase;
-            box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+            box-shadow: 0 0 10px rgba(26, 86, 219, 0.3);
         }
 
         .card-content { padding: 26px; display: flex; flex-direction: column; flex-grow: 1; }
         .card-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
         .category-tag {
-            background: rgba(0, 242, 254, 0.1);
+            background: rgba(26, 86, 219, 0.1);
             color: var(--water-cyan);
-            border: 1px solid rgba(0, 242, 254, 0.3);
+            border: 1px solid rgba(26, 86, 219, 0.3);
             padding: 4px 12px;
             border-radius: var(--radius-pill);
             font-size: 0.78rem;
@@ -792,16 +798,16 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            color: #fff;
+            color: var(--text-pure);
         }
         .course-info {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-bottom: 18px;
-            color: #94a3b8;
+            color: var(--text-body);
             font-size: 0.9rem;
-            border-top: 1px solid rgba(56, 189, 248, 0.1);
+            border-top: 1px solid rgba(26, 86, 219, 0.1);
             padding-top: 14px;
         }
         .card-footer {
@@ -810,14 +816,14 @@
             align-items: center;
             margin-top: auto;
             padding-top: 18px;
-            border-top: 1px solid rgba(56, 189, 248, 0.1);
+            border-top: 1px solid rgba(26, 86, 219, 0.1);
         }
-        .price { font-size: 1.7rem; font-weight: 800; color: var(--water-cyan); text-shadow: 0 0 10px rgba(0, 242, 254, 0.3); }
+        .price { font-size: 1.7rem; font-weight: 800; color: var(--water-cyan); text-shadow: 0 0 10px rgba(26, 86, 219, 0.3); }
 
         .progress-container { margin: 15px 0; }
-        .progress-text { display: flex; justify-content: space-between; font-size: 0.85rem; color: #cbd5e1; font-weight: 600; }
+        .progress-text { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-soft); font-weight: 600; }
         .progress-bar-bg {
-            background: rgba(11, 23, 57, 0.8);
+            background: var(--panel);
             height: 8px;
             border-radius: var(--radius-pill);
             overflow: hidden;
@@ -837,29 +843,29 @@
         .service-icon-box {
             width: 76px;
             height: 76px;
-            background: rgba(0, 242, 254, 0.08);
-            border: 1px solid rgba(0, 242, 254, 0.3);
+            background: rgba(26, 86, 219, 0.08);
+            border: 1px solid rgba(26, 86, 219, 0.3);
             border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
             color: var(--water-cyan);
-            box-shadow: 0 0 25px rgba(0, 242, 254, 0.2);
+            box-shadow: 0 0 25px rgba(26, 86, 219, 0.2);
             transition: var(--transition-bounce);
         }
         .service-card:hover .service-icon-box {
             background: var(--gradient-water-3d);
-            color: #020617;
+            color: #fff;
             transform: scale(1.12) rotate(6deg);
             box-shadow: 0 0 30px var(--water-cyan);
         }
         .service-icon-box span { font-size: 36px; }
-        .service-card h3 { font-size: 1.4rem; color: #fff; margin-bottom: 10px; }
-        .plan-description { color: #94a3b8; font-size: 0.92rem; }
+        .service-card h3 { font-size: 1.4rem; color: var(--text-pure); margin-bottom: 10px; }
+        .plan-description { color: var(--text-body); font-size: 0.92rem; }
 
         .pricing-area {
-            background: rgba(7, 15, 38, 0.75);
+            background: var(--panel);
             border-top: 1px solid var(--navy-border);
             border-bottom: 1px solid var(--navy-border);
             padding: 22px;
@@ -876,7 +882,7 @@
             font-weight: 800;
         }
         .current-price { display: flex; justify-content: center; align-items: baseline; gap: 6px; }
-        .current-price .price-amount { font-size: 2.6rem; font-weight: 800; color: var(--water-cyan); text-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
+        .current-price .price-amount { font-size: 2.6rem; font-weight: 800; color: var(--water-cyan); text-shadow: 0 0 15px rgba(26, 86, 219, 0.3); }
 
         .service-body { padding: 26px; flex-grow: 1; display: flex; flex-direction: column; }
         .service-features { list-style: none; margin-bottom: 28px; flex-grow: 1; }
@@ -886,7 +892,7 @@
             gap: 12px;
             margin-bottom: 14px;
             font-size: 0.94rem;
-            color: #cbd5e1;
+            color: var(--text-soft);
         }
         .service-features .material-symbols-outlined { color: var(--water-cyan); font-size: 20px; }
 
@@ -894,7 +900,7 @@
             width: 100%;
             padding: 15px;
             background: var(--gradient-water-3d);
-            color: #030712;
+            color: #fff;
             border: none;
             border-radius: var(--radius-md);
             font-size: 1rem;
@@ -910,7 +916,7 @@
         }
         .buy-now-btn:hover, .btn-service-action:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 12px 30px rgba(0, 242, 254, 0.5);
+            box-shadow: 0 12px 30px rgba(26, 86, 219, 0.5);
             color: #000;
         }
 
@@ -934,7 +940,7 @@
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; background: #000; }
         .video-wrapper iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
         .video-info { padding: 22px; text-align: center; }
-        .video-info h4 { font-size: 1.15rem; color: #fff; margin-bottom: 6px; }
+        .video-info h4 { font-size: 1.15rem; color: var(--text-pure); margin-bottom: 6px; }
         .video-info p { font-size: 0.9rem; color: var(--water-blue); }
 
         .slider-wrapper {
@@ -954,7 +960,7 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(7, 15, 38, 0.85);
+            background: var(--panel);
             backdrop-filter: blur(8px);
             border: 1px solid var(--water-cyan);
             color: var(--water-cyan);
@@ -970,7 +976,7 @@
         }
         .slider-btn:hover {
             background: var(--water-cyan);
-            color: #020617;
+            color: #fff;
             box-shadow: 0 0 15px var(--water-cyan);
         }
         .slider-btn.prev-btn { left: 16px; }
@@ -997,16 +1003,16 @@
             box-shadow: var(--shadow-card);
         }
         .notice-item .material-symbols-outlined {
-            background: rgba(0, 242, 254, 0.12);
-            border: 1px solid rgba(0, 242, 254, 0.3);
+            background: rgba(26, 86, 219, 0.12);
+            border: 1px solid rgba(26, 86, 219, 0.3);
             color: var(--water-cyan);
             padding: 14px;
             border-radius: var(--radius-sm);
             font-size: 28px;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
+            box-shadow: 0 0 15px rgba(26, 86, 219, 0.15);
         }
-        .notice-details h4 { font-size: 1.2rem; color: #fff; margin-bottom: 6px; }
-        .notice-details p { color: #94a3b8; font-size: 0.95rem; margin-bottom: 0; line-height: 1.6; }
+        .notice-details h4 { font-size: 1.2rem; color: var(--text-pure); margin-bottom: 6px; }
+        .notice-details p { color: var(--text-body); font-size: 0.95rem; margin-bottom: 0; line-height: 1.6; }
 
         /* ==========================================================================
            CONTACT CTA SECTION
@@ -1026,29 +1032,29 @@
             right: -100px;
             width: 350px;
             height: 350px;
-            background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(26, 86, 219, 0.15) 0%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
         }
         .contact-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; align-items: center; }
         .contact-text { padding: 60px; }
-        .contact-text h2 { font-size: 2.6rem; color: #fff; margin-bottom: 18px; line-height: 1.25; }
-        .contact-text p { color: #94a3b8; font-size: 1.05rem; margin-bottom: 36px; max-width: 500px; }
+        .contact-text h2 { font-size: 2.6rem; color: var(--text-pure); margin-bottom: 18px; line-height: 1.25; }
+        .contact-text p { color: var(--text-body); font-size: 1.05rem; margin-bottom: 36px; max-width: 500px; }
         .contact-info-row { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
         .phone-info { display: flex; align-items: center; gap: 16px; }
         .phone-icon {
             width: 52px;
             height: 52px;
             border-radius: var(--radius-sm);
-            background: rgba(0, 242, 254, 0.1);
-            border: 1px solid rgba(0, 242, 254, 0.3);
+            background: rgba(26, 86, 219, 0.1);
+            border: 1px solid rgba(26, 86, 219, 0.3);
             color: var(--water-cyan);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
+            box-shadow: 0 0 15px rgba(26, 86, 219, 0.15);
         }
-        .numbers a { text-decoration: none; color: #fff; font-weight: 700; font-size: 1.05rem; display: block; }
+        .numbers a { text-decoration: none; color: var(--text-pure); font-weight: 700; font-size: 1.05rem; display: block; }
         .numbers a:hover { color: var(--water-cyan); }
         .contact-img-wrapper {
             display: flex;
@@ -1056,7 +1062,7 @@
             justify-content: center;
             padding-right: 40px;
         }
-        .contact-img-wrapper img { max-width: 90%; height: auto; filter: drop-shadow(0 20px 30px rgba(0, 242, 254, 0.2)); }
+        .contact-img-wrapper img { max-width: 90%; height: auto; filter: drop-shadow(0 20px 30px rgba(26, 86, 219, 0.2)); }
 
         /* ==========================================================================
            MODALS (3D LIQUID GLASS DIALOGS)
@@ -1086,7 +1092,7 @@
             max-width: 880px;
             display: flex;
             overflow: hidden;
-            box-shadow: var(--shadow-3d-deep), 0 0 40px rgba(0, 242, 254, 0.2);
+            box-shadow: var(--shadow-3d-deep), 0 0 40px rgba(26, 86, 219, 0.2);
             position: relative;
             transform: translateY(30px) scale(0.96);
             transition: var(--transition-bounce);
@@ -1097,9 +1103,9 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            background: rgba(15, 33, 77, 0.8);
+            background: var(--panel-2);
             border: 1px solid var(--navy-border);
-            color: #94a3b8;
+            color: var(--text-body);
             width: 38px;
             height: 38px;
             border-radius: 50%;
@@ -1120,7 +1126,7 @@
 
         .modal-info-panel {
             width: 44%;
-            background: linear-gradient(135deg, rgba(7, 15, 38, 0.95), rgba(15, 33, 77, 0.95));
+            background: linear-gradient(135deg, var(--panel), var(--panel-2));
             border-right: 1px solid var(--navy-border);
             padding: 50px 40px;
             display: flex;
@@ -1133,11 +1139,11 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at top right, rgba(0, 242, 254, 0.2), transparent 70%);
+            background: radial-gradient(circle at top right, rgba(26, 86, 219, 0.2), transparent 70%);
         }
         .modal-info-panel .logo img { max-height: 48px; margin-bottom: 24px; position: relative; }
-        .modal-info-panel h2 { font-size: 2.2rem; color: #fff; margin-bottom: 14px; position: relative; }
-        .modal-info-panel p { color: #94a3b8; font-size: 0.95rem; line-height: 1.6; position: relative; }
+        .modal-info-panel h2 { font-size: 2.2rem; color: var(--text-pure); margin-bottom: 14px; position: relative; }
+        .modal-info-panel p { color: var(--text-body); font-size: 0.95rem; line-height: 1.6; position: relative; }
 
         .modal-form-panel {
             width: 56%;
@@ -1145,27 +1151,27 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            background: rgba(11, 23, 57, 0.95);
+            background: var(--panel);
         }
-        .modal-form-panel h2 { font-size: 1.8rem; color: #fff; margin-bottom: 28px; }
+        .modal-form-panel h2 { font-size: 1.8rem; color: var(--text-pure); margin-bottom: 28px; }
 
         /* Input Floating Labels */
         .input-group { position: relative; margin-bottom: 20px; }
         .input-group input, .input-group select {
             width: 100%;
             padding: 15px 16px 15px 48px;
-            background: rgba(7, 15, 38, 0.85);
+            background: var(--panel);
             border: 1px solid var(--navy-border);
             border-radius: var(--radius-md);
-            color: #fff;
+            color: var(--text-pure);
             font-size: 0.95rem;
             outline: none;
             transition: var(--transition-smooth);
         }
         .input-group input:focus, .input-group select:focus {
             border-color: var(--water-cyan);
-            background: rgba(15, 33, 77, 0.9);
-            box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.18);
+            background: var(--panel-2);
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.18);
         }
         .input-group .material-symbols-outlined {
             position: absolute;
@@ -1200,7 +1206,7 @@
         .login-links { text-align: right; margin-top: -8px; margin-bottom: 20px; }
         .login-links a { color: var(--water-blue); text-decoration: none; font-size: 0.88rem; font-weight: 600; }
         .login-links a:hover { color: var(--water-cyan); text-decoration: underline; }
-        .signup-link { text-align: center; color: #94a3b8; font-size: 0.92rem; margin-top: 18px; }
+        .signup-link { text-align: center; color: var(--text-body); font-size: 0.92rem; margin-top: 18px; }
         .signup-link a { color: var(--water-cyan); font-weight: 700; text-decoration: none; }
         .signup-link a:hover { text-decoration: underline; }
 
@@ -1209,7 +1215,7 @@
         .otp-input-group input {
             width: 48px;
             height: 56px;
-            background: rgba(7, 15, 38, 0.9);
+            background: var(--panel);
             border: 2px solid var(--navy-border);
             border-radius: var(--radius-sm);
             color: var(--water-cyan);
@@ -1221,7 +1227,7 @@
         }
         .otp-input-group input:focus {
             border-color: var(--water-cyan);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+            box-shadow: 0 0 15px rgba(26, 86, 219, 0.3);
         }
 
         /* ==========================================================================
@@ -1244,7 +1250,7 @@
         }
         .checkout-section-title {
             font-size: 1.15rem;
-            color: #fff;
+            color: var(--text-pure);
             border-bottom: 1px solid var(--navy-border);
             padding-bottom: 12px;
             margin-bottom: 20px;
@@ -1256,7 +1262,7 @@
             gap: 18px;
             align-items: center;
             padding-bottom: 24px;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+            border-bottom: 1px solid rgba(26, 86, 219, 0.1);
             margin-bottom: 24px;
         }
         .checkout-item-details img {
@@ -1266,28 +1272,28 @@
             object-fit: cover;
             border: 1px solid var(--navy-border);
         }
-        .checkout-item-info h4 { font-size: 1.15rem; color: #fff; margin-bottom: 4px; }
-        .checkout-item-info p { font-size: 0.85rem; color: #94a3b8; }
+        .checkout-item-info h4 { font-size: 1.15rem; color: var(--text-pure); margin-bottom: 4px; }
+        .checkout-item-info p { font-size: 0.85rem; color: var(--text-body); }
         .checkout-coupon-area {
-            background: rgba(7, 15, 38, 0.7);
+            background: var(--panel);
             border: 1px dashed var(--water-cyan);
             padding: 20px;
             border-radius: var(--radius-md);
             margin-bottom: 20px;
         }
-        .checkout-coupon-area label { color: #fff; font-size: 0.92rem; font-weight: 700; margin-bottom: 10px; display: block; }
+        .checkout-coupon-area label { color: var(--text-pure); font-size: 0.92rem; font-weight: 700; margin-bottom: 10px; display: block; }
         .coupon-input-group { display: flex; gap: 10px; }
         .coupon-input-group input {
             flex: 1;
             padding: 12px 16px;
-            background: rgba(11, 23, 57, 0.9);
+            background: var(--panel);
             border: 1px solid var(--navy-border);
             border-radius: var(--radius-sm);
-            color: #fff;
+            color: var(--text-pure);
             outline: none;
         }
         .coupon-input-group button {
-            background: rgba(0, 242, 254, 0.1);
+            background: rgba(26, 86, 219, 0.1);
             border: 1px solid var(--water-cyan);
             color: var(--water-cyan);
             padding: 0 20px;
@@ -1296,16 +1302,16 @@
             cursor: pointer;
             transition: var(--transition-bounce);
         }
-        .coupon-input-group button:hover { background: var(--water-cyan); color: #020617; }
+        .coupon-input-group button:hover { background: var(--water-cyan); color: #fff; }
 
         .checkout-summary-box {
-            background: rgba(7, 15, 38, 0.85);
+            background: var(--panel);
             border: 1px solid var(--navy-border);
             border-radius: var(--radius-md);
             padding: 22px;
             margin-bottom: 24px;
         }
-        .summary-row { display: flex; justify-content: space-between; color: #94a3b8; margin-bottom: 12px; font-size: 0.95rem; }
+        .summary-row { display: flex; justify-content: space-between; color: var(--text-body); margin-bottom: 12px; font-size: 0.95rem; }
         .summary-row.discount { color: #10b981; font-weight: 700; }
         .summary-row.total {
             border-top: 1px dashed var(--navy-border);
@@ -1322,7 +1328,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 16px;
-            background: rgba(7, 15, 38, 0.8);
+            background: var(--panel);
             border: 1px solid var(--navy-border);
             border-radius: var(--radius-md);
             margin-bottom: 12px;
@@ -1331,8 +1337,8 @@
         }
         .payment-method-label.active {
             border-color: var(--water-cyan);
-            background: rgba(0, 242, 254, 0.08);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+            background: rgba(26, 86, 219, 0.08);
+            box-shadow: 0 0 15px rgba(26, 86, 219, 0.2);
         }
         .pm-left { display: flex; align-items: center; gap: 12px; font-weight: 700; color: #fff; }
         .pm-left input { accent-color: var(--water-cyan); width: 18px; height: 18px; }
@@ -1344,7 +1350,7 @@
             background: var(--gradient-water-3d);
             border: none;
             border-radius: var(--radius-md);
-            color: #030712;
+            color: #fff;
             font-size: 1.1rem;
             font-weight: 800;
             cursor: pointer;
@@ -1355,7 +1361,7 @@
             justify-content: center;
             gap: 10px;
         }
-        .btn-pay-now:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 242, 254, 0.5); }
+        .btn-pay-now:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(26, 86, 219, 0.5); }
 
         /* bKash Modal Elements */
         #payment-modal .login-card { max-width: 440px; display: block; border-radius: var(--radius-lg); overflow: hidden; }
@@ -1398,7 +1404,7 @@
             text-transform: uppercase;
         }
         #bkash-close-btn { background: #e2e8f0; color: #475569; }
-        #bkash-confirm-btn { background: #cbd5e1; color: #94a3b8; pointer-events: none; }
+        #bkash-confirm-btn { background: #cbd5e1; color: var(--text-body); pointer-events: none; }
         #bkash-confirm-btn.active { background: var(--bkash-pink); color: #fff; pointer-events: auto; }
         .bkash-merchant-box {
             background: rgba(0, 0, 0, 0.2);
@@ -1449,7 +1455,7 @@
             width: 72px;
             height: 72px;
             border-radius: 50%;
-            background: rgba(0, 242, 254, 0.15);
+            background: rgba(26, 86, 219, 0.15);
             border: 2px solid var(--water-cyan);
             color: var(--water-cyan);
             display: flex;
@@ -1457,8 +1463,8 @@
             justify-content: center;
             margin: 0 auto 16px;
         }
-        .verification-card-body { padding: 30px; background: rgba(7, 15, 38, 0.9); }
-        .verification-card-body p { color: #94a3b8; margin-bottom: 24px; font-size: 1.05rem; }
+        .verification-card-body { padding: 30px; background: var(--panel); }
+        .verification-card-body p { color: var(--text-body); margin-bottom: 24px; font-size: 1.05rem; }
 
         /* ==========================================================================
            DASHBOARD: ENTERPRISE LMS WORKSPACE
@@ -1489,7 +1495,7 @@
             box-shadow: 0 0 12px var(--water-cyan);
             object-fit: cover;
         }
-        .sidebar-user h4 { font-size: 1.05rem; color: #fff; }
+        .sidebar-user h4 { font-size: 1.05rem; color: var(--text-pure); }
 
         .sidebar-nav {
             background: var(--gradient-card-3d);
@@ -1507,22 +1513,22 @@
             gap: 14px;
             padding: 13px 18px;
             border-radius: var(--radius-sm);
-            color: #cbd5e1;
+            color: var(--text-soft);
             text-decoration: none;
             font-weight: 600;
             font-size: 0.92rem;
             transition: var(--transition-smooth);
         }
         .sidebar-nav a:hover {
-            background: rgba(0, 242, 254, 0.08);
+            background: rgba(26, 86, 219, 0.08);
             color: var(--water-cyan);
             transform: translateX(4px);
         }
         .sidebar-nav li.active a {
             background: var(--gradient-water-3d);
-            color: #020617;
+            color: #fff;
             font-weight: 800;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+            box-shadow: 0 0 15px rgba(26, 86, 219, 0.3);
         }
 
         /* 3D Liquid HUD Countdown Timer */
@@ -1540,10 +1546,10 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 8px;
-            background: rgba(7, 15, 38, 0.85);
+            background: var(--panel);
             padding: 14px 10px;
             border-radius: var(--radius-sm);
-            border: 1px solid rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(26, 86, 219, 0.15);
         }
         .time-block { font-size: 1.4rem; font-weight: 800; color: #fff; }
         .time-block span { display: block; font-size: 0.7rem; color: var(--water-blue); font-weight: 600; text-transform: uppercase; }
@@ -1564,18 +1570,18 @@
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
-        .content-header h2 { font-size: 1.8rem; color: #fff; }
+        .content-header h2 { font-size: 1.8rem; color: var(--text-pure); }
 
         /* Schedule & Data Tables */
         .class-schedule-table { width: 100%; border-collapse: separate; border-spacing: 0; }
         .class-schedule-table th, .class-schedule-table td {
             padding: 16px 18px;
             text-align: left;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+            border-bottom: 1px solid rgba(26, 86, 219, 0.1);
             font-size: 0.92rem;
         }
         .class-schedule-table th {
-            background: rgba(7, 15, 38, 0.8);
+            background: var(--panel);
             color: var(--water-cyan);
             font-weight: 700;
             text-transform: uppercase;
@@ -1589,8 +1595,8 @@
             font-weight: 800;
             text-transform: uppercase;
         }
-        .status-upcoming { background: rgba(0, 242, 254, 0.15); color: var(--water-cyan); border: 1px solid rgba(0, 242, 254, 0.3); }
-        .status-completed { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
+        .status-upcoming { background: rgba(26, 86, 219, 0.15); color: var(--water-cyan); border: 1px solid rgba(26, 86, 219, 0.3); }
+        .status-completed { background: rgba(148, 163, 184, 0.15); color: var(--text-body); }
 
         /* Curriculum Cinema Player */
         .curriculum-layout { display: grid; grid-template-columns: 1.9fr 1.1fr; gap: 28px; }
@@ -1611,7 +1617,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: radial-gradient(circle, rgba(15, 33, 77, 0.8), #020617);
+            background: radial-gradient(circle, var(--panel-2), #020617);
             color: #fff;
             text-align: center;
             padding: 24px;
@@ -1619,7 +1625,7 @@
         #video-placeholder span { font-size: 56px; color: var(--water-cyan); margin-bottom: 12px; }
 
         .curriculum-list-wrapper {
-            background: rgba(7, 15, 38, 0.8);
+            background: var(--panel);
             border: 1px solid var(--navy-border);
             border-radius: var(--radius-md);
             padding: 16px;
@@ -1627,21 +1633,21 @@
             overflow-y: auto;
         }
         .curriculum-module {
-            border: 1px solid rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(26, 86, 219, 0.12);
             border-radius: var(--radius-sm);
             margin-bottom: 12px;
             overflow: hidden;
-            background: rgba(11, 23, 57, 0.6);
+            background: var(--panel);
         }
         .module-header {
             padding: 14px 18px;
-            background: rgba(15, 33, 77, 0.7);
+            background: var(--panel-2);
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: 700;
-            color: #fff;
+            color: var(--text-pure);
             font-size: 0.95rem;
         }
         .module-videos { list-style: none; max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
@@ -1651,22 +1657,22 @@
             align-items: center;
             justify-content: space-between;
             padding: 12px 18px;
-            border-top: 1px solid rgba(56, 189, 248, 0.08);
-            color: #94a3b8;
+            border-top: 1px solid rgba(26, 86, 219, 0.08);
+            color: var(--text-body);
             text-decoration: none;
             font-size: 0.88rem;
             font-weight: 600;
             transition: var(--transition-smooth);
         }
-        .video-item-link:hover { background: rgba(0, 242, 254, 0.05); color: var(--water-cyan); }
-        .video-item-link.playing { background: var(--gradient-water-3d); color: #020617; font-weight: 800; }
+        .video-item-link:hover { background: rgba(26, 86, 219, 0.05); color: var(--water-cyan); }
+        .video-item-link.playing { background: var(--gradient-water-3d); color: #fff; font-weight: 800; }
 
         /* Profile Summary Area */
         .profile-summary {
             display: flex;
             align-items: center;
             gap: 24px;
-            background: rgba(7, 15, 38, 0.7);
+            background: var(--panel);
             border: 1px solid var(--navy-border);
             padding: 24px;
             border-radius: var(--radius-md);
@@ -1686,7 +1692,7 @@
             bottom: 2px;
             right: 2px;
             background: var(--gradient-water-3d);
-            color: #020617;
+            color: #fff;
             width: 32px;
             height: 32px;
             border-radius: 50%;
@@ -1698,19 +1704,19 @@
         }
 
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; color: #cbd5e1; font-size: 0.9rem; font-weight: 600; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--text-soft); font-size: 0.9rem; font-weight: 600; }
         .form-group input, .form-group select {
             width: 100%;
             padding: 13px 16px;
-            background: rgba(7, 15, 38, 0.85);
+            background: var(--panel);
             border: 1px solid var(--navy-border);
             border-radius: var(--radius-sm);
-            color: #fff;
+            color: var(--text-pure);
             outline: none;
         }
         .form-group input:focus, .form-group select:focus {
             border-color: var(--water-cyan);
-            box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.15);
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.15);
         }
 
         /* ==========================================================================
@@ -1739,7 +1745,7 @@
         .footer-col li { margin-bottom: 12px; }
         .footer-col a {
             text-decoration: none;
-            color: #94a3b8;
+            color: var(--text-body);
             font-size: 0.92rem;
             transition: var(--transition-smooth);
         }
@@ -1749,19 +1755,19 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: rgba(15, 33, 77, 0.8);
+            background: var(--panel-2);
             border: 1px solid var(--navy-border);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #fff;
+            color: var(--text-pure);
             text-decoration: none;
             transition: var(--transition-bounce);
         }
         .social-icon:hover {
             border-color: var(--water-cyan);
             background: var(--water-cyan);
-            color: #020617;
+            color: #fff;
             transform: translateY(-4px);
             box-shadow: 0 0 15px var(--water-cyan);
         }
@@ -1770,7 +1776,7 @@
 
         .copyright {
             text-align: center;
-            border-top: 1px solid rgba(56, 189, 248, 0.1);
+            border-top: 1px solid rgba(26, 86, 219, 0.1);
             padding-top: 25px;
             font-size: 0.88rem;
             color: #64748b;
@@ -1784,7 +1790,7 @@
             height: 50px;
             border-radius: 50%;
             background: var(--gradient-water-3d);
-            color: #020617;
+            color: #fff;
             border: none;
             display: flex;
             align-items: center;
@@ -1827,7 +1833,7 @@
             gap: 12px;
         }
         .toast {
-            background: rgba(11, 23, 57, 0.95);
+            background: var(--panel);
             backdrop-filter: blur(16px);
             border: 1px solid var(--navy-border);
             border-left: 4px solid var(--water-cyan);
@@ -1850,7 +1856,7 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background: rgba(7, 15, 38, 0.96);
+            background: var(--panel);
             backdrop-filter: blur(20px);
             border-top: 1px solid var(--navy-border);
             z-index: 1001;
@@ -1864,12 +1870,12 @@
             flex-direction: column;
             align-items: center;
             text-decoration: none;
-            color: #94a3b8;
+            color: var(--text-body);
             font-size: 0.72rem;
             font-weight: 700;
         }
         .mobile-nav-link .material-symbols-outlined { font-size: 24px; margin-bottom: 2px; }
-        .mobile-nav-link.active { color: var(--water-cyan); text-shadow: 0 0 10px rgba(0, 242, 254, 0.5); }
+        .mobile-nav-link.active { color: var(--water-cyan); text-shadow: 0 0 10px rgba(26, 86, 219, 0.5); }
 
         /* Blog & Legal Styles */
         .legal-section-card {
@@ -1882,7 +1888,7 @@
             box-shadow: var(--shadow-card);
         }
         .legal-section-card h3 { color: var(--water-cyan); margin: 24px 0 12px; }
-        .legal-section-card p, .legal-section-card li { color: #94a3b8; line-height: 1.8; }
+        .legal-section-card p, .legal-section-card li { color: var(--text-body); line-height: 1.8; }
 
         .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 30px; }
         .blog-card {
@@ -1898,8 +1904,8 @@
         .blog-thumbnail { width: 100%; height: 210px; object-fit: cover; }
         .blog-content { padding: 22px; flex-grow: 1; display: flex; flex-direction: column; }
         .blog-date { color: var(--water-cyan); font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; }
-        .blog-content h3 { font-size: 1.2rem; color: #fff; margin-bottom: 12px; }
-        .blog-content p { color: #94a3b8; font-size: 0.92rem; margin-bottom: 18px; flex-grow: 1; }
+        .blog-content h3 { font-size: 1.2rem; color: var(--text-pure); margin-bottom: 12px; }
+        .blog-content p { color: var(--text-body); font-size: 0.92rem; margin-bottom: 18px; flex-grow: 1; }
         .read-more-btn { color: var(--water-cyan); font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
 
         /* ==========================================================================
@@ -1946,59 +1952,59 @@
         .dx-profile .sidebar-user { align-items: center; }
         .dx-profile .sidebar-user > div { min-width: 0; }
         .dx-profile h4 { margin-bottom: 4px; }
-        .dx-pill { display: inline-block; padding: 2px 12px; border-radius: var(--radius-pill); font-size: .72rem; font-weight: 800; background: var(--gradient-water-3d); color: #020617; }
+        .dx-pill { display: inline-block; padding: 2px 12px; border-radius: var(--radius-pill); font-size: .72rem; font-weight: 800; background: var(--gradient-water-3d); color: #fff; }
         .dx-sid { display: block; margin-top: 6px; font-size: .78rem; color: var(--text-body); overflow: hidden; text-overflow: ellipsis; }
         .dx-badge { margin-left: auto; font-size: .68rem; font-weight: 800; padding: 2px 9px; border-radius: var(--radius-pill); background: #ef4444; color: #fff; }
         .sidebar-nav li.active .dx-badge { background: #020617; color: var(--water-cyan); }
         .dx-promo { border: 1px solid var(--navy-border); border-radius: var(--radius-md); padding: 22px; background: var(--gradient-card-3d), var(--navy-dark); box-shadow: var(--shadow-card); position: relative; overflow: hidden; }
         .dx-promo::after { content: ''; position: absolute; right: -30px; top: -30px; width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, var(--water-glow-subtle), transparent 70%); }
         .dx-promo p { color: var(--text-body); font-size: .85rem; }
-        .dx-promo strong { display: block; color: #fff; font-size: 1.1rem; line-height: 1.3; margin: 4px 0 10px; }
+        .dx-promo strong { display: block; color: var(--text-pure); font-size: 1.1rem; line-height: 1.3; margin: 4px 0 10px; }
         .dx-promo em { font-family: 'Great Vibes', cursive; font-style: normal; font-size: 1.7rem; color: var(--water-cyan); }
 
         .dx-grid { display: grid; grid-template-columns: minmax(0, 1fr) 310px; gap: 24px; align-items: start; }
         .dx-main, .dx-side { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
         .dx-panel { background: var(--gradient-card-3d); border: 1px solid var(--navy-border); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-card); }
         .dx-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; gap: 12px; }
-        .dx-head h3 { font-size: 1.15rem; color: #fff; display: flex; align-items: center; gap: 10px; }
+        .dx-head h3 { font-size: 1.15rem; color: var(--text-pure); display: flex; align-items: center; gap: 10px; }
         .dx-head h3 .material-symbols-outlined { color: var(--water-cyan); }
         .dx-link { background: none; border: 0; cursor: pointer; font: inherit; font-size: .82rem; font-weight: 700; color: var(--water-cyan); white-space: nowrap; }
         .dx-link:hover { text-decoration: underline; }
 
-        .dx-hero { position: relative; overflow: hidden; border: 1px solid var(--navy-border); border-radius: var(--radius-lg); padding: 30px; background: linear-gradient(135deg, rgba(0,242,254,.14), rgba(15,33,77,.9) 55%, rgba(7,15,38,.95)); box-shadow: var(--shadow-card); }
+        .dx-hero { position: relative; overflow: hidden; border: 1px solid var(--navy-border); border-radius: var(--radius-lg); padding: 30px; background: linear-gradient(135deg, rgba(26, 86, 219,.14), var(--panel-2) 55%, var(--panel)); box-shadow: var(--shadow-card); }
         .dx-hero h2 { font-size: 1.05rem; color: var(--text-body); font-weight: 600; }
-        .dx-hero h1 { font-size: 2rem; color: #fff; line-height: 1.2; margin: 2px 0 6px; overflow-wrap: anywhere; }
-        .dx-hero p { color: #cbd5e1; }
+        .dx-hero h1 { font-size: 2rem; color: var(--text-pure); line-height: 1.2; margin: 2px 0 6px; overflow-wrap: anywhere; }
+        .dx-hero p { color: var(--text-soft); }
         .dx-script { position: absolute; right: 28px; top: 22px; text-align: right; font-family: 'Great Vibes', cursive; font-size: 2.3rem; line-height: 1.05; color: var(--water-cyan); opacity: .9; pointer-events: none; }
         .dx-stats { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 24px; }
-        .dx-stat { flex: 1 1 140px; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: var(--radius-sm); background: rgba(7,15,38,.7); border: 1px solid var(--navy-border); }
+        .dx-stat { flex: 1 1 140px; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: var(--radius-sm); background: var(--panel); border: 1px solid var(--navy-border); }
         .dx-stat .material-symbols-outlined { color: var(--water-cyan); font-size: 28px; }
         .dx-stat small { display: block; font-size: .75rem; color: var(--text-body); }
-        .dx-stat b { font-size: 1.3rem; color: #fff; }
+        .dx-stat b { font-size: 1.3rem; color: var(--text-pure); }
 
         .dx-courses { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
-        .dx-course { display: flex; flex-direction: column; background: rgba(7,15,38,.6); border: 1px solid var(--navy-border); border-radius: var(--radius-md); overflow: hidden; }
+        .dx-course { display: flex; flex-direction: column; background: var(--panel); border: 1px solid var(--navy-border); border-radius: var(--radius-md); overflow: hidden; }
         .dx-thumb { position: relative; }
         .dx-thumb img { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
         .dx-status { position: absolute; top: 8px; right: 8px; font-size: .68rem; font-weight: 800; padding: 3px 10px; border-radius: var(--radius-pill); background: var(--water-deep); color: #fff; }
         .dx-status.done { background: #10b981; } .dx-status.new { background: var(--navy-card-light); border: 1px solid var(--navy-border); }
         .dx-cbody { padding: 14px; display: flex; flex-direction: column; flex: 1; }
-        .dx-cbody h3 { font-size: .95rem; line-height: 1.35; color: #fff; min-height: 2.7em; margin-bottom: 4px; }
+        .dx-cbody h3 { font-size: .95rem; line-height: 1.35; color: var(--text-pure); min-height: 2.7em; margin-bottom: 4px; }
         .dx-cbody > small { color: var(--text-muted); font-size: .76rem; }
-        .dx-meter { display: flex; justify-content: space-between; font-size: .76rem; color: #cbd5e1; margin-top: 12px; }
+        .dx-meter { display: flex; justify-content: space-between; font-size: .76rem; color: var(--text-soft); margin-top: 12px; }
         .dx-cbody .progress-bar-bg { margin: 6px 0 14px; height: 6px; }
         .dx-cbody .btn { margin-top: auto; width: 100%; padding: 10px 12px; font-size: .85rem; }
         .dx-cbody .download-cert-btn { margin-top: 8px; border-color: var(--water-cyan); color: var(--water-cyan); }
 
         .dx-two { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; }
-        .dx-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid rgba(56,189,248,.1); }
+        .dx-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid rgba(26, 86, 219,.1); }
         .dx-row:first-of-type { border-top: 0; }
         .dx-ico { flex: 0 0 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; background: var(--water-glow-subtle); color: var(--water-cyan); }
-        .dx-row p { color: #e2e8f0; font-size: .86rem; line-height: 1.35; } .dx-row small { color: var(--text-muted); font-size: .74rem; }
+        .dx-row p { color: var(--text-soft); font-size: .86rem; line-height: 1.35; } .dx-row small { color: var(--text-muted); font-size: .74rem; }
         .dx-row > div:nth-child(2) { flex: 1; min-width: 0; }
         .dx-empty { color: var(--text-muted); font-size: .86rem; padding: 6px 0; }
         .dx-qgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .dx-q { display: flex; align-items: center; gap: 10px; padding: 14px; text-align: left; cursor: pointer; font: inherit; font-size: .84rem; font-weight: 700; color: #e2e8f0; background: rgba(7,15,38,.6); border: 1px solid var(--navy-border); border-radius: var(--radius-md); transition: var(--transition-smooth); }
+        .dx-q { display: flex; align-items: center; gap: 10px; padding: 14px; text-align: left; cursor: pointer; font: inherit; font-size: .84rem; font-weight: 700; color: var(--text-soft); background: var(--panel); border: 1px solid var(--navy-border); border-radius: var(--radius-md); transition: var(--transition-smooth); }
         .dx-q:hover { border-color: var(--water-cyan); color: var(--water-cyan); }
         .dx-q .material-symbols-outlined { color: var(--water-cyan); }
         .dx-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: none; border: 0; padding: 0; box-shadow: none; }
@@ -2006,16 +2012,16 @@
         .dx-tiles .dx-q .material-symbols-outlined { font-size: 30px; }
 
         .dx-donut-wrap { display: flex; gap: 18px; align-items: center; }
-        .dx-donut { --p: 0; flex: 0 0 118px; height: 118px; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--water-cyan) calc(var(--p) * 1%), rgba(56,189,248,.15) 0); }
-        .dx-donut span { width: 88px; height: 88px; border-radius: 50%; display: grid; place-items: center; background: var(--navy-dark); font-weight: 800; font-size: 1.35rem; color: #fff; }
-        .dx-legend { flex: 1; font-size: .82rem; color: #cbd5e1; } .dx-legend div { display: flex; justify-content: space-between; padding: 5px 0; }
+        .dx-donut { --p: 0; flex: 0 0 118px; height: 118px; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--water-cyan) calc(var(--p) * 1%), rgba(26, 86, 219,.15) 0); }
+        .dx-donut span { width: 88px; height: 88px; border-radius: 50%; display: grid; place-items: center; background: var(--navy-dark); font-weight: 800; font-size: 1.35rem; color: var(--text-pure); }
+        .dx-legend { flex: 1; font-size: .82rem; color: var(--text-soft); } .dx-legend div { display: flex; justify-content: space-between; padding: 5px 0; }
         .dx-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; }
-        .dx-join { padding: 7px 16px; border-radius: var(--radius-sm); font-size: .8rem; font-weight: 800; text-decoration: none; background: var(--gradient-water-3d); color: #020617; }
+        .dx-join { padding: 7px 16px; border-radius: var(--radius-sm); font-size: .8rem; font-weight: 800; text-decoration: none; background: var(--gradient-water-3d); color: #fff; }
         .dx-join.off { background: rgba(148,163,184,.15); color: var(--text-body); }
         .dx-why { display: flex; flex-wrap: wrap; gap: 18px 32px; align-items: center; justify-content: space-between; margin-top: 24px; padding: 22px 28px; border: 1px solid var(--navy-border); border-radius: var(--radius-lg); background: var(--gradient-card-3d); }
-        .dx-why h3 { color: #fff; font-size: 1.15rem; } .dx-why > div { display: flex; align-items: center; gap: 10px; }
+        .dx-why h3 { color: var(--text-pure); font-size: 1.15rem; } .dx-why > div { display: flex; align-items: center; gap: 10px; }
         .dx-why .material-symbols-outlined { color: var(--water-cyan); font-size: 30px; }
-        .dx-why small { display: block; color: var(--text-muted); } .dx-why b { color: #e2e8f0; font-size: .85rem; }
+        .dx-why small { display: block; color: var(--text-muted); } .dx-why b { color: var(--text-soft); font-size: .85rem; }
         @media (max-width: 1100px) { .dx-grid, .dx-two { grid-template-columns: 1fr; } }
         @media (max-width: 600px) { .dx-script { display: none; } .dx-hero h1 { font-size: 1.5rem; } .dx-panel { padding: 18px; } }
 
@@ -2046,10 +2052,10 @@
         .cp-wrap { padding-top: 24px; padding-bottom: 60px; }
         .cp-crumb { font-size: .85rem; color: var(--text-muted); margin-bottom: 18px; display: flex; flex-wrap: wrap; gap: 6px; }
         .cp-crumb a { color: var(--water-cyan); text-decoration: none; }
-        .cp-hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: center; padding: 34px; border: 1px solid var(--navy-border); border-radius: var(--radius-lg); background: linear-gradient(135deg, rgba(0,242,254,.12), rgba(15,33,77,.92) 55%, rgba(7,15,38,.96)); box-shadow: var(--shadow-card); }
+        .cp-hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: center; padding: 34px; border: 1px solid var(--navy-border); border-radius: var(--radius-lg); background: linear-gradient(135deg, rgba(26, 86, 219,.12), var(--panel-2) 55%, var(--panel)); box-shadow: var(--shadow-card); }
         .cp-tag { display: inline-block; padding: 4px 14px; border-radius: var(--radius-pill); font-size: .78rem; font-weight: 800; background: var(--water-glow-subtle); color: var(--water-cyan); border: 1px solid var(--navy-border); }
-        .cp-hero h1 { font-size: 2.1rem; line-height: 1.25; color: #fff; margin: 14px 0 12px; overflow-wrap: anywhere; }
-        .cp-lead { color: #cbd5e1; line-height: 1.7; margin-bottom: 18px; }
+        .cp-hero h1 { font-size: 2.1rem; line-height: 1.25; color: var(--text-pure); margin: 14px 0 12px; overflow-wrap: anywhere; }
+        .cp-lead { color: var(--text-soft); line-height: 1.7; margin-bottom: 18px; }
         .cp-price-row { display: flex; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
         .cp-price { font-size: 2rem; font-weight: 800; color: var(--water-cyan); }
         .cp-price-row s { color: var(--text-muted); } .cp-price-row b { color: #10b981; font-size: .85rem; }
@@ -2057,34 +2063,34 @@
         .cp-actions .btn { width: auto; padding: 13px 26px; }
         .cp-hero-img img { width: 100%; border-radius: var(--radius-md); border: 1px solid var(--navy-border); aspect-ratio: 16/10; object-fit: cover; display: block; box-shadow: var(--shadow-3d-deep); }
         .cp-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr)); gap: 14px; margin: 22px 0; }
-        .cp-fact { display: flex; gap: 12px; align-items: center; padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--navy-border); background: rgba(7,15,38,.7); }
+        .cp-fact { display: flex; gap: 12px; align-items: center; padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--navy-border); background: var(--panel); }
         .cp-fact .material-symbols-outlined { color: var(--water-cyan); font-size: 28px; }
-        .cp-fact small { display: block; color: var(--text-muted); font-size: .76rem; } .cp-fact b { color: #fff; font-size: .95rem; overflow-wrap: anywhere; }
+        .cp-fact small { display: block; color: var(--text-muted); font-size: .76rem; } .cp-fact b { color: var(--text-pure); font-size: .95rem; overflow-wrap: anywhere; }
         .cp-sec { margin-top: 38px; }
-        .cp-sec > h2 { font-size: 1.5rem; color: #fff; margin-bottom: 6px; text-align: center; }
+        .cp-sec > h2 { font-size: 1.5rem; color: var(--text-pure); margin-bottom: 6px; text-align: center; }
         .cp-sec > p.cp-sub { text-align: center; color: var(--text-body); margin-bottom: 22px; }
         .cp-learn { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 12px; }
-        .cp-learn div { display: flex; gap: 10px; align-items: flex-start; padding: 14px 16px; border-radius: var(--radius-md); border: 1px solid var(--navy-border); background: var(--gradient-card-3d); color: #e2e8f0; line-height: 1.5; }
+        .cp-learn div { display: flex; gap: 10px; align-items: flex-start; padding: 14px 16px; border-radius: var(--radius-md); border: 1px solid var(--navy-border); background: var(--gradient-card-3d); color: var(--text-soft); line-height: 1.5; }
         .cp-learn .material-symbols-outlined { color: var(--water-cyan); }
         .cp-why { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 14px; }
         .cp-why div { padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--navy-border); background: var(--gradient-card-3d); }
         .cp-why .material-symbols-outlined { color: var(--water-cyan); font-size: 32px; }
-        .cp-why h4 { color: #fff; margin: 8px 0 4px; } .cp-why p { color: var(--text-body); font-size: .88rem; line-height: 1.5; }
+        .cp-why h4 { color: var(--text-pure); margin: 8px 0 4px; } .cp-why p { color: var(--text-body); font-size: .88rem; line-height: 1.5; }
         .cp-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 14px; counter-reset: st; }
-        .cp-steps div { position: relative; padding: 22px 18px 18px; border-radius: var(--radius-md); border: 1px solid var(--navy-border); background: rgba(7,15,38,.7); counter-increment: st; }
-        .cp-steps div::before { content: counter(st); position: absolute; top: -14px; left: 16px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--gradient-water-3d); color: #020617; font-weight: 800; }
-        .cp-steps h4 { color: #fff; margin-bottom: 4px; } .cp-steps p { color: var(--text-body); font-size: .86rem; line-height: 1.5; }
+        .cp-steps div { position: relative; padding: 22px 18px 18px; border-radius: var(--radius-md); border: 1px solid var(--navy-border); background: var(--panel); counter-increment: st; }
+        .cp-steps div::before { content: counter(st); position: absolute; top: -14px; left: 16px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--gradient-water-3d); color: #fff; font-weight: 800; }
+        .cp-steps h4 { color: var(--text-pure); margin-bottom: 4px; } .cp-steps p { color: var(--text-body); font-size: .86rem; line-height: 1.5; }
         .cp-faq { max-width: 820px; margin: 0 auto; }
         .cp-faq-item { border: 1px solid var(--navy-border); border-radius: var(--radius-md); margin-bottom: 10px; background: var(--gradient-card-3d); overflow: hidden; }
-        .cp-faq-q { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; background: none; border: 0; color: #fff; font: inherit; font-weight: 700; text-align: left; cursor: pointer; }
-        .cp-faq-a { display: none; padding: 0 18px 16px; color: #cbd5e1; line-height: 1.7; }
+        .cp-faq-q { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; background: none; border: 0; color: var(--text-pure); font: inherit; font-weight: 700; text-align: left; cursor: pointer; }
+        .cp-faq-a { display: none; padding: 0 18px 16px; color: var(--text-soft); line-height: 1.7; }
         .cp-faq-item.open .cp-faq-a { display: block; } .cp-faq-item.open .cp-faq-q .material-symbols-outlined { transform: rotate(45deg); }
         .cp-others { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 14px; }
         .cp-other { display: block; text-decoration: none; border: 1px solid var(--navy-border); border-radius: var(--radius-md); overflow: hidden; background: var(--gradient-card-3d); }
         .cp-other img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
-        .cp-other div { padding: 12px 14px; } .cp-other b { color: #fff; display: block; margin-bottom: 4px; } .cp-other span { color: var(--water-cyan); font-weight: 800; }
-        .cp-cta { margin-top: 38px; text-align: center; padding: 32px 20px; border-radius: var(--radius-lg); border: 1px solid var(--navy-border); background: linear-gradient(135deg, rgba(0,242,254,.14), rgba(15,33,77,.95)); }
-        .cp-cta h2 { color: #fff; margin-bottom: 8px; } .cp-cta p { color: #cbd5e1; margin-bottom: 18px; }
+        .cp-other div { padding: 12px 14px; } .cp-other b { color: var(--text-pure); display: block; margin-bottom: 4px; } .cp-other span { color: var(--water-cyan); font-weight: 800; }
+        .cp-cta { margin-top: 38px; text-align: center; padding: 32px 20px; border-radius: var(--radius-lg); border: 1px solid var(--navy-border); background: linear-gradient(135deg, rgba(26, 86, 219,.14), var(--panel-2)); }
+        .cp-cta h2 { color: var(--text-pure); margin-bottom: 8px; } .cp-cta p { color: var(--text-soft); margin-bottom: 18px; }
         .cp-cta .cp-actions { justify-content: center; }
         .cp-sticky { display: none; }
         @media (max-width: 820px) {
@@ -2095,7 +2101,7 @@
             .cp-actions .btn { flex: 1 1 100%; }
             .cp-wrap { padding-bottom: 150px; }
             .cp-sec > h2 { font-size: 1.25rem; }
-            .cp-sticky { display: flex; position: fixed; left: 0; right: 0; bottom: 65px; z-index: 900; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; background: rgba(7,15,38,.97); border-top: 1px solid var(--navy-border); }
+            .cp-sticky { display: flex; position: fixed; left: 0; right: 0; bottom: 65px; z-index: 900; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; background: var(--panel); border-top: 1px solid var(--navy-border); }
             .cp-sticky small { display: block; color: var(--text-muted); font-size: .72rem; max-width: 52vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
             .cp-sticky b { color: var(--water-cyan); font-size: 1.15rem; }
             .cp-sticky .btn { width: auto; padding: 11px 22px; }
@@ -2104,11 +2110,254 @@
         .cp-rv-imgs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(210px, 100%), 1fr)); gap: 12px; margin-top: 22px; }
         .cp-rv-imgs:empty { display: none; }
         .cp-rv-imgs img { width: 100%; height: auto; border-radius: var(--radius-md); border: 1px solid var(--navy-border); cursor: zoom-in; display: block; }
+    
+        /* =====================================================================
+           INTERNATIONAL INSTITUTIONAL THEME  (Dreams Academy)
+           Navy + white, restrained gold accent, clean typography
+           ===================================================================== */
+        body { font-family: 'Inter', 'Noto Sans Bengali', 'Hind Siliguri', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: var(--navy-deepest); background-image: none; color: var(--text-body); line-height: 1.7; }
+        h1, h2, h3, h4, h5, h6 { font-family: inherit; color: var(--text-pure); letter-spacing: -0.012em; }
+        button, input, select, textarea { font-family: inherit; }
+        ::-webkit-scrollbar-track { background: #EAF0F8; }
+        ::-webkit-scrollbar-thumb { background: #B7C6DE; border: 2px solid #EAF0F8; }
+        ::-webkit-scrollbar-thumb:hover { background: #1A56DB; }
+
+        /* ---- dark "navy" surfaces: hero, footer, sidebar, banners ---- */
+        .hero-section, .main-footer, .dashboard-sidebar, .dx-hero, .cp-hero, .cp-cta, .dx-promo, .modal-info-panel, .topbar, #video-placeholder, .toast {
+            --navy-deepest: #040C1E; --navy-dark: #071B3D; --navy-surface: #0A2450; --navy-card: #0E2F63; --navy-card-light: #14397A;
+            --navy-border: rgba(160, 190, 235, 0.22); --navy-border-hover: rgba(242, 193, 78, 0.6);
+            --water-cyan: #8EC1FF; --water-blue: #6AA6FF; --water-deep: #2F6FEB; --water-glow: rgba(106,166,255,.35); --water-glow-subtle: rgba(255,255,255,.08);
+            --text-pure: #FFFFFF; --text-heading: #F4F8FF; --text-body: #B9C8DE; --text-muted: #8DA2C2; --text-soft: #D7E2F2;
+            --gradient-card-3d: linear-gradient(160deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+            --gradient-card-hover: linear-gradient(160deg, rgba(255,255,255,.1), rgba(255,255,255,.05));
+            --panel: rgba(255,255,255,.07); --panel-2: rgba(255,255,255,.11);
+            --shadow-card: 0 10px 30px -14px rgba(0,0,0,.55); --shadow-3d-deep: 0 20px 44px -18px rgba(0,0,0,.6);
+            color: var(--text-body);
+        }
+
+        /* ---- utility top bar ---- */
+        .topbar { background: #061633; color: #C4D3EA; font-size: .8rem; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.06); position: relative; z-index: 1001; }
+        .topbar .container { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .topbar span.tag { letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: #F2C14E; font-size: .72rem; }
+        .topbar a { color: #E4ECF8; text-decoration: none; margin-left: 18px; }
+        .topbar a:hover { color: #F2C14E; }
+
+        /* ---- header ---- */
+        .main-header { background: #FFFFFF; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 1px solid #DCE5F1; box-shadow: 0 8px 24px -16px rgba(11,42,91,.28); padding: 10px 0; }
+        .logo img { filter: none; max-height: 46px; }
+        .main-nav ul { gap: 6px; }
+        .main-nav a { color: var(--text-soft); font-weight: 600; font-size: .92rem; padding: 9px 14px; border-radius: 8px; }
+        .main-nav a:hover { color: #1A56DB; background: #EEF3FC; }
+        .main-nav li.active a { color: #0B2A5B; text-shadow: none; background: #E6EEFB; }
+        .main-nav li.active a::after, .main-nav a::after { display: none; }
+        .search-bar input { background: #F3F6FB; border: 1px solid #D5DFEE; border-radius: 10px; color: var(--text-pure); min-width: 240px; padding: 11px 16px 11px 44px; }
+        .search-bar input:focus { border-color: #1A56DB; background: #fff; box-shadow: 0 0 0 3px rgba(26,86,219,.12); }
+        .search-bar::before { color: #64748B; }
+        .header-icons .material-symbols-outlined { color: var(--text-soft); }
+        .profile-icon { background: #E6EEFB; color: #0B2A5B; border-color: #C9D8F2; }
+        .notification-dropdown, .profile-dropdown { background: #fff; border: 1px solid #DCE5F1; box-shadow: 0 24px 50px -20px rgba(11,42,91,.35); }
+        .profile-dropdown-header { background: #F3F6FB; border-bottom: 1px solid #DCE5F1; }
+        .profile-dropdown-menu li a:hover { background: #EEF3FC; color: #1A56DB; }
+
+        /* ---- buttons ---- */
+        .btn { border-radius: 10px; padding: 12px 24px; font-weight: 600; letter-spacing: .005em; transition: transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease, color .18s ease; }
+        .btn-gradient { background: linear-gradient(180deg, #2A6BEF 0%, #1A4FC2 100%); color: #fff; border: 1px solid #1743A5; box-shadow: 0 8px 18px -8px rgba(26,86,219,.6); font-weight: 600; }
+        .btn-gradient:hover { background: linear-gradient(180deg, #1F5FE0 0%, #0B2A5B 100%); color: #fff; transform: translateY(-1px); box-shadow: 0 12px 22px -10px rgba(11,42,91,.65); }
+        .btn-outline { background: #fff; color: #0B2A5B; border: 1.5px solid #C4D3EA; box-shadow: none; backdrop-filter: none; }
+        .btn-outline:hover { border-color: #1A56DB; color: #1A56DB; background: #F3F7FF; transform: translateY(-1px); }
+        .btn-gradient .material-symbols-outlined, .btn-outline .material-symbols-outlined { font-size: 20px; }
+        .hero-section .btn-gradient { background: linear-gradient(180deg, #F6CE6A 0%, #E0A722 100%); color: #0B1F3A; border-color: #C79A2B; box-shadow: 0 10px 22px -10px rgba(224,167,34,.7); }
+        .hero-section .btn-gradient:hover { background: linear-gradient(180deg, #FFD97E 0%, #E8B02E 100%); color: #0B1F3A; }
+        .hero-section .btn-outline { background: rgba(255,255,255,.08); color: #fff; border: 1.5px solid rgba(255,255,255,.45); }
+        .hero-section .btn-outline:hover { background: rgba(255,255,255,.16); color: #fff; border-color: #fff; }
+
+        /* ---- hero ---- */
+        .hero-section { background: radial-gradient(900px 420px at 88% -8%, rgba(70,130,235,.42), transparent 62%), radial-gradient(700px 380px at -5% 105%, rgba(242,193,78,.12), transparent 60%), linear-gradient(135deg, #061633 0%, #0A2554 52%, #0F3A82 100%); padding: 76px 0 150px; }
+        .hero-section::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px); background-size: 46px 46px; -webkit-mask-image: linear-gradient(180deg, #000 10%, transparent 90%); mask-image: linear-gradient(180deg, #000 10%, transparent 90%); pointer-events: none; }
+        .hero-tag { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.22); color: #F2D58A; box-shadow: none; font-size: .74rem; letter-spacing: .14em; padding: 8px 16px; }
+        .hero-content h1 { font-size: 3.15rem; line-height: 1.16; font-weight: 800; letter-spacing: -0.025em; color: #fff; }
+        .hero-content h1 .text-gradient { background: none; -webkit-text-fill-color: #F2C14E; color: #F2C14E; }
+        .hero-content p { color: #C6D4EA; font-size: 1.08rem; line-height: 1.85; max-width: 580px; }
+        .hero-bn { font-size: 1.15rem; font-weight: 600; color: #F2D58A; margin: -8px 0 16px; letter-spacing: 0; }
+        .hero-image-wrapper img { border-radius: 16px; border: 5px solid rgba(255,255,255,.14); box-shadow: 0 34px 70px -24px rgba(0,0,0,.65); filter: none; animation: none; }
+
+        /* ---- stats strip ---- */
+        .stats-section { margin-top: -74px; margin-bottom: 70px; }
+        .stats-grid { background: #fff; border: 1px solid #DCE5F1; border-radius: 16px; box-shadow: 0 24px 48px -26px rgba(11,42,91,.35); padding: 8px; gap: 0; }
+        .stat-item { background: transparent; border: none; box-shadow: none; border-radius: 12px; padding: 22px 14px; }
+        .stat-item + .stat-item { border-left: 1px solid #E5ECF6; }
+        .stat-icon { background: #E6EEFB; color: #1A56DB; box-shadow: none; border: none; }
+        .stat-item:hover { transform: none; background: #F6F9FE; }
+        .stat-item:hover .stat-icon { background: #1A56DB; color: #fff; }
+        .stat-item h3 { color: #0B2A5B; font-weight: 800; }
+        .stat-item p { color: var(--text-muted); font-weight: 500; }
+
+        /* ---- sections ---- */
+        .section, .services-section { padding: 80px 0; }
+        #about, #services, #trust, #contact-us { background: #FFFFFF; border-top: 1px solid #E5ECF6; border-bottom: 1px solid #E5ECF6; }
+        .section-title { font-size: 2.1rem; font-weight: 800; color: var(--text-pure); margin-bottom: 54px; letter-spacing: -0.02em; text-shadow: none; }
+        .section-title::after { content: ''; display: block; width: 58px; height: 4px; border-radius: 3px; background: #C79A2B; margin: 16px auto 0; box-shadow: none; position: static; left: auto; transform: none; }
+        .section-title::before { display: none; }
+
+        /* ---- cards ---- */
+        .course-card, .service-card { background: #fff; border: 1px solid #DCE5F1; border-radius: 14px; box-shadow: 0 1px 2px rgba(11,42,91,.05), 0 14px 28px -20px rgba(11,42,91,.3); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+        .course-card:hover, .service-card:hover { transform: translateY(-4px); border-color: #BCD0F4; box-shadow: 0 20px 38px -20px rgba(11,42,91,.38); }
+        .course-card h3, .service-card h3 { color: #0B2A5B; }
+        .category-tag { background: #E6EEFB; color: #1A56DB; border: 1px solid #CADBF6; box-shadow: none; }
+        .card-footer { border-top: 1px solid #E5ECF6; }
+        .price { color: #0B2A5B; }
+        .video-card, .notice-item-public, .contact-cta-box { background: #fff; border: 1px solid #DCE5F1; box-shadow: 0 14px 28px -22px rgba(11,42,91,.3); }
+        .stat-icon, .service-icon-box { box-shadow: none; }
+        .service-icon-box { background: #E6EEFB; color: #1A56DB; border: 1px solid #CADBF6; }
+        .service-card:hover .service-icon-box { background: #1A56DB; color: #fff; }
+
+        /* ---- footer ---- */
+        .main-footer { background: linear-gradient(180deg, #071B3D 0%, #040F26 100%); border-top: 4px solid #C79A2B; }
+        .main-footer a { color: #C9D7EC; }
+        .main-footer a:hover { color: #F2C14E; }
+        .footer-col h4 { color: #fff; font-size: 1rem; letter-spacing: .02em; }
+        .copyright { border-top: 1px solid rgba(255,255,255,.1); color: #8DA2C2; }
+        .social-icon { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); }
+        .social-icon:hover { background: #fff; border-color: #fff; }
+        #scrollTopBtn { background: #F2C14E; color: #0B1F3A; box-shadow: 0 10px 20px -10px rgba(0,0,0,.6); }
+
+        /* ---- modals / forms ---- */
+        .login-modal { background: rgba(6, 22, 51, 0.62); backdrop-filter: blur(4px); }
+        .login-card, .checkout-card { background: #fff; border: 1px solid #DCE5F1; box-shadow: 0 40px 80px -30px rgba(6,22,51,.6); }
+        .modal-info-panel { background: linear-gradient(150deg, #061633, #0F3A82); border-right: none; }
+        .modal-form-panel { background: #fff; }
+        .input-group input, .input-group select, .form-group input, .form-group select, .form-group textarea, .coupon-input-group input { background: #F5F8FD; border: 1px solid #CFDAEC; color: #0B1F3A; border-radius: 10px; }
+        .input-group input:focus, .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #1A56DB; background: #fff; box-shadow: 0 0 0 3px rgba(26,86,219,.12); }
+        .close-modal-btn { color: #475569; background: #EEF3FC; }
+        .close-modal-btn:hover { background: #fee2e2; color: #dc2626; }
+        .toast { background: #0B2A5B; color: #fff; border: 1px solid rgba(255,255,255,.15); }
+
+        /* ---- mobile bottom navigation (public site) ---- */
+        .mobile-bottom-nav { background: #fff; border-top: 1px solid #DCE5F1; box-shadow: 0 -10px 30px -16px rgba(11,42,91,.35); backdrop-filter: none; }
+        .mobile-nav-link { color: #64748B; }
+        .mobile-nav-link.active, .mobile-nav-link:active { color: #1A56DB; }
+        .mobile-nav-link .material-symbols-outlined { font-size: 24px; }
+
+    
+        /* ---- fixes found in visual review ---- */
+        .about-section, .courses-section, .services-section { background: transparent; }
+        #courses.courses-section { background: #F3F6FB; }
+        #video-reviews, #noticeboard { background: #F3F6FB; }
+        .top-course-tag { background: #0B2A5B; color: #F6D88A; border: 1px solid rgba(255,255,255,.18); box-shadow: 0 6px 14px -8px rgba(11,42,91,.7); letter-spacing: .06em; }
+        .price, .current-price .price-amount { color: #0B2A5B; text-shadow: none; font-weight: 800; }
+        .cf-stack { display: flex; flex-direction: column; align-items: stretch; gap: 14px; }
+        .cf-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .cf-actions .btn { width: 100%; padding: 11px 10px; font-size: .86rem; }
+        .buy-now-btn, .btn-service-action { color: #fff; }
+        .buy-now-btn:hover, .btn-service-action:hover { color: #fff; }
+        .login-modal, .payment-verification-modal { background: rgba(6, 22, 51, 0.66); }
+        .video-card { overflow: hidden; border-radius: 14px; }
+        .video-info h4 { color: #0B2A5B; }
+        .slider-btn { background: #fff; color: #0B2A5B; border: 1px solid #CBD8EE; box-shadow: 0 8px 18px -10px rgba(11,42,91,.5); }
+        .slider-btn:hover { background: #1A56DB; color: #fff; box-shadow: none; }
+        .slider-wrapper { background: #fff; border: 1px solid #DCE5F1; }
+        .input-group input:focus + label, .input-group input:not(:placeholder-shown) + label { background: #fff; color: #1A56DB; }
+
+        /* ---- spacing for sections that lack the .section class ---- */
+        .courses-section { padding: 80px 0; }
+        #trust .section-title { margin-bottom: 40px; }
+
+        /* ---- mobile polish (public site) ---- */
+        @media (max-width: 768px) {
+            .section, .services-section, .courses-section { padding: 52px 0; }
+            .section-title { font-size: 1.55rem; margin-bottom: 34px; }
+            .hero-section { padding: 28px 0 96px; }
+            .hero-grid { text-align: left; gap: 26px; }
+            .hero-image-wrapper { order: 2; }
+            .hero-content { order: 1; }
+            .hero-content h1 { font-size: 2.05rem; text-align: left; }
+            .hero-content p { margin: 0 0 24px; font-size: .98rem; text-align: left; }
+            .hero-bn { text-align: left; }
+            .hero-image-wrapper img { max-width: 100%; border-width: 3px; }
+            .hero-buttons { justify-content: flex-start; flex-wrap: wrap; }
+            .hero-buttons .btn { flex: 1 1 100%; }
+            .stats-section { margin-top: -62px; margin-bottom: 40px; }
+            .stats-grid { display: grid; grid-template-columns: 1fr 1fr; padding: 6px; }
+            .stat-item { padding: 18px 8px; }
+            .stat-item + .stat-item { border-left: none; }
+            .stat-item:nth-child(even) { border-left: 1px solid #E5ECF6; }
+            .stat-item:nth-child(n+3) { border-top: 1px solid #E5ECF6; }
+            .stat-item h3 { font-size: 1.6rem; }
+            .stat-icon { width: 46px; height: 46px; margin-bottom: 10px; }
+            .feature-list, .about-features { grid-template-columns: 1fr; }
+            .topbar { font-size: .72rem; }
+            .topbar .container { justify-content: center; text-align: center; }
+            .topbar .tag { display: none; }
+            .topbar a { margin: 0 8px; }
+            .main-header { padding: 8px 0; }
+            .logo img { max-height: 38px; }
+            body { padding-bottom: 70px; }
+            #floating-whatsapp-btn { bottom: 84px; }
+        }
+
+        /* ---- dark navy islands need their own backgrounds ---- */
+        .dx-hero { background: radial-gradient(500px 220px at 95% 0%, rgba(106,166,255,.35), transparent 65%), linear-gradient(135deg, #0A2554 0%, #0F3A82 100%); border: 1px solid rgba(255,255,255,.1); }
+        .dx-hero h2 { color: #C6D4EA; } .dx-hero h1 { color: #fff; } .dx-hero p { color: #C6D4EA; }
+        .dx-script { color: #F2C14E; opacity: 1; }
+        .dx-stat { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); } .dx-stat .material-symbols-outlined { color: #F2C14E; } .dx-stat b { color: #fff; } .dx-stat small { color: #B9C8DE; }
+        .dx-idchip { display: inline-block; margin-top: 6px; padding: 4px 12px; border-radius: 999px; font-size: .78rem; font-weight: 700; color: #F2D58A; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); }
+        .dx-idchip:empty { display: none; }
+        .dx-promo { background: linear-gradient(135deg, #0A2554, #0F3A82); border: 1px solid rgba(255,255,255,.1); }
+        .dx-promo em { color: #F2C14E; }
+        .dashboard-sidebar { background: linear-gradient(180deg, #071B3D 0%, #0A2554 100%); border-radius: 18px; padding: 14px; border: 1px solid rgba(255,255,255,.08); box-shadow: 0 24px 48px -28px rgba(6,22,51,.7); }
+        .dashboard-sidebar .sidebar-welcome-card { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); box-shadow: none; }
+        .sidebar-nav { background: transparent; border: none; box-shadow: none; }
+        .sidebar-nav a { color: #D7E2F2; }
+        .sidebar-nav a:hover { background: rgba(255,255,255,.09); color: #fff; }
+        .sidebar-nav li.active a { background: linear-gradient(180deg, #F6CE6A, #E0A722); color: #0B1F3A; box-shadow: none; }
+        .cp-hero { background: radial-gradient(500px 240px at 100% 0%, rgba(106,166,255,.35), transparent 65%), linear-gradient(135deg, #0A2554, #0F3A82); border: 1px solid rgba(255,255,255,.1); }
+        .cp-cta { background: linear-gradient(135deg, #0A2554, #0F3A82); border: 1px solid rgba(255,255,255,.1); }
+        .cp-hero .btn-outline, .cp-cta .btn-outline { background: rgba(255,255,255,.08); color: #fff; border: 1.5px solid rgba(255,255,255,.45); }
+        .cp-hero .btn-gradient, .cp-cta .btn-gradient { background: linear-gradient(180deg, #F6CE6A, #E0A722); color: #0B1F3A; border-color: #C79A2B; }
+        .cp-tag { background: rgba(255,255,255,.1); color: #F2D58A; border-color: rgba(255,255,255,.2); }
+        .cp-price { color: #F2C14E; }
+
+        /* ---- student dashboard: app-style bottom navigation on phones ---- */
+        .dash-bottom-nav, .dash-sheet { display: none; }
+        @media (max-width: 900px) {
+            body.in-dashboard .mobile-bottom-nav { display: none !important; }
+            body.in-dashboard .dashboard-sidebar { display: none; }
+            body.in-dashboard { padding-bottom: 76px; }
+            body.in-dashboard .dash-bottom-nav { display: flex; position: fixed; left: 0; right: 0; bottom: 0; height: 66px; z-index: 1002; background: #fff; border-top: 1px solid #DCE5F1; box-shadow: 0 -12px 30px -16px rgba(11,42,91,.4); padding: 0 4px env(safe-area-inset-bottom); }
+            .dash-bottom-nav button { flex: 1; background: none; border: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: #64748B; font: inherit; font-size: .68rem; font-weight: 600; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+            .dash-bottom-nav button .material-symbols-outlined { font-size: 24px; padding: 3px 18px; border-radius: 16px; transition: background .2s, color .2s; }
+            .dash-bottom-nav button.active { color: #0B2A5B; font-weight: 700; }
+            .dash-bottom-nav button.active .material-symbols-outlined { background: #E1EBFC; color: #1A56DB; }
+            body.in-dashboard .dash-sheet:not(.hidden) { display: block; position: fixed; inset: 0; z-index: 1100; }
+            .dash-sheet-bg { position: absolute; inset: 0; background: rgba(6,22,51,.55); }
+            .dash-sheet-card { position: absolute; left: 0; right: 0; bottom: 0; background: #fff; border-radius: 22px 22px 0 0; padding: 18px 16px calc(20px + env(safe-area-inset-bottom)); box-shadow: 0 -20px 50px -20px rgba(6,22,51,.5); animation: dashUp .22s ease; }
+            .dash-sheet-card h4 { font-size: 1rem; margin-bottom: 14px; color: #0B2A5B; }
+            .dash-sheet-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+            .dash-sheet-grid button { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 6px; border: 1px solid #DCE5F1; background: #F5F8FD; border-radius: 14px; color: #0B2A5B; font: inherit; font-size: .76rem; font-weight: 600; cursor: pointer; text-align: center; }
+            .dash-sheet-grid button .material-symbols-outlined { color: #1A56DB; font-size: 26px; }
+            @keyframes dashUp { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+            .dx-hero { padding: 22px 18px; } .dx-hero h1 { font-size: 1.5rem; }
+            .dashboard-container { gap: 0; }
+        }
+
+        @media (max-width: 900px) {
+            body.in-dashboard .main-footer, body.in-dashboard .topbar { display: none; }
+            body.in-dashboard .dashboard-container { padding-top: 14px; }
+        }
+
+        .dx-script { display: none; }
+        #course-page.section { padding: 0; }
+        #course-page .cp-wrap { padding-top: 6px; }
+
+        body:has(#course-page:not(.hidden)) #floating-whatsapp-btn { bottom: 150px; }
+        @media (min-width: 821px) { body:has(#course-page:not(.hidden)) #floating-whatsapp-btn { bottom: 24px; } }
+
     </style>
 </head>
 <body>
 
     <!-- ======================= Header ======================= -->
+    <div class="topbar"><div class="container"><span class="tag">Learn &bull; Grow &bull; Achieve</span><div><a href="tel:01703743441">Helpline: 01703743441</a><a href="mailto:dreams.edus@gmail.com">dreams.edus@gmail.com</a></div></div></div>
     <header class="main-header">
         <div class="container">
             <a href="#home" class="logo" title="Dreams Academy (ড্রিমস একাডেমি)">
@@ -2130,7 +2379,7 @@
                     <input type="text" id="course-search-input" placeholder="Search courses or skills...">
                 </div>
                 <div id="logged-out-view">
-                    <button class="btn btn-gradient" id="login-signup-btn">Portal Access <span class="material-symbols-outlined">login</span></button>
+                    <button class="btn btn-gradient" id="login-signup-btn">Student Portal <span class="material-symbols-outlined">login</span></button>
                 </div>
                 <div id="logged-in-view" class="header-icons hidden">
                     <!-- Notifications -->
@@ -2182,8 +2431,8 @@
                 <div class="modal-form-panel" style="width: 100%; padding: 36px;">
                     <button class="close-modal-btn" id="close-course-preview-btn" type="button" aria-label="Close">&times;</button>
                     <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--navy-border);">
-                        <span class="material-symbols-outlined" style="font-size: 30px; color: var(--water-cyan); background: rgba(0, 242, 254, 0.1); padding: 10px; border-radius: 12px;">menu_book</span>
-                        <h2 style="margin-bottom: 0; font-size: 1.6rem; color: #fff;" id="preview-course-title">Course Modules</h2>
+                        <span class="material-symbols-outlined" style="font-size: 30px; color: var(--water-cyan); background: rgba(26, 86, 219, 0.1); padding: 10px; border-radius: 12px;">menu_book</span>
+                        <h2 style="margin-bottom: 0; font-size: 1.6rem; color: var(--text-pure);" id="preview-course-title">Course Modules</h2>
                     </div>
                     
                     <div class="curriculum-list-wrapper" style="max-height: none; overflow: visible; box-shadow: none; border: none; padding: 0; background: transparent;">
@@ -2203,7 +2452,7 @@
                 <div class="modal-info-panel">
                     <a href="#home" class="logo"><img id="header-logo-img-modal" src="https://i.postimg.cc/JhGSwr4J/Untitled-design-(1).png" alt="Dreams Academy Logo"></a>
                     <h2>Welcome Back</h2>
-                    <p>Enter your credentials to continue your high-income skill development journey at Dreams Academy.</p>
+                    <p>Enter your credentials to continue your skill development journey at Dreams Academy.</p>
                 </div>
                 <div class="modal-form-panel">
                     <h2>Account Login</h2>
@@ -2256,10 +2505,10 @@
             <div class="login-card" style="max-width: 460px; display: block; text-align: center; padding: 40px 30px;">
                 <button class="close-modal-btn" aria-label="Close" id="close-otp-modal">&times;</button>
                 <div style="margin-bottom: 20px;">
-                    <span class="material-symbols-outlined" style="font-size: 52px; color: var(--water-cyan); background: rgba(0, 242, 254, 0.1); padding: 16px; border-radius: 50%; box-shadow: 0 0 25px rgba(0, 242, 254, 0.2);">mark_email_read</span>
+                    <span class="material-symbols-outlined" style="font-size: 52px; color: var(--water-cyan); background: rgba(26, 86, 219, 0.1); padding: 16px; border-radius: 50%; box-shadow: 0 0 25px rgba(26, 86, 219, 0.2);">mark_email_read</span>
                 </div>
-                <h2 style="color: #fff; margin-bottom: 10px; font-size: 1.7rem;">Verify Your Email</h2>
-                <p style="color: #94a3b8; margin-bottom: 26px; font-size: 0.95rem;">A 6-digit security OTP was sent to your email. Enter it below to activate your Dreams Academy account.</p>
+                <h2 style="color: var(--text-pure); margin-bottom: 10px; font-size: 1.7rem;">Verify Your Email</h2>
+                <p style="color: var(--text-body); margin-bottom: 26px; font-size: 0.95rem;">A 6-digit security OTP was sent to your email. Enter it below to activate your Dreams Academy account.</p>
                 <form id="otp-form">
                     <div class="otp-input-group" id="otp-inputs">
                         <input type="text" maxlength="1" required>
@@ -2271,7 +2520,7 @@
                     </div>
                     <button type="submit" class="btn btn-gradient" style="width: 100%; padding: 15px;">Verify Code <span class="material-symbols-outlined">check_circle</span></button>
                 </form>
-                <div style="margin-top: 20px; font-size: 0.9rem; color: #94a3b8;">
+                <div style="margin-top: 20px; font-size: 0.9rem; color: var(--text-body);">
                     Didn't receive code? <a href="#" id="resend-otp-link" style="color: var(--water-cyan); font-weight: 700;">Resend OTP</a>
                 </div>
             </div>
@@ -2283,7 +2532,7 @@
                 <div class="modal-form-panel" style="width: 100%; padding: 40px 30px;">
                     <button class="close-modal-btn" aria-label="Close">&times;</button>
                     <h2>Password Reset</h2>
-                    <p style="margin-top: -15px; margin-bottom: 26px; color: #94a3b8; font-size: 0.95rem;">Enter your email to receive recovery instructions from Dreams Academy.</p>
+                    <p style="margin-top: -15px; margin-bottom: 26px; color: var(--text-body); font-size: 0.95rem;">Enter your email to receive recovery instructions from Dreams Academy.</p>
                     <form id="forgot-password-form">
                         <div class="input-group">
                             <input type="email" id="reset-email" placeholder=" " required>
@@ -2302,7 +2551,7 @@
             <div class="login-card" style="max-width: 480px; display: block; text-align: center;">
                 <div class="modal-form-panel" style="width: 100%; padding: 40px 30px;">
                     <h2>Set New Password</h2>
-                    <p style="margin-top: -15px; margin-bottom: 26px; color: #94a3b8; font-size: 0.95rem;">Enter your new secure password below.</p>
+                    <p style="margin-top: -15px; margin-bottom: 26px; color: var(--text-body); font-size: 0.95rem;">Enter your new secure password below.</p>
                     <form id="set-new-password-form">
                         <div class="input-group">
                             <input type="password" id="new-reset-password" placeholder=" " required minlength="6">
@@ -2349,7 +2598,7 @@
                         <div class="summary-row discount"><span>ডিসকাউন্ট</span><span id="checkout-discount-display">-৳0.00</span></div>
                         <div class="summary-row total"><span>সর্বমোট</span><span id="checkout-total-display">৳0.00</span></div>
                     </div>
-                    <div style="font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 12px;">পেমেন্ট মেথড সিলেক্ট করুন</div>
+                    <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-pure); margin-bottom: 12px;">পেমেন্ট মেথড সিলেক্ট করুন</div>
                     <div class="payment-methods">
                         <label class="payment-method-label active">
                             <div class="pm-left"><input type="radio" name="payment_method" value="bkash" checked> বিকাশ (bKash)</div>
@@ -2436,8 +2685,8 @@
                 <div style="width: 64px; height: 64px; background: rgba(239, 68, 68, 0.15); border: 2px solid #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: #ef4444;">
                     <span class="material-symbols-outlined" style="font-size: 32px;">error</span>
                 </div>
-                <h2 style="color: #fff; margin-bottom: 10px;">Verification Failed</h2>
-                <p style="color: #94a3b8; margin-bottom: 24px;">TrxIDটি খুঁজে পাওয়া যায়নি অথবা অলরেডি ব্যবহৃত হয়েছে। দয়া করে সঠিক TrxID লিখুন।</p>
+                <h2 style="color: var(--text-pure); margin-bottom: 10px;">Verification Failed</h2>
+                <p style="color: var(--text-body); margin-bottom: 24px;">TrxIDটি খুঁজে পাওয়া যায়নি অথবা অলরেডি ব্যবহৃত হয়েছে। দয়া করে সঠিক TrxID লিখুন।</p>
                 <button id="close-custom-error-btn" class="btn btn-gradient" style="width: 100%;">আবার চেষ্টা করুন</button>
             </div>
         </div>
@@ -2448,12 +2697,12 @@
                 <div class="modal-form-panel" style="width: 100%; padding: 40px 30px;">
                     <button class="close-modal-btn" id="close-dollar-sell-modal">&times;</button>
                     <div style="text-align: center; margin-bottom: 24px;">
-                        <span class="material-symbols-outlined" style="font-size: 44px; color: var(--water-cyan); background: rgba(0, 242, 254, 0.1); padding: 14px; border-radius: 50%;">currency_exchange</span>
+                        <span class="material-symbols-outlined" style="font-size: 44px; color: var(--water-cyan); background: rgba(26, 86, 219, 0.1); padding: 14px; border-radius: 50%;">currency_exchange</span>
                         <h2 style="margin-top: 12px; margin-bottom: 4px;">Instant Dollar Sell</h2>
-                        <p style="color: #94a3b8; font-size: 0.9rem;">Exchange dollars swiftly at real-time competitive rates at Dreams Academy</p>
+                        <p style="color: var(--text-body); font-size: 0.9rem;">Exchange dollars swiftly at real-time competitive rates at Dreams Academy</p>
                     </div>
                     <form id="dollar-sell-form">
-                        <div id="ds-rate-display" style="background: rgba(0, 242, 254, 0.1); border: 1px solid var(--water-cyan); color: var(--water-cyan); padding: 12px; border-radius: var(--radius-sm); text-align: center; font-weight: 700; margin-bottom: 18px; display: none;">
+                        <div id="ds-rate-display" style="background: rgba(26, 86, 219, 0.1); border: 1px solid var(--water-cyan); color: var(--water-cyan); padding: 12px; border-radius: var(--radius-sm); text-align: center; font-weight: 700; margin-bottom: 18px; display: none;">
                             <span class="material-symbols-outlined" style="vertical-align: middle;">trending_up</span> <span id="rate-text">Loading...</span>
                         </div>
                         <div class="input-group">
@@ -2496,7 +2745,7 @@
             <div class="login-card" style="max-width: 720px; display: block; overflow-y: auto; max-height: 90vh;">
                 <div class="modal-form-panel" style="width: 100%; padding: 36px;">
                     <button class="close-modal-btn" id="close-ssn-modal-btn" type="button" aria-label="Close">&times;</button>
-                    <h2 style="margin-bottom: 24px; color: #fff;">Edit SSN Information</h2>
+                    <h2 style="margin-bottom: 24px; color: var(--text-pure);">Edit SSN Information</h2>
                     <form id="ssn-edit-form">
                         <input type="hidden" id="edit-ssn-id">
                         <div class="form-grid">
@@ -2520,10 +2769,11 @@
             <section class="hero-section page-section" id="home">
                 <div class="container hero-grid">
                     <div class="hero-content">
-                        <div class="hero-tag"><span class="material-symbols-outlined" style="font-size: 16px;">verified</span> Dreams Academy Smart Skills Platform</div>
+                        <div class="hero-tag"><span class="material-symbols-outlined" style="font-size: 16px;">verified</span> ড্রিমস একাডেমি &middot; Online Skills Academy</div>
                         <!-- Primary H1 optimized for both English and Bengali Brand Keywords -->
-                        <h1>Elevate Your Career with <br><span class="text-gradient">Dreams Academy (ড্রিমস একাডেমি)</span></h1>
-                        <p>Dreams Academy (ড্রিমস একাডেমি) আপনার ক্যারিয়ারের নির্ভরযোগ্য সহযাত্রী। লাইভ প্র্যাকটিক্যাল ট্রেনিং, প্রিমিয়াম রিসোর্স এবং লাইফটাইম মেন্টরিং নিয়ে আজ থেকেই শুরু করুন আপনার অনলাইন স্কিল জার্নি।</p>
+                        <h1>Build Job-Ready Skills <br><span class="text-gradient">with Dreams Academy</span></h1>
+                        <div class="hero-bn">শিখুন, দক্ষ হোন, এগিয়ে যান</div>
+                        <p>ড্রিমস একাডেমিতে পাচ্ছেন লাইভ প্র্যাকটিক্যাল ক্লাস, গোছানো কোর্স মডিউল, সার্টিফিকেট এবং ডেডিকেটেড সাপোর্ট &mdash; সবকিছু এক প্ল্যাটফর্মে। আজই শুরু করুন আপনার স্কিল ডেভেলপমেন্টের যাত্রা।</p>
                         <div class="hero-buttons">
                             <a href="#courses" class="btn btn-gradient internal-link-btn">Explore Courses <span class="material-symbols-outlined">arrow_forward</span></a>
                             <a href="#services" class="btn btn-outline internal-link-btn">Digital Services</a>
@@ -2570,7 +2820,7 @@
             <!-- Courses Section -->
             <section class="courses-section page-section" id="courses">
                 <div class="container">
-                    <h2 class="section-title">Dreams Academy Featured Courses</h2>
+                    <h2 class="section-title">Our Courses <span style="font-weight:600;color:var(--text-muted);">(আমাদের কোর্সসমূহ)</span></h2>
                     <div class="course-grid" id="courses-container">
                         <p style="text-align: center; color: var(--text-muted); width: 100%;">Loading courses...</p>
                     </div>
@@ -2588,9 +2838,9 @@
             </section>
 
             <!-- Video Reviews Section -->
-            <section class="section page-section" id="video-reviews" style="background: rgba(7, 15, 38, 0.4);">
+            <section class="section page-section" id="video-reviews" style="background: var(--panel);">
                 <div class="container">
-                    <h2 class="section-title">Dreams Academy Success Stories</h2>
+                    <h2 class="section-title">Student Success Stories <span style="font-weight:600;color:var(--text-muted);">(শিক্ষার্থীদের সাফল্য)</span></h2>
                     <div class="video-grid" id="video-reviews-container"><p style="text-align:center; width:100%;">Loading success stories...</p></div>
                 </div>
             </section>
@@ -2598,7 +2848,7 @@
             <!-- Trust Screenshots Slider -->
             <section class="section page-section" id="trust">
                 <div class="container">
-                    <h2 class="section-title">Dreams Academy Payment Proofs (প্রমাণসমূহ)</h2>
+                    <h2 class="section-title">Payment Proofs <span style="font-weight:600;color:var(--text-muted);">(পেমেন্ট প্রমাণ)</span></h2>
                     <div class="slider-wrapper">
                         <div class="screenshot-grid" id="screenshot-container"></div>
                         <button class="slider-btn prev-btn" aria-label="Previous Slide"><span class="material-symbols-outlined">chevron_left</span></button>
@@ -2610,7 +2860,7 @@
             <!-- Noticeboard -->
             <section class="section page-section" id="noticeboard">
                 <div class="container">
-                    <h2 class="section-title">Dreams Academy Announcements (নোটিশ বোর্ড)</h2>
+                    <h2 class="section-title">Notice Board <span style="font-weight:600;color:var(--text-muted);">(নোটিশ বোর্ড)</span></h2>
                     <div class="notice-list-public" id="notice-board"></div>
                 </div>
             </section>
@@ -2627,7 +2877,7 @@
                                     <a href="tel:01703743441" class="btn btn-gradient">Call Helpline <span class="material-symbols-outlined">call</span></a>
                                     <div class="phone-info">
                                         <div class="phone-icon"><span class="material-symbols-outlined">support_agent</span></div>
-                                        <div class="numbers"><a href="tel:01703743441">01703743441</a><a href="mailto:dreams.edus@gmail.com" style="font-size: 0.9rem; color: #94a3b8;">dreams.edus@gmail.com</a></div>
+                                        <div class="numbers"><a href="tel:01703743441">01703743441</a><a href="mailto:dreams.edus@gmail.com" style="font-size: 0.9rem; color: var(--text-body);">dreams.edus@gmail.com</a></div>
                                     </div>
                                 </div>
                             </div>
@@ -2745,6 +2995,7 @@
                                 <h2>Welcome Back,</h2>
                                 <h1><span class="dx-name">Student</span></h1>
                                 <p>Keep learning, keep growing!</p>
+                                <span class="dx-idchip" id="dx-sid2"></span>
                                 <div class="dx-stats">
                                   <div class="dx-stat"><span class="material-symbols-outlined">menu_book</span><div><small>Enrolled Courses</small><b id="dx-s-courses">0</b></div></div>
                                   <div class="dx-stat"><span class="material-symbols-outlined">task_alt</span><div><small>Completed Lessons</small><b id="dx-s-lessons">0</b></div></div>
@@ -2811,9 +3062,9 @@
                         <div class="dashboard-page hidden" id="support-page">
                             <div class="content-card"><div class="content-header"><h2>Support Center</h2></div>
                                 <div class="dx-panel" style="margin-bottom:20px;">
-                                    <select id="dx-sup-course" style="width:100%;margin-bottom:10px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--navy-border);background:var(--navy-dark);color:#fff;font:inherit;"><option value="">General question</option></select>
-                                    <input type="text" id="dx-sup-subject" placeholder="Subject" maxlength="120" style="width:100%;margin-bottom:10px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--navy-border);background:var(--navy-dark);color:#fff;font:inherit;">
-                                    <textarea id="dx-sup-msg" rows="4" placeholder="Describe your problem or question..." maxlength="1500" style="width:100%;margin-bottom:10px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--navy-border);background:var(--navy-dark);color:#fff;font:inherit;"></textarea>
+                                    <select id="dx-sup-course" style="width:100%;margin-bottom:10px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--navy-border);background:var(--navy-dark);color: var(--text-pure);font:inherit;"><option value="">General question</option></select>
+                                    <input type="text" id="dx-sup-subject" placeholder="Subject" maxlength="120" style="width:100%;margin-bottom:10px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--navy-border);background:var(--navy-dark);color: var(--text-pure);font:inherit;">
+                                    <textarea id="dx-sup-msg" rows="4" placeholder="Describe your problem or question..." maxlength="1500" style="width:100%;margin-bottom:10px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--navy-border);background:var(--navy-dark);color: var(--text-pure);font:inherit;"></textarea>
                                     <button class="btn btn-gradient" id="dx-sup-send">Send Request</button>
                                 </div>
                                 <div id="dx-sup-list"></div>
@@ -2841,7 +3092,7 @@
                                         <label for="profile-image-upload" class="avatar-upload-label"><span class="material-symbols-outlined" style="font-size: 18px;">photo_camera</span></label>
                                         <input type="file" id="profile-image-upload" accept="image/*" style="display: none;">
                                     </div>
-                                    <h3 id="profile-summary-name" style="color: #fff;">Student Name</h3>
+                                    <h3 id="profile-summary-name" style="color: var(--text-pure);">Student Name</h3>
                                 </div>
                                 <form class="profile-form" id="profile-update-form">
                                     <h4 style="color: var(--water-cyan); margin-bottom: 18px;">Personal Information</h4>
@@ -2884,7 +3135,7 @@
                                         </div>
                                         <iframe id="youtube-player" src="" title="Dreams Academy Class Lecture Video Player" allowfullscreen></iframe>
                                     </div>
-                                    <div id="class-note-container" class="hidden" style="margin-top: 24px; background: rgba(7, 15, 38, 0.8); border: 1px solid var(--navy-border); border-radius: var(--radius-md); padding: 24px;"></div>
+                                    <div id="class-note-container" class="hidden" style="margin-top: 24px; background: var(--panel); border: 1px solid var(--navy-border); border-radius: var(--radius-md); padding: 24px;"></div>
                                 </div>
                                 <div class="curriculum-list-wrapper">
                                     <div id="curriculum-list-container"><p>Loading curriculum lessons...</p></div>
@@ -2910,16 +3161,16 @@
                             <div class="content-card">
                                 <div class="content-header"><h2>Generate American Synthetic SSN</h2></div>
                                 <div style="max-width: 420px; margin-bottom: 24px;">
-                                    <label style="color: #cbd5e1; font-weight: 600; display: block; margin-bottom: 8px;">Select Country Region</label>
-                                    <select id="ssn-country-select" style="width: 100%; padding: 12px 16px; background: rgba(7, 15, 38, 0.85); border: 1px solid var(--navy-border); border-radius: var(--radius-sm); color: #fff; font-weight: 700;">
+                                    <label style="color: var(--text-soft); font-weight: 600; display: block; margin-bottom: 8px;">Select Country Region</label>
+                                    <select id="ssn-country-select" style="width: 100%; padding: 12px 16px; background: var(--panel); border: 1px solid var(--navy-border); border-radius: var(--radius-sm); color: var(--text-pure); font-weight: 700;">
                                         <option value="USA">USA</option><option value="CANADA">CANADA</option><option value="UK">UK</option>
                                     </select>
                                     <button id="btn-generate-ssn" class="btn btn-gradient" style="margin-top: 16px; width: 100%;">Generate Profile <span class="material-symbols-outlined">autorenew</span></button>
                                 </div>
-                                <div id="ssn-output-area" class="hidden" style="background: rgba(7, 15, 38, 0.85); border: 1px dashed var(--water-cyan); padding: 24px; border-radius: var(--radius-md); position: relative;">
+                                <div id="ssn-output-area" class="hidden" style="background: var(--panel); border: 1px dashed var(--water-cyan); padding: 24px; border-radius: var(--radius-md); position: relative;">
                                     <button id="copy-ssn-btn" class="btn btn-outline" style="position: absolute; top: 18px; right: 18px; padding: 6px 14px; font-size: 0.8rem;"><span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span> Copy Details</button>
                                     <h4 style="color: var(--water-cyan); margin-bottom: 16px;">Generated Details</h4>
-                                    <div id="ssn-details-text" style="line-height: 2; color: #cbd5e1;"></div>
+                                    <div id="ssn-details-text" style="line-height: 2; color: var(--text-soft);"></div>
                                 </div>
                             </div>
                         </div>
@@ -2977,7 +3228,7 @@
             <div class="footer-grid">
                 <div class="footer-col">
                     <a href="#home" class="logo" title="Dreams Academy" style="margin-bottom: 20px;"><img id="footer-logo-img" src="https://i.postimg.cc/KzHvk0wq/Black-White-Modern-Initial-Logo-250-x-110-px.png" alt="Dreams Academy - ড্রিমস একাডেমি Footer Logo"></a>
-                    <p style="color: #94a3b8; font-size: 0.92rem; margin-bottom: 18px;"><strong>Dreams Academy (ড্রিমস একাডেমি)</strong> শিক্ষার্থীদের অনলাইন স্কিল ডেভেলপমেন্ট ও আর্থিক সচ্ছলতা অর্জনে সার্বক্ষণিক সহায়তা দিয়ে থাকে।</p>
+                    <p style="color: var(--text-body); font-size: 0.92rem; margin-bottom: 18px;"><strong>Dreams Academy (ড্রিমস একাডেমি)</strong> শিক্ষার্থীদের অনলাইন স্কিল ডেভেলপমেন্ট ও আর্থিক সচ্ছলতা অর্জনে সার্বক্ষণিক সহায়তা দিয়ে থাকে।</p>
                 </div>
                 <div class="footer-col">
                     <h4>Helpful Links</h4>
@@ -2999,8 +3250,8 @@
                 </div>
                 <div class="footer-col">
                     <h4>Dreams Academy Helpline</h4>
-                    <p style="color: #fff; font-size: 1.1rem; font-weight: 700;"><a href="tel:01703743441" style="color: var(--water-cyan);">01703743441</a></p>
-                    <p style="color: #94a3b8; font-size: 0.92rem;">dreams.edus@gmail.com</p>
+                    <p style="color: var(--text-pure); font-size: 1.1rem; font-weight: 700;"><a href="tel:01703743441" style="color: var(--water-cyan);">01703743441</a></p>
+                    <p style="color: var(--text-body); font-size: 0.92rem;">dreams.edus@gmail.com</p>
                     <div style="margin-top: 18px;" class="social-icons" id="social-icons-container"></div>
                 </div>
             </div>
@@ -3017,12 +3268,52 @@
     <div id="toast-container"></div>
 
     <!-- Mobile Sticky Navigation -->
+    <nav class="dash-bottom-nav" id="dash-bottom-nav" aria-label="Student navigation">
+        <button type="button" data-go="my-courses-page"><span class="material-symbols-outlined">dashboard</span><span>Home</span></button>
+        <button type="button" data-go="class-joining-page"><span class="material-symbols-outlined">video_camera_front</span><span>Live</span></button>
+        <button type="button" data-go="progress-page"><span class="material-symbols-outlined">workspace_premium</span><span>Progress</span></button>
+        <button type="button" data-go="assignments-page"><span class="material-symbols-outlined">assignment</span><span>Tasks</span></button>
+        <button type="button" id="dash-more-btn"><span class="material-symbols-outlined">apps</span><span>More</span></button>
+    </nav>
+    <div class="dash-sheet hidden" id="dash-sheet"><div class="dash-sheet-bg"></div><div class="dash-sheet-card"><h4>More</h4><div class="dash-sheet-grid">
+        <button type="button" data-go="my-profile-page"><span class="material-symbols-outlined">manage_accounts</span>My Profile</button>
+        <button type="button" data-go="materials-page"><span class="material-symbols-outlined">folder_open</span>Materials</button>
+        <button type="button" data-go="support-page"><span class="material-symbols-outlined">support_agent</span>Support</button>
+        <button type="button" data-go="noticeboard"><span class="material-symbols-outlined">campaign</span>Notices</button>
+        <button type="button" data-go="my-services-page"><span class="material-symbols-outlined">design_services</span>Services</button>
+        <button type="button" data-go="ssn-generate-page"><span class="material-symbols-outlined">badge</span>SSN</button>
+        <button type="button" data-go="ssn-list-page"><span class="material-symbols-outlined">list_alt</span>Saved SSN</button>
+        <button type="button" data-website="1"><span class="material-symbols-outlined">language</span>Website</button>
+    </div></div></div>
+    <script>
+    (function () {
+        var dash = document.getElementById('dashboard-content'), bar = document.getElementById('dash-bottom-nav'), sheet = document.getElementById('dash-sheet'), menu = document.getElementById('sidebar-menu');
+        if (!dash || !bar || !sheet || !menu) return;
+        function sync() { document.body.classList.toggle('in-dashboard', !dash.classList.contains('hidden')); }
+        new MutationObserver(sync).observe(dash, { attributes: true, attributeFilter: ['class'] }); sync();
+        function go(p) { var li = menu.querySelector('li[data-page="' + p + '"]'); sheet.classList.add('hidden'); if (li) { li.click(); window.scrollTo(0, 0); } }
+        function mark() {
+            var act = menu.querySelector('li.active'), p = act ? act.getAttribute('data-page') : '';
+            bar.querySelectorAll('[data-go]').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-go') === p); });
+            document.getElementById('dash-more-btn').classList.toggle('active', !!p && !bar.querySelector('[data-go="' + p + '"]'));
+        }
+        new MutationObserver(mark).observe(menu, { subtree: true, attributes: true, attributeFilter: ['class'] }); mark();
+        bar.addEventListener('click', function (e) { var b = e.target.closest('[data-go]'); if (b) go(b.getAttribute('data-go')); });
+        document.getElementById('dash-more-btn').addEventListener('click', function () { sheet.classList.toggle('hidden'); });
+        sheet.addEventListener('click', function (e) {
+            if (e.target.closest('.dash-sheet-bg')) { sheet.classList.add('hidden'); return; }
+            var b = e.target.closest('[data-go]'); if (b) { go(b.getAttribute('data-go')); return; }
+            if (e.target.closest('[data-website]')) { sheet.classList.add('hidden'); var a = document.querySelector('.main-nav a[href="#home"]'); if (a) a.click(); }
+        });
+    })();
+    </script>
     <nav class="mobile-bottom-nav">
-        <a href="javascript:void(0)" class="mobile-nav-link" id="mobile-dollar-sell-btn"><span class="material-symbols-outlined" style="color: var(--water-cyan);">currency_exchange</span><span style="color: var(--water-cyan);">Dollar</span></a>
-        <a href="#courses" class="mobile-nav-link"><span class="material-symbols-outlined">menu_book</span><span>Course</span></a>
+        <a href="#home" class="mobile-nav-link"><span class="material-symbols-outlined">home</span><span>Home</span></a>
+        <a href="#courses" class="mobile-nav-link"><span class="material-symbols-outlined">menu_book</span><span>Courses</span></a>
         <a href="#services" class="mobile-nav-link"><span class="material-symbols-outlined">grid_view</span><span>Services</span></a>
         <a href="#video-reviews" class="mobile-nav-link"><span class="material-symbols-outlined">star</span><span>Reviews</span></a>
         <a href="#noticeboard" class="mobile-nav-link"><span class="material-symbols-outlined">campaign</span><span>Notice</span></a>
+        <a href="javascript:void(0)" class="mobile-nav-link" id="mobile-dollar-sell-btn"><span class="material-symbols-outlined">currency_exchange</span><span>Dollar</span></a>
     </nav>
 
     <!-- EmailJS & Firebase Libraries -->
@@ -3436,7 +3727,7 @@
                     if(data.type === 'assignment') icon = 'assignment';
                     if(data.type === 'certificate') { icon = 'workspace_premium'; color = '#f59e0b'; }
                     if(data.type === 'account') { icon = 'verified_user'; color = '#10b981'; }
-                    list.innerHTML += `<li class="notification-list-item" style="${data.read ? 'opacity: 0.6;' : 'background: rgba(0, 242, 254, 0.05);'}" onclick="markNotificationRead('${d.id}')"><div class="notification-icon" style="background: ${color};"><span class="material-symbols-outlined">${icon}</span></div><div class="notification-content"><p><strong>${data.title || 'Notification'}</strong></p><p>${data.message}</p><span class="time">${formatNotificationTime(data.timestamp)}</span></div></li>`; 
+                    list.innerHTML += `<li class="notification-list-item" style="${data.read ? 'opacity: 0.6;' : 'background: rgba(26, 86, 219, 0.05);'}" onclick="markNotificationRead('${d.id}')"><div class="notification-icon" style="background: ${color};"><span class="material-symbols-outlined">${icon}</span></div><div class="notification-content"><p><strong>${data.title || 'Notification'}</strong></p><p>${data.message}</p><span class="time">${formatNotificationTime(data.timestamp)}</span></div></li>`; 
                 });
                 if(unread > 0) { badge.classList.remove('hidden'); badge.textContent = unread > 9 ? '9+' : unread; } else badge.classList.add('hidden');
             }
@@ -3537,7 +3828,7 @@
                 const grid = document.getElementById('my-courses-grid'); const user = auth.currentUser; if(!user || !grid) return;
                 try {
                     const snap = await db.collection('enrollments').where('studentUid','==',user.uid).get();
-                    if(snap.empty){ grid.innerHTML='<p style="color: #94a3b8;">You haven\'t enrolled in any courses yet.</p>'; window.dxRender([]); return; }
+                    if(snap.empty){ grid.innerHTML='<p style="color: var(--text-body);">You haven\'t enrolled in any courses yet.</p>'; window.dxRender([]); return; }
                     let html=''; const dxData=[];
                     for(let d of snap.docs) { 
                         const c = d.data(); 
@@ -3577,13 +3868,13 @@
                 player.src = ''; placeholder.classList.remove('hidden'); noteC.classList.add('hidden');
                 try {
                     const q = await db.collection('curriculum').where('courseName','==',courseName).where('batch','==',batch).limit(1).get();
-                    if(q.empty) { container.innerHTML='<p style="color:#94a3b8;">No curriculum found.</p>'; return; }
+                    if(q.empty) { container.innerHTML='<p style="color: var(--text-body);">No curriculum found.</p>'; return; }
                     let html=''; (q.docs[0].data().modules||[]).forEach((m,i)=>{ html+=`<div class="curriculum-module"><div class="module-header" data-target="module-vids-${i}"><span>${m.title}</span><span class="material-symbols-outlined">expand_more</span></div><ul class="module-videos" id="module-vids-${i}">${(m.videos||[]).map(v=>`<li><a href="#" class="video-item-link" data-url="${v.youtubeLink}" data-note="${encodeURIComponent(v.classNote||'')}"><div style="display: flex; align-items: center; gap: 10px;"><span class="material-symbols-outlined">play_circle</span><span class="vid-title-text">${v.title}</span></div></a></li>`).join('')}</ul></div>`; }); container.innerHTML=html;
                     container.querySelectorAll('.module-header').forEach(h=>h.addEventListener('click', ()=>{h.classList.toggle('active'); document.getElementById(h.dataset.target).classList.toggle('show');}));
                     container.querySelectorAll('.video-item-link').forEach(l=>l.addEventListener('click', e=>{ 
                         e.preventDefault(); container.querySelectorAll('.video-item-link').forEach(al=>al.classList.remove('playing')); l.classList.add('playing'); 
                         const embed=getYouTubeEmbedUrl(l.dataset.url); if(embed){placeholder.classList.add('hidden'); player.src=embed;} 
-                        const note=decodeURIComponent(l.dataset.note); if(note){noteC.innerHTML=`<h4 style="color:var(--water-cyan); margin-bottom:10px;">Module Notes</h4><div class="note-content" style="color:#cbd5e1;">${note}</div>`; noteC.classList.remove('hidden');}else noteC.classList.add('hidden');
+                        const note=decodeURIComponent(l.dataset.note); if(note){noteC.innerHTML=`<h4 style="color:var(--water-cyan); margin-bottom:10px;">Module Notes</h4><div class="note-content" style="color: var(--text-soft);">${note}</div>`; noteC.classList.remove('hidden');}else noteC.classList.add('hidden');
                         
                         const videoTitle = l.querySelector('.vid-title-text').textContent;
                         if (window.currentEnrollmentDocId) db.collection('enrollments').doc(window.currentEnrollmentDocId).update({ completed_lessons: firebase.firestore.FieldValue.arrayUnion(videoTitle) }).catch(err => {});
@@ -3595,7 +3886,7 @@
             window.openCoursePreviewModal = async function(courseName, price, imgUrl) {
                 document.getElementById('preview-course-title').textContent = courseName;
                 document.getElementById('course-preview-modal').classList.remove('hidden');
-                document.getElementById('preview-curriculum-container').innerHTML = '<div style="text-align:center; padding: 30px;"><span class="material-symbols-outlined" style="font-size: 36px; color: var(--water-cyan);">autorenew</span><p style="margin-top: 10px; color:#94a3b8;">Loading curriculum modules...</p></div>';
+                document.getElementById('preview-curriculum-container').innerHTML = '<div style="text-align:center; padding: 30px;"><span class="material-symbols-outlined" style="font-size: 36px; color: var(--water-cyan);">autorenew</span><p style="margin-top: 10px; color: var(--text-body);">Loading curriculum modules...</p></div>';
 
                 const enrollBtn = document.getElementById('preview-buy-btn');
                 enrollBtn.onclick = () => {
@@ -3629,7 +3920,7 @@
                             </div>
                             <ul class="module-videos" id="preview-module-vids-${i}">
                                 ${(m.videos || []).map(v => `
-                                    <li style="padding: 12px 18px; border-top: 1px solid rgba(56, 189, 248, 0.1); display: flex; justify-content: space-between; align-items: center; color: #94a3b8;">
+                                    <li style="padding: 12px 18px; border-top: 1px solid rgba(26, 86, 219, 0.1); display: flex; justify-content: space-between; align-items: center; color: var(--text-body);">
                                         <div style="display: flex; align-items: center; gap: 10px;">
                                             <span class="material-symbols-outlined" style="color: var(--water-cyan);">play_circle</span>
                                             <span>${v.title}</span>
@@ -3715,18 +4006,18 @@
             async function displayLiveClasses() {
                 const c = document.getElementById('live-class-schedule-container'); const u = auth.currentUser; if(!u || !c) return;
                 try {
-                    const en = await db.collection('enrollments').where('studentUid','==',u.uid).get(); if(en.empty) { c.innerHTML='<p style="color:#94a3b8;">No schedules available.</p>'; return; }
+                    const en = await db.collection('enrollments').where('studentUid','==',u.uid).get(); if(en.empty) { c.innerHTML='<p style="color: var(--text-body);">No schedules available.</p>'; return; }
                     let html='', found=false;
                     for (const doc of en.docs) {
                         const {courseName, batch} = doc.data(); const cl = await db.collection('joinClass').where('courseName','==',courseName).where('batch','==',batch).orderBy('dateTime','desc').get();
-                        if(!cl.empty){ found=true; html+=`<h3 style="margin:20px 0 14px; color:var(--water-cyan);">${courseName} (Batch ${batch})</h3><div style="overflow-x:auto;"><table class="class-schedule-table"><thead><tr><th>Class</th><th>Topic</th><th>Date & Time</th><th>Status</th><th>Action</th></tr></thead><tbody>`; cl.forEach(d=>{ const l=d.data(), ct=l.dateTime.toDate(), now=new Date(), diff=(ct-now)/60000; html+=`<tr><td>${l.classNumber}</td><td style="color:#fff; font-weight:700;">${l.topic}</td><td>${ct.toLocaleString()}</td><td><span class="status-tag ${now>ct?'status-completed':'status-upcoming'}">${now>ct?'Completed':'Upcoming'}</span></td><td>${now<=ct && diff<=15?`<a href="${l.link}" target="_blank" class="btn btn-gradient" style="padding:6px 14px; font-size:0.8rem;">Join</a>`:'-'}</td></tr>`; }); html+='</tbody></table></div>'; }
-                    } c.innerHTML=found?html:'<p style="color:#94a3b8;">No active live classes scheduled right now.</p>';
+                        if(!cl.empty){ found=true; html+=`<h3 style="margin:20px 0 14px; color:var(--water-cyan);">${courseName} (Batch ${batch})</h3><div style="overflow-x:auto;"><table class="class-schedule-table"><thead><tr><th>Class</th><th>Topic</th><th>Date & Time</th><th>Status</th><th>Action</th></tr></thead><tbody>`; cl.forEach(d=>{ const l=d.data(), ct=l.dateTime.toDate(), now=new Date(), diff=(ct-now)/60000; html+=`<tr><td>${l.classNumber}</td><td style="color: var(--text-pure); font-weight:700;">${l.topic}</td><td>${ct.toLocaleString()}</td><td><span class="status-tag ${now>ct?'status-completed':'status-upcoming'}">${now>ct?'Completed':'Upcoming'}</span></td><td>${now<=ct && diff<=15?`<a href="${l.link}" target="_blank" class="btn btn-gradient" style="padding:6px 14px; font-size:0.8rem;">Join</a>`:'-'}</td></tr>`; }); html+='</tbody></table></div>'; }
+                    } c.innerHTML=found?html:'<p style="color: var(--text-body);">No active live classes scheduled right now.</p>';
                 }catch(e){}
             }
 
             async function displayMyServices() {
                 const b = document.getElementById('my-services-table-body'); const u = auth.currentUser; if (!u || !b) return;
-                try { const snap = await db.collection('payments').where('userId', '==', u.uid).orderBy('timestamp', 'desc').get(); if (snap.empty) { b.innerHTML = '<tr><td colspan="4" style="text-align: center; color:#94a3b8;">No services active.</td></tr>'; return; } let html = ''; snap.forEach(d => { const v = d.data(), date = v.timestamp ? v.timestamp.toDate().toLocaleDateString() : 'N/A'; html += `<tr><td>${date}</td><td style="color:#fff; font-weight:700;">${v.itemName}</td><td style="color:var(--water-cyan); font-weight:700;">৳${v.amount}</td><td><span class="status-tag status-completed">${v.status || 'Active'}</span></td></tr>`; }); b.innerHTML = html; } catch (e) { b.innerHTML = '<tr><td colspan="4" style="text-align: center; color:#ef4444;">Error loading services.</td></tr>'; }
+                try { const snap = await db.collection('payments').where('userId', '==', u.uid).orderBy('timestamp', 'desc').get(); if (snap.empty) { b.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-body);">No services active.</td></tr>'; return; } let html = ''; snap.forEach(d => { const v = d.data(), date = v.timestamp ? v.timestamp.toDate().toLocaleDateString() : 'N/A'; html += `<tr><td>${date}</td><td style="color: var(--text-pure); font-weight:700;">${v.itemName}</td><td style="color:var(--water-cyan); font-weight:700;">৳${v.amount}</td><td><span class="status-tag status-completed">${v.status || 'Active'}</span></td></tr>`; }); b.innerHTML = html; } catch (e) { b.innerHTML = '<tr><td colspan="4" style="text-align: center; color:#ef4444;">Error loading services.</td></tr>'; }
             }
 
             // Public Services & Courses Fetching
@@ -3802,7 +4093,7 @@
                         let durationText = '';
                         if (v.packageType === 'subscription') {
                             let days = v.durationDays || 30;
-                            durationText = `<span style="font-size: 0.95rem; color: #94a3b8; font-weight: 600; margin-left: 6px;">/ ${days} Days</span>`;
+                            durationText = `<span style="font-size: 0.95rem; color: var(--text-body); font-weight: 600; margin-left: 6px;">/ ${days} Days</span>`;
                         }
 
                         h += `<div class="service-card"><div class="service-header">${m}<h3>${v.name || 'Service'}</h3><p class="plan-description">${v.shortDescription || v.description || ''}</p></div><div class="pricing-area"><div class="pricing-info">${oldP > 0 ? `<span class="old-price">৳ ${oldP}</span>` : ''}${sv > 0 ? `<span class="save-badge">Save ${sv}%</span>` : ''}</div><div class="current-price"><span class="price-amount">৳ ${curP}</span>${durationText}</div></div><div class="service-body"><ul class="service-features">${featuresHtml}</ul><a href="#" class="btn-service-action buy-now-btn" data-name="${v.name}" data-price="${curP}">Order Package <span class="material-symbols-outlined">shopping_cart_checkout</span></a></div></div>`; 
@@ -3843,11 +4134,11 @@
                                     <div class="course-info">
                                         <span class="material-symbols-outlined" style="color: var(--water-cyan);">person</span> ${instructor}
                                     </div>
-                                    <div class="card-footer" style="flex-wrap: wrap; gap: 12px;">
+                                    <div class="card-footer cf-stack">
                                         <span class="price">৳ ${curP}</span>
-                                        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-left: auto;">
-                                            <a href="/course/${encodeURIComponent(cpSlug)}" class="btn btn-outline course-module-btn" data-slug="${cpSlug}" style="width: auto; padding: 10px 14px; font-size: 0.85rem;">Course Module</a>
-                                            <a href="#" class="btn btn-gradient buy-now-btn" data-name="${v.name}" data-price="${curP}" style="width: auto; padding: 10px 18px; font-size: 0.85rem;">Enroll <span class="material-symbols-outlined">arrow_forward</span></a>
+                                        <div class="cf-actions">
+                                            <a href="/course/${encodeURIComponent(cpSlug)}" class="btn btn-outline course-module-btn" data-slug="${cpSlug}" >Course Module</a>
+                                            <a href="#" class="btn btn-gradient buy-now-btn" data-name="${v.name}" data-price="${curP}" >Enroll <span class="material-symbols-outlined">arrow_forward</span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -3868,7 +4159,7 @@
                     const s = await db.collection('notices').orderBy('timestamp','desc').get(); 
                     let h=''; 
                     s.forEach(d=>{ const n=d.data(); h+=`<div class="notice-item"><span class="material-symbols-outlined">campaign</span><div class="notice-details"><h4>${n.title}</h4><p>${n.description}</p></div></div>`;}); 
-                    c.innerHTML = h||'<p style="color:#94a3b8;">No notices posted yet.</p>'; 
+                    c.innerHTML = h||'<p style="color: var(--text-body);">No notices posted yet.</p>'; 
                 }catch(e){} 
             }
 
@@ -3916,7 +4207,7 @@
                 if(!c) return; 
                 try { 
                     const s = await db.collection('video_reviews').get(); 
-                    if(s.empty) { c.innerHTML = '<p style="text-align:center; width:100%; color:#94a3b8;">No video reviews yet.</p>'; return; } 
+                    if(s.empty) { c.innerHTML = '<p style="text-align:center; width:100%; color: var(--text-body);">No video reviews yet.</p>'; return; } 
                     const docs = s.docs.slice().sort((a, b) => dxTime(b) - dxTime(a));
                     c.innerHTML = docs.map(d => { const data = d.data(); return dxVideoCard(data.youtubeLink, data.title, data.subtitle); }).join(''); 
                 } catch(e){ c.innerHTML = '<p style="text-align:center; color:#ef4444; width:100%;">Failed to load video reviews.</p>'; } 
@@ -3936,7 +4227,7 @@
                 setById('hero-image', url(hero, heroOld)); setById('about-us-image', url(about, aboutOld));
                 setById('contact-us-image', url(contact, contactOld)); setById('floating-chat-icon-img', url(chat, chatOld));
 
-                const ICONS = {"facebook": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"12\" fill=\"#1877F2\"/><path fill=\"#fff\" d=\"M13.5 19v-6.2h2.1l.4-2.6h-2.5V8.6c0-.8.3-1.3 1.4-1.3H16V5.1c-.3 0-1.1-.1-2-.1-2 0-3.4 1.2-3.4 3.5v1.7H8.5v2.6h2.1V19h2.9z\"/></svg>", "youtube": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"1\" y=\"4.5\" width=\"22\" height=\"15\" rx=\"4.5\" fill=\"#FF0000\"/><path fill=\"#fff\" d=\"M10 8.8l5.4 3.2-5.4 3.2z\"/></svg>", "whatsapp": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"12\" fill=\"#25D366\"/><path fill=\"#fff\" d=\"M12 5.2a6.8 6.8 0 0 0-5.8 10.3L5.2 19l3.6-1A6.8 6.8 0 1 0 12 5.2zm3.5 9.4c-.15.4-.9.8-1.2.8-.3 0-.7.1-2.3-.5-1.9-.8-3.1-2.7-3.2-2.8-.1-.1-.8-1-.8-2s.5-1.4.7-1.6c.2-.2.4-.2.5-.2h.4c.1 0 .3 0 .4.3l.6 1.4c.1.1 0 .3 0 .4l-.3.4-.2.3c-.1.1-.2.3 0 .5.5.9 1.2 1.5 2 1.9.2.1.4.1.5 0l.6-.7c.1-.2.3-.2.5-.1l1.3.6c.2.1.3.2.3.3 0 .2 0 .7-.2 1.1z\"/></svg>", "telegram": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"12\" fill=\"#229ED9\"/><path fill=\"#fff\" d=\"M5.5 11.8l11.6-4.5c.5-.2 1 .1.8.9l-2 9.2c-.1.7-.6.8-1.1.5l-3-2.2-1.4 1.4c-.2.2-.3.3-.6.3l.2-3.1 5.6-5c.2-.2 0-.3-.3-.1l-6.9 4.3-3-.9c-.6-.2-.6-.6.1-.8z\"/></svg>", "instagram": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><defs><linearGradient id=\"dxig\" x1=\"0\" y1=\"1\" x2=\"1\" y2=\"0\"><stop offset=\"0\" stop-color=\"#FEDA75\"/><stop offset=\".35\" stop-color=\"#FA7E1E\"/><stop offset=\".6\" stop-color=\"#D62976\"/><stop offset=\".85\" stop-color=\"#962FBF\"/><stop offset=\"1\" stop-color=\"#4F5BD5\"/></linearGradient></defs><rect x=\"1\" y=\"1\" width=\"22\" height=\"22\" rx=\"6.5\" fill=\"url(#dxig)\"/><rect x=\"6\" y=\"6\" width=\"12\" height=\"12\" rx=\"3.6\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1.7\"/><circle cx=\"12\" cy=\"12\" r=\"2.9\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1.7\"/><circle cx=\"16\" cy=\"8\" r=\"1\" fill=\"#fff\"/></svg>", "tiktok": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"12\" fill=\"#010101\"/><path fill=\"#fff\" d=\"M16.5 8.3a3 3 0 0 1-2.4-2.6h-2.2v8.1a1.7 1.7 0 1 1-1.2-1.6V10c-2.2-.1-4 1.6-4 3.8a3.9 3.9 0 0 0 7.8 0V9.6a5 5 0 0 0 2.9.9V8.3z\"/></svg>", "linkedin": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"1\" y=\"1\" width=\"22\" height=\"22\" rx=\"4\" fill=\"#0A66C2\"/><path fill=\"#fff\" d=\"M7 9.5h2.3V17H7zM8.15 5.9a1.35 1.35 0 1 1 0 2.7 1.35 1.35 0 0 1 0-2.7zM10.9 9.5h2.2v1c.4-.7 1.2-1.2 2.3-1.2 2.3 0 2.7 1.5 2.7 3.5V17h-2.3v-3.7c0-.9 0-2-1.2-2s-1.4.9-1.4 1.9V17h-2.3z\"/></svg>", "x": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"12\" fill=\"#000\"/><path stroke=\"#fff\" stroke-width=\"1.9\" stroke-linecap=\"round\" d=\"M7.5 7.5l9 9M16.5 7.5l-9 9\"/></svg>", "link": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"12\" fill=\"#38bdf8\"/><path fill=\"none\" stroke=\"#fff\" stroke-width=\"1.8\" stroke-linecap=\"round\" d=\"M10 14a3 3 0 0 0 4.2 0l2.3-2.3a3 3 0 0 0-4.2-4.2l-.8.8M14 10a3 3 0 0 0-4.2 0l-2.3 2.3a3 3 0 0 0 4.2 4.2l.8-.8\"/></svg>"};
+                const ICONS = {"facebook": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"12\" fill=\"#1877F2\"/><path fill=\"#fff\" d=\"M13.5 19v-6.2h2.1l.4-2.6h-2.5V8.6c0-.8.3-1.3 1.4-1.3H16V5.1c-.3 0-1.1-.1-2-.1-2 0-3.4 1.2-3.4 3.5v1.7H8.5v2.6h2.1V19h2.9z\"/></svg>", "youtube": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"1\" y=\"4.5\" width=\"22\" height=\"15\" rx=\"4.5\" fill=\"#FF0000\"/><path fill=\"#fff\" d=\"M10 8.8l5.4 3.2-5.4 3.2z\"/></svg>", "whatsapp": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"12\" fill=\"#25D366\"/><path fill=\"#fff\" d=\"M12 5.2a6.8 6.8 0 0 0-5.8 10.3L5.2 19l3.6-1A6.8 6.8 0 1 0 12 5.2zm3.5 9.4c-.15.4-.9.8-1.2.8-.3 0-.7.1-2.3-.5-1.9-.8-3.1-2.7-3.2-2.8-.1-.1-.8-1-.8-2s.5-1.4.7-1.6c.2-.2.4-.2.5-.2h.4c.1 0 .3 0 .4.3l.6 1.4c.1.1 0 .3 0 .4l-.3.4-.2.3c-.1.1-.2.3 0 .5.5.9 1.2 1.5 2 1.9.2.1.4.1.5 0l.6-.7c.1-.2.3-.2.5-.1l1.3.6c.2.1.3.2.3.3 0 .2 0 .7-.2 1.1z\"/></svg>", "telegram": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"12\" fill=\"#229ED9\"/><path fill=\"#fff\" d=\"M5.5 11.8l11.6-4.5c.5-.2 1 .1.8.9l-2 9.2c-.1.7-.6.8-1.1.5l-3-2.2-1.4 1.4c-.2.2-.3.3-.6.3l.2-3.1 5.6-5c.2-.2 0-.3-.3-.1l-6.9 4.3-3-.9c-.6-.2-.6-.6.1-.8z\"/></svg>", "instagram": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><defs><linearGradient id=\"dxig\" x1=\"0\" y1=\"1\" x2=\"1\" y2=\"0\"><stop offset=\"0\" stop-color=\"#FEDA75\"/><stop offset=\".35\" stop-color=\"#FA7E1E\"/><stop offset=\".6\" stop-color=\"#D62976\"/><stop offset=\".85\" stop-color=\"#962FBF\"/><stop offset=\"1\" stop-color=\"#4F5BD5\"/></linearGradient></defs><rect x=\"1\" y=\"1\" width=\"22\" height=\"22\" rx=\"6.5\" fill=\"url(#dxig)\"/><rect x=\"6\" y=\"6\" width=\"12\" height=\"12\" rx=\"3.6\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1.7\"/><circle cx=\"12\" cy=\"12\" r=\"2.9\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1.7\"/><circle cx=\"16\" cy=\"8\" r=\"1\" fill=\"#fff\"/></svg>", "tiktok": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"12\" fill=\"#010101\"/><path fill=\"#fff\" d=\"M16.5 8.3a3 3 0 0 1-2.4-2.6h-2.2v8.1a1.7 1.7 0 1 1-1.2-1.6V10c-2.2-.1-4 1.6-4 3.8a3.9 3.9 0 0 0 7.8 0V9.6a5 5 0 0 0 2.9.9V8.3z\"/></svg>", "linkedin": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"1\" y=\"1\" width=\"22\" height=\"22\" rx=\"4\" fill=\"#0A66C2\"/><path fill=\"#fff\" d=\"M7 9.5h2.3V17H7zM8.15 5.9a1.35 1.35 0 1 1 0 2.7 1.35 1.35 0 0 1 0-2.7zM10.9 9.5h2.2v1c.4-.7 1.2-1.2 2.3-1.2 2.3 0 2.7 1.5 2.7 3.5V17h-2.3v-3.7c0-.9 0-2-1.2-2s-1.4.9-1.4 1.9V17h-2.3z\"/></svg>", "x": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"12\" fill=\"#000\"/><path stroke=\"#fff\" stroke-width=\"1.9\" stroke-linecap=\"round\" d=\"M7.5 7.5l9 9M16.5 7.5l-9 9\"/></svg>", "link": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"12\" fill=\"#2F6FEB\"/><path fill=\"none\" stroke=\"#fff\" stroke-width=\"1.8\" stroke-linecap=\"round\" d=\"M10 14a3 3 0 0 0 4.2 0l2.3-2.3a3 3 0 0 0-4.2-4.2l-.8.8M14 10a3 3 0 0 0-4.2 0l-2.3 2.3a3 3 0 0 0 4.2 4.2l.8-.8\"/></svg>"};
                 const box = document.getElementById('social-icons-container'); if (!box) return;
                 box.innerHTML = '';
                 const links = Array.isArray(soc.links) ? soc.links : (Array.isArray(socOld.links) ? socOld.links : []);
@@ -4139,7 +4430,7 @@
             window.ssnDataCache = {};
             async function displaySSNList() {
                 const b = document.getElementById('ssn-list-table-body'); const u = auth.currentUser; if (!u || !b) return;
-                try { const s = await db.collection('ssn_list').where('userId', '==', u.uid).orderBy('timestamp', 'desc').get(); if (s.empty) { b.innerHTML = '<tr><td colspan="6" style="text-align: center; color:#94a3b8;">No synthetic SSN generated yet.</td></tr>'; return; } window.ssnDataCache = {}; let h = ''; s.forEach(d => { const v = d.data(); window.ssnDataCache[d.id] = v; const date = v.timestamp ? v.timestamp.toDate().toLocaleDateString() : 'N/A'; h += `<tr><td>${date}</td><td style="color:#fff; font-weight:600;">${v.name}</td><td style="font-family: monospace; color: var(--water-cyan); font-weight: bold;">${v.number}</td><td>${v.country}</td><td>${v.state}</td><td><button onclick="openSSNModal('${d.id}')" title="Edit" style="background:none; border:none; color:var(--water-cyan); cursor:pointer; margin-right:8px;"><span class="material-symbols-outlined" style="font-size: 20px;">visibility</span></button><button onclick="deleteSSN('${d.id}')" title="Delete" style="background:none; border:none; color:#ef4444; cursor:pointer;"><span class="material-symbols-outlined" style="font-size: 20px;">delete</span></button></td></tr>`; }); b.innerHTML = h; } catch (e) { b.innerHTML = '<tr><td colspan="6" style="text-align: center; color:#ef4444;">Error loading SSN records.</td></tr>'; }
+                try { const s = await db.collection('ssn_list').where('userId', '==', u.uid).orderBy('timestamp', 'desc').get(); if (s.empty) { b.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-body);">No synthetic SSN generated yet.</td></tr>'; return; } window.ssnDataCache = {}; let h = ''; s.forEach(d => { const v = d.data(); window.ssnDataCache[d.id] = v; const date = v.timestamp ? v.timestamp.toDate().toLocaleDateString() : 'N/A'; h += `<tr><td>${date}</td><td style="color: var(--text-pure); font-weight:600;">${v.name}</td><td style="font-family: monospace; color: var(--water-cyan); font-weight: bold;">${v.number}</td><td>${v.country}</td><td>${v.state}</td><td><button onclick="openSSNModal('${d.id}')" title="Edit" style="background:none; border:none; color:var(--water-cyan); cursor:pointer; margin-right:8px;"><span class="material-symbols-outlined" style="font-size: 20px;">visibility</span></button><button onclick="deleteSSN('${d.id}')" title="Delete" style="background:none; border:none; color:#ef4444; cursor:pointer;"><span class="material-symbols-outlined" style="font-size: 20px;">delete</span></button></td></tr>`; }); b.innerHTML = h; } catch (e) { b.innerHTML = '<tr><td colspan="6" style="text-align: center; color:#ef4444;">Error loading SSN records.</td></tr>'; }
             }
             
             window.deleteSSN = async function(docId) { if(confirm("Are you sure you want to delete this record?")) { try { await db.collection('ssn_list').doc(docId).delete(); showToast("Record deleted.", "success"); displaySSNList(); } catch(e) { showToast("Error deleting SSN.", "error"); } } };
@@ -4183,7 +4474,7 @@
                         const c = await tx.get(cref), n = c.exists ? c.data().next : 1001;
                         tx.set(cref, { next: n + 1 }); tx.update(ref, { studentId: n }); return n;
                     });
-                    if (el) el.textContent = 'Student ID: ' + (id || '-');
+                    if (el) el.textContent = 'Student ID: ' + (id || '-'); const el2 = document.getElementById('dx-sid2'); if (el2) el2.textContent = id ? 'Student ID: ' + id : '';
                     if (id) { const es = await db.collection('enrollments').where('studentUid', '==', u.uid).get(); es.forEach(d => { if (!d.data().studentName || !d.data().studentId) d.ref.update({ studentName: ud.name || '', studentId: id }).catch(() => {}); }); }
                 } catch (e) { console.error('Student ID error', e); }
                 window.__dxIdBusy = false;
@@ -4237,7 +4528,7 @@
             }
             window.dxProgressPage = function() {
                 const box = document.getElementById('dx-progress-list');
-                box.innerHTML = window.dxData.length ? window.dxData.map(x => `<div class="dx-row" style="flex-wrap:wrap;"><div style="flex:1;min-width:220px;"><p style="color:#fff;font-weight:700;">${dxEsc(x.name)} <small>(Batch ${dxEsc(x.batch)})</small></p><div class="dx-meter"><span>${x.done}/${x.total} Lessons</span><b>${x.pct}%</b></div><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${x.pct}%"></div></div></div>${x.total > 0 && x.pct >= 100 ? `<button class="btn btn-outline dx-cert" data-course="${dxEsc(x.name)}" style="border-color:var(--water-cyan);color:var(--water-cyan);">Download Certificate <span class="material-symbols-outlined">workspace_premium</span></button>` : '<span class="dx-join off">Complete all lessons to unlock</span>'}</div>`).join('') : '<p class="dx-empty">You haven\'t enrolled in any courses yet.</p>';
+                box.innerHTML = window.dxData.length ? window.dxData.map(x => `<div class="dx-row" style="flex-wrap:wrap;"><div style="flex:1;min-width:220px;"><p style="color: var(--text-pure);font-weight:700;">${dxEsc(x.name)} <small>(Batch ${dxEsc(x.batch)})</small></p><div class="dx-meter"><span>${x.done}/${x.total} Lessons</span><b>${x.pct}%</b></div><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${x.pct}%"></div></div></div>${x.total > 0 && x.pct >= 100 ? `<button class="btn btn-outline dx-cert" data-course="${dxEsc(x.name)}" style="border-color:var(--water-cyan);color:var(--water-cyan);">Download Certificate <span class="material-symbols-outlined">workspace_premium</span></button>` : '<span class="dx-join off">Complete all lessons to unlock</span>'}</div>`).join('') : '<p class="dx-empty">You haven\'t enrolled in any courses yet.</p>';
                 box.querySelectorAll('.dx-cert').forEach(b => b.addEventListener('click', () => generateCertificatePDF(b.dataset.course)));
             };
             document.querySelectorAll('[data-dx-go]').forEach(b => b.addEventListener('click', () => navigateTo(b.dataset.dxGo)));
@@ -4266,9 +4557,9 @@
                     box.innerHTML = items.map(a => { const sb = subs[a.id], due = a.dueDate && a.dueDate.toDate ? a.dueDate.toDate() : null, late = due && due < new Date();
                         const st = sb ? (sb.grade ? 'Graded' : 'Submitted') : (late ? 'Overdue' : 'Pending');
                         return `<div class="dx-panel" style="margin-bottom:16px;"><div class="dx-head"><h3>${dxEsc(a.title)}</h3><span class="dx-status ${sb ? 'done' : (late ? '' : 'new')}" style="position:static;">${st}</span></div>
-                        <p style="color:#cbd5e1;margin-bottom:6px;">${dxEsc(a.description)}</p><small style="color:var(--text-muted);">${dxEsc(a.courseName)}${due ? ' • Due: ' + dxWhen(a.dueDate) : ''}</small>
+                        <p style="color: var(--text-soft);margin-bottom:6px;">${dxEsc(a.description)}</p><small style="color:var(--text-muted);">${dxEsc(a.courseName)}${due ? ' • Due: ' + dxWhen(a.dueDate) : ''}</small>
                         ${sb && sb.grade ? `<p style="margin-top:10px;color:var(--water-cyan);"><b>Grade: ${dxEsc(sb.grade)}</b>${sb.feedback ? ' - ' + dxEsc(sb.feedback) : ''}</p>` : ''}
-                        ${sb && sb.grade ? '' : `<textarea class="dx-ans" rows="3" placeholder="Write your answer or paste your work link..." style="width:100%;margin:12px 0 8px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--navy-border);background:var(--navy-dark);color:#fff;font:inherit;">${dxEsc(sb ? sb.answer : '')}</textarea><button class="btn btn-gradient dx-sub" data-id="${a.id}" data-course="${dxEsc(a.courseName)}" data-batch="${dxEsc(a.batch || '')}">${sb ? 'Update Submission' : 'Submit Assignment'}</button>`}</div>`; }).join('');
+                        ${sb && sb.grade ? '' : `<textarea class="dx-ans" rows="3" placeholder="Write your answer or paste your work link..." style="width:100%;margin:12px 0 8px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--navy-border);background:var(--navy-dark);color: var(--text-pure);font:inherit;">${dxEsc(sb ? sb.answer : '')}</textarea><button class="btn btn-gradient dx-sub" data-id="${a.id}" data-course="${dxEsc(a.courseName)}" data-batch="${dxEsc(a.batch || '')}">${sb ? 'Update Submission' : 'Submit Assignment'}</button>`}</div>`; }).join('');
                     box.querySelectorAll('.dx-sub').forEach(b => b.addEventListener('click', async () => {
                         const ans = b.parentElement.querySelector('.dx-ans').value.trim(); if (!ans) return showToast('Please write your answer first.', 'error');
                         b.disabled = true;
@@ -4297,7 +4588,7 @@
                 try {
                     const sn = await db.collection('supportTickets').where('uid','==',u.uid).get();
                     const t = sn.docs.map(d => d.data()).sort((a, b) => (b.createdAt ? b.createdAt.toMillis() : 0) - (a.createdAt ? a.createdAt.toMillis() : 0));
-                    box.innerHTML = t.length ? t.map(x => `<div class="dx-panel" style="margin-bottom:14px;"><div class="dx-head"><h3>${dxEsc(x.subject)}</h3><span class="dx-status ${x.reply ? 'done' : ''}" style="position:static;">${x.reply ? 'Replied' : 'Open'}</span></div><p style="color:#cbd5e1;">${dxEsc(x.message)}</p><small style="color:var(--text-muted);">${dxWhen(x.createdAt)}</small>${x.reply ? `<p style="margin-top:12px;padding:12px;border-radius:var(--radius-sm);background:var(--water-glow-subtle);color:#fff;"><b>Support:</b> ${dxEsc(x.reply)}</p>` : ''}</div>`).join('') : '<p class="dx-empty">No support requests yet.</p>';
+                    box.innerHTML = t.length ? t.map(x => `<div class="dx-panel" style="margin-bottom:14px;"><div class="dx-head"><h3>${dxEsc(x.subject)}</h3><span class="dx-status ${x.reply ? 'done' : ''}" style="position:static;">${x.reply ? 'Replied' : 'Open'}</span></div><p style="color: var(--text-soft);">${dxEsc(x.message)}</p><small style="color:var(--text-muted);">${dxWhen(x.createdAt)}</small>${x.reply ? `<p style="margin-top:12px;padding:12px;border-radius:var(--radius-sm);background:var(--water-glow-subtle);color: var(--text-pure);"><b>Support:</b> ${dxEsc(x.reply)}</p>` : ''}</div>`).join('') : '<p class="dx-empty">No support requests yet.</p>';
                 } catch (e) { box.innerHTML = '<p class="dx-empty">Could not load requests.</p>'; }
             };
             document.getElementById('dx-sup-send').addEventListener('click', async function() {
@@ -4345,7 +4636,7 @@
                 try {
                     if (!window.__cpList) window.__cpList = cpBuildList(await db.collection('courses').get());
                     const list = window.__cpList, c = list.find(x => x.slug === slug) || list.find(x => x.id === slug);
-                    if (!c) { root.innerHTML = '<div class="container" style="padding:80px 0;text-align:center;"><h2 style="color:#fff;">কোর্সটি পাওয়া যায়নি</h2><p style="color:var(--text-body);margin:10px 0 20px;">লিংকটি ভুল বা কোর্সটি আর চালু নেই।</p><a href="/courses" class="btn btn-gradient" data-go="courses" style="width:auto;display:inline-flex;">সব কোর্স দেখুন</a></div>'; cpBind(root); return; }
+                    if (!c) { root.innerHTML = '<div class="container" style="padding:80px 0;text-align:center;"><h2 style="color: var(--text-pure);">কোর্সটি পাওয়া যায়নি</h2><p style="color:var(--text-body);margin:10px 0 20px;">লিংকটি ভুল বা কোর্সটি আর চালু নেই।</p><a href="/courses" class="btn btn-gradient" data-go="courses" style="width:auto;display:inline-flex;">সব কোর্স দেখুন</a></div>'; cpBind(root); return; }
                     cpRender(root, c, list);
                 } catch (e) { root.innerHTML = '<div class="container" style="padding:80px 0;text-align:center;color:#ef4444;">পেজ লোড করা যায়নি। আবার চেষ্টা করুন।</div>'; }
             }
@@ -4452,7 +4743,7 @@
                 }
                 if (!mods.length) return;
                 document.getElementById('cp-syllabus-sec').classList.remove('hidden');
-                document.getElementById('cp-syllabus').innerHTML = mods.map((m, i) => `<div class="curriculum-module"><div class="module-header" data-target="cp-mod-${i}"><span>${cpEsc(m.title)}</span><span class="material-symbols-outlined">expand_more</span></div><ul class="module-videos" id="cp-mod-${i}">${(m.lessons || []).map(t => `<li style="padding:12px 18px;border-top:1px solid rgba(56,189,248,.1);display:flex;justify-content:space-between;align-items:center;gap:10px;color:#94a3b8;"><span style="display:flex;align-items:center;gap:10px;"><span class="material-symbols-outlined" style="color:var(--water-cyan);">play_circle</span>${cpEsc(t)}</span><span class="material-symbols-outlined" style="color:#f59e0b;font-size:18px;">lock</span></li>`).join('')}</ul></div>`).join('');
+                document.getElementById('cp-syllabus').innerHTML = mods.map((m, i) => `<div class="curriculum-module"><div class="module-header" data-target="cp-mod-${i}"><span>${cpEsc(m.title)}</span><span class="material-symbols-outlined">expand_more</span></div><ul class="module-videos" id="cp-mod-${i}">${(m.lessons || []).map(t => `<li style="padding:12px 18px;border-top:1px solid rgba(26, 86, 219,.1);display:flex;justify-content:space-between;align-items:center;gap:10px;color: var(--text-body);"><span style="display:flex;align-items:center;gap:10px;"><span class="material-symbols-outlined" style="color:var(--water-cyan);">play_circle</span>${cpEsc(t)}</span><span class="material-symbols-outlined" style="color:#f59e0b;font-size:18px;">lock</span></li>`).join('')}</ul></div>`).join('');
                 document.querySelectorAll('#cp-syllabus .module-header').forEach(h => h.addEventListener('click', () => { h.classList.toggle('active'); document.getElementById(h.dataset.target).classList.toggle('show'); }));
             }
 
