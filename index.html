@@ -2352,6 +2352,25 @@
         body:has(#course-page:not(.hidden)) #floating-whatsapp-btn { bottom: 150px; }
         @media (min-width: 821px) { body:has(#course-page:not(.hidden)) #floating-whatsapp-btn { bottom: 24px; } }
 
+        /* ---- student dashboard: independent scroll areas on desktop ---- */
+        @media (min-width: 901px) {
+            .dashboard-sidebar { position: sticky; top: 86px; display: flex; flex-direction: column; gap: 14px; max-height: calc(100vh - 104px); overflow: hidden; }
+            .dashboard-sidebar .sidebar-welcome-card { flex: 0 0 auto; margin: 0; }
+            .dashboard-sidebar .sidebar-nav { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; margin: 0; padding-right: 6px; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.3) transparent; }
+            .dashboard-sidebar .sidebar-nav::-webkit-scrollbar { width: 6px; }
+            .dashboard-sidebar .sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+            .dashboard-sidebar .sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,.28); border-radius: 6px; border: 0; }
+            .dashboard-sidebar .sidebar-nav::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.5); }
+            .dashboard-sidebar .dx-promo { flex: 0 0 auto; margin: 0; }
+        }
+        @media (min-width: 901px) and (max-height: 820px) { .dashboard-sidebar .dx-promo { display: none; } }
+        @media (min-width: 1101px) {
+            .dx-side { position: sticky; top: 86px; align-self: start; max-height: calc(100vh - 104px); overflow-y: auto; overscroll-behavior: contain; padding: 2px 6px 2px 2px; scrollbar-width: thin; scrollbar-color: #B7C6DE transparent; }
+            .dx-side::-webkit-scrollbar { width: 6px; }
+            .dx-side::-webkit-scrollbar-thumb { background: #B7C6DE; border-radius: 6px; border: 0; }
+            .dx-side::-webkit-scrollbar-thumb:hover { background: #1A56DB; }
+        }
+
     </style>
 </head>
 <body>
