@@ -650,6 +650,20 @@
         @media (max-width: 900px) { .promo { padding-bottom: 120px; } }
         @media (max-width: 768px) { .main-content { margin-left: 0; width: 100%; } .sidebar { width: 288px; } }
         html[data-theme="dark"] .stat-card[style*="background: #f0fdf4"] { background: linear-gradient(160deg, rgba(22,120,78,.55), rgba(16,60,44,.7)) !important; }
+    
+        /* ---- student list: filters, NEW highlight, badge ---- */
+        .user-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 16px; }
+        .uchip { border: 1px solid var(--border-color); background: #fff; border-radius: 999px; padding: 7px 14px; font: inherit; font-size: .82rem; font-weight: 600; color: #334155; cursor: pointer; }
+        .uchip b { margin-left: 6px; background: rgba(22,167,101,.12); color: var(--primary-blue); border-radius: 999px; padding: 1px 8px; font-size: .74rem; }
+        .uchip:hover { border-color: var(--primary-blue); }
+        .uchip.active { background: var(--primary-blue); border-color: var(--primary-blue); color: #fff; }
+        .uchip.active b { background: rgba(255,255,255,.25); color: #fff; }
+        .row-new { background: rgba(22,167,101,.07); }
+        .row-new td:first-child { box-shadow: inset 3px 0 0 var(--primary-blue); }
+        .new-pill { background: #16a34a; color: #fff; font-size: .62rem; font-weight: 800; padding: 2px 7px; border-radius: 999px; margin-left: 8px; letter-spacing: .05em; vertical-align: middle; }
+        .dx-new-badge { margin-left: auto; background: #ef4444; color: #fff; font-size: .68rem; font-weight: 800; padding: 2px 8px; border-radius: 999px; }
+            #users-page .content-box { overflow-x: auto; }
+        #users-page .data-table th, #users-page .data-table td { padding-left: 10px; padding-right: 10px; }
     </style>
 </head>
 
@@ -1152,10 +1166,11 @@
             <!-- Users Page -->
             <div id="users-page" class="page">
                 <div class="page-header"><h1>Student Management</h1><button class="btn btn-add" onclick="dxGenerateIds()"><span class="material-symbols-outlined">badge</span> Generate Missing Student IDs</button></div>
-                <div class="search-bar-container"><input type="text" id="user-search-input" placeholder="Search students by name, email, or mobile..."></div>
+                <div class="search-bar-container"><input type="text" id="user-search-input" placeholder="Search by name, email, mobile or Student ID..."></div>
+                <div class="user-chips" id="user-chips"></div>
                 <div class="content-box">
                     <table class="data-table">
-                        <thead><tr><th>Student ID</th><th>Name</th><th>Email</th><th>Mobile</th><th>Referral Code</th><th>Balance</th><th>Status</th><th>Action</th></tr></thead>
+                        <thead><tr><th>Student ID</th><th>Name</th><th>Email</th><th>Mobile</th><th>Registered</th><th>Referral Code</th><th>Balance</th><th>Status</th><th>Action</th></tr></thead>
                         <tbody id="users-table-body"></tbody>
                     </table>
                 </div>
@@ -1678,7 +1693,7 @@
                 if (user) {
                     const em = (user.email || '').toLowerCase();
                     if (em === ADMIN_EMAIL) {
-                        window.ROLE = 'admin'; setTimeout(() => { if (window.dxSyncAll) window.dxSyncAll().catch(() => {}); }, 2500);
+                        window.ROLE = 'admin'; setTimeout(() => { if (window.dxSyncAll) window.dxSyncAll().catch(() => {}); }, 2500); setTimeout(() => dxNewUsersInit(), 1500);
                         loginPage.classList.add('hidden'); adminPanel.classList.remove('hidden'); navigateTo('dashboard-page');
                     } else {
                         try {
@@ -2609,12 +2624,7 @@
                 });
             });
 
-            document.getElementById('user-search-input')?.addEventListener('input', function() {
-                const val = this.value.toLowerCase();
-                document.querySelectorAll('#users-table-body tr').forEach(r => {
-                    r.style.display = r.textContent.toLowerCase().includes(val) ? '' : 'none';
-                });
-            });
+            document.getElementById('user-search-input')?.addEventListener('input', function() { window.__dxUserLimit = DX_PAGE; dxUsersView(); });
 
             document.getElementById('cert-search-input')?.addEventListener('input', function() {
                 const val = this.value.toLowerCase();
@@ -2938,40 +2948,98 @@
             }
 
             // RENDER STUDENTS (USERS)
+            const DX_PAGE = 100;
+            const dxq = s => dxe(String(s == null ? '' : s).replace(/\\/g, '\\\\').replace(/'/g, "\\'"));
+            function dxAgo(ms) {
+                const m = Math.floor((Date.now() - ms) / 60000);
+                if (m < 1) return 'just now'; if (m < 60) return m + ' min ago';
+                const h = Math.floor(m / 60); if (h < 24) return h + ' hr ago';
+                const d = Math.floor(h / 24); return d < 30 ? d + ' day' + (d > 1 ? 's' : '') + ' ago' : '';
+            }
+            function dxUserMatches(u, f) {
+                const age = Date.now() - u._t, day = 86400000;
+                if (f === 'today') return u._t > 0 && age < day;
+                if (f === 'week') return u._t > 0 && age < 7 * day;
+                if (f === 'unverified') return u.email_verified === false;
+                if (f === 'noid') return !u.studentId;
+                return true;
+            }
+            function dxUpdateNewBadge() {
+                const el = document.getElementById('dx-new-users'); if (!el) return;
+                const n = window.__dxUsers ? window.__dxUsers.filter(u => dxUserMatches(u, 'today')).length : (window.__dxNew24 || 0);
+                window.__dxNew24 = n; el.textContent = n; el.classList.toggle('hidden', !n);
+            }
+            function dxUserRow(u) {
+                const isNew = u._t > 0 && (Date.now() - u._t) < 2 * 86400000;
+                const when = u._t ? `${new Date(u._t).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}<br><small style="color:#64748b;">${new Date(u._t).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}${dxAgo(u._t) ? ' &middot; ' + dxAgo(u._t) : ''}</small>` : '<small style="color:#94a3b8;">-</small>';
+                const ver = u.email_verified === false ? '<span class="status-badge pending">Unverified</span>' : '<span class="status-badge approved">Verified</span>';
+                return `<tr class="${isNew ? 'row-new' : ''}">
+                    <td data-label="ID"><strong>${dxe(u.studentId) || '-'}</strong></td>
+                    <td data-label="Name"><strong>${dxe(u.name) || 'N/A'}</strong>${isNew ? '<span class="new-pill">NEW</span>' : ''}</td>
+                    <td data-label="Email">${dxe(u.email) || 'N/A'}</td>
+                    <td data-label="Mobile"><span style="cursor:pointer; text-decoration:underline;" onclick="copyToClipboard('${dxq(u.mobile)}')" title="Click to copy">${dxe(u.mobile) || 'N/A'}</span></td>
+                    <td data-label="Registered" style="white-space:nowrap;">${when}</td>
+                    <td data-label="Referral">${dxe(u.referralCode) || 'N/A'}</td>
+                    <td data-label="Balance">৳ ${dxe(u.affiliateBalance || 0)}</td>
+                    <td data-label="Status">${ver}</td>
+                    <td class="actions-cell" data-label="Action">
+                        <button class="btn-whatsapp" onclick="openStudentWhatsappModal('${dxq(u.mobile)}', '${dxq(u.name)}')" title="Send WhatsApp"><span class="material-symbols-outlined">chat</span></button>
+                        <button class="btn-edit" onclick="openModalForEdit('users', '${dxq(u.id)}')" title="Edit Student"><span class="material-symbols-outlined">edit</span></button>
+                        <button class="btn-delete" onclick="deleteItem('users', '${dxq(u.id)}')" title="Delete"><span class="material-symbols-outlined">delete</span></button>
+                    </td></tr>`;
+            }
+            function dxUsersView() {
+                const tb = document.getElementById('users-table-body'), chips = document.getElementById('user-chips'); if (!tb) return;
+                const all = window.__dxUsers || [], f = window.__dxUserFilter || 'all';
+                const q = ((document.getElementById('user-search-input') || {}).value || '').trim().toLowerCase();
+                const defs = [['all', 'All'], ['today', 'Last 24h'], ['week', 'Last 7 days'], ['unverified', 'Unverified'], ['noid', 'No Student ID']];
+                if (chips) chips.innerHTML = defs.map(d => `<button type="button" class="uchip ${f === d[0] ? 'active' : ''}" data-f="${d[0]}">${d[1]} <b>${all.filter(u => dxUserMatches(u, d[0])).length}</b></button>`).join('');
+                let rows = all.filter(u => dxUserMatches(u, f));
+                if (q) rows = rows.filter(u => [u.name, u.email, u.mobile, u.studentId, u.referralCode].join(' ').toLowerCase().includes(q));
+                const limit = window.__dxUserLimit || DX_PAGE, shown = rows.slice(0, limit);
+                tb.innerHTML = shown.map(dxUserRow).join('') + (rows.length > shown.length ? `<tr><td colspan="9" style="text-align:center;"><button type="button" class="btn btn-add" onclick="dxUsersMore()">Show more (${rows.length - shown.length} remaining)</button></td></tr>` : '') || '<tr><td colspan="9" style="text-align:center;">No students match.</td></tr>';
+            }
+            window.dxUsersMore = () => { window.__dxUserLimit = (window.__dxUserLimit || DX_PAGE) + DX_PAGE; dxUsersView(); };
             async function renderUsers() {
                 const tableBody = document.getElementById('users-table-body');
                 if (!tableBody) return;
-                tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center;">Loading students...</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="9" style="text-align: center;">Loading students...</td></tr>`;
                 try {
                     const usersSnapshot = await db.collection('users').get();
-                    if (usersSnapshot.empty) {
-                        tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center;">No students found.</td></tr>`;
-                        return;
-                    }
-                    let tableHTML = '';
-                    usersSnapshot.forEach(doc => {
-                        const user = { id: doc.id, ...doc.data() };
-                        tableHTML += `<tr>
-                            <td data-label="ID"><strong>${user.studentId || '-'}</strong></td>
-                            <td data-label="Name"><strong>${user.name || 'N/A'}</strong></td>
-                            <td data-label="Email">${user.email || 'N/A'}</td>
-                            <td data-label="Mobile"><span style="cursor:pointer; text-decoration:underline;" onclick="copyToClipboard('${user.mobile || ''}')" title="Click to copy">${user.mobile || 'N/A'}</span></td>
-                            <td data-label="Referral">${user.referralCode || 'N/A'}</td>
-                            <td data-label="Balance">৳ ${user.affiliateBalance || 0}</td>
-                            <td data-label="Status"><span class="status-badge approved">Verified</span></td>
-                            <td class="actions-cell" data-label="Action">
-                                <button class="btn-whatsapp" onclick="openStudentWhatsappModal('${user.mobile || ''}', '${user.name || ''}')" title="Send WhatsApp"><span class="material-symbols-outlined">chat</span></button>
-                                <button class="btn-edit" onclick="openModalForEdit('users', '${user.id}')" title="Edit Student"><span class="material-symbols-outlined">edit</span></button>
-                                <button class="btn-delete" onclick="deleteItem('users', '${user.id}')" title="Delete"><span class="material-symbols-outlined">delete</span></button>
-                            </td>
-                        </tr>`;
-                    });
-                    tableBody.innerHTML = tableHTML;
+                    window.__dxUsers = usersSnapshot.docs.map(d => { const u = { id: d.id, ...d.data() }; u._t = u.timestamp && u.timestamp.toMillis ? u.timestamp.toMillis() : 0; return u; }).sort((x, y) => y._t - x._t);
+                    window.__dxUserLimit = DX_PAGE;
+                    if (!window.__dxUsers.length) { tableBody.innerHTML = `<tr><td colspan="9" style="text-align: center;">No students found.</td></tr>`; return; }
+                    dxUsersView(); dxUpdateNewBadge();
                 } catch (error) {
                     console.error("renderUsers error:", error);
-                    tableBody.innerHTML = `<tr><td colspan="7" style="color: red; text-align: center;">Error: ${error.message}</td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="9" style="color: red; text-align: center;">Error: ${error.message}</td></tr>`;
                 }
             }
+            /* sidebar badge + live alert when a new student registers (admin only) */
+            async function dxNewUsersInit() {
+                if (window.ROLE !== 'admin' || window.__dxNewInit) return; window.__dxNewInit = true;
+                const link = document.querySelector('.sidebar-nav li[data-page="users-page"] a');
+                if (link && !document.getElementById('dx-new-users')) { const sp = document.createElement('span'); sp.id = 'dx-new-users'; sp.className = 'dx-new-badge hidden'; link.appendChild(sp); }
+                try {
+                    const since = firebase.firestore.Timestamp.fromDate(new Date(Date.now() - 86400000));
+                    window.__dxNew24 = (await db.collection('users').where('timestamp', '>', since).get()).size; dxUpdateNewBadge();
+                } catch (e) { console.warn('new users count', e); }
+                let first = true;
+                db.collection('users').orderBy('timestamp', 'desc').limit(1).onSnapshot(snap => {
+                    if (first) { first = false; return; }
+                    snap.docChanges().forEach(ch => {
+                        if (ch.type !== 'added') return;
+                        const u = ch.doc.data();
+                        showToast('New student registered: ' + (u.name || u.email || ''), 'success');
+                        if (window.__dxUsers) window.__dxUsers = null; window.__dxNew24 = (window.__dxNew24 || 0) + 1; dxUpdateNewBadge();
+                        const pg = document.getElementById('users-page'); if (pg && pg.classList.contains('active')) renderUsers();
+                    });
+                }, () => {});
+            }
+            document.getElementById('user-chips')?.addEventListener('click', e => {
+                const b = e.target.closest('[data-f]'); if (!b) return;
+                window.__dxUserFilter = b.getAttribute('data-f'); window.__dxUserLimit = DX_PAGE; dxUsersView();
+            });
 
             // GENERIC RENDERER
             async function renderGeneric(collection, tableBodyId, rowRenderer) {
