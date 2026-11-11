@@ -1097,6 +1097,15 @@
                         <button type="submit" class="btn btn-primary" style="width:auto; height:48px;"><span class="material-symbols-outlined">person_add</span> লিড সেভ করুন</button>
                     </form>
                 </div>
+                <div class="content-box">
+                    <h3 style="margin-bottom:8px; font-weight:700;">৩. Google Sheet থেকে একসাথে ইমপোর্ট</h3>
+                    <p style="font-size:.85em; color:var(--text-muted); margin-bottom:12px;">Google Sheet-এ নাম ও নাম্বারের ঘরগুলো সিলেক্ট করে কপি (Ctrl+C) করুন, তারপর নিচের বক্সে পেস্ট (Ctrl+V) করুন। পেস্ট করলেই অটো সেভ হবে। কলাম আগে-পরে থাকলেও সমস্যা নেই, নাম ও নাম্বার নিজে বুঝে নেবে। হেডার লাইন ও ভুল নাম্বার বাদ যাবে, আগের নাম্বার দ্বিতীয়বার সেভ হবে না।</p>
+                    <textarea id="fc-paste" rows="5" placeholder="এখানে পেস্ট করুন...&#10;Rahim	01712345678&#10;Karim	01812345679"></textarea>
+                    <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:12px;">
+                        <button type="button" class="btn btn-primary" id="fc-paste-btn" style="width:auto;"><span class="material-symbols-outlined">upload</span> ইমপোর্ট করুন</button>
+                        <span id="fc-paste-result" style="font-size:.88em; color:var(--text-muted);"></span>
+                    </div>
+                </div>
                 <div class="user-chips" id="fc-chips"></div>
                 <div class="search-bar-container"><input type="text" id="fc-search" placeholder="নাম বা নাম্বার দিয়ে খুঁজুন..."></div>
                 <div class="content-box">
@@ -4186,6 +4195,44 @@
         } catch (e) { toast('মেসেজ পাঠানো যায়নি: ' + e.message, 'error'); return false; }
     }
 
+    function parsePaste(text) {
+        const out = [], seen = new Set(); let invalid = 0, dup = 0;
+        String(text || '').split(/\r?\n/).forEach(raw => {
+            const line = raw.trim(); if (!line) return;
+            let mobile = null, rest = [];
+            const cells = line.split(/\t|,|;|\|/).map(c => c.trim()).filter(Boolean);
+            cells.forEach(c => { const n = !mobile && !/[^\d\s+\-()]/.test(c) ? normPhone(c) : null; if (n) mobile = n; else rest.push(c); });
+            if (!mobile) {
+                const m = line.match(/(?:\+?88)?[\s-]*0?1[3-9](?:[\s-]*\d){8}/);
+                if (m) { mobile = normPhone(m[0]); rest = [line.replace(m[0], ' ')]; }
+            }
+            if (!mobile) { if (/\d{6,}/.test(line)) invalid++; return; }
+            const name = (rest.find(c => /[A-Za-z\u0980-\u09FF]/.test(c)) || 'Student').replace(/[,;|]+/g, ' ').replace(/\s+/g, ' ').trim() || 'Student';
+            if (seen.has(mobile) || LEADS.some(l => l.mobile === mobile)) { dup++; return; }
+            seen.add(mobile); out.push({ name, mobile });
+        });
+        return { out, invalid, dup };
+    }
+    async function importPaste() {
+        const box = $('fc-paste'), res = $('fc-paste-result'), text = box.value;
+        if (!text.trim()) return toast('আগে Google Sheet থেকে কপি করা ডাটা পেস্ট করুন।', 'error');
+        const { out, invalid, dup } = parsePaste(text);
+        if (!out.length) { res.textContent = `নতুন কোনো লিড পাওয়া যায়নি (ডুপ্লিকেট ${dup}, ভুল নাম্বার ${invalid})।`; return toast('নতুন লিড পাওয়া যায়নি।', 'error'); }
+        res.textContent = 'সেভ হচ্ছে...';
+        try {
+            let b = db.batch(), n = 0;
+            for (const l of out) {
+                b.set(db.collection('free_class_leads').doc(), { name: l.name, mobile: l.mobile, source: 'Google Sheet', status: 'new', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                if (++n % 400 === 0) { await b.commit(); b = db.batch(); }
+            }
+            if (n % 400 !== 0) await b.commit();
+            box.value = '';
+            res.textContent = `✅ ${out.length} জন সেভ হয়েছে। বাদ: ডুপ্লিকেট ${dup}, ভুল নাম্বার ${invalid}।`;
+            toast(`${out.length} জন লিড সেভ হয়েছে।`);
+            window.renderFreeClass();
+        } catch (e) { res.textContent = ''; toast('সেভ হয়নি: ' + e.message, 'error'); }
+    }
+
     function filtered() {
         const q = ($('fc-search').value || '').trim().toLowerCase();
         return LEADS.filter(l => (FILTER === 'all' || l.status === FILTER) && (!q || (l.name + ' ' + l.mobile).toLowerCase().includes(q)));
@@ -4253,6 +4300,8 @@
             } catch (err) { toast('সেভ হয়নি: ' + err.message, 'error'); }
         });
 
+        $('fc-paste-btn').addEventListener('click', importPaste);
+        $('fc-paste').addEventListener('paste', () => setTimeout(importPaste, 100));
         $('fc-search').addEventListener('input', draw);
         $('fc-chips').addEventListener('click', e => { const b = e.target.closest('[data-f]'); if (b) { FILTER = b.dataset.f; draw(); } });
 
