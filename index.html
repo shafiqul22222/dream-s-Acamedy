@@ -1393,67 +1393,85 @@
         }
         .btn-pay-now:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(26, 86, 219, 0.5); }
 
-        /* bKash Modal Elements */
-        #payment-modal .login-card { max-width: 440px; display: block; border-radius: var(--radius-lg); overflow: hidden; }
-        .bkash-wrapper { width: 100%; }
-        .bkash-top-header { background: #fff; padding: 20px; display: flex; justify-content: center; }
-        .bkash-top-header img { height: 38px; }
-        .bkash-invoice-bar {
-            background: #f8fafc;
-            padding: 16px 22px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .bkash-merchant-info strong { font-size: 0.95rem; color: #0f172a; display: block; }
-        .bkash-merchant-info span { font-size: 0.8rem; color: #64748b; }
-        .bkash-amount { font-size: 1.25rem; font-weight: 800; color: var(--bkash-pink); }
-        .bkash-body-pink { background: var(--bkash-gradient); padding: 34px 24px; text-align: center; color: #fff; }
-        .bkash-body-pink input[type="number"], .bkash-trx-input {
-            width: 100%;
-            padding: 15px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            text-align: center;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: var(--radius-sm);
-            background: rgba(255, 255, 255, 0.12);
-            color: #fff;
-            outline: none;
-            margin-bottom: 20px;
-        }
-        .bkash-footer { display: flex; }
-        .bkash-footer button {
-            flex: 1;
-            padding: 18px;
-            font-size: 1rem;
-            font-weight: 800;
-            cursor: pointer;
-            border: none;
-            text-transform: uppercase;
-        }
-        #bkash-close-btn { background: #e2e8f0; color: #475569; }
-        #bkash-confirm-btn { background: #cbd5e1; color: var(--text-body); pointer-events: none; }
-        #bkash-confirm-btn.active { background: var(--bkash-pink); color: #fff; pointer-events: auto; }
-        .bkash-merchant-box {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px dashed rgba(255, 255, 255, 0.4);
-            border-radius: var(--radius-sm);
-            padding: 16px;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        .number-copy-row { display: flex; justify-content: space-between; align-items: center; }
-        .number-copy-row h2 { color: #fff; font-size: 1.5rem; letter-spacing: 2px; }
-        .number-copy-row button {
-            background: rgba(255, 255, 255, 0.25);
-            border: none;
-            color: #fff;
-            padding: 8px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
+        /* bKash Payment Page (bKash checkout style) */
+        #payment-modal .login-card.bk-card { max-width: 420px; display: block; padding: 0; background: #fff; border: 0; border-radius: 14px; overflow: hidden; position: relative; box-shadow: 0 24px 60px -12px rgba(0,0,0,.55); font-family: 'Inter','Noto Sans Bengali',sans-serif; }
+        .bk-header { background: #fff; padding: 14px 20px; display: flex; justify-content: center; align-items: center; border-bottom: 1px solid #eee; }
+        .bk-header img { height: 36px; width: auto; }
+        .bk-merchant { background: #fff; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; gap: 12px; border-bottom: 1px solid #f0e3ea; }
+        .bk-m-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+        .bk-m-logo { width: 44px; height: 44px; border-radius: 50%; border: 1px solid #eee; object-fit: contain; background: #fff; padding: 3px; flex: 0 0 44px; }
+        .bk-m-left strong { display: block; color: #222; font-size: 0.95rem; line-height: 1.25; }
+        .bk-m-left span { display: block; color: #777; font-size: 0.78rem; margin-top: 2px; }
+        .bk-amount { color: #e2136e; font-size: 1.35rem; font-weight: 800; white-space: nowrap; }
+        .bk-body { background: #e2136e; color: #fff; padding: 22px 22px 26px; text-align: center; }
+        .bk-steps { display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+        .bk-step { display: flex; flex-direction: column; align-items: center; gap: 5px; width: 74px; font-size: 0.68rem; font-weight: 600; opacity: .7; }
+        .bk-step i { font-style: normal; width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(255,255,255,.7); display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 800; }
+        .bk-step.active { opacity: 1; }
+        .bk-step.active i { background: #fff; color: #e2136e; border-color: #fff; }
+        .bk-step.done { opacity: 1; }
+        .bk-step.done i { background: rgba(255,255,255,.25); border-color: #fff; }
+        .bk-step-line { flex: 0 0 34px; height: 2px; background: rgba(255,255,255,.45); margin-bottom: 18px; }
+        .bk-step-line.done { background: #fff; }
+        .bk-label { font-size: 0.95rem; font-weight: 600; margin-bottom: 12px; }
+        .bk-input { width: 100%; padding: 13px 14px; font-size: 1.05rem; font-weight: 600; text-align: center; border: 0; border-radius: 8px; background: #fff; color: #333; outline: none; box-shadow: inset 0 1px 3px rgba(0,0,0,.12); }
+        .bk-input::placeholder { color: #aaa; font-weight: 500; }
+        .bk-input:focus { box-shadow: 0 0 0 3px rgba(255,255,255,.45); }
+        .bk-terms { font-size: 0.78rem; margin-top: 14px; opacity: .95; line-height: 1.5; }
+        .bk-terms u { text-underline-offset: 2px; }
+        .bk-sendbox { background: #fff; color: #333; border-radius: 10px; padding: 14px 16px; text-align: left; margin-bottom: 16px; }
+        .bk-sendbox small { color: #777; font-size: 0.74rem; display: block; }
+        .bk-sendrow { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 4px 0 10px; }
+        .bk-sendrow h2 { color: #e2136e; font-size: 1.5rem; letter-spacing: 1.5px; margin: 0; }
+        .bk-sendrow button { background: #fde7f0; color: #e2136e; border: 0; border-radius: 8px; padding: 7px 9px; cursor: pointer; display: flex; }
+        .bk-sum { border-top: 1px dashed #e7c8d7; padding-top: 10px; display: grid; gap: 6px; font-size: 0.84rem; }
+        .bk-sum div { display: flex; justify-content: space-between; gap: 12px; }
+        .bk-sum span { color: #777; }
+        .bk-sum b { color: #222; text-align: right; }
+        .bk-sum .amt { color: #e2136e; }
+        .bk-note { font-size: 0.8rem; opacity: .95; margin-bottom: 10px; text-align: left; line-height: 1.5; }
+        .bk-footer { display: flex; background: #fff; }
+        .bk-footer button { flex: 1; padding: 16px 10px; border: 0; font-family: inherit; font-size: 0.98rem; font-weight: 700; cursor: pointer; transition: background .15s; }
+        .bk-btn-close { background: #ececec; color: #555; }
+        .bk-btn-close:hover { background: #e1e1e1; }
+        .bk-btn-confirm { background: #e2136e; color: #fff; }
+        .bk-btn-confirm:hover { background: #cc0f60; }
+        #bkash-confirm-btn { background: #f1a9c8; color: #fff; pointer-events: none; }
+        #bkash-confirm-btn.active { background: #e2136e; pointer-events: auto; }
+        #payment-submit-btn:disabled { background: #f1a9c8; cursor: wait; }
+        .bk-overlay { position: absolute; inset: 0; background: #fff; z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 28px 26px; transition: opacity .2s; }
+        .bk-overlay.hidden { display: none; }
+        .bk-overlay.bk-soft { background: rgba(255,255,255,.93); }
+        .bk-overlay h3 { color: #222; font-size: 1.2rem; margin: 14px 0 6px; }
+        .bk-overlay p { color: #666; font-size: 0.9rem; margin: 0 0 20px; line-height: 1.5; }
+        .bk-ov-btns { display: flex; gap: 10px; width: 100%; }
+        .bk-ov-btns button { flex: 1; padding: 13px; border: 0; border-radius: 8px; font-family: inherit; font-weight: 700; font-size: 0.95rem; cursor: pointer; }
+        .bk-ov-icon { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .bk-ov-icon .material-symbols-outlined { font-size: 34px; }
+        .bk-spinner { width: 58px; height: 58px; border-radius: 50%; border: 5px solid #fbd3e3; border-top-color: #e2136e; animation: bkspin .8s linear infinite; }
+        @keyframes bkspin { to { transform: rotate(360deg); } }
+        .bk-bar { width: 150px; height: 4px; background: #fbd3e3; border-radius: 4px; overflow: hidden; margin-top: 18px; }
+        .bk-bar::after { content: ""; display: block; width: 45%; height: 100%; background: #e2136e; border-radius: 4px; animation: bkbar 1.1s ease-in-out infinite; }
+        @keyframes bkbar { 0% { transform: translateX(-100%); } 100% { transform: translateX(340%); } }
+
+        /* bKash success screen */
+        .bk-success { background: #fff !important; border: 0 !important; max-width: 400px !important; border-radius: 14px !important; text-align: center; font-family: 'Inter','Noto Sans Bengali',sans-serif; }
+        .bk-s-top { background: #e2136e; color: #fff; padding: 26px 20px 22px; }
+        .bk-s-check { width: 70px; height: 70px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; animation: bkpop .45s cubic-bezier(.2,1.4,.4,1); }
+        .bk-s-check svg { width: 38px; height: 38px; }
+        .bk-s-check path { stroke-dasharray: 40; stroke-dashoffset: 40; animation: bkdraw .5s .25s ease forwards; }
+        @keyframes bkpop { from { transform: scale(.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes bkdraw { to { stroke-dashoffset: 0; } }
+        .bk-s-top h2 { color: #fff; font-size: 1.3rem; margin: 0 0 4px; }
+        .bk-s-top .bk-s-amt { font-size: 1.9rem; font-weight: 800; }
+        .bk-s-body { padding: 20px 22px 22px; background: #fff; }
+        .bk-s-rows { display: grid; gap: 10px; font-size: 0.88rem; margin-bottom: 18px; text-align: left; }
+        .bk-s-rows div { display: flex; justify-content: space-between; gap: 14px; padding-bottom: 9px; border-bottom: 1px solid #f1e6ec; }
+        .bk-s-rows span { color: #777; }
+        .bk-s-rows b { color: #222; text-align: right; word-break: break-all; }
+        .bk-s-btns { display: flex; gap: 10px; }
+        .bk-s-btns button { flex: 1; padding: 13px; border-radius: 8px; font-family: inherit; font-weight: 700; font-size: 0.95rem; cursor: pointer; border: 0; }
+        #custom-error-modal #close-custom-error-btn { background: #e2136e; border-color: #e2136e; color: #fff; }
 
         /* Success & Custom Error Dialogs */
         .payment-verification-modal {
@@ -2757,81 +2775,111 @@
 
         <!-- bKash Modal -->
         <div class="login-modal hidden" id="payment-modal">
-            <div class="login-card">
-                <div class="bkash-wrapper">
-                    <div id="bkash-step-1">
-                        <div class="bkash-top-header"><img src="https://i.postimg.cc/44jBKNGq/image-removebg-preview-(1).png" alt="Dreams Academy bKash Merchant Payment"></div>
-                        <div class="bkash-invoice-bar">
-                            <div class="bkash-merchant-info">
-                                <strong>M/S Dreams Academy</strong><span id="bkash-invoice-no">Inv No: DA-12345678</span>
-                            </div>
-                            <div class="bkash-amount" id="bkash-step1-amount">৳0.00</div>
-                        </div>
-                        <div class="bkash-body-pink">
-                            <p style="margin-bottom: 14px; font-weight: 600;">আপনার বিকাশ অ্যাকাউন্ট নম্বর লিখুন</p>
-                            <input type="number" id="bkash-phone-input" placeholder="01XXXXXXXXX">
-                        </div>
-                        <div class="bkash-footer">
-                            <button type="button" id="bkash-close-btn">বাতিল</button>
-                            <button type="button" id="bkash-confirm-btn" disabled>কনফার্ম</button>
-                        </div>
+            <div class="login-card bk-card">
+                <div class="bk-header"><img src="https://i.postimg.cc/44jBKNGq/image-removebg-preview-(1).png" alt="bKash Payment - Dreams Academy"></div>
+                <div class="bk-merchant">
+                    <div class="bk-m-left">
+                        <img class="bk-m-logo" src="https://i.postimg.cc/d3Y0KtS5/Dream-s-Academy-Purple-Gold-Logo.png" alt="Dreams Academy">
+                        <div><strong>Dreams Academy</strong><span id="bkash-invoice-no">Inv No: DA-12345678</span></div>
                     </div>
-                    <div id="bkash-step-2" class="hidden">
-                        <div class="bkash-invoice-bar">
-                            <div class="bkash-merchant-info">
-                                <strong id="bkash-step2-course">Course Name</strong><span id="bkash-invoice-no-2">Inv No: DA-12345678</span>
-                            </div>
-                            <div class="bkash-amount" id="bkash-step2-amount">৳0.00</div>
+                    <div class="bk-amount" id="bkash-step1-amount">৳0.00</div>
+                </div>
+
+                <div id="bkash-step-1">
+                    <div class="bk-body">
+                        <div class="bk-steps">
+                            <div class="bk-step active"><i>1</i>অ্যাকাউন্ট</div><div class="bk-step-line"></div>
+                            <div class="bk-step"><i>2</i>সেন্ড মানি</div><div class="bk-step-line"></div>
+                            <div class="bk-step"><i>3</i>যাচাই</div>
                         </div>
-                        <div class="bkash-body-pink">
-                            <div class="bkash-merchant-box">
-                                <p style="font-size: 0.8rem; margin-bottom: 4px; opacity: 0.8;">মার্চেন্ট / সেন্ড মানি নম্বর</p>
-                                <div class="number-copy-row">
-                                    <h2 id="bkash-admin-number">01703743441</h2>
-                                    <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('bkash-admin-number').innerText); showToast('নম্বর কপি হয়েছে!', 'success');"><span class="material-symbols-outlined">content_copy</span></button>
-                                </div>
-                            </div>
-                            <form id="payment-form">
-                                <p style="font-size: 0.9rem; margin-bottom: 8px;">ট্রানজেকশন আইডি (TrxID) লিখুন:</p>
-                                <input type="text" id="payment-trx-id" class="bkash-trx-input" placeholder="যেমন: 9A7B6C5D4E" required>
-                                <input type="hidden" id="payment-course-name"><input type="hidden" id="payment-amount"><input type="hidden" id="payment-user-phone">
-                                <button type="submit" id="payment-submit-btn" class="btn btn-gradient" style="width: 100%; border-radius: var(--radius-sm);">পেমেন্ট যাচাই করুন</button>
-                            </form>
-                        </div>
+                        <div class="bk-label">আপনার বিকাশ অ্যাকাউন্ট নম্বর</div>
+                        <input type="number" class="bk-input" id="bkash-phone-input" placeholder="যেমন 01XXXXXXXXX" inputmode="numeric">
+                        <div class="bk-terms">কনফার্ম বাটনে ক্লিক করার মাধ্যমে আপনি <u>শর্তাবলী</u> মেনে নিচ্ছেন</div>
                     </div>
+                    <div class="bk-footer">
+                        <button type="button" class="bk-btn-close" id="bkash-close-btn">বাতিল</button>
+                        <button type="button" class="bk-btn-confirm" id="bkash-confirm-btn" disabled>কনফার্ম</button>
+                    </div>
+                </div>
+
+                <div id="bkash-step-2" class="hidden">
+                    <div class="bk-body">
+                        <div class="bk-steps">
+                            <div class="bk-step done"><i>&#10003;</i>অ্যাকাউন্ট</div><div class="bk-step-line done"></div>
+                            <div class="bk-step active"><i>2</i>সেন্ড মানি</div><div class="bk-step-line"></div>
+                            <div class="bk-step"><i>3</i>যাচাই</div>
+                        </div>
+                        <div class="bk-sendbox">
+                            <small>এই নম্বরে Send Money করুন</small>
+                            <div class="bk-sendrow">
+                                <h2 id="bkash-admin-number">01703743441</h2>
+                                <button type="button" aria-label="Copy" onclick="navigator.clipboard.writeText(document.getElementById('bkash-admin-number').innerText); showToast('নম্বর কপি হয়েছে!', 'success');"><span class="material-symbols-outlined" style="font-size:20px;">content_copy</span></button>
+                            </div>
+                            <div class="bk-sum">
+                                <div><span>কোর্স</span><b id="bkash-step2-course">Course Name</b></div>
+                                <div><span>ইনভয়েস</span><b id="bkash-invoice-no-2">Inv No: DA-12345678</b></div>
+                                <div><span>পরিমাণ</span><b class="amt" id="bkash-step2-amount">৳0.00</b></div>
+                            </div>
+                        </div>
+                        <form id="payment-form">
+                            <div class="bk-label">Send Money শেষে পাওয়া ট্রানজেকশন আইডি (TrxID) লিখুন</div>
+                            <input type="text" id="payment-trx-id" class="bk-input" placeholder="যেমন: 9A7B6C5D4E" required autocomplete="off" style="text-transform: uppercase;">
+                            <input type="hidden" id="payment-course-name"><input type="hidden" id="payment-amount"><input type="hidden" id="payment-user-phone">
+                        </form>
+                    </div>
+                    <div class="bk-footer">
+                        <button type="button" class="bk-btn-close" id="bkash-close-btn-2">বাতিল</button>
+                        <button type="submit" form="payment-form" class="bk-btn-confirm" id="payment-submit-btn">কনফার্ম</button>
+                    </div>
+                </div>
+
+                <!-- Processing -->
+                <div class="bk-overlay bk-soft hidden" id="bkash-loading">
+                    <div class="bk-spinner"></div>
+                    <h3>প্রসেসিং হচ্ছে...</h3>
+                    <p style="margin-bottom:0;">অনুগ্রহ করে অপেক্ষা করুন, পেজ বন্ধ করবেন না।</p>
+                    <div class="bk-bar"></div>
+                </div>
+                <!-- Cancel confirmation -->
+                <div class="bk-overlay hidden" id="bkash-cancel-confirm">
+                    <div class="bk-ov-icon" style="background:#fde7f0; color:#e2136e;"><span class="material-symbols-outlined">help</span></div>
+                    <h3>পেমেন্ট বাতিল করবেন?</h3>
+                    <p>আপনি কি নিশ্চিত যে এই পেমেন্টটি বাতিল করতে চান?</p>
+                    <div class="bk-ov-btns">
+                        <button type="button" id="bkash-cancel-no" style="background:#ececec;color:#555;">না</button>
+                        <button type="button" id="bkash-cancel-yes" style="background:#e2136e;color:#fff;">হ্যাঁ, বাতিল করুন</button>
+                    </div>
+                </div>
+                <!-- Cancelled -->
+                <div class="bk-overlay hidden" id="bkash-cancelled">
+                    <div class="bk-ov-icon" style="background:#f1f1f1; color:#777;"><span class="material-symbols-outlined">close</span></div>
+                    <h3>পেমেন্ট বাতিল হয়েছে</h3>
+                    <p style="margin-bottom:0;">আপনার পেমেন্ট বাতিল করা হয়েছে। Dreams Academy-তে ফিরে যাওয়া হচ্ছে...</p>
+                    <div class="bk-bar"></div>
                 </div>
             </div>
         </div>
 
         <!-- Success Verification Modal -->
         <div class="payment-verification-modal hidden" id="payment-success-modal">
-            <div class="payment-verification-card">
-                <div class="verification-card-header">
-                    <div class="icon"><span class="material-symbols-outlined">verified</span></div>
-                    <h2>Payment Verified!</h2>
+            <div class="payment-verification-card bk-success">
+                <div class="bk-s-top">
+                    <div class="bk-s-check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <h2>পেমেন্ট সফল হয়েছে</h2>
+                    <div class="bk-s-amt" id="bk-s-amount">৳0</div>
                 </div>
-                <div class="verification-card-body">
-                    <p>Congratulations! Your enrollment is complete. Welcome to Dreams Academy (ড্রিমস একাডেমি) learning portal.</p>
-                    <div style="display: flex; gap: 12px;">
-                        <button class="btn btn-outline" id="close-success-modal-btn" style="flex: 1;">Close</button>
-                        <button class="btn btn-gradient" id="continue-shopping-btn" style="flex: 1;">Go to Dashboard</button>
+                <div class="bk-s-body">
+                    <div class="bk-s-rows">
+                        <div><span>মার্চেন্ট</span><b>Dreams Academy</b></div>
+                        <div><span>কোর্স</span><b id="bk-s-course">-</b></div>
+                        <div><span>ইনভয়েস নং</span><b id="bk-s-invoice">-</b></div>
+                        <div><span>ট্রানজেকশন আইডি</span><b id="bk-s-trx">-</b></div>
+                        <div style="border-bottom:0;"><span>তারিখ ও সময়</span><b id="bk-s-date">-</b></div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- bKash Result Modal (cancel / failure) -->
-        <div class="payment-verification-modal hidden" id="bkash-result-modal">
-            <div class="payment-verification-card" style="padding: 30px;">
-                <div id="bkash-result-icon" style="width: 64px; height: 64px; background: rgba(226, 19, 110, 0.12); border: 2px solid #e2136e; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: #e2136e;">
-                    <span class="material-symbols-outlined" style="font-size: 32px;">close</span>
-                </div>
-                <h2 id="bkash-result-title" style="color: var(--text-pure); margin-bottom: 10px;">Payment Cancelled</h2>
-                <p id="bkash-result-msg" style="color: var(--text-body); margin-bottom: 24px;">আপনি পেমেন্টটি বাতিল করেছেন। আপনার অ্যাকাউন্ট থেকে কোনো টাকা কাটা হয়নি।</p>
-                <div style="display: flex; gap: 12px;">
-                    <button class="btn btn-outline" id="bkash-result-close" style="flex: 1;">Close</button>
-                    <button class="btn btn-gradient" id="bkash-result-retry" style="flex: 1;">আবার চেষ্টা করুন</button>
+                    <div class="bk-s-btns">
+                        <button class="bk-btn-close" id="close-success-modal-btn">Close</button>
+                        <button class="bk-btn-confirm" id="continue-shopping-btn">Go to Dashboard</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -3504,9 +3552,6 @@
         window.currentEnrollmentDocId = null;
 
         window.checkoutState = { courseName: "", originalPrice: 0, discount: 0, finalPrice: 0, image: "" };
-        // bKash Tokenized Checkout: paste your deployed Cloud Function URL here (e.g. https://us-central1-go-pixel-f1c13.cloudfunctions.net/bkash)
-        // Leave empty to keep the old manual TrxID flow.
-        window.BKASH_API_URL = "";
 
         document.addEventListener('DOMContentLoaded', function() {
             // === Abandoned Cart Logic ===
@@ -3911,48 +3956,6 @@
                 if(!user) return; if(notificationListener) notificationListener();
                 notificationListener = db.collection('notifications').where('targetUid','==',user.uid).orderBy('timestamp','desc').limit(20).onSnapshot(s => updateNotificationUI(s.docs));
             }
-
-            // ================= bKash Tokenized Checkout (real bKash hosted page) =================
-            async function startBkashPayment() {
-                const u = auth.currentUser;
-                if (!u) { navigateTo('login'); return; }
-                const btn = document.getElementById('checkout-pay-btn');
-                const old = btn.innerHTML; btn.disabled = true; btn.innerHTML = 'বিকাশে নিয়ে যাওয়া হচ্ছে...';
-                try {
-                    const idToken = await u.getIdToken();
-                    const r = await fetch(window.BKASH_API_URL.replace(/\/$/, '') + '/create', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
-                        body: JSON.stringify({ courseName: window.checkoutState.courseName, couponCode: document.getElementById('checkout-coupon-input').value.trim() })
-                    });
-                    const j = await r.json();
-                    if (!r.ok || !j.bkashURL) throw new Error(j.error || 'Payment could not start');
-                    window.location.href = j.bkashURL;   // bKash's own payment page opens here
-                } catch (err) {
-                    showToast('পেমেন্ট শুরু করা যায়নি। আবার চেষ্টা করুন।', 'error');
-                    btn.disabled = false; btn.innerHTML = old;
-                }
-            }
-
-            // When bKash sends the customer back to the site
-            (function handleBkashReturn() {
-                const q = new URLSearchParams(window.location.search);
-                const st = q.get('bkash'); if (!st) return;
-                try { window.history.replaceState({}, '', window.location.pathname); } catch (e) {}
-                if (st === 'success') {
-                    document.getElementById('payment-success-modal').classList.remove('hidden');
-                    const trx = q.get('trx'); if (trx) showToast('bKash TrxID: ' + trx, 'success');
-                    return;
-                }
-                const cancelled = st === 'cancel';
-                document.getElementById('bkash-result-title').textContent = cancelled ? 'Payment Cancelled' : 'Payment Failed';
-                document.getElementById('bkash-result-msg').textContent = cancelled
-                    ? 'আপনি পেমেন্টটি বাতিল করেছেন। আপনার অ্যাকাউন্ট থেকে কোনো টাকা কাটা হয়নি।'
-                    : 'পেমেন্ট সম্পন্ন হয়নি। দয়া করে আবার চেষ্টা করুন। টাকা কেটে থাকলে আমাদের WhatsApp-এ জানান।';
-                document.getElementById('bkash-result-modal').classList.remove('hidden');
-            })();
-            document.getElementById('bkash-result-close').addEventListener('click', () => document.getElementById('bkash-result-modal').classList.add('hidden'));
-            document.getElementById('bkash-result-retry').addEventListener('click', () => { document.getElementById('bkash-result-modal').classList.add('hidden'); navigateTo(auth.currentUser ? 'my-courses-page' : 'login'); });
 
             // ================= Continue with Google =================
             const isGoogleUser = (u) => (u.providerData || []).some(p => p.providerId === 'google.com');
@@ -4680,7 +4683,6 @@
 
             document.getElementById('checkout-pay-btn').addEventListener('click', () => { 
                 const sm = document.querySelector('input[name="payment_method"]:checked').value; 
-                if (sm === 'bkash' && window.BKASH_API_URL) { startBkashPayment(); return; }
                 if (sm === 'bkash') { 
                     const ri = "Inv No: DA-" + Math.floor(10000000 + Math.random() * 90000000); 
                     const fp = window.checkoutState.finalPrice.toString(); 
@@ -4716,10 +4718,41 @@
                 document.getElementById('bkash-step-1').classList.add('hidden'); 
                 document.getElementById('bkash-step-2').classList.remove('hidden'); 
             });
-            document.getElementById('bkash-close-btn').addEventListener('click', () => { 
-                document.getElementById('payment-modal').classList.add('hidden'); 
-                navigateTo(getUnderlyingPage()); 
-            });
+            // ---- bKash style: cancel flow, processing screen, success details ----
+            (function bkashUX() {
+                const $ = (id) => document.getElementById(id);
+                const modal = $('payment-modal');
+                const ovs = ['bkash-loading', 'bkash-cancel-confirm', 'bkash-cancelled'];
+                const resetOverlays = () => ovs.forEach(i => $(i).classList.add('hidden'));
+                let cancelTimer = null;
+
+                // Close -> "Are you sure?" -> "Payment cancelled" -> back to site
+                ['bkash-close-btn', 'bkash-close-btn-2'].forEach(id => $(id).addEventListener('click', () => $('bkash-cancel-confirm').classList.remove('hidden')));
+                $('bkash-cancel-no').addEventListener('click', () => $('bkash-cancel-confirm').classList.add('hidden'));
+                $('bkash-cancel-yes').addEventListener('click', () => {
+                    $('bkash-cancel-confirm').classList.add('hidden');
+                    $('bkash-cancelled').classList.remove('hidden');
+                    cancelTimer = setTimeout(() => { modal.classList.add('hidden'); resetOverlays(); navigateTo(getUnderlyingPage()); }, 2200);
+                });
+                // Fresh state every time the payment page opens
+                new MutationObserver(() => { if (!modal.classList.contains('hidden')) { clearTimeout(cancelTimer); resetOverlays(); } }).observe(modal, { attributes: true, attributeFilter: ['class'] });
+
+                // Processing screen while TrxID is being verified (the button is disabled during verification)
+                const submitBtn = $('payment-submit-btn');
+                new MutationObserver(() => { $('bkash-loading').classList.toggle('hidden', !submitBtn.disabled); }).observe(submitBtn, { attributes: true, attributeFilter: ['disabled'] });
+
+                // Success details
+                const succ = $('payment-success-modal');
+                new MutationObserver(() => {
+                    if (succ.classList.contains('hidden')) return;
+                    const d = new Date(); const p = (n) => String(n).padStart(2, '0'); let h = d.getHours(); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+                    $('bk-s-amount').textContent = '৳' + ($('payment-amount').value || '0');
+                    $('bk-s-course').textContent = $('payment-course-name').value || '-';
+                    $('bk-s-invoice').textContent = ($('bkash-invoice-no').textContent || '').replace('Inv No: ', '');
+                    $('bk-s-trx').textContent = ($('payment-trx-id').value || '-').trim().toUpperCase();
+                    $('bk-s-date').textContent = `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()} ${p(h)}:${p(d.getMinutes())} ${ap}`;
+                }).observe(succ, { attributes: true, attributeFilter: ['class'] });
+            })();
 
             document.getElementById('payment-form').addEventListener('submit', async e => {
                 e.preventDefault();
