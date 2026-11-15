@@ -2820,6 +2820,22 @@
             </div>
         </div>
 
+
+        <!-- bKash Result Modal (cancel / failure) -->
+        <div class="payment-verification-modal hidden" id="bkash-result-modal">
+            <div class="payment-verification-card" style="padding: 30px;">
+                <div id="bkash-result-icon" style="width: 64px; height: 64px; background: rgba(226, 19, 110, 0.12); border: 2px solid #e2136e; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: #e2136e;">
+                    <span class="material-symbols-outlined" style="font-size: 32px;">close</span>
+                </div>
+                <h2 id="bkash-result-title" style="color: var(--text-pure); margin-bottom: 10px;">Payment Cancelled</h2>
+                <p id="bkash-result-msg" style="color: var(--text-body); margin-bottom: 24px;">আপনি পেমেন্টটি বাতিল করেছেন। আপনার অ্যাকাউন্ট থেকে কোনো টাকা কাটা হয়নি।</p>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn btn-outline" id="bkash-result-close" style="flex: 1;">Close</button>
+                    <button class="btn btn-gradient" id="bkash-result-retry" style="flex: 1;">আবার চেষ্টা করুন</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Custom Error Modal -->
         <div class="payment-verification-modal hidden" id="custom-error-modal">
             <div class="payment-verification-card" style="padding: 30px;">
@@ -3488,6 +3504,9 @@
         window.currentEnrollmentDocId = null;
 
         window.checkoutState = { courseName: "", originalPrice: 0, discount: 0, finalPrice: 0, image: "" };
+        // bKash Tokenized Checkout: paste your deployed Cloud Function URL here (e.g. https://us-central1-go-pixel-f1c13.cloudfunctions.net/bkash)
+        // Leave empty to keep the old manual TrxID flow.
+        window.BKASH_API_URL = "";
 
         document.addEventListener('DOMContentLoaded', function() {
             // === Abandoned Cart Logic ===
@@ -3892,6 +3911,48 @@
                 if(!user) return; if(notificationListener) notificationListener();
                 notificationListener = db.collection('notifications').where('targetUid','==',user.uid).orderBy('timestamp','desc').limit(20).onSnapshot(s => updateNotificationUI(s.docs));
             }
+
+            // ================= bKash Tokenized Checkout (real bKash hosted page) =================
+            async function startBkashPayment() {
+                const u = auth.currentUser;
+                if (!u) { navigateTo('login'); return; }
+                const btn = document.getElementById('checkout-pay-btn');
+                const old = btn.innerHTML; btn.disabled = true; btn.innerHTML = 'বিকাশে নিয়ে যাওয়া হচ্ছে...';
+                try {
+                    const idToken = await u.getIdToken();
+                    const r = await fetch(window.BKASH_API_URL.replace(/\/$/, '') + '/create', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
+                        body: JSON.stringify({ courseName: window.checkoutState.courseName, couponCode: document.getElementById('checkout-coupon-input').value.trim() })
+                    });
+                    const j = await r.json();
+                    if (!r.ok || !j.bkashURL) throw new Error(j.error || 'Payment could not start');
+                    window.location.href = j.bkashURL;   // bKash's own payment page opens here
+                } catch (err) {
+                    showToast('পেমেন্ট শুরু করা যায়নি। আবার চেষ্টা করুন।', 'error');
+                    btn.disabled = false; btn.innerHTML = old;
+                }
+            }
+
+            // When bKash sends the customer back to the site
+            (function handleBkashReturn() {
+                const q = new URLSearchParams(window.location.search);
+                const st = q.get('bkash'); if (!st) return;
+                try { window.history.replaceState({}, '', window.location.pathname); } catch (e) {}
+                if (st === 'success') {
+                    document.getElementById('payment-success-modal').classList.remove('hidden');
+                    const trx = q.get('trx'); if (trx) showToast('bKash TrxID: ' + trx, 'success');
+                    return;
+                }
+                const cancelled = st === 'cancel';
+                document.getElementById('bkash-result-title').textContent = cancelled ? 'Payment Cancelled' : 'Payment Failed';
+                document.getElementById('bkash-result-msg').textContent = cancelled
+                    ? 'আপনি পেমেন্টটি বাতিল করেছেন। আপনার অ্যাকাউন্ট থেকে কোনো টাকা কাটা হয়নি।'
+                    : 'পেমেন্ট সম্পন্ন হয়নি। দয়া করে আবার চেষ্টা করুন। টাকা কেটে থাকলে আমাদের WhatsApp-এ জানান।';
+                document.getElementById('bkash-result-modal').classList.remove('hidden');
+            })();
+            document.getElementById('bkash-result-close').addEventListener('click', () => document.getElementById('bkash-result-modal').classList.add('hidden'));
+            document.getElementById('bkash-result-retry').addEventListener('click', () => { document.getElementById('bkash-result-modal').classList.add('hidden'); navigateTo(auth.currentUser ? 'my-courses-page' : 'login'); });
 
             // ================= Continue with Google =================
             const isGoogleUser = (u) => (u.providerData || []).some(p => p.providerId === 'google.com');
@@ -4619,6 +4680,7 @@
 
             document.getElementById('checkout-pay-btn').addEventListener('click', () => { 
                 const sm = document.querySelector('input[name="payment_method"]:checked').value; 
+                if (sm === 'bkash' && window.BKASH_API_URL) { startBkashPayment(); return; }
                 if (sm === 'bkash') { 
                     const ri = "Inv No: DA-" + Math.floor(10000000 + Math.random() * 90000000); 
                     const fp = window.checkoutState.finalPrice.toString(); 
