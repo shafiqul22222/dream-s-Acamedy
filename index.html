@@ -1223,6 +1223,23 @@
         .signup-link a { color: var(--water-cyan); font-weight: 700; text-decoration: none; }
         .signup-link a:hover { text-decoration: underline; }
 
+        /* Continue with Google */
+        .btn-google {
+            width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px;
+            padding: 13px 18px; margin-bottom: 4px;
+            background: #ffffff; color: #1f2937; border: 1px solid #dadce0; border-radius: 12px;
+            font-family: inherit; font-size: 0.98rem; font-weight: 700; cursor: pointer;
+            box-shadow: 0 6px 16px -8px rgba(0,0,0,.35);
+            transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+        }
+        .btn-google:hover { background: #f8fafc; transform: translateY(-1px); box-shadow: 0 10px 22px -10px rgba(0,0,0,.45); }
+        .btn-google:disabled { opacity: .65; cursor: wait; transform: none; }
+        .btn-google svg { width: 22px; height: 22px; flex: 0 0 22px; }
+        .auth-divider { display: flex; align-items: center; gap: 12px; margin: 18px 0 22px; color: var(--text-muted); font-size: 0.82rem; font-weight: 600; }
+        .auth-divider::before, .auth-divider::after { content: ""; flex: 1; height: 1px; background: var(--navy-border); }
+        .wa-skip-link { display: inline-block; margin-top: 16px; color: var(--text-muted); font-size: 0.9rem; font-weight: 600; text-decoration: none; }
+        .wa-skip-link:hover { color: var(--water-cyan); text-decoration: underline; }
+
         /* OTP Verification Input Boxes */
         .otp-input-group { display: flex; gap: 10px; justify-content: center; margin-bottom: 26px; }
         .otp-input-group input {
@@ -2558,6 +2575,8 @@
                 </div>
                 <div class="modal-form-panel">
                     <h2>Account Login</h2>
+                    <button type="button" class="btn-google" id="google-btn-login"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Continue with Google</span></button>
+                    <div class="auth-divider"><span>or use email</span></div>
                     <form id="login-form">
                         <div class="input-group">
                             <input type="email" id="login-email" placeholder=" " required>
@@ -2589,6 +2608,8 @@
                 </div>
                 <div class="modal-form-panel">
                     <h2>Register Account</h2>
+                    <button type="button" class="btn-google" id="google-btn-signup"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Continue with Google</span></button>
+                    <div class="auth-divider"><span>or sign up with email</span></div>
                     <form id="signup-form">
                         <div class="input-group"><input type="text" id="signup-name" placeholder=" " required><label>Full Name</label><span class="material-symbols-outlined">person</span></div>
                         <div class="input-group"><input type="email" id="signup-email" placeholder=" " required><label>Email Address</label><span class="material-symbols-outlined">mail</span></div>
@@ -2625,6 +2646,24 @@
                 <div style="margin-top: 20px; font-size: 0.9rem; color: var(--text-body);">
                     Didn't receive code? <a href="#" id="resend-otp-link" style="color: var(--water-cyan); font-weight: 700;">Resend OTP</a>
                 </div>
+            </div>
+        </div>
+
+
+        <!-- WhatsApp Number Modal (after Google sign-up) -->
+        <div class="login-modal hidden" id="whatsapp-modal">
+            <div class="login-card" style="max-width: 460px; display: block; text-align: center; padding: 40px 30px;">
+                <div style="margin-bottom: 20px;">
+                    <span class="material-symbols-outlined" style="font-size: 52px; color: #25D366; background: rgba(37, 211, 102, 0.12); padding: 16px; border-radius: 50%; box-shadow: 0 0 25px rgba(37, 211, 102, 0.2);">chat</span>
+                </div>
+                <h2 style="color: var(--text-pure); margin-bottom: 10px; font-size: 1.7rem;">Add Your WhatsApp Number</h2>
+                <p style="color: var(--text-body); margin-bottom: 26px; font-size: 0.95rem;">Your account is ready! Add your WhatsApp number to get class updates and support from Dreams Academy.</p>
+                <form id="whatsapp-form">
+                    <div class="input-group"><input type="tel" id="wa-number-input" placeholder=" " required inputmode="tel" autocomplete="tel"><label>WhatsApp Number (e.g. 01XXXXXXXXX)</label><span class="material-symbols-outlined">call</span></div>
+                    <button type="submit" class="btn btn-gradient" style="width: 100%; padding: 15px;">Save &amp; Continue <span class="material-symbols-outlined">check_circle</span></button>
+                </form>
+                <a href="#" class="wa-skip-link" id="wa-skip-link">Skip for now</a>
+                <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 8px;">You can add it later from My Profile.</p>
             </div>
         </div>
 
@@ -3854,6 +3893,93 @@
                 notificationListener = db.collection('notifications').where('targetUid','==',user.uid).orderBy('timestamp','desc').limit(20).onSnapshot(s => updateNotificationUI(s.docs));
             }
 
+            // ================= Continue with Google =================
+            const isGoogleUser = (u) => (u.providerData || []).some(p => p.providerId === 'google.com');
+            const _gProfilePromises = {};
+
+            // Creates the Firestore profile for a Google user (no OTP needed - Google already verified the email)
+            function ensureGoogleProfile(user) {
+                const ref = db.collection('users').doc(user.uid);
+                if (!isGoogleUser(user)) return ref.get();
+                if (_gProfilePromises[user.uid]) return _gProfilePromises[user.uid];
+                const job = ref.get().then(async (snap) => {
+                    try {
+                        if (!snap.exists) {
+                            await ref.set({
+                                name: user.displayName || (user.email ? user.email.split('@')[0] : 'Student'),
+                                email: user.email || '', mobile: '', dob: '', title: '',
+                                photoURL: user.photoURL || '',
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                email_verified: true, signup_method: 'google'
+                            });
+                            db.collection('notifications').add({ targetUid: user.uid, title: 'Welcome to Dreams Academy', message: 'Your account has been created successfully with Google.', type: 'account', read: false, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).catch(() => {});
+                            return ref.get();
+                        }
+                        if (snap.data().email_verified === false) {
+                            await ref.update({ email_verified: true, otp_code: null, otp_expiry: null });
+                            return ref.get();
+                        }
+                    } catch (err) { showToast('Could not save your profile. Please try again.', 'error'); }
+                    return snap;
+                });
+                _gProfilePromises[user.uid] = job;
+                job.finally(() => { setTimeout(() => { delete _gProfilePromises[user.uid]; }, 4000); });
+                return job;
+            }
+
+            const waModal = document.getElementById('whatsapp-modal');
+            function maybePromptWhatsapp(data) {
+                if (!data || data.mobile || data.whatsapp_prompt_skipped) return;
+                waModal.classList.remove('hidden');
+                setTimeout(() => { const i = document.getElementById('wa-number-input'); if (i) i.focus(); }, 300);
+            }
+
+            document.getElementById('whatsapp-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const user = auth.currentUser; if (!user) return;
+                let num = document.getElementById('wa-number-input').value.replace(/[\s\-()]/g, '');
+                if (!/^\+?[0-9]{10,15}$/.test(num)) { showToast('Please enter a valid WhatsApp number.', 'error'); return; }
+                const btn = e.target.querySelector('button[type="submit"]'); btn.disabled = true;
+                db.collection('users').doc(user.uid).update({ mobile: num })
+                    .then(() => { waModal.classList.add('hidden'); showToast('WhatsApp number saved!', 'success'); })
+                    .catch(() => showToast('Could not save number. Try again.', 'error'))
+                    .finally(() => { btn.disabled = false; });
+            });
+            document.getElementById('wa-skip-link').addEventListener('click', (e) => {
+                e.preventDefault();
+                waModal.classList.add('hidden');
+                const user = auth.currentUser;
+                if (user) db.collection('users').doc(user.uid).update({ whatsapp_prompt_skipped: true }).catch(() => {});
+            });
+
+            function handleGoogleSignIn(btn) {
+                if (/FBAN|FBAV|FB_IAB|Instagram|Messenger/i.test(navigator.userAgent)) {
+                    showToast('Google sign-in does not work inside Facebook/Messenger browser. Please open this site in Chrome.', 'error'); return;
+                }
+                const provider = new firebase.auth.GoogleAuthProvider();
+                provider.setCustomParameters({ prompt: 'select_account' });
+                const label = btn.querySelector('span'); const oldText = label.textContent;
+                btn.disabled = true; label.textContent = 'Please wait...';
+                auth.signInWithPopup(provider).then(async (result) => {
+                    const doc = await ensureGoogleProfile(result.user);
+                    document.querySelectorAll('.login-modal').forEach(m => m.classList.add('hidden'));
+                    navigateTo('my-courses-page');
+                    const data = doc.exists ? doc.data() : null;
+                    showToast(result.additionalUserInfo && result.additionalUserInfo.isNewUser ? 'Account created with Google!' : 'Welcome back to Dreams Academy!', 'success');
+                    maybePromptWhatsapp(data);
+                }).catch((err) => {
+                    const c = err.code;
+                    if (c === 'auth/popup-closed-by-user' || c === 'auth/cancelled-popup-request') return;
+                    if (c === 'auth/popup-blocked' || c === 'auth/operation-not-supported-in-this-environment') { auth.signInWithRedirect(provider); return; }
+                    if (c === 'auth/account-exists-with-different-credential') showToast('This email already has an account. Please sign in with your email & password.', 'error');
+                    else if (c === 'auth/unauthorized-domain') showToast('This domain is not authorized in Firebase. Add it under Authentication > Settings > Authorized domains.', 'error');
+                    else if (c === 'auth/operation-not-allowed') showToast('Google sign-in is not enabled in Firebase yet.', 'error');
+                    else if (c === 'auth/network-request-failed') showToast('Network error. Check your internet connection.', 'error');
+                    else showToast('Google sign-in failed. Please try again.', 'error');
+                }).finally(() => { btn.disabled = false; label.textContent = oldText; });
+            }
+            document.querySelectorAll('.btn-google').forEach(b => b.addEventListener('click', () => handleGoogleSignIn(b)));
+
             // Auth State Change
             function populateUI(userData) {
                 if (!userData) return;
@@ -3873,7 +3999,7 @@
 
             auth.onAuthStateChanged(user => {
                 if (user) {
-                    db.collection('users').doc(user.uid).get().then(doc => {
+                    ensureGoogleProfile(user).then(doc => {
                         if(doc.exists) {
                             const data = doc.data();
                             if(data.email_verified === false) {
@@ -3892,6 +4018,7 @@
                                     if (['/', '/home', '/index.html', '/login', '/signup'].includes(p)) navigateTo('my-courses-page', false);
                                     else handleInitialRoute(false);
                                     initialRouteHandled = true;
+                                    maybePromptWhatsapp(data);
                                 }
                             }
                         }
