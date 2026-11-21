@@ -2489,6 +2489,60 @@
         .rv { opacity: 0; transform: translateY(24px); transition: opacity .65s ease, transform .65s cubic-bezier(.2,.7,.2,1); }
         .rv.rv-in { opacity: 1; transform: none; }
         @media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; transition: none; } .vp-play::before { animation: none; } }
+
+/* ===== DX upgrade: cinema player / assignments / materials ===== */
+@property --cxa{syntax:'<angle>';initial-value:0deg;inherits:false}
+body.cx-lock{overflow:hidden}
+.cx-stage{position:relative;border-radius:18px;isolation:isolate;scroll-margin-top:76px}
+.cx-glow{position:absolute;inset:-3px;border-radius:21px;z-index:-1;background:conic-gradient(from var(--cxa),#1A56DB,#22D3EE,#F2C14E,#8B5CF6,#1A56DB);filter:blur(16px);opacity:.45;animation:cxSpin 7s linear infinite;transition:opacity .4s}
+.cx-on .cx-glow{opacity:.9}
+@keyframes cxSpin{to{--cxa:360deg}}
+.video-player-wrapper.cx-frame{padding-top:0;aspect-ratio:16/9;border-radius:16px;border:1px solid rgba(255,255,255,.2)}
+.cx-loader{position:absolute;inset:0;display:grid;place-items:center;background:#020617;z-index:3}
+.cx-loader i{width:46px;height:46px;border-radius:50%;border:4px solid rgba(255,255,255,.2);border-top-color:#22D3EE;animation:vpSpin .8s linear infinite}
+.cx-mask{position:absolute;top:0;right:0;width:68px;height:60px;z-index:4;display:none}
+.cx-stage[data-kind=drive] .cx-mask{display:block}
+.cx-wm{position:absolute;z-index:4;pointer-events:none;color:rgba(255,255,255,.3);font:700 .7rem/1 sans-serif;text-shadow:0 1px 3px rgba(0,0,0,.6);animation:cxWm 26s linear infinite}
+@keyframes cxWm{0%,100%{top:8%;left:4%}25%{top:12%;left:58%}50%{top:78%;left:52%}75%{top:70%;left:6%}}
+.cx-x{display:none;position:absolute;top:10px;right:10px;z-index:7;width:42px;height:42px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;place-items:center;cursor:pointer}
+.cx-stage.cx-fs{position:fixed;inset:0;z-index:10040;border-radius:0;background:#000}
+.cx-stage.cx-fs .cx-glow{display:none}
+.cx-stage.cx-fs .cx-frame,.cx-stage:fullscreen .cx-frame,.cx-stage:-webkit-full-screen .cx-frame{height:100%;aspect-ratio:auto;border-radius:0;border:0}
+.cx-stage:fullscreen,.cx-stage:-webkit-full-screen{background:#000;border-radius:0}
+.cx-stage.cx-fs .cx-x{display:grid}
+.cx-info{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:16px;padding:14px 16px;background:var(--panel);border:1px solid var(--navy-border);border-radius:var(--radius-md)}
+.cx-info small{color:var(--text-muted);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.cx-info h3{color:var(--text-pure);font-size:1.02rem;margin-top:2px}
+.cx-actions{display:flex;gap:8px;flex-wrap:wrap}
+.cx-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:42px;padding:0 14px;border-radius:10px;border:1px solid var(--navy-border);background:#fff;color:var(--water-cyan);font-weight:700;font-size:.82rem;font-family:inherit;cursor:pointer;text-decoration:none}
+.cx-btn:hover{box-shadow:0 0 0 3px rgba(26,86,219,.15)}
+.cx-btn:disabled{opacity:.4;cursor:default;box-shadow:none}
+.cx-btn.pri{background:var(--gradient-water-3d);color:#fff;border-color:transparent;box-shadow:0 8px 20px -8px rgba(26,86,219,.7)}
+.cx-prog{margin-bottom:12px}.cx-prog>div:first-child{display:flex;justify-content:space-between;color:var(--text-soft);font-size:.82rem;margin-bottom:6px}
+.cx-bar{height:8px;border-radius:8px;background:rgba(26,86,219,.12);overflow:hidden}
+.cx-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#1A56DB,#22D3EE);box-shadow:0 0 10px rgba(34,211,238,.6);transition:width .5s}
+.cx-search,.mt-search,.as-form textarea,.as-form input[type=url]{width:100%;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--navy-border);background:#fff;color:var(--text-pure);font:inherit;margin-top:10px}
+.cx-cnt{opacity:.6;font-weight:600;margin-left:6px;font-size:.78rem}
+.cx-ic.ok{color:#16A34A}.video-item-link.playing .cx-ic.ok{color:#fff}
+.module-videos.show{max-height:3000px}
+@media(orientation:landscape) and (max-height:520px){.cx-stage:not(.cx-fs) .video-player-wrapper.cx-frame{aspect-ratio:auto;height:calc(100dvh - 90px)}}
+@media(max-width:900px){.curriculum-list-wrapper{max-height:none}.cx-actions{width:100%}.cx-btn{flex:1}.cx-stage{border-radius:14px}.video-player-wrapper.cx-frame{border-radius:12px}}
+.as-add{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;border:2px dashed var(--water-cyan);border-radius:12px;background:rgba(26,86,219,.05);color:var(--water-cyan);font-weight:800;font-family:inherit;cursor:pointer}
+.as-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px;margin-top:10px}
+.as-thumbs:empty{display:none}
+.as-th{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;border:1px solid var(--navy-border)}
+.as-th img{width:100%;height:100%;object-fit:cover;cursor:zoom-in}
+.as-th button{position:absolute;top:4px;right:4px;width:26px;height:26px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;font-size:16px;cursor:pointer}
+.as-form{display:grid;gap:4px;margin-top:12px}
+.dx-row.mt-row{flex-wrap:wrap}.mt-btns{display:flex;gap:8px}
+button.dx-join,a.dx-join{border:0;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:4px;min-height:38px}
+.dx-join.dl{background:linear-gradient(180deg,#16A34A,#15803D)}
+.mt-ov{position:fixed;inset:0;z-index:10050;background:rgba(2,8,23,.92);display:flex;flex-direction:column;animation:dxPop .18s ease}
+.mt-top{display:flex;gap:8px;align-items:center;padding:10px 12px;background:#0B2A5B;color:#fff}
+.mt-top b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.92rem}
+.mt-body{flex:1;min-height:0;display:grid;place-items:center;background:#111}
+.mt-body iframe{width:100%;height:100%;border:0;background:#fff}
+.mt-body img,.mt-body video{max-width:100%;max-height:100%}
     </style>
 </head>
 <body>
@@ -3332,19 +3386,38 @@
                                 </a>
                             </div>
                             <div class="curriculum-layout">
-                                <div>
-                                    <div class="video-player-wrapper">
-                                        <div id="video-placeholder">
-                                            <span class="material-symbols-outlined">play_circle</span>
-                                            <h3>Interactive Lecture Player</h3>
-                                            <p>Select any class from the right curriculum panel to stream</p>
+                                <div class="cx-left">
+                                    <div class="cx-stage" id="cx-stage">
+                                        <div class="cx-glow"></div>
+                                        <div class="video-player-wrapper cx-frame" id="cx-frame">
+                                            <div id="video-placeholder">
+                                                <span class="material-symbols-outlined">play_circle</span>
+                                                <h3>Interactive Lecture Player</h3>
+                                                <p>ডান পাশের তালিকা থেকে ক্লাস সিলেক্ট করুন</p>
+                                                <button type="button" class="cx-btn pri" id="cx-resume" style="margin-top:14px">▶ ক্লাস শুরু করুন</button>
+                                            </div>
+                                            <iframe id="youtube-player" src="" title="Dreams Academy Class Lecture Video Player" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                                            <div class="cx-loader hidden" id="cx-loader"><i></i></div>
+                                            <div class="cx-mask"></div>
+                                            <div class="cx-wm" id="cx-wm"></div>
                                         </div>
-                                        <iframe id="youtube-player" src="" title="Dreams Academy Class Lecture Video Player" allowfullscreen></iframe>
+                                        <button type="button" class="cx-x" id="cx-x" aria-label="Close fullscreen"><span class="material-symbols-outlined">close</span></button>
+                                    </div>
+                                    <div class="cx-info hidden" id="cx-info">
+                                        <div style="min-width:0"><small id="cx-mod"></small><h3 id="cx-title"></h3></div>
+                                        <div class="cx-actions">
+                                            <button type="button" class="cx-btn" id="cx-prev"><span class="material-symbols-outlined">skip_previous</span> আগের</button>
+                                            <button type="button" class="cx-btn pri" id="cx-next">পরের <span class="material-symbols-outlined">skip_next</span></button>
+                                            <button type="button" class="cx-btn" id="cx-fs"><span class="material-symbols-outlined">fullscreen</span> ফুলস্ক্রিন</button>
+                                            <a class="cx-btn" id="cx-ext" target="_blank" rel="noopener"><span class="material-symbols-outlined">open_in_new</span> চলছে না?</a>
+                                        </div>
                                     </div>
                                     <div id="class-note-container" class="hidden" style="margin-top: 24px; background: var(--panel); border: 1px solid var(--navy-border); border-radius: var(--radius-md); padding: 24px;"></div>
                                 </div>
+
                                 <div class="curriculum-list-wrapper">
-                                    <div id="curriculum-list-container"><p>Loading curriculum lessons...</p></div>
+                                    <div class="cx-prog"><div><span><b id="cx-pct">0%</b> সম্পন্ন</span><span id="cx-cntx"></span></div><div class="cx-bar"><i id="cx-fill"></i></div><input class="cx-search" id="cx-search" type="search" placeholder="লেসন খুঁজুন..."></div>
+<div id="curriculum-list-container"><p>Loading curriculum lessons...</p></div>
                                 </div>
                             </div>
                         </div>
@@ -3765,6 +3838,7 @@
                 });
                 if (targetPageId === 'course-curriculum-page') document.querySelector('#sidebar-menu li[data-page="my-courses-page"]').classList.add('active');
 
+                if (targetPageId !== 'course-curriculum-page' && window.cxStop) window.cxStop();
                 if (targetPageId === 'my-profile-page') populateProfileForm();
                 if (targetPageId === 'my-courses-page') displayMyCourses();
                 if (targetPageId === 'class-joining-page') displayLiveClasses();
@@ -4164,30 +4238,79 @@
                 }catch(e){}
             }
 
-            function getYouTubeEmbedUrl(url) {
-                if (!url) return ''; 
-                if (url.includes('drive.google.com/file/d/')) { const m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/); if (m && m[1]) return `https://drive.google.com/file/d/${m[1]}/preview`; }
-                let v = ''; try { const u = new URL(url); if (u.hostname === 'youtu.be') v = u.pathname.slice(1); else if (u.hostname.includes('youtube.com')) v = u.searchParams.get('v'); } catch(e) {} 
-                return v ? `https://www.youtube.com/embed/${v}` : url;
+            function dxMedia(url) {
+                url = (url || '').trim(); if (!url) return null;
+                let m = url.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:[^#]*&)?id=)([\w-]+)/);
+                if (m) return { kind: 'drive', src: `https://drive.google.com/file/d/${m[1]}/preview`, ext: `https://drive.google.com/file/d/${m[1]}/view` };
+                let v = ''; try { const u = new URL(url); if (u.hostname === 'youtu.be') v = u.pathname.slice(1); else if (u.hostname.includes('youtube.com')) v = u.searchParams.get('v') || (u.pathname.match(/\/(?:embed|shorts|live)\/([\w-]+)/) || [])[1] || ''; } catch (e) {}
+                if (v) return { kind: 'yt', src: `https://www.youtube.com/embed/${v}?rel=0&modestbranding=1&playsinline=1`, ext: `https://youtu.be/${v}` };
+                m = url.match(/vimeo\.com\/(\d+)/); if (m) return { kind: 'vimeo', src: `https://player.vimeo.com/video/${m[1]}`, ext: url };
+                return { kind: 'other', src: url, ext: url };
             }
-
+            function getYouTubeEmbedUrl(url) { const m = dxMedia(url); return m ? m.src : ''; }
+            const cxEsc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+            const cxToast = (t, k) => { try { showToast(t, k || 'info'); } catch (e) {} };
+            window.cxStop = function () {
+                const p = document.getElementById('youtube-player'), s = document.getElementById('cx-stage'); if (!p || !s) return;
+                p.src = ''; s.classList.remove('cx-on', 'cx-fs'); document.body.classList.remove('cx-lock');
+            };
+            if (!window._cxFsInit) {
+                window._cxFsInit = true;
+                const off = () => { if (!document.fullscreenElement && !document.webkitFullscreenElement) { const s = document.getElementById('cx-stage'); if (s) s.classList.remove('cx-fs'); document.body.classList.remove('cx-lock'); try { screen.orientation.unlock(); } catch (e) {} } };
+                document.addEventListener('fullscreenchange', off); document.addEventListener('webkitfullscreenchange', off);
+                document.addEventListener('keydown', e => { if (e.key === 'Escape') { const s = document.getElementById('cx-stage'); if (s && s.classList.contains('cx-fs')) { s.classList.remove('cx-fs'); document.body.classList.remove('cx-lock'); } } });
+            }
             async function fetchAndDisplayCurriculum(courseName, batch) {
-                const container = document.getElementById('curriculum-list-container'), player = document.getElementById('youtube-player'), placeholder = document.getElementById('video-placeholder'), noteC = document.getElementById('class-note-container');
-                player.src = ''; placeholder.classList.remove('hidden'); noteC.classList.add('hidden');
+                const $ = id => document.getElementById(id);
+                const container = $('curriculum-list-container'), player = $('youtube-player'), ph = $('video-placeholder'), noteC = $('class-note-container'), stage = $('cx-stage'), info = $('cx-info'), loader = $('cx-loader');
+                cxStop(); ph.classList.remove('hidden'); noteC.classList.add('hidden'); info.classList.add('hidden');
+                const key = 'cx_last_' + courseName + '_' + batch, lessons = [], done = new Set(); let cur = -1;
+                $('cx-wm').textContent = (auth.currentUser && auth.currentUser.email) || '';
                 try {
-                    const q = await db.collection('curriculum').where('courseName','==',courseName).where('batch','==',batch).limit(1).get();
-                    if(q.empty) { container.innerHTML='<p style="color: var(--text-body);">No curriculum found.</p>'; return; }
-                    let html=''; (q.docs[0].data().modules||[]).forEach((m,i)=>{ html+=`<div class="curriculum-module"><div class="module-header" data-target="module-vids-${i}"><span>${m.title}</span><span class="material-symbols-outlined">expand_more</span></div><ul class="module-videos" id="module-vids-${i}">${(m.videos||[]).map(v=>`<li><a href="#" class="video-item-link" data-url="${v.youtubeLink}" data-note="${encodeURIComponent(v.classNote||'')}"><div style="display: flex; align-items: center; gap: 10px;"><span class="material-symbols-outlined">play_circle</span><span class="vid-title-text">${v.title}</span></div></a></li>`).join('')}</ul></div>`; }); container.innerHTML=html;
-                    container.querySelectorAll('.module-header').forEach(h=>h.addEventListener('click', ()=>{h.classList.toggle('active'); document.getElementById(h.dataset.target).classList.toggle('show');}));
-                    container.querySelectorAll('.video-item-link').forEach(l=>l.addEventListener('click', e=>{ 
-                        e.preventDefault(); container.querySelectorAll('.video-item-link').forEach(al=>al.classList.remove('playing')); l.classList.add('playing'); 
-                        const embed=getYouTubeEmbedUrl(l.dataset.url); if(embed){placeholder.classList.add('hidden'); player.src=embed;} 
-                        const note=decodeURIComponent(l.dataset.note); if(note){noteC.innerHTML=`<h4 style="color:var(--water-cyan); margin-bottom:10px;">Module Notes</h4><div class="note-content" style="color: var(--text-soft);">${note}</div>`; noteC.classList.remove('hidden');}else noteC.classList.add('hidden');
-                        
-                        const videoTitle = l.querySelector('.vid-title-text').textContent;
-                        if (window.currentEnrollmentDocId) db.collection('enrollments').doc(window.currentEnrollmentDocId).update({ completed_lessons: firebase.firestore.FieldValue.arrayUnion(videoTitle) }).catch(err => {});
-                    }));
-                }catch(e){}
+                    const q = await db.collection('curriculum').where('courseName', '==', courseName).where('batch', '==', batch).limit(1).get();
+                    if (q.empty) { container.innerHTML = '<p style="color: var(--text-body);">No curriculum found.</p>'; return; }
+                    if (window.currentEnrollmentDocId) { try { const e = await db.collection('enrollments').doc(window.currentEnrollmentDocId).get(); ((e.data() || {}).completed_lessons || []).forEach(t => done.add(t)); } catch (_) {} }
+                    let html = '';
+                    (q.docs[0].data().modules || []).forEach((m, i) => {
+                        html += `<div class="curriculum-module"><div class="module-header ${i === 0 ? 'active' : ''}" data-target="module-vids-${i}"><span>${cxEsc(m.title)}<span class="cx-cnt">${(m.videos || []).length} ক্লাস</span></span><span class="material-symbols-outlined">expand_more</span></div><ul class="module-videos ${i === 0 ? 'show' : ''}" id="module-vids-${i}">`;
+                        (m.videos || []).forEach(v => { const idx = lessons.push({ title: v.title, url: v.youtubeLink, note: v.classNote || '', mod: m.title }) - 1;
+                            html += `<li><a href="#" class="video-item-link" data-i="${idx}"><div style="display:flex;align-items:center;gap:10px"><span class="material-symbols-outlined cx-ic ${done.has(v.title) ? 'ok' : ''}">${done.has(v.title) ? 'check_circle' : 'play_circle'}</span><span class="vid-title-text">${cxEsc(v.title)}</span></div></a></li>`; });
+                        html += '</ul></div>';
+                    });
+                    container.innerHTML = html;
+                    const links = [...container.querySelectorAll('.video-item-link')];
+                    const prog = () => { const n = lessons.filter(l => done.has(l.title)).length, p = lessons.length ? Math.round(n / lessons.length * 100) : 0; $('cx-pct').textContent = p + '%'; $('cx-fill').style.width = p + '%'; $('cx-cntx').textContent = n + '/' + lessons.length + ' ক্লাস'; };
+                    prog();
+                    container.querySelectorAll('.module-header').forEach(h => h.addEventListener('click', () => { h.classList.toggle('active'); document.getElementById(h.dataset.target).classList.toggle('show'); }));
+                    player.onload = () => loader.classList.add('hidden');
+                    const play = i => {
+                        const L = lessons[i]; if (!L) return; const md = dxMedia(L.url); if (!md) return cxToast('ভিডিওর লিংক পাওয়া যায়নি', 'error');
+                        cur = i; try { localStorage.setItem(key, i); } catch (e) {}
+                        ph.classList.add('hidden'); stage.classList.add('cx-on'); stage.dataset.kind = md.kind; loader.classList.remove('hidden'); player.src = md.src;
+                        $('cx-ext').href = md.ext; $('cx-title').textContent = L.title; $('cx-mod').textContent = L.mod + ' • ' + (i + 1) + '/' + lessons.length; info.classList.remove('hidden');
+                        $('cx-prev').disabled = i === 0; $('cx-next').disabled = i === lessons.length - 1;
+                        links.forEach((a, k) => a.classList.toggle('playing', k === i));
+                        if (L.note) { noteC.innerHTML = `<h4 style="color:var(--water-cyan); margin-bottom:10px;">Module Notes</h4><div class="note-content" style="color: var(--text-soft);">${L.note}</div>`; noteC.classList.remove('hidden'); } else noteC.classList.add('hidden');
+                        if (!done.has(L.title)) { done.add(L.title); const ic = links[i].querySelector('.cx-ic'); ic.textContent = 'check_circle'; ic.classList.add('ok'); prog();
+                            if (window.currentEnrollmentDocId) db.collection('enrollments').doc(window.currentEnrollmentDocId).update({ completed_lessons: firebase.firestore.FieldValue.arrayUnion(L.title) }).catch(() => {}); }
+                        stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    };
+                    links.forEach(a => a.addEventListener('click', e => { e.preventDefault(); play(+a.dataset.i); }));
+                    $('cx-prev').onclick = () => play(cur - 1); $('cx-next').onclick = () => play(cur + 1);
+                    let last = 0; try { last = Math.min(Math.max(+localStorage.getItem(key) || 0, 0), lessons.length - 1); } catch (e) {}
+                    if (lessons[last]) $('cx-resume').textContent = last ? '▶ চালিয়ে যান: ' + lessons[last].title : '▶ ক্লাস শুরু করুন';
+                    $('cx-resume').onclick = () => play(last);
+                    const pseudo = () => { stage.classList.add('cx-fs'); document.body.classList.add('cx-lock'); };
+                    $('cx-fs').onclick = () => {
+                        const r = stage.requestFullscreen || stage.webkitRequestFullscreen;
+                        if (r) { Promise.resolve(r.call(stage)).then(() => { try { screen.orientation.lock('landscape').catch(() => {}); } catch (e) {} }).catch(pseudo); } else pseudo();
+                    };
+                    $('cx-x').onclick = () => { if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen(); stage.classList.remove('cx-fs'); document.body.classList.remove('cx-lock'); };
+                    $('cx-search').oninput = e => { const t = e.target.value.trim().toLowerCase();
+                        container.querySelectorAll('.curriculum-module').forEach(mod => { let any = false;
+                            mod.querySelectorAll('li').forEach(li => { const ok = !t || li.textContent.toLowerCase().includes(t); li.style.display = ok ? '' : 'none'; if (ok) any = true; });
+                            mod.style.display = any ? '' : 'none'; if (t && any) { mod.querySelector('.module-videos').classList.add('show'); mod.querySelector('.module-header').classList.add('active'); } }); };
+                } catch (e) {}
             }
 
             // Public Course Preview
@@ -4983,39 +5106,94 @@
                 box.innerHTML = '<p class="dx-empty">Loading...</p>';
                 try {
                     const courses = await dxCourseList(); const items = [];
-                    for (const c of courses) {
-                        const sn = await db.collection('assignments').where('courseName','==',c.name).get();
-                        sn.forEach(d => { const a = d.data(); if (dxBatchOk(a, c)) items.push({ id: d.id, ...a }); });
-                    }
+                    for (const c of courses) { const sn = await db.collection('assignments').where('courseName','==',c.name).get(); sn.forEach(d => { const a = d.data(); if (dxBatchOk(a, c)) items.push({ id: d.id, ...a }); }); }
                     const subs = {}; (await db.collection('assignmentSubmissions').where('uid','==',u.uid).get()).forEach(d => subs[d.data().assignmentId] = d.data());
                     items.sort((a, b) => (b.createdAt ? b.createdAt.toMillis() : 0) - (a.createdAt ? a.createdAt.toMillis() : 0));
                     if (!items.length) { box.innerHTML = '<p class="dx-empty">No assignments yet.</p>'; return; }
                     box.innerHTML = items.map(a => { const sb = subs[a.id], due = a.dueDate && a.dueDate.toDate ? a.dueDate.toDate() : null, late = due && due < new Date();
-                        const st = sb ? (sb.grade ? 'Graded' : 'Submitted') : (late ? 'Overdue' : 'Pending');
-                        return `<div class="dx-panel" style="margin-bottom:16px;"><div class="dx-head"><h3>${dxEsc(a.title)}</h3><span class="dx-status ${sb ? 'done' : (late ? '' : 'new')}" style="position:static;">${st}</span></div>
+                        const st = sb ? (sb.grade ? 'Graded' : 'Submitted') : (late ? 'Overdue' : 'Pending'), graded = sb && sb.grade;
+                        const gal = (sb && sb.images || []).map(s => `<div class="as-th"><img src="${dxEsc(s)}" alt=""></div>`).join('');
+                        return `<div class="dx-panel as-card" data-id="${a.id}" data-course="${dxEsc(a.courseName)}" data-batch="${dxEsc(a.batch || '')}" style="margin-bottom:16px;"><div class="dx-head"><h3>${dxEsc(a.title)}</h3><span class="dx-status ${sb ? 'done' : (late ? '' : 'new')}" style="position:static;">${st}</span></div>
                         <p style="color: var(--text-soft);margin-bottom:6px;">${dxEsc(a.description)}</p><small style="color:var(--text-muted);">${dxEsc(a.courseName)}${due ? ' • Due: ' + dxWhen(a.dueDate) : ''}</small>
-                        ${sb && sb.grade ? `<p style="margin-top:10px;color:var(--water-cyan);"><b>Grade: ${dxEsc(sb.grade)}</b>${sb.feedback ? ' - ' + dxEsc(sb.feedback) : ''}</p>` : ''}
-                        ${sb && sb.grade ? '' : `<textarea class="dx-ans" rows="3" placeholder="Write your answer or paste your work link..." style="width:100%;margin:12px 0 8px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--navy-border);background:var(--navy-dark);color: var(--text-pure);font:inherit;">${dxEsc(sb ? sb.answer : '')}</textarea><button class="btn btn-gradient dx-sub" data-id="${a.id}" data-course="${dxEsc(a.courseName)}" data-batch="${dxEsc(a.batch || '')}">${sb ? 'Update Submission' : 'Submit Assignment'}</button>`}</div>`; }).join('');
-                    box.querySelectorAll('.dx-sub').forEach(b => b.addEventListener('click', async () => {
-                        const ans = b.parentElement.querySelector('.dx-ans').value.trim(); if (!ans) return showToast('Please write your answer first.', 'error');
-                        b.disabled = true;
-                        try {
-                            await db.collection('assignmentSubmissions').doc(b.dataset.id + '_' + u.uid).set({ assignmentId: b.dataset.id, uid: u.uid, studentName: (document.querySelector('.dx-name') || {}).textContent || '', courseName: b.dataset.course, batch: b.dataset.batch, answer: ans, submittedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
-                            showToast('Assignment submitted!', 'success'); window.dxAssignments();
-                        } catch (e) { showToast('Could not submit. Try again.', 'error'); b.disabled = false; }
-                    }));
+                        ${graded ? `<p style="margin-top:10px;color:var(--water-cyan);"><b>Grade: ${dxEsc(sb.grade)}</b>${sb.feedback ? ' - ' + dxEsc(sb.feedback) : ''}</p>${sb.link ? `<p style="margin-top:8px"><a href="${dxEsc(sb.link)}" target="_blank" rel="noopener">${dxEsc(sb.link)}</a></p>` : ''}<div class="as-thumbs as-view">${gal}</div>` :
+                        `<div class="as-form"><textarea class="as-txt" rows="3" placeholder="আপনার উত্তর লিখুন (ঐচ্ছিক)..."></textarea><input class="as-link" type="url" inputmode="url" placeholder="কাজের লিংক (Drive / Facebook / অন্য যেকোনো)"><button type="button" class="as-add"><span class="material-symbols-outlined">add_photo_alternate</span> গ্যালারি থেকে ছবি সিলেক্ট করুন (সর্বোচ্চ ৬টি)</button><input type="file" class="as-file" accept="image/*" multiple style="display:none"><div class="as-thumbs"></div><button type="button" class="btn btn-gradient as-sub" style="margin-top:8px">${sb ? 'Update Submission' : 'Submit Assignment'}</button></div>`}</div>`; }).join('');
+                    box.querySelectorAll('.as-view img').forEach(im => im.onclick = () => typeof dxLightbox === 'function' ? dxLightbox(im.src) : window.open(im.src));
+                    box.querySelectorAll('.as-card').forEach(card => { if (card.querySelector('.as-form')) dxAsInit(card, subs[card.dataset.id], u); });
                 } catch (e) { box.innerHTML = '<p class="dx-empty">Could not load assignments.</p>'; }
             };
+            async function dxAsShrink(file) {
+                try { const bm = await createImageBitmap(file), s = Math.min(1, 1600 / Math.max(bm.width, bm.height)), c = document.createElement('canvas'); c.width = Math.round(bm.width * s); c.height = Math.round(bm.height * s); c.getContext('2d').drawImage(bm, 0, 0, c.width, c.height);
+                    return await new Promise(r => c.toBlob(b => r(b || file), 'image/jpeg', .85)); } catch (e) { return file; }
+            }
+            async function dxAsUpload(file) {
+                const fd = new FormData(); fd.append('key', typeof IMGBB_API_KEY !== 'undefined' ? IMGBB_API_KEY : '41b94ddf4c1e99c53b0253d7daefadef'); fd.append('image', await dxAsShrink(file));
+                const r = await (await fetch('https://api.imgbb.com/1/upload', { method: 'POST', body: fd })).json(); if (!r.success) throw new Error('upload'); return r.data.url;
+            }
+            function dxAsInit(card, sb, u) {
+                const q = s => card.querySelector(s), txt = q('.as-txt'), lk = q('.as-link'), fi = q('.as-file'), th = q('.as-thumbs'), btn = q('.as-sub');
+                const pics = ((sb && sb.images) || []).map(url => ({ url, pv: url }));
+                txt.value = sb ? (sb.answerText != null ? sb.answerText : (sb.answer || '')) : ''; lk.value = (sb && sb.link) || '';
+                const draw = () => { th.innerHTML = pics.map((p, i) => `<div class="as-th"><img src="${dxEsc(p.pv)}" alt=""><button type="button" data-rm="${i}" aria-label="Remove">×</button></div>`).join(''); };
+                draw();
+                th.addEventListener('click', e => { const rm = e.target.closest('[data-rm]'); if (rm) { pics.splice(+rm.dataset.rm, 1); draw(); return; } const im = e.target.closest('img'); if (im) { typeof dxLightbox === 'function' ? dxLightbox(im.src) : window.open(im.src); } });
+                q('.as-add').onclick = () => fi.click();
+                fi.onchange = () => { [...fi.files].forEach(f => { if (pics.length >= 6) return cxToast('সর্বোচ্চ ৬টি ছবি দেওয়া যাবে', 'error'); if (!f.type.startsWith('image/') || f.size > 20e6) return cxToast('শুধু ২০MB এর কম ছবি দিন', 'error'); pics.push({ file: f, pv: URL.createObjectURL(f) }); }); fi.value = ''; draw(); };
+                btn.onclick = async () => {
+                    const text = txt.value.trim(), link = lk.value.trim();
+                    if (!text && !link && !pics.length) return cxToast('উত্তর, লিংক বা ছবি দিন', 'error');
+                    if (link && !/^https?:\/\//i.test(link)) return cxToast('লিংক http:// বা https:// দিয়ে শুরু হতে হবে', 'error');
+                    btn.disabled = true; const old = btn.textContent;
+                    try {
+                        let n = 0; const need = pics.filter(p => !p.url).length;
+                        for (const p of pics) if (!p.url) { btn.textContent = `Uploading ${++n}/${need}...`; p.url = await dxAsUpload(p.file); }
+                        const images = pics.map(p => p.url), answer = [text, link && 'Link: ' + link, ...images.map(s => 'Image: ' + s)].filter(Boolean).join('\n');
+                        await db.collection('assignmentSubmissions').doc(card.dataset.id + '_' + u.uid).set({ assignmentId: card.dataset.id, uid: u.uid, studentName: (document.querySelector('.dx-name') || {}).textContent || '', courseName: card.dataset.course, batch: card.dataset.batch, answer, answerText: text, link, images, submittedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+                        cxToast('Assignment submitted!', 'success'); window.dxAssignments();
+                    } catch (e) { cxToast('Could not submit. Try again.', 'error'); btn.disabled = false; btn.textContent = old; }
+                };
+            }
+            function dxMtInfo(m) {
+                const link = (m.link || '').trim(), t = (m.type || '').toLowerCase(), lc = link.toLowerCase().split('?')[0], r = { link, view: link, dl: link, kind: 'other' }; let x;
+                if (x = link.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:[^#]*&)?id=)([\w-]+)/)) { r.kind = 'drive'; r.view = `https://drive.google.com/file/d/${x[1]}/preview`; r.dl = `https://drive.google.com/uc?export=download&id=${x[1]}`; }
+                else if (x = link.match(/drive\.google\.com\/drive\/folders\/([\w-]+)/)) { r.kind = 'folder'; r.view = `https://drive.google.com/embeddedfolderview?id=${x[1]}#list`; r.dl = ''; }
+                else if (x = link.match(/docs\.google\.com\/(document|spreadsheets|presentation)\/d\/([\w-]+)/)) { r.kind = 'gdoc'; r.view = `https://docs.google.com/${x[1]}/d/${x[2]}/preview`; r.dl = `https://docs.google.com/${x[1]}/d/${x[2]}/export?format=${x[1] === 'presentation' ? 'pptx' : (x[1] === 'spreadsheets' ? 'xlsx' : 'pdf')}`; }
+                else if (/youtu\.?be|vimeo\.com/.test(link)) { r.kind = 'video'; r.view = (dxMedia(link) || {}).src || link; r.dl = ''; }
+                else if (/\.(png|jpe?g|gif|webp|avif|svg)$/.test(lc) || t === 'image') r.kind = 'image';
+                else if (/\.(mp4|webm|mov)$/.test(lc)) r.kind = 'file-video';
+                else if (/\.pdf$/.test(lc) || t === 'pdf') { r.kind = 'pdf'; r.view = 'https://docs.google.com/viewer?embedded=true&url=' + encodeURIComponent(link); }
+                else if (/\.(docx?|pptx?|xlsx?)$/.test(lc)) { r.kind = 'office'; r.view = 'https://docs.google.com/viewer?embedded=true&url=' + encodeURIComponent(link); }
+                if (/dropbox\.com/.test(link)) r.dl = /dl=/.test(link) ? link.replace(/dl=0/, 'dl=1') : link + (link.includes('?') ? '&' : '?') + 'dl=1';
+                return r;
+            }
+            async function dxMtDownload(a, name) {
+                const url = a.href; if (/google\.com|dropbox\.com/.test(url)) return true;
+                try { const r = await fetch(url); if (!r.ok) throw 0; const b = await r.blob(), o = URL.createObjectURL(b), l = document.createElement('a'); l.href = o; l.download = name || 'file'; document.body.appendChild(l); l.click(); l.remove(); setTimeout(() => URL.revokeObjectURL(o), 4000); return false; }
+                catch (e) { return true; }
+            }
+            function dxMtOpen(m) {
+                const i = dxMtInfo(m); document.querySelectorAll('.mt-ov').forEach(o => o.remove());
+                const body = i.kind === 'image' ? `<img src="${dxEsc(i.view)}" alt="">` : i.kind === 'file-video' ? `<video controls playsinline autoplay src="${dxEsc(i.view)}"></video>` : `<iframe src="${dxEsc(i.view)}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+                const ov = document.createElement('div'); ov.className = 'mt-ov';
+                ov.innerHTML = `<div class="mt-top"><b>${dxEsc(m.title)}</b>${i.dl ? `<a class="dx-join dl" href="${dxEsc(i.dl)}" download target="_blank" rel="noopener"><span class="material-symbols-outlined" style="font-size:18px">download</span> ডাউনলোড</a>` : ''}<a class="dx-join" href="${dxEsc(i.link)}" target="_blank" rel="noopener" aria-label="Open in new tab"><span class="material-symbols-outlined" style="font-size:18px">open_in_new</span></a><button type="button" class="dx-join off mt-close" aria-label="Close"><span class="material-symbols-outlined" style="font-size:18px">close</span></button></div><div class="mt-body">${body}</div>`;
+                document.body.appendChild(ov); document.body.classList.add('cx-lock');
+                const close = () => { ov.remove(); document.body.classList.remove('cx-lock'); document.removeEventListener('keydown', esc); }, esc = e => { if (e.key === 'Escape') close(); };
+                ov.querySelector('.mt-close').onclick = close; document.addEventListener('keydown', esc);
+                const d = ov.querySelector('.dl'); if (d) d.onclick = async e => { if (!(await dxMtDownload(d, m.title)) ) e.preventDefault(); };
+            }
             window.dxMaterials = async function() {
                 const box = document.getElementById('dx-mat-list'); box.innerHTML = '<p class="dx-empty">Loading...</p>';
                 try {
-                    const courses = await dxCourseList(); let html = '';
+                    const courses = await dxCourseList(); let html = ''; const all = [];
                     for (const c of courses) {
                         const rows = []; (await db.collection('materials').where('courseName','==',c.name).get()).forEach(d => { const m = d.data(); if (dxBatchOk(m, c)) rows.push(m); });
                         if (!rows.length) continue;
-                        html += `<div class="dx-panel" style="margin-bottom:16px;"><div class="dx-head"><h3>${dxEsc(c.name)}</h3></div>` + rows.map(m => `<div class="dx-row"><div class="dx-ico"><span class="material-symbols-outlined">${m.type === 'video' ? 'play_circle' : (m.type === 'pdf' ? 'picture_as_pdf' : 'description')}</span></div><div><p>${dxEsc(m.title)}</p><small>${dxEsc(m.type || 'file')}</small></div><a class="dx-join" href="${dxEsc(m.link)}" target="_blank" rel="noopener">Open</a></div>`).join('') + '</div>';
+                        html += `<div class="dx-panel mt-group" style="margin-bottom:16px;"><div class="dx-head"><h3>${dxEsc(c.name)}</h3></div>` + rows.map(m => { const i = dxMtInfo(m), n = all.push(m) - 1, ic = i.kind === 'image' ? 'image' : (/video/.test(i.kind) || m.type === 'video' ? 'play_circle' : (i.kind === 'folder' ? 'folder' : (i.kind === 'pdf' || m.type === 'pdf' ? 'picture_as_pdf' : 'description')));
+                            return `<div class="dx-row mt-row"><div class="dx-ico"><span class="material-symbols-outlined">${ic}</span></div><div><p>${dxEsc(m.title)}</p><small>${dxEsc(m.type || i.kind)}</small></div><div class="mt-btns"><button type="button" class="dx-join" data-mt="${n}"><span class="material-symbols-outlined" style="font-size:18px">visibility</span> দেখুন</button>${i.dl ? `<a class="dx-join dl" data-dl="${n}" href="${dxEsc(i.dl)}" download target="_blank" rel="noopener"><span class="material-symbols-outlined" style="font-size:18px">download</span> ডাউনলোড</a>` : ''}</div></div>`; }).join('') + '</div>';
                     }
-                    box.innerHTML = html || '<p class="dx-empty">No materials uploaded yet.</p>';
+                    box.innerHTML = html ? '<input class="mt-search" type="search" placeholder="ম্যাটেরিয়াল খুঁজুন...">' + html : '<p class="dx-empty">No materials uploaded yet.</p>';
+                    box.onclick = async e => { const v = e.target.closest('[data-mt]'); if (v) return dxMtOpen(all[+v.dataset.mt]);
+                        const d = e.target.closest('[data-dl]'); if (d && !(await dxMtDownload(d, all[+d.dataset.dl].title))) e.preventDefault(); };
+                    const s = box.querySelector('.mt-search'); if (s) s.oninput = () => { const t = s.value.trim().toLowerCase(); box.querySelectorAll('.mt-row').forEach(r => r.style.display = !t || r.textContent.toLowerCase().includes(t) ? '' : 'none'); };
                 } catch (e) { box.innerHTML = '<p class="dx-empty">Could not load materials.</p>'; }
             };
             window.dxSupport = async function() {
